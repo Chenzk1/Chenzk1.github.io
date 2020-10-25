@@ -24,19 +24,22 @@
     var CONFIG = {"hostname":"chenzk1.github.io","root":"/","scheme":"Muse","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}};
   </script>
 
-  <meta name="description" content="blog">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Kayden&#39;s Blog">
-<meta property="og:url" content="https://chenzk1.github.io/archives/2020/10/index.html">
+  <meta name="description" content="类不平衡（class imbalance）现象：即负样本比正样本多很多（或者相反）  ACCURACY&#x2F;RECALL&#x2F;F1   Accuracy：TP&#x2F;(TP+TN) 即预测对的数据个数与总数据个数的比   A和R的问题在于如果样本不平衡，则参考意义很小  准确率（Precision）：P&#x3D;TP&#x2F;(TP+FP)。通俗地讲，就是预测正确的正例数据占预测为正例数据的比例。   针对判别结果 查准率">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ROC AUC, Accuracy, Recall, F1">
+<meta property="og:url" content="https://chenzk1.github.io/2020/10/25/ROC%20%20AUC/index.html">
 <meta property="og:site_name" content="Kayden&#39;s Blog">
-<meta property="og:description" content="blog">
+<meta property="og:description" content="类不平衡（class imbalance）现象：即负样本比正样本多很多（或者相反）  ACCURACY&#x2F;RECALL&#x2F;F1   Accuracy：TP&#x2F;(TP+TN) 即预测对的数据个数与总数据个数的比   A和R的问题在于如果样本不平衡，则参考意义很小  准确率（Precision）：P&#x3D;TP&#x2F;(TP+FP)。通俗地讲，就是预测正确的正例数据占预测为正例数据的比例。   针对判别结果 查准率">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-10-25T01:35:05.005Z">
+<meta property="article:modified_time" content="2018-11-23T02:53:22.918Z">
 <meta property="article:author" content="Kayden">
-<meta property="article:tag" content="code">
+<meta property="article:tag" content="ML">
+<meta property="article:tag" content="Metrics">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://chenzk1.github.io/archives/2020/10/">
+<link rel="canonical" href="https://chenzk1.github.io/2020/10/25/ROC%20%20AUC/">
 
 
 <script class="page-configurations">
@@ -44,12 +47,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>归档 | Kayden's Blog</title>
+  <title>ROC AUC, Accuracy, Recall, F1 | Kayden's Blog</title>
   
 
 
@@ -198,236 +201,136 @@
 </noscript>
 
 
-    <div class="main-inner archive posts-collapse">
+    <div class="main-inner post posts-expand">
       
 
       
 
   
-  
-  
-  <div class="post-block">
-    <div class="post-content">
-      <div class="collection-title">
-        <span class="collection-header">嗯..! 目前共计 15 篇日志。 继续努力。</span>
-      </div>
 
-      
-    <div class="collection-year">
-      <span class="collection-header">2020</span>
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/25/ROC%20%20AUC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Kayden">
+      <meta itemprop="description" content="blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kayden's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ROC AUC, Accuracy, Recall, F1
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-10-25 09:35:05" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:05+08:00">2020-10-25</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2018-11-23 10:53:22" itemprop="dateModified" datetime="2018-11-23T10:53:22+08:00">2018-11-23</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>类不平衡（class imbalance）现象：即负样本比正样本多很多（或者相反）</p>
+<ol>
+<li>ACCURACY/RECALL/F1</li>
+</ol>
+<ul>
+<li><p>Accuracy：TP/(TP+TN) 即预测对的数据个数与总数据个数的比</p>
+<p>  <strong><em>A和R的问题在于如果样本不平衡，则参考意义很小</em></strong></p>
+</li>
+<li><p>准确率（Precision）：P=TP/(TP+FP)。通俗地讲，就是预测正确的正例数据占预测为正例数据的比例。</p>
+<p>  <strong>针对判别结果 查准率</strong></p>
+</li>
+<li><p>召回率（Recall）：R=TP/(TP+FN)。通俗地讲，就是预测为正例的数据占实际为正例数据的比例。</p>
+<p>  <strong>针对样本 查全率</strong></p>
+</li>
+<li><p>F1 = 2*P*R/(P+R)：既有P又有R</p>
+</li>
+<li><p>PRC， precision recall curve，与下面的ROC一样，先看是否光滑，光滑的话说明过拟合不大。越往右上越好。</p>
+<p>  <strong><em>A和R的问题在于如果样本不平衡，则参考意义很小</em></strong></p>
+</li>
+</ul>
+<ol start="2">
+<li><p>ROC AUC<br>TPR=TP/(TP+FN)=TP/actual positives 也就是Recall<br>FPR=FP/(FP+TN)=FP/actual negatives<br>ROC是由点（TPR,FPR）组成的曲线，AUC就是ROC的面积。AUC越大越好。</p>
+<p> 一般来说，如果ROC是光滑的，那么基本可以判断没有太大的overfitting。</p>
+<p> 越往左上越好。</p>
+<p> 画法：ROC曲线其实是多个混淆矩阵的结果组合，如果在上述模型中我们没有定好阈值，而是将模型预测结果从高到低排序，将每个概率值依次作为阈值，那么就有多个混淆矩阵。对于每个混淆矩阵，我们计算两个指标TPR（True positive rate）和FPR（False positive rate），TPR=TP/(TP+FN)=Recall，TPR就是召回率。FPR=FP/(FP+TN)，FPR即为实际为好人的人中，预测为坏人的人占比。我们以FPR为x轴，TPR为y轴画图，就得到了ROC曲线。</p>
+<p><strong><em>也就是说，ROC曲线的阈值不是多次运行模型得到的，是同一个模型中通过对所得结果按照概率的排序得到了一个threshold</em></strong></p>
+<p> 所以使用ROC的话，它会先对预测到的结果进行排序，然后再根据排序的结果画图，所以他的曲线形状不会因为数据不平衡而发生大的改变。<br> <strong>但是当数据极度不平衡时，ROC仍然有问题，下面的PRC表现更好。</strong></p>
+</li>
+<li><p>PRC， precision recall curve，与上面的ROC一样，先看是否光滑，光滑的话说明过拟合不大。越往右上越好。</p>
+</li>
+</ol>
+
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2020-10-25T09:35:05+08:00"
-              content="2020-10-25">
-          10-25
-        </time>
-      </div>
+    
+    
+    
 
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/10/25/kaggle%E7%9B%B8%E5%85%B3/" itemprop="url">
-            <span itemprop="name">Kaggle相关</span>
-          </a>
-      </div>
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ML/" rel="tag"># ML</a>
+              <a href="/tags/Metrics/" rel="tag"># Metrics</a>
+          </div>
 
-      
-    </header>
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/10/25/python%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" rel="prev" title="python面向对象">
+                  <i class="fa fa-chevron-left"></i> python面向对象
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/10/25/WNSP#2/" rel="next" title="WNSP#2">
+                  WNSP#2 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
   </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2020-10-25T09:35:05+08:00"
-              content="2020-10-25">
-          10-25
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/10/25/GBDT%20&%20XGBoost/" itemprop="url">
-            <span itemprop="name">GBDT & XGBoost</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2020-10-25T09:35:05+08:00"
-              content="2020-10-25">
-          10-25
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/10/25/Decision%20Tree/" itemprop="url">
-            <span itemprop="name">ID3 C4.5 CART</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2020-10-25T09:35:05+08:00"
-              content="2020-10-25">
-          10-25
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/10/25/DBSCAN/" itemprop="url">
-            <span itemprop="name">DBSCAN以及sklearn实现DBSCAN</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2020-10-25T09:35:05+08:00"
-              content="2020-10-25">
-          10-25
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/10/25/D%20S%20competition_Coursera#1/" itemprop="url">
-            <span itemprop="name">DS Competition_Coursera#1</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2020-10-25T09:35:05+08:00"
-              content="2020-10-25">
-          10-25
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/10/25/CS231n-img_classification/" itemprop="url">
-            <span itemprop="name">CS231n-imgClassification</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2020-10-25T09:35:05+08:00"
-              content="2020-10-25">
-          10-25
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/10/25/CNN/" itemprop="url">
-            <span itemprop="name">CNN</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2020-10-25T09:35:05+08:00"
-              content="2020-10-25">
-          10-25
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/10/25/%E7%BB%8F%E9%AA%8C%20%E6%9C%9F%E6%9C%9B%20%E7%BB%93%E6%9E%84/" itemprop="url">
-            <span itemprop="name">经验风险、期望风险、结构风险</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2020-10-25T09:35:05+08:00"
-              content="2020-10-25">
-          10-25
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/10/25/WNSP#2/" itemprop="url">
-            <span itemprop="name">WNSP#2</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2020-10-25T09:35:05+08:00"
-              content="2020-10-25">
-          10-25
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/10/25/ROC%20%20AUC/" itemprop="url">
-            <span itemprop="name">ROC AUC, Accuracy, Recall, F1</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
+</div>
 
 
-    </div>
-  </div>
-  
-  
-  
 
-  
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/archives/2020/10/page/2/">2</a><a class="extend next" rel="next" href="/archives/2020/10/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
-  </nav>
 
 
 

@@ -24,19 +24,28 @@
     var CONFIG = {"hostname":"chenzk1.github.io","root":"/","scheme":"Muse","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}};
   </script>
 
-  <meta name="description" content="blog">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Kayden&#39;s Blog">
-<meta property="og:url" content="https://chenzk1.github.io/archives/2020/10/index.html">
+  <meta name="description" content="kNNs 没有参数需要训练 只计算与训练样本之间的距离  Linear Classfication 可以将其理解为模板匹配，即最终的权重矩阵W的每一行为所学习得到的类别的模板，将其与test img做点积即做一次模板匹配。每个点积的值即为该分类所得的分数。     将权重矩阵的每一行重组后可以得到其信息，可以看出类似于某一类的模板：  可以看出当同一个类别有很多图片时，得到的模板是这些图片的平均。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CS231n-imgClassification">
+<meta property="og:url" content="https://chenzk1.github.io/2020/10/25/CS231n-img_classification/index.html">
 <meta property="og:site_name" content="Kayden&#39;s Blog">
-<meta property="og:description" content="blog">
+<meta property="og:description" content="kNNs 没有参数需要训练 只计算与训练样本之间的距离  Linear Classfication 可以将其理解为模板匹配，即最终的权重矩阵W的每一行为所学习得到的类别的模板，将其与test img做点积即做一次模板匹配。每个点积的值即为该分类所得的分数。     将权重矩阵的每一行重组后可以得到其信息，可以看出类似于某一类的模板：  可以看出当同一个类别有很多图片时，得到的模板是这些图片的平均。">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://cs231n.github.io/assets/imagemap.jpg">
+<meta property="og:image" content="http://cs231n.github.io/assets/templates.jpg">
+<meta property="article:published_time" content="2020-10-25T01:35:05.227Z">
+<meta property="article:modified_time" content="2018-09-29T02:23:17.318Z">
 <meta property="article:author" content="Kayden">
-<meta property="article:tag" content="code">
+<meta property="article:tag" content="ML">
+<meta property="article:tag" content="CS231n">
+<meta property="article:tag" content="kNN">
+<meta property="article:tag" content="SVM">
+<meta property="article:tag" content="imgClassification">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://cs231n.github.io/assets/imagemap.jpg">
 
 
-<link rel="canonical" href="https://chenzk1.github.io/archives/2020/10/">
+<link rel="canonical" href="https://chenzk1.github.io/2020/10/25/CS231n-img_classification/">
 
 
 <script class="page-configurations">
@@ -44,12 +53,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>归档 | Kayden's Blog</title>
+  <title>CS231n-imgClassification | Kayden's Blog</title>
   
 
 
@@ -138,7 +147,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -150,6 +159,7 @@
 
       <!--noindex-->
       <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#kNNs"><span class="nav-number">1.</span> <span class="nav-text">kNNs</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Linear-Classfication"><span class="nav-number">2.</span> <span class="nav-text">Linear Classfication</span></a></li></ol></div>
       </section>
       <!--/noindex-->
 
@@ -198,236 +208,120 @@
 </noscript>
 
 
-    <div class="main-inner archive posts-collapse">
+    <div class="main-inner post posts-expand">
       
 
       
 
   
-  
-  
-  <div class="post-block">
-    <div class="post-content">
-      <div class="collection-title">
-        <span class="collection-header">嗯..! 目前共计 15 篇日志。 继续努力。</span>
-      </div>
 
-      
-    <div class="collection-year">
-      <span class="collection-header">2020</span>
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/25/CS231n-img_classification/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Kayden">
+      <meta itemprop="description" content="blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kayden's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CS231n-imgClassification
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-10-25 09:35:05" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:05+08:00">2020-10-25</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2018-09-29 10:23:17" itemprop="dateModified" datetime="2018-09-29T10:23:17+08:00">2018-09-29</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="kNNs"><a href="#kNNs" class="headerlink" title="kNNs"></a>kNNs</h1><ul>
+<li>没有参数需要训练</li>
+<li>只计算与训练样本之间的距离</li>
+</ul>
+<h1 id="Linear-Classfication"><a href="#Linear-Classfication" class="headerlink" title="Linear Classfication"></a>Linear Classfication</h1><ul>
+<li>可以将其理解为<strong>模板匹配</strong>，即最终的权重矩阵W的每一行为所学习得到的类别的模板，将其与test img做点积即做一次模板匹配。每个点积的值即为该分类所得的分数。</li>
+</ul>
+<p><img src="http://cs231n.github.io/assets/imagemap.jpg" alt="ex0"></p>
+<p>  将权重矩阵的每一行重组后可以得到其信息，可以看出类似于某一类的模板：<br><img src="http://cs231n.github.io/assets/templates.jpg" alt="ex1"></p>
+<blockquote>
+<p>可以看出当同一个类别有很多图片时，得到的模板是这些图片的平均。也暴露了它不适合用于多变性复杂的分类。</p>
+</blockquote>
+
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2020-10-25T09:35:05+08:00"
-              content="2020-10-25">
-          10-25
-        </time>
-      </div>
+    
+    
+    
 
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/10/25/kaggle%E7%9B%B8%E5%85%B3/" itemprop="url">
-            <span itemprop="name">Kaggle相关</span>
-          </a>
-      </div>
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ML/" rel="tag"># ML</a>
+              <a href="/tags/CS231n/" rel="tag"># CS231n</a>
+              <a href="/tags/kNN/" rel="tag"># kNN</a>
+              <a href="/tags/SVM/" rel="tag"># SVM</a>
+              <a href="/tags/imgClassification/" rel="tag"># imgClassification</a>
+          </div>
 
-      
-    </header>
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/10/25/CNN/" rel="prev" title="CNN">
+                  <i class="fa fa-chevron-left"></i> CNN
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/10/25/D%20S%20competition_Coursera#1/" rel="next" title="DS Competition_Coursera#1">
+                  DS Competition_Coursera#1 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
   </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2020-10-25T09:35:05+08:00"
-              content="2020-10-25">
-          10-25
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/10/25/GBDT%20&%20XGBoost/" itemprop="url">
-            <span itemprop="name">GBDT & XGBoost</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2020-10-25T09:35:05+08:00"
-              content="2020-10-25">
-          10-25
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/10/25/Decision%20Tree/" itemprop="url">
-            <span itemprop="name">ID3 C4.5 CART</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2020-10-25T09:35:05+08:00"
-              content="2020-10-25">
-          10-25
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/10/25/DBSCAN/" itemprop="url">
-            <span itemprop="name">DBSCAN以及sklearn实现DBSCAN</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2020-10-25T09:35:05+08:00"
-              content="2020-10-25">
-          10-25
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/10/25/D%20S%20competition_Coursera#1/" itemprop="url">
-            <span itemprop="name">DS Competition_Coursera#1</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2020-10-25T09:35:05+08:00"
-              content="2020-10-25">
-          10-25
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/10/25/CS231n-img_classification/" itemprop="url">
-            <span itemprop="name">CS231n-imgClassification</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2020-10-25T09:35:05+08:00"
-              content="2020-10-25">
-          10-25
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/10/25/CNN/" itemprop="url">
-            <span itemprop="name">CNN</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2020-10-25T09:35:05+08:00"
-              content="2020-10-25">
-          10-25
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/10/25/%E7%BB%8F%E9%AA%8C%20%E6%9C%9F%E6%9C%9B%20%E7%BB%93%E6%9E%84/" itemprop="url">
-            <span itemprop="name">经验风险、期望风险、结构风险</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2020-10-25T09:35:05+08:00"
-              content="2020-10-25">
-          10-25
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/10/25/WNSP#2/" itemprop="url">
-            <span itemprop="name">WNSP#2</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2020-10-25T09:35:05+08:00"
-              content="2020-10-25">
-          10-25
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/10/25/ROC%20%20AUC/" itemprop="url">
-            <span itemprop="name">ROC AUC, Accuracy, Recall, F1</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
+</div>
 
 
-    </div>
-  </div>
-  
-  
-  
 
-  
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/archives/2020/10/page/2/">2</a><a class="extend next" rel="next" href="/archives/2020/10/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
-  </nav>
 
 
 
