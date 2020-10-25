@@ -23,12 +23,12 @@
     var CONFIG = {"hostname":"chenzk1.github.io","root":"/","scheme":"Gemini","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 
-  <meta name="description" content="[TOC]  决策树问题：如何挑选用于分裂节点的特征—&gt;ID3 C4.5 …(一个标准：使分裂出来的节点尽可能纯，即一个分支尽可能属于同类)  ID3信息增益  信息增益 &#x3D; 信息熵 - 条件熵  信息增益：针对每个 属性 信息熵：整个样本空间的不确定度。其中Pk一定是label取值的概率。 条件熵：给定某个属性，求其信息熵 —&gt; 问题：某属性所包括的类别越多，信息增益越大。极限：每个">
+  <meta name="description" content="[TOC]  决策树_问题：如何挑选用于分裂节点的特征—&gt;ID3 C4.5 …(一个标准：使分裂出来的节点尽可能纯，即一个分支尽可能属于同类)_  ID3_信息增益_  信息增益 &#x3D; 信息熵 - 条件熵  信息增益：针对每个 _属性_ 信息熵：整个样本空间的不确定度。其中Pk一定是label取值的概率。 条件熵：给定某个属性，求其信息熵 —&gt; 问题：某属性所包括的类别越多，信息增益越大">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Decision Tree">
 <meta property="og:url" content="https://chenzk1.github.io/2020/10/25/Decision%20Tree/index.html">
 <meta property="og:site_name" content="Kayden&#39;s Blog">
-<meta property="og:description" content="[TOC]  决策树问题：如何挑选用于分裂节点的特征—&gt;ID3 C4.5 …(一个标准：使分裂出来的节点尽可能纯，即一个分支尽可能属于同类)  ID3信息增益  信息增益 &#x3D; 信息熵 - 条件熵  信息增益：针对每个 属性 信息熵：整个样本空间的不确定度。其中Pk一定是label取值的概率。 条件熵：给定某个属性，求其信息熵 —&gt; 问题：某属性所包括的类别越多，信息增益越大。极限：每个">
+<meta property="og:description" content="[TOC]  决策树_问题：如何挑选用于分裂节点的特征—&gt;ID3 C4.5 …(一个标准：使分裂出来的节点尽可能纯，即一个分支尽可能属于同类)_  ID3_信息增益_  信息增益 &#x3D; 信息熵 - 条件熵  信息增益：针对每个 _属性_ 信息熵：整个样本空间的不确定度。其中Pk一定是label取值的概率。 条件熵：给定某个属性，求其信息熵 —&gt; 问题：某属性所包括的类别越多，信息增益越大">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://pic4.zhimg.com/80/v2-812104c0291d20935e910919a9fa5c27_hd.png">
 <meta property="og:image" content="https://img-blog.csdn.net/20150109184544578?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvQW5kcm9pZGx1c2hhbmdkZXJlbg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
@@ -250,6 +250,10 @@
 
 
       </section>
+        <div class="back-to-top animated">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
     </div>
   </aside>
   <div class="sidebar-dimmer"></div>
@@ -258,10 +262,6 @@
     </header>
 
     
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
 
 <noscript>
   <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
@@ -330,12 +330,12 @@
     <div class="post-body" itemprop="articleBody">
         <p>[TOC]</p>
 <ol>
-<li><p>决策树<br><strong><em>问题：如何挑选用于分裂节点的特征—&gt;ID3 C4.5 …(一个标准：使分裂出来的节点尽可能纯，即一个分支尽可能属于同类)</em></strong></p>
+<li><p>决策树<br><strong>_问题：如何挑选用于分裂节点的特征—&gt;ID3 C4.5 …(一个标准：使分裂出来的节点尽可能纯，即一个分支尽可能属于同类)_</strong></p>
 </li>
-<li><p>ID3<br><em><strong>信息增益</strong></em></p>
+<li><p>ID3<br>_<strong>信息增益</strong>_</p>
 <p> 信息增益 = 信息熵 - 条件熵</p>
 <ul>
-<li>信息增益：针对每个 <em><strong>属性</strong></em></li>
+<li>信息增益：针对每个 _<strong>属性</strong>_</li>
 <li>信息熵：整个样本空间的不确定度。其中Pk一定是label取值的概率。</li>
 <li><p>条件熵：给定某个属性，求其信息熵</p>
 <p>—&gt; 问题：某属性所包括的类别越多，信息增益越大。极限：每个类别仅有1个实例（label数量为1），log p = log1 = 0， 所以最终条件熵=0。或：属性类别越多，条件熵越小，其纯度越高。</p>
@@ -344,7 +344,7 @@
 </li>
 </ul>
 </li>
-<li><p>C4.5 <em><strong>信息增益率+信息增益</strong></em></p>
+<li><p>C4.5 _<strong>信息增益率+信息增益</strong>_</p>
 <p> 属性a的信息增益率 = 属性a的信息增益 / a的某个固有统计量IV(a)</p>
 <p> <img src="https://pic4.zhimg.com/80/v2-812104c0291d20935e910919a9fa5c27_hd.png" alt="IV(a)公式"></p>
 <p> V为a的取值数目。<br> （实际上是属性a的信息熵）</p>
@@ -353,7 +353,7 @@
 <li>先选择高于平均水平信息增益的属性，再选择最高信息增益率的属性。</li>
 </ul>
 </li>
-<li><p>CART <em><strong>基尼系数+MAE/MSE</strong></em></p>
+<li><p>CART _<strong>基尼系数+MAE/MSE</strong>_</p>
 <p>与ID3、C4.5的不同：形成二叉树，因此 —&gt; 既要确定要分割的属性，也要确定要分割的值</p>
 <ul>
 <li><p>回归树：MAE/MSE</p>

@@ -251,6 +251,10 @@
 
 
       </section>
+        <div class="back-to-top animated">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
     </div>
   </aside>
   <div class="sidebar-dimmer"></div>
@@ -259,10 +263,6 @@
     </header>
 
     
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
 
 <noscript>
   <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
@@ -482,7 +482,7 @@ f(\mathbf{x}+\Delta \mathbf{x}) \leq f(\mathbf{x})</script><p>梯度下降法每
 <script type="math/tex; mode=display">
 (\nabla f(\mathbf{x}))^{\mathrm{T}} \Delta \mathbf{x}=-\alpha(\nabla f(\mathbf{x}))^{\mathrm{T}}(\nabla f(\mathbf{x})) \leq 0</script><p>函数值下降。从初始点$\mathbf{x}_{0}$开始，反复使用如下<strong>迭代公式</strong></p>
 <script type="math/tex; mode=display">
-\mathbf{x}_{k+1}=\mathbf{x}_{k}-\alpha \nabla f\left(\mathbf{x}_{k}\right)</script><p>只要没有到达梯度为0的点，函数值会沿序列$\mathbf{x}<em>{k}$递减，最终收敛到梯度为0 的点。从$\mathbf{x}</em>{0}$<br>出发，用<strong>迭代公式</strong>进行迭代，会形成一个函数值递减的序列$\left{\mathbf{x}_{i}\right}$</p>
+\mathbf{x}_{k+1}=\mathbf{x}_{k}-\alpha \nabla f\left(\mathbf{x}_{k}\right)</script><p>只要没有到达梯度为0的点，函数值会沿序列$\mathbf{x}_{k}$递减，最终收敛到梯度为0 的点。从$\mathbf{x}_{0}$<br>出发，用<strong>迭代公式</strong>进行迭代，会形成一个函数值递减的序列$\left\{\mathbf{x}_{i}\right\}$</p>
 <script type="math/tex; mode=display">
 f\left(\mathbf{x}_{0}\right) \geq f\left(\mathbf{x}_{1}\right) \geq f\left(\mathbf{x}_{2}\right) \geq \ldots \geq f\left(\mathbf{x}_{k}\right)</script><h2 id="9-梯度下降法如何判断是否收敛？"><a href="#9-梯度下降法如何判断是否收敛？" class="headerlink" title="9.  梯度下降法如何判断是否收敛？"></a>9.  梯度下降法如何判断是否收敛？</h2><p>迭代终止的条件是函数的梯度值为0(实际实现时是接近于0 即可)，此时认为已经达<br>到极值点。可以通过判定梯度的二范数是否充分接近于0 而实现。</p>
 <h2 id="10-梯度下降法为什么要在迭代公式中使用步长系数？"><a href="#10-梯度下降法为什么要在迭代公式中使用步长系数？" class="headerlink" title="10. 梯度下降法为什么要在迭代公式中使用步长系数？"></a>10. 梯度下降法为什么要在迭代公式中使用步长系数？</h2><p>其作用是保证$\mathbf{x}+\Delta \mathbf{x}$在$\mathbf{x}$的邻域内，即控制增量的步长，从而可以忽略泰勒公式中的<br>$o(|\Delta \mathbf{x}|)$项。否则不能保证每次迭代时函数值下降。</p>
@@ -506,7 +506,7 @@ f\left(\mathbf{x}_{0}\right) \geq f\left(\mathbf{x}_{1}\right) \geq f\left(\math
 <script type="math/tex; mode=display">
 f(\mathbf{x})=f\left(\mathbf{x}_{0}\right)+\nabla f\left(\mathbf{x}_{0}\right)^{\mathrm{T}}\left(\mathbf{x}-\mathbf{x}_{0}\right)+\frac{1}{2}\left(\mathbf{x}-\mathbf{x}_{0}\right)^{\mathrm{T}} \nabla^{2} f\left(\mathbf{x}_{0}\right)\left(\mathbf{x}-\mathbf{x}_{0}\right)+o\left(\left\|\mathbf{k}-\mathbf{x}_{0}\right\|^{2}\right)</script><p>忽略二次以上的项，将目标函数近似成二次函数，等式两边同时对$\mathbf{x}$求梯度，可得</p>
 <script type="math/tex; mode=display">
-\nabla f(\mathbf{x}) \approx \nabla f\left(\mathbf{x}_{0}\right)+\nabla^{2} f\left(\mathbf{x}_{0}\right)\left(\mathbf{x}-\mathbf{x}_{0}\right)</script><p>其中 $\nabla^{2} f\left(\mathbf{x}<em>{0}\right)$为在$\mathbf{x}</em>{0}$ 处的Hessian 矩阵。令函数的梯度为0 ，有 </p>
+\nabla f(\mathbf{x}) \approx \nabla f\left(\mathbf{x}_{0}\right)+\nabla^{2} f\left(\mathbf{x}_{0}\right)\left(\mathbf{x}-\mathbf{x}_{0}\right)</script><p>其中 $\nabla^{2} f\left(\mathbf{x}_{0}\right)$为在$\mathbf{x}_{0}$ 处的Hessian 矩阵。令函数的梯度为0 ，有 </p>
 <script type="math/tex; mode=display">
 \nabla f\left(\mathbf{x}_{0}\right)+\nabla^{2} f\left(\mathbf{x}_{0}\right)\left(\mathbf{x}-\mathbf{x}_{0}\right)=\mathbf{0}</script><p>解这个线性方程组可以得到</p>
 <script type="math/tex; mode=display">

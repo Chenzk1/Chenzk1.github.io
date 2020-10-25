@@ -251,6 +251,10 @@
 
 
       </section>
+        <div class="back-to-top animated">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
     </div>
   </aside>
   <div class="sidebar-dimmer"></div>
@@ -259,10 +263,6 @@
     </header>
 
     
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
 
 <noscript>
   <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
@@ -342,7 +342,7 @@
 </li>
 </ul>
 <h1 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h1><p><img src="http://i.imgur.com/L7PhJwO.png" alt="Summary"></p>
-<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><h2 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h2><script type="math/tex; mode=display">\text{obj} = \sum_{i=1}^n l(y_i, \hat{y}_i^{(t)}) + \sum_{i=1}^t\Omega(f_i)</script><p>l为loss，\ \Omega \ 为正则项</p>
+<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><h2 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h2><script type="math/tex; mode=display">\text{obj} = \sum_{i=1}^n l(y_i, \hat{y}_i^{(t)}) + \sum_{i=1}^t\Omega(f_i)</script><p>l为loss，\\ \Omega \\ 为正则项</p>
 <ul>
 <li>loss：采用加法策略，第t颗树时：<script type="math/tex; mode=display">\hat{y}_i^{(0)} = 0</script><script type="math/tex; mode=display">\hat{y}_i^{(1)} = f_1(x_i) = \hat{y}_i^{(0)} + f_1(x_i)</script><script type="math/tex; mode=display">\hat{y}_i^{(2)} = f_1(x_i) + f_2(x_i)= \hat{y}_i^{(1)} + f_2(x_i)</script><script type="math/tex; mode=display">\dots</script><script type="math/tex; mode=display">\hat{y}_i^{(t)} = \sum_{k=1}^t f_k(x_i)= \hat{y}_i^{(t-1)} + f_t(x_i)</script>在添加第t颗树时，需要优化的目标函数为：<script type="math/tex; mode=display">\sum_{i=1}^n [g_i f_t(x_i) + \frac{1}{2} h_i f_t^2(x_i)] + \Omega(f_t)</script>其中h和f：<script type="math/tex; mode=display">g_i = \partial_{\hat{y}_i^{(t-1)}} l(y_i, \hat{y}_i^{(t-1)})</script><script type="math/tex; mode=display">h_i = \partial_{\hat{y}_i^{(t-1)}}^2 l(y_i, \hat{y}_i^{(t-1)})</script>note: 是对谁的导</li>
 <li>正则项：复杂度：<script type="math/tex; mode=display">\Omega(f) = \gamma T + \frac{1}{2}\lambda \sum_{j=1}^T w_j^2</script>其中w是叶子上的score vector，T是叶子数量</li>
