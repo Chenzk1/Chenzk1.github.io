@@ -217,7 +217,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-count">23</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -735,7 +735,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2020-10-25 10:54:33 / 修改时间：11:08:32" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
+      <time title="创建时间：2020-10-25 10:54:33 / 修改时间：16:37:25" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -758,17 +758,17 @@
     
     <div class="post-body" itemprop="articleBody">
           <p>[TOC]</p>
-<h1><span id="线性回归">线性回归</span></h1><h2><span id="1-简单介绍一下线性回归">1. 简单介绍一下线性回归。</span></h2><ul>
+<h1 id="线性回归"><a href="#线性回归" class="headerlink" title="线性回归"></a>线性回归</h1><h2 id="1-简单介绍一下线性回归。"><a href="#1-简单介绍一下线性回归。" class="headerlink" title="1. 简单介绍一下线性回归。"></a>1. 简单介绍一下线性回归。</h2><ul>
 <li>线性：两个变量之间的关系<strong>是</strong>一次函数关系的——图象<strong>是直线</strong>，叫做线性。</li>
 <li>非线性：两个变量之间的关系<strong>不是</strong>一次函数关系的——图象<strong>不是直线</strong>，叫做非线性。</li>
 <li>回归：人们在测量事物的时候因为客观条件所限，求得的都是测量值，而不是事物真实的值，为了能够得到真实值，无限次的进行测量，最后通过这些测量数据计算<strong>回归到真实值</strong>，这就是回归的由来。</li>
 </ul>
 <p>线性回归就是利用的样本$D=(\mathrm{x}_i, \mathrm{y}_i)<br>$，$ \mathrm{i}=1,2,3 \ldots \mathrm{N}, \mathrm{x}_i$是特征数据，可能是一个，也可能是多个，通过有监督的学习，学习到由$x$到$y$的映射$h$，利用该映射关系对未知的数据进行预估，因为$y$为连续值，所以是回归问题。</p>
-<h2><span id="2-线性回归的假设函数是什么形式">2. 线性回归的假设函数是什么形式？</span></h2><p>线性回归的假设函数（$\theta<em>{0}$表示截距项，$ x</em>{0} = 1$，方便矩阵表达）：</p>
+<h2 id="2-线性回归的假设函数是什么形式？"><a href="#2-线性回归的假设函数是什么形式？" class="headerlink" title="2. 线性回归的假设函数是什么形式？"></a>2. 线性回归的假设函数是什么形式？</h2><p>线性回归的假设函数（$\theta<em>{0}$表示截距项，$ x</em>{0} = 1$，方便矩阵表达）：</p>
 <script type="math/tex; mode=display">
 f(x)=\theta_{0} x_{0}+\theta_{1} x_{1}+\theta_{2} x_{2} \ldots+\theta_{n} x_{n}  = \theta ^TX</script><p>其中$\theta,x$都是列向量</p>
-<h2><span id="3-线性回归的代价损失函数是什么形式">3. 线性回归的代价(损失)函数是什么形式？</span></h2><script type="math/tex; mode=display">
-MSE: \qquad J\left(\theta_{0}, \theta_{1}\right)=\frac{1}{2 m} \sum_{i=1}^{m}\left(y_{i}-h_{\theta}\left(x_{i}\right)\right)^{2}</script><h2><span id="4-简述岭回归与lasso回归以及使用场景">4. 简述岭回归与Lasso回归以及使用场景。</span></h2><ul>
+<h2 id="3-线性回归的代价-损失-函数是什么形式？"><a href="#3-线性回归的代价-损失-函数是什么形式？" class="headerlink" title="3. 线性回归的代价(损失)函数是什么形式？"></a>3. 线性回归的代价(损失)函数是什么形式？</h2><script type="math/tex; mode=display">
+MSE: \qquad J\left(\theta_{0}, \theta_{1}\right)=\frac{1}{2 m} \sum_{i=1}^{m}\left(y_{i}-h_{\theta}\left(x_{i}\right)\right)^{2}</script><h2 id="4-简述岭回归与Lasso回归以及使用场景。"><a href="#4-简述岭回归与Lasso回归以及使用场景。" class="headerlink" title="4. 简述岭回归与Lasso回归以及使用场景。"></a>4. 简述岭回归与Lasso回归以及使用场景。</h2><ul>
 <li><p>目的：</p>
 <ul>
 <li><p>解决线性回归出现的过拟合的请况。</p>
@@ -800,7 +800,7 @@ J(\theta)=\frac{1}{2 m} \sum_{i=1}^{m}\left(h_{\theta}\left(x^{(i)}\right)-y^{(i
 </li>
 </ul>
 <script type="math/tex; mode=display">
-J(\theta)=\frac{1}{2 m} \sum_{i=1}^{m}\left(h_{\theta}\left(x^{(i)}\right)-y^{(i)}\right)^{2}+\lambda \sum_{j=1}^{n} |\theta_{j}|</script><p>本来Lasso回归与岭回归的解空间是全部区域，但通过正则化添加了一些约束，使得解空间变小了，甚至在个别正则化方式下，解变得稀疏了。<br><img src="https://img-blog.csdnimg.cn/20200101212656597.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0hlaXRhbzUyMDA=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述" style="zoom:50%;"><br>如图所示，这里的$w_1$，$w_2$都是模型的参数，要优化的目标参数，那个红色边框包含的区域，其实就是解空间，正如上面所说，这个时候，解空间“缩小了”，你只能在这个缩小了的空间中，寻找使得目标函数最小的$w_1$，$w_2$。左边图的解空间是圆的，是由于采用了$L2$范数正则化项的缘故，右边的是个四边形，是由于采用了$L1$范数作为正则化项的缘故，大家可以在纸上画画，$L2$构成的区域一定是个圆，$L1$构成的区域一定是个四边形。</p>
+J(\theta)=\frac{1}{2 m} \sum_{i=1}^{m}\left(h_{\theta}\left(x^{(i)}\right)-y^{(i)}\right)^{2}+\lambda \sum_{j=1}^{n} |\theta_{j}|</script><p>本来Lasso回归与岭回归的解空间是全部区域，但通过正则化添加了一些约束，使得解空间变小了，甚至在个别正则化方式下，解变得稀疏了。<br><img src="https://img-blog.csdnimg.cn/20200101212656597.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0hlaXRhbzUyMDA=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述" style="zoom:50%;" /><br>如图所示，这里的$w_1$，$w_2$都是模型的参数，要优化的目标参数，那个红色边框包含的区域，其实就是解空间，正如上面所说，这个时候，解空间“缩小了”，你只能在这个缩小了的空间中，寻找使得目标函数最小的$w_1$，$w_2$。左边图的解空间是圆的，是由于采用了$L2$范数正则化项的缘故，右边的是个四边形，是由于采用了$L1$范数作为正则化项的缘故，大家可以在纸上画画，$L2$构成的区域一定是个圆，$L1$构成的区域一定是个四边形。</p>
 <p>再看看那蓝色的圆圈，再次提醒大家，这个<strong>坐标轴和特征（数据）没关系</strong>，它完全是参数的坐标系，每一个圆圈上，可以取无数个$w_1$，$w_2$，这些$w_1$，$w_2$有个共同的特点，用它们计算的目标函数值是相等的！那个蓝色的圆心，就是实际最优参数，但是由于我们对解空间做了限制，所以最优解只能在“缩小的”解空间中产生。</p>
 <p>蓝色的圈圈一圈又一圈，代表着参数$w_1$，$w_2$在不停的变化，并且是在解空间中进行变化（这点注意，图上面没有画出来，估计画出来就不好看了），直到脱离了解空间，也就得到了图上面的那个$w^*$，这便是目标函数的最优参数。</p>
 <p>对比一下左右两幅图的$w^<em>$，我们明显可以发现，右图的$w^</em>$的$w_1$分量是0，有没有感受到一丝丝凉意？稀疏解诞生了！是的，这就是我们想要的稀疏解，我们想要的简单模型。$L1$比$L2$正则化更容易产生稀疏矩阵。</p>
@@ -828,22 +828,22 @@ J(\theta)=\frac{1}{2} \sum_{i=1}^{m} w^{(i)}\left(h_{\theta}\left(x^{(i)}\right)
 </ul>
 </li>
 </ul>
-<h2><span id="5-线性回归要求因变量服从正态分布吗">5. 线性回归要求因变量服从正态分布吗？</span></h2><p><strong>线性回归的假设前提是噪声服从正态分布，即因变量服从正态分布。但实际上难以达到，因变量服从正态分布时模型拟合效果更好。</strong></p>
+<h2 id="5-线性回归要求因变量服从正态分布吗？"><a href="#5-线性回归要求因变量服从正态分布吗？" class="headerlink" title="5. 线性回归要求因变量服从正态分布吗？"></a>5. 线性回归要求因变量服从正态分布吗？</h2><p><strong>线性回归的假设前提是噪声服从正态分布，即因变量服从正态分布。但实际上难以达到，因变量服从正态分布时模型拟合效果更好。</strong></p>
 <p>参考资料： <a target="_blank" rel="noopener" href="http://www.julyedu.com/question/big/kp_id/23/ques_id/2914">http://www.julyedu.com/question/big/kp_id/23/ques_id/2914</a> </p>
-<h1><span id="逻辑回归">逻辑回归</span></h1><h2><span id="1-简单介绍一下逻辑回归">1. 简单介绍一下逻辑回归</span></h2><p>逻辑回归用来解决<strong>分类</strong>问题，线性回归的结果$Y$带入一个非线性变换的<strong>Sigmoid函数</strong>中，得到$[0,1]$之间取值范围的数$S$，$S$可以把它看成是一个概率值，如果我们设置概率阈值为0.5，那么$S$大于0.5可以看成是正样本，小于0.5看成是负样本，就可以进行分类了。</p>
+<h1 id="逻辑回归"><a href="#逻辑回归" class="headerlink" title="逻辑回归"></a>逻辑回归</h1><h2 id="1-简单介绍一下逻辑回归"><a href="#1-简单介绍一下逻辑回归" class="headerlink" title="1. 简单介绍一下逻辑回归"></a>1. 简单介绍一下逻辑回归</h2><p>逻辑回归用来解决<strong>分类</strong>问题，线性回归的结果$Y$带入一个非线性变换的<strong>Sigmoid函数</strong>中，得到$[0,1]$之间取值范围的数$S$，$S$可以把它看成是一个概率值，如果我们设置概率阈值为0.5，那么$S$大于0.5可以看成是正样本，小于0.5看成是负样本，就可以进行分类了。</p>
 <ul>
 <li>逻辑回归的本质： 极大似然估计</li>
 <li>逻辑回归的激活函数：Sigmoid</li>
 <li>逻辑回归的代价函数：交叉熵</li>
 </ul>
-<h2><span id="2-简单介绍一下sigmoid函数">2. 简单介绍一下Sigmoid函数</span></h2><p>函数公式如下：</p>
+<h2 id="2-简单介绍一下Sigmoid函数"><a href="#2-简单介绍一下Sigmoid函数" class="headerlink" title="2. 简单介绍一下Sigmoid函数"></a>2. 简单介绍一下Sigmoid函数</h2><p>函数公式如下：</p>
 <script type="math/tex; mode=display">
 S(t)=\frac{1}{1+e^{-t}}</script><p>函数中$t$无论取什么值，其结果都在$[0,{1}]$的区间内，回想一下，一个分类问题就有两种答案，一种是“是”，一种是“否”，那0对应着“否”，1对应着“是”，那又有人问了，你这不是$[0,1]$的区间吗，怎么会只有0和1呢？这个问题问得好，我们假设分类的<strong>阈值</strong>是0.5，那么超过0.5的归为1分类，低于0.5的归为0分类，阈值是可以自己设定的。</p>
 <p>好了，接下来我们把$\theta^T X+b$带入$t$中就得到了我们的逻辑回归的一般模型方程：</p>
 <p>逻辑回归的<strong>假设函数</strong>：</p>
 <script type="math/tex; mode=display">
 H(\theta, b)=\frac{1}{1+e^{(\theta^T X+b)}}</script><p>结果$P$也可以理解为概率，换句话说概率大于0.5的属于1分类，概率小于0.5的属于0分类，这就达到了分类的目的。</p>
-<h2><span id="3-逻辑回归的损失函数是什么">3. 逻辑回归的损失函数是什么</span></h2><p>逻辑回归的损失函数是<strong>对数似然函数</strong>，函数公式如下：</p>
+<h2 id="3-逻辑回归的损失函数是什么"><a href="#3-逻辑回归的损失函数是什么" class="headerlink" title="3. 逻辑回归的损失函数是什么"></a>3. 逻辑回归的损失函数是什么</h2><p>逻辑回归的损失函数是<strong>对数似然函数</strong>，函数公式如下：</p>
 <script type="math/tex; mode=display">
 \operatorname{cost}\left(h_{\theta}(x), y\right)=\left\{\begin{aligned}-\log \left(h_{\theta}(x)\right) & \qquad  y=1 \\-\log \left(1-h_{\theta}(x)\right) & \qquad  y=0 \end{aligned}\right.</script><p><strong>两式合并</strong>得到<strong>概率分布表达式</strong>：</p>
 <script type="math/tex; mode=display">
@@ -855,7 +855,7 @@ J(\theta) = -lnL(\theta) = -\sum\limits_{i=1}^{m}(y^{(i)}log(h_{\theta}(x^{(i)})
 <li>为何不能用mse</li>
 </ul>
 <p><a target="_blank" rel="noopener" href="http://sofasofa.io/forum_main_post.php?postid=1001792">解释</a></p>
-<h2><span id="4可以进行多分类吗">4.可以进行多分类吗？</span></h2><p>多分类问题一般将二分类推广到多分类的方式有三种，一对一，一对多，多对多。</p>
+<h2 id="4-可以进行多分类吗？"><a href="#4-可以进行多分类吗？" class="headerlink" title="4.可以进行多分类吗？"></a>4.可以进行多分类吗？</h2><p>多分类问题一般将二分类推广到多分类的方式有三种，一对一，一对多，多对多。</p>
 <ul>
 <li><p>一对一：</p>
 <ul>
@@ -873,7 +873,7 @@ J(\theta) = -lnL(\theta) = -\sum\limits_{i=1}^{m}(y^{(i)}log(h_{\theta}(x^{(i)})
 </ul>
 </li>
 </ul>
-<h2><span id="5逻辑回归的优缺点">5.逻辑回归的优缺点</span></h2><ul>
+<h2 id="5-逻辑回归的优缺点"><a href="#5-逻辑回归的优缺点" class="headerlink" title="5.逻辑回归的优缺点"></a>5.逻辑回归的优缺点</h2><ul>
 <li><p>优点</p>
 <ul>
 <li>LR能以概率的形式输出结果，而非只是0,1判定。</li>
@@ -890,7 +890,7 @@ J(\theta) = -lnL(\theta) = -\sum\limits_{i=1}^{m}(y^{(i)}log(h_{\theta}(x^{(i)})
 </ul>
 </li>
 </ul>
-<h2><span id="6-逻辑斯特回归为什么要对特征进行离散化">6. 逻辑斯特回归为什么要对特征进行离散化。</span></h2><ul>
+<h2 id="6-逻辑斯特回归为什么要对特征进行离散化。"><a href="#6-逻辑斯特回归为什么要对特征进行离散化。" class="headerlink" title="6. 逻辑斯特回归为什么要对特征进行离散化。"></a>6. 逻辑斯特回归为什么要对特征进行离散化。</h2><ul>
 <li><p>逻辑回归属于广义线性模型，表达能力受限；单变量离散化为N个后，每个变量有单独的权重，相当于为模型引入了非线性，能够提升模型表达能力，加大拟合；离散特征的增加和减少都很容易，易于模型的快速迭代； </p>
 </li>
 <li><p>稀疏向量内积乘法运算速度快，计算结果方便存储，容易扩展； </p>
@@ -900,7 +900,7 @@ J(\theta) = -lnL(\theta) = -\sum\limits_{i=1}^{m}(y^{(i)}log(h_{\theta}(x^{(i)})
 <li><p>方便交叉与特征组合：离散化后可以进行特征交叉，由$M+N$个变量变为$M*N$个变量，进一步引入非线性，提升表达能力； </p>
 </li>
 </ul>
-<h2><span id="7-线性回归与逻辑回归的区别">7.  线性回归与逻辑回归的区别</span></h2><ul>
+<h2 id="7-线性回归与逻辑回归的区别"><a href="#7-线性回归与逻辑回归的区别" class="headerlink" title="7.  线性回归与逻辑回归的区别"></a>7.  线性回归与逻辑回归的区别</h2><ul>
 <li><p>线性回归的样本的输出，都是连续值，$ y\in (-\infty ,+\infty )$，而逻辑回归中$y\in (0,1)$，只能取0和1。</p>
 </li>
 <li><p>对于拟合函数也有本质上的差别： </p>
@@ -920,7 +920,7 @@ J(\theta) = -lnL(\theta) = -\sum\limits_{i=1}^{m}(y^{(i)}log(h_{\theta}(x^{(i)})
 </ul>
 <ul>
 <li><p>这个时候就能看出区别，在线性回归中$\theta ^{T}x$为预测值的拟合函数；而在逻辑回归中$\theta ^{T}x$为决策边界。下表为线性回归和逻辑回归的区别。</p>
-<p><center>线性回归和逻辑回归的区别</center></p>
+<p><center>线性回归和逻辑回归的区别</p>
 <p>|              |  线性回归  |   逻辑回归   |<br>| :—————: | :————: | :—————: |<br>|     目的     |    预测    |     分类     |<br>|  $y^{(i)}$   |    未知    |   （0,1）    |<br>|     函数     |  拟合函数  |   预测函数   |<br>| 参数计算方式 | 最小二乘法 | 极大似然估计 |</p>
 </li>
 </ul>
@@ -929,7 +929,7 @@ J(\theta) = -lnL(\theta) = -\sum\limits_{i=1}^{m}(y^{(i)}log(h_{\theta}(x^{(i)})
 <li>拟合函数和预测函数什么关系呢？简单来说就是将拟合函数做了一个逻辑函数的转换，转换后使得$y^{(i)} \in (0,1)$;</li>
 <li>最小二乘和最大似然估计可以相互替代吗？回答当然是不行了。我们来看看两者依仗的原理：最大似然估计是计算使得数据出现的可能性最大的参数，依仗的自然是Probability。而最小二乘是计算误差损失。</li>
 </ol>
-<h2><span id="8-逻辑回归有哪些应用">8. 逻辑回归有哪些应用</span></h2><ul>
+<h2 id="8-逻辑回归有哪些应用"><a href="#8-逻辑回归有哪些应用" class="headerlink" title="8. 逻辑回归有哪些应用"></a>8. 逻辑回归有哪些应用</h2><ul>
 <li>CTR预估/推荐系统的learning to rank/各种分类场景。</li>
 <li>某搜索引擎厂的广告CTR预估基线版是LR。</li>
 <li>某电商搜索排序/广告CTR预估基线版是LR。</li>
@@ -1338,7 +1338,7 @@ f(\mathbf{x})=f\left(\mathbf{x}_{0}\right)+\nabla f\left(\mathbf{x}_{0}\right)^{
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2020-10-25 10:54:33 / 修改时间：11:04:38" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
+      <time title="创建时间：2020-10-25 10:54:33 / 修改时间：16:36:29" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1361,7 +1361,7 @@ f(\mathbf{x})=f\left(\mathbf{x}_{0}\right)+\nabla f\left(\mathbf{x}_{0}\right)^{
     
     <div class="post-body" itemprop="articleBody">
           <p>[TOC]</p>
-<h2><span id="1-简单介绍随机森林">1. 简单介绍随机森林</span></h2><p><strong>多次随机取样，多次随机取属性，选取最优分割点，构建多个(CART)分类器，投票表决或简单平均</strong></p>
+<h2 id="1-简单介绍随机森林"><a href="#1-简单介绍随机森林" class="headerlink" title="1. 简单介绍随机森林"></a>1. 简单介绍随机森林</h2><p><strong>多次随机取样，多次随机取属性，选取最优分割点，构建多个(CART)分类器，投票表决或简单平均</strong></p>
 <p><strong>算法流程：</strong></p>
 <ul>
 <li>输入为样本集$D={(x，y_1)，(x_2，y_2) \dots (x_m，y_m)}$，弱分类器迭代次数$T$。</li>
@@ -1375,8 +1375,8 @@ f(\mathbf{x})=f\left(\mathbf{x}_{0}\right)+\nabla f\left(\mathbf{x}_{0}\right)^{
 </li>
 <li>如果是分类算法预测，则$T$个弱学习器投出最多票数的类别或者类别之一为最终类别。如果是回归算法，$T$个弱学习器得到的回归结果进行算术平均得到的值为最终的模型输出。</li>
 </ul>
-<h2><span id="2-随机森林的随机性体现在哪里">2. 随机森林的随机性体现在哪里？</span></h2><p><strong>多次有放回的随机取样，多次随机取属性</strong></p>
-<h2><span id="3-随机森林为什么不容易过拟合">3. 随机森林为什么不容易过拟合？</span></h2><ul>
+<h2 id="2-随机森林的随机性体现在哪里？"><a href="#2-随机森林的随机性体现在哪里？" class="headerlink" title="2. 随机森林的随机性体现在哪里？"></a>2. 随机森林的随机性体现在哪里？</h2><p><strong>多次有放回的随机取样，多次随机取属性</strong></p>
+<h2 id="3-随机森林为什么不容易过拟合？"><a href="#3-随机森林为什么不容易过拟合？" class="headerlink" title="3. 随机森林为什么不容易过拟合？"></a>3. 随机森林为什么不容易过拟合？</h2><ul>
 <li><p>随机森林中的每一颗树都是过拟合的，拟合到非常小的细节上</p>
 </li>
 <li><p>随机森林通过引入随机性，使每一颗树拟合的细节不同</p>
@@ -1385,24 +1385,24 @@ f(\mathbf{x})=f\left(\mathbf{x}_{0}\right)+\nabla f\left(\mathbf{x}_{0}\right)^{
 </li>
 </ul>
 <p>因此随机森林出现过拟合的概率相对低。</p>
-<h2><span id="4-为什么不用全样本训练">4. 为什么不用全样本训练？</span></h2><p>全样本训练忽视了局部样本的规律（各个决策树趋于相同），对于模型的泛化能力是有害的，使随机森<br>林算法在样本层面失去了随机性。</p>
-<h2><span id="5-为什么要随机特征">5. 为什么要随机特征？</span></h2><p>随机特征保证基分类器的多样性（差异性），最终集成的泛化性能可通过个体学习器之间的差异度而进<br>一步提升，从而提高泛化能力和抗噪能力。</p>
-<h2><span id="6-rf与-gbdt-的区别">6. RF与 GBDT 的区别？</span></h2><ul>
+<h2 id="4-为什么不用全样本训练？"><a href="#4-为什么不用全样本训练？" class="headerlink" title="4. 为什么不用全样本训练？"></a>4. 为什么不用全样本训练？</h2><p>全样本训练忽视了局部样本的规律（各个决策树趋于相同），对于模型的泛化能力是有害的，使随机森<br>林算法在样本层面失去了随机性。</p>
+<h2 id="5-为什么要随机特征？"><a href="#5-为什么要随机特征？" class="headerlink" title="5. 为什么要随机特征？"></a>5. 为什么要随机特征？</h2><p>随机特征保证基分类器的多样性（差异性），最终集成的泛化性能可通过个体学习器之间的差异度而进<br>一步提升，从而提高泛化能力和抗噪能力。</p>
+<h2 id="6-RF与-GBDT-的区别？"><a href="#6-RF与-GBDT-的区别？" class="headerlink" title="6. RF与 GBDT 的区别？"></a>6. RF与 GBDT 的区别？</h2><ul>
 <li>随机森林将多棵决策树的结果进行投票后得到最终的结果，对不同的树的训练结果也没有做进一步的优化提升，将其称为<strong>Bagging算法。</strong></li>
 <li>GBDT用到的是<strong>Boosting算法</strong>，在迭代的每一步构建弱学习器弥补原有模型的不足。GBDT中的Gradient Boost就是通过每次迭代的时候构建一个沿梯度下降最快的方向的学习器。并且通过设置不同的损失函数可以处理各类学习任务(多分类、回归等)。</li>
 </ul>
-<h2><span id="7-rf为什么比bagging效率高">7. RF为什么比Bagging效率高？</span></h2><p>Bagging无随机特征，使得训练决策树时效率更低</p>
-<h2><span id="8-你已经建了一个有10000棵树的随机森林模型-在得到000的训练误差后你非常高兴-但是验证错误是3423-到底是怎么回事你还没有训练好你的模型吗">8. 你已经建了一个有10000棵树的随机森林模型。在得到0.00的训练误差后，你非常高兴。但是，验证错误是34.23。到底是怎么回事？你还没有训练好你的模型吗？</span></h2><p>训练误差为0：<strong>模型过度拟合</strong></p>
+<h2 id="7-RF为什么比Bagging效率高？"><a href="#7-RF为什么比Bagging效率高？" class="headerlink" title="7. RF为什么比Bagging效率高？"></a>7. RF为什么比Bagging效率高？</h2><p>Bagging无随机特征，使得训练决策树时效率更低</p>
+<h2 id="8-你已经建了一个有10000棵树的随机森林模型。在得到0-00的训练误差后，你非常高兴。但是，验证错误是34-23。到底是怎么回事？你还没有训练好你的模型吗？"><a href="#8-你已经建了一个有10000棵树的随机森林模型。在得到0-00的训练误差后，你非常高兴。但是，验证错误是34-23。到底是怎么回事？你还没有训练好你的模型吗？" class="headerlink" title="8. 你已经建了一个有10000棵树的随机森林模型。在得到0.00的训练误差后，你非常高兴。但是，验证错误是34.23。到底是怎么回事？你还没有训练好你的模型吗？"></a>8. 你已经建了一个有10000棵树的随机森林模型。在得到0.00的训练误差后，你非常高兴。但是，验证错误是34.23。到底是怎么回事？你还没有训练好你的模型吗？</h2><p>训练误差为0：<strong>模型过度拟合</strong></p>
 <p>验证错误为34.23：该分类器用于<strong>未看见的样本</strong>上时，找不到已有的模式</p>
 <p>因此，为了避免这些情况，要用交叉验证来调整树的数量。</p>
-<h2><span id="9-如何使用随机森林对特征重要性进行评估">9. 如何使用随机森林对特征重要性进行评估？</span></h2><p><strong>袋外数据(OOB)</strong>： 大约有1/3的训练实例没有参与第k棵树的生成，它们称为第$k$棵树的袋外数据样本。 </p>
+<h2 id="9-如何使用随机森林对特征重要性进行评估？"><a href="#9-如何使用随机森林对特征重要性进行评估？" class="headerlink" title="9. 如何使用随机森林对特征重要性进行评估？"></a>9. 如何使用随机森林对特征重要性进行评估？</h2><p><strong>袋外数据(OOB)</strong>： 大约有1/3的训练实例没有参与第k棵树的生成，它们称为第$k$棵树的袋外数据样本。 </p>
 <p>在随机森林中某个特征$X$的重要性的计算方法如下：</p>
 <ul>
 <li>对于随机森林中的每一颗决策树，使用相应的OOB(袋外数据)来计算它的袋外数据误差，记为$errooB1$。</li>
 <li>随机地对袋外数据OOB所有样本的特征$X$加入噪声干扰(就可以随机的改变样本在特征X处的值)，再次计算它的袋外数据误差，记为$errooB2$。</li>
 <li>假设随机森林中有$N$棵树，那么对于特征$X$的重要性为$(errOOB2-errOOB1)/N)$，之所以可以用这个表达式来作为相应特征的重要性的度量值是因为：若给某个特征随机加入噪声之后，袋外的准确率大幅度降低，则说明这个特征对于样本的分类结果影响很大，也就是说它的重要程度比较高。</li>
 </ul>
-<h2><span id="10-随机森林算法训练时主要需要调整哪些参数"><em>10. 随机森林算法训练时主要需要调整哪些参数？</em></span></h2><ul>
+<h2 id="10-随机森林算法训练时主要需要调整哪些参数？"><a href="#10-随机森林算法训练时主要需要调整哪些参数？" class="headerlink" title="10. 随机森林算法训练时主要需要调整哪些参数？"></a><em>10. 随机森林算法训练时主要需要调整哪些参数？</em></h2><ul>
 <li><p><strong>n_estimators:</strong>随机森林建立子树的数量。<br>较多的子树一般可以让模型有更好的性能，但同时让你的代码变慢。需要选择最佳的随机森林子树数量</p>
 </li>
 <li><p><strong>max_features：</strong>随机森林允许单个决策树使用特征的最大数量。<br>增加max_features一般能提高模型的性能，因为在每个节点上，我们有更多的选择可以考虑。然而，这未必完全是对的，因为它降低了单个树的多样性，而这正是随机森林独特的优点。但是，可以肯定，你通过增加max_features会降低算法的速度。因此，你需要适当的平衡和选择最佳max_features。</p>
@@ -1421,7 +1421,7 @@ f(\mathbf{x})=f\left(\mathbf{x}_{0}\right)+\nabla f\left(\mathbf{x}_{0}\right)^{
 <li><p><strong>min_impurity_split：</strong> 节点划分最小不纯度<br>这个值限制了决策树的增长，如果某节点的不纯度（基于基尼系数，均方差）小于这个阈值，则该节点不再生成子节点。即为叶子节点。一般不推荐改动默认值1e-7。</p>
 </li>
 </ul>
-<h2><span id="11-随机森林的优缺点">11. 随机森林的优缺点</span></h2><ul>
+<h2 id="11-随机森林的优缺点"><a href="#11-随机森林的优缺点" class="headerlink" title="11. 随机森林的优缺点"></a>11. 随机森林的优缺点</h2><ul>
 <li>优点<ul>
 <li>训练可以高度并行化，对于大数据时代的大样本训练速度有优势。个人觉得这是的最主要的优点。</li>
 <li>由于可以随机选择决策树节点划分特征，这样在样本特征维度很高的时候，仍然能高效的训练模型。</li>
@@ -1437,7 +1437,7 @@ f(\mathbf{x})=f\left(\mathbf{x}_{0}\right)+\nabla f\left(\mathbf{x}_{0}\right)^{
 </ul>
 </li>
 </ul>
-<h2><span id="12-简述一下adaboost原理">12. 简述一下Adaboost原理</span></h2><p>Adaboost算法利用同一种基分类器（弱分类器），<strong>基于分类器的错误率分配不同的权重参数，最后累加加权的预测结果</strong>作为输出。</p>
+<h2 id="12-简述一下Adaboost原理"><a href="#12-简述一下Adaboost原理" class="headerlink" title="12. 简述一下Adaboost原理"></a>12. 简述一下Adaboost原理</h2><p>Adaboost算法利用同一种基分类器（弱分类器），<strong>基于分类器的错误率分配不同的权重参数，最后累加加权的预测结果</strong>作为输出。</p>
 <ul>
 <li>Adaboost算法流程：<ul>
 <li>样本赋予权重，得到第一个分类器。</li>
@@ -1449,7 +1449,7 @@ f(\mathbf{x})=f\left(\mathbf{x}_{0}\right)+\nabla f\left(\mathbf{x}_{0}\right)^{
 </ul>
 </li>
 </ul>
-<h2><span id="13-adaboost的优点和缺点">13. AdaBoost的优点和缺点</span></h2><ul>
+<h2 id="13-AdaBoost的优点和缺点"><a href="#13-AdaBoost的优点和缺点" class="headerlink" title="13. AdaBoost的优点和缺点"></a>13. AdaBoost的优点和缺点</h2><ul>
 <li>优点<ul>
 <li>Adaboost提供一种框架，在框架内可以使用各种方法构建子分类器。可以使用简单的弱分类器，不用对特征进行筛选，也不存在过拟合的现象。</li>
 <li>Adaboost算法不需要弱分类器的先验知识，最后得到的强分类器的分类精度依赖于所有弱分类器。无论是应用于人造数据还是真实数据，Adaboost都能显著的提高学习精度。</li>
@@ -1464,8 +1464,8 @@ f(\mathbf{x})=f\left(\mathbf{x}_{0}\right)+\nabla f\left(\mathbf{x}_{0}\right)^{
 </ul>
 </li>
 </ul>
-<h2><span id="14-adaboost对噪声敏感吗">14. Adaboost对噪声敏感吗？</span></h2><p>在Adaboost训练过程中，Adaboost会使得难于分类样本的权值呈指数增长，训练将会过于偏向这类困难的样本，导致Adaboost算法易受噪声干扰。</p>
-<h2><span id="15-adaboost和随机森林算法的异同点">15. Adaboost和随机森林算法的异同点</span></h2><p>随机森林和Adaboost算法都可以用来分类，它们都是优秀的基于决策树的组合算法。</p>
+<h2 id="14-Adaboost对噪声敏感吗？"><a href="#14-Adaboost对噪声敏感吗？" class="headerlink" title="14. Adaboost对噪声敏感吗？"></a>14. Adaboost对噪声敏感吗？</h2><p>在Adaboost训练过程中，Adaboost会使得难于分类样本的权值呈指数增长，训练将会过于偏向这类困难的样本，导致Adaboost算法易受噪声干扰。</p>
+<h2 id="15-Adaboost和随机森林算法的异同点"><a href="#15-Adaboost和随机森林算法的异同点" class="headerlink" title="15. Adaboost和随机森林算法的异同点"></a>15. Adaboost和随机森林算法的异同点</h2><p>随机森林和Adaboost算法都可以用来分类，它们都是优秀的基于决策树的组合算法。</p>
 <ul>
 <li>相同之处<ul>
 <li>二者都是Bootsrap自助法选取样本。</li>
@@ -1520,7 +1520,7 @@ f(\mathbf{x})=f\left(\mathbf{x}_{0}\right)+\nabla f\left(\mathbf{x}_{0}\right)^{
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/10/25/%E5%86%B3%E7%AD%96%E6%A0%91/" class="post-title-link" itemprop="url">Decision Tree</a>
+            <a href="/2020/10/25/%E5%86%B3%E7%AD%96%E6%A0%91/" class="post-title-link" itemprop="url">机器学习面试题-决策树</a>
         </h2>
 
         <div class="post-meta-container">
@@ -1532,7 +1532,7 @@ f(\mathbf{x})=f\left(\mathbf{x}_{0}\right)+\nabla f\left(\mathbf{x}_{0}\right)^{
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2020-10-25 10:54:33 / 修改时间：11:04:46" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
+      <time title="创建时间：2020-10-25 10:54:33 / 修改时间：16:41:06" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1557,8 +1557,7 @@ f(\mathbf{x})=f\left(\mathbf{x}_{0}\right)+\nabla f\left(\mathbf{x}_{0}\right)^{
           <p>[TOC]</p>
 <h2 id="1-简单介绍决策树算法"><a href="#1-简单介绍决策树算法" class="headerlink" title="1. 简单介绍决策树算法"></a>1. 简单介绍决策树算法</h2><p>决策树将算法组织成一颗树的形式。其实这就是将平时所说的<strong>if-then语句</strong>构建成了树的形式。决策树主要包括<strong>三个部分：内部节点、叶节点、边。内部节点是划分的特征，边代表划分的条件，叶节点表示类别。</strong></p>
 <p>构建决策树 就是一个递归的选择内部节点，计算划分条件的边，最后到达叶子节点的过程。 决策树在本质上是一组嵌套的if-else判定规则，从数学上看是分段常数函数，对应于用平行于坐标轴的平面对空间的划分。判定规则是人类处理很多问题时的常用方法，这些规则是我们通过经验总结出来的，而决策树的这些规则是通过训练样本自动学习得到的。下面是一棵简单的决策树以及它对空间的划分结果： </p>
-<img src="https://mmbiz.qpic.cn/mmbiz_png/75DkJnThACkAo4IibbcQjEuyibRfEFSaemBGYWpM6AOLwCJHk4ByqIje7otdia0PUj9mWKQBK5btVmIFbSQ9bdSbA/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" style="zoom:33%;" />
-
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/75DkJnThACkAo4IibbcQjEuyibRfEFSaemBGYWpM6AOLwCJHk4ByqIje7otdia0PUj9mWKQBK5btVmIFbSQ9bdSbA/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" style="zoom:33%;" /></p>
 <p>训练时，通过最大化Gini或者其他指标来寻找最佳分裂。决策树可以输特征向量每个分量的重要性。</p>
 <p><strong>决策树是一种判别模型，既支持分类问题，也支持回归问题，是一种非线性模型（分段线性函数不是线性的）。它天然的支持多分类问题。</strong></p>
 <h2 id="2-决策树和条件概率分布的关系？"><a href="#2-决策树和条件概率分布的关系？" class="headerlink" title="2. 决策树和条件概率分布的关系？"></a>2. 决策树和条件概率分布的关系？</h2><p><strong>决策树可以表示成给定条件下类的条件概率分布。</strong> </p>
@@ -1603,42 +1602,43 @@ f(\mathbf{x})=f\left(\mathbf{x}_{0}\right)+\nabla f\left(\mathbf{x}_{0}\right)^{
 <h2 id="5-决策树的缺失值是怎么处理的"><a href="#5-决策树的缺失值是怎么处理的" class="headerlink" title="5. 决策树的缺失值是怎么处理的"></a>5. 决策树的缺失值是怎么处理的</h2><ul>
 <li><p>如何在特征值缺失的情况下进行划分特征的选择？</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">（比如“色泽”这个特征有的样本在该特征上的值是缺失的，那么该如何计算“色泽”的信息增益？）</span><br></pre></td></tr></table></figure>
-
 <ul>
 <li><p>每个样本设置一个权重（初始可以都为1） </p>
 </li>
-<li><p> 划分数据，一部分是有特征值$a$的数据，另一部分是没有特征值$a$的数据,记为$\tilde{D}$，</p>
+<li><p>划分数据，一部分是有特征值$a$的数据，另一部分是没有特征值$a$的数据,记为$\tilde{D}$，</p>
 </li>
-<li><p> <strong>对</strong>没有缺失特征值$a$的<strong>数据集$\tilde{D}$，</strong>来和对应的特征$A$的各个特征值一起<strong>计算加权重后的信息增益比</strong>，最后乘上一个系数$\rho$ 。</p>
-</li>
-</ul>
+<li><p><strong>对</strong>没有缺失特征值$a$的<strong>数据集$\tilde{D}$，</strong>来和对应的特征$A$的各个特征值一起<strong>计算加权重后的信息增益比</strong>，最后乘上一个系数$\rho$ 。</p>
 </li>
 </ul>
-<p>$$<br>\rho=\frac{\sum_{x \in \tilde{D}} w_{x}}{\sum_{x \in {D}} w_{x}}<br>$$</p>
-<p>$$<br>\tilde{p}<em>{k}=\frac{\sum</em>{x \in \tilde{D}<em>{k}} w</em>{x}}{\sum_{x \in \tilde{D}} w_{x}} \quad(1 \leq \mathrm{k} \leq|y|)<br>$$</p>
-<p>$$<br>\tilde{r}<em>{v}=\frac{\sum</em>{x \in \tilde D^{v}} w_{x}}{\sum_{x \in \tilde{D}} w_{x}} \quad(1 \leq v \leq V)<br>$$</p>
-<p>​        假设特征$A$有$v$个取值${a_1,a_2 \dots a_v}$</p>
+</li>
+</ul>
+<script type="math/tex; mode=display">
+\rho=\frac{\sum_{x \in \tilde{D}} w_{x}}{\sum_{x \in {D}} w_{x}}</script><script type="math/tex; mode=display">
+\tilde{p}_{k}=\frac{\sum_{x \in \tilde{D}_{k}} w_{x}}{\sum_{x \in \tilde{D}} w_{x}} \quad(1 \leq \mathrm{k} \leq|y|)</script><script type="math/tex; mode=display">
+\tilde{r}_{v}=\frac{\sum_{x \in \tilde D^{v}} w_{x}}{\sum_{x \in \tilde{D}} w_{x}} \quad(1 \leq v \leq V)</script><p>​        假设特征$A$有$v$个取值${a_1,a_2 \dots a_v}$</p>
 <p>​        $\tilde D$：该特征上没有缺失值的样本</p>
 <p>​        $\tilde D_k$：$\tilde D$中属于第$k$类的样本子集</p>
 <p>​        $\tilde D^v$：$\tilde D$中在特征$a$上取值为$a_v$的样本子集</p>
 <p>​        $\rho$：无特征$A$缺失的样本加权后所占加权总样本的比例。</p>
 <p>​        $\tilde{p}_{k}$：无缺失值样本第$k$类所占无缺失值样本的比例</p>
 <p>​        $\tilde{r}_{v}$：无缺失值样本在特征$a$上取值$a^v$的样本所占无缺失值样本的比例</p>
-<p>​        新的信息增益公式：<br>$$<br>\begin{aligned}<br>&amp;\operatorname{Gain}(D, a)=\rho \times \operatorname{Gain}(\tilde{D}, a)=\rho \times\left(\operatorname{Ent}(\tilde{D})-\sum_{v=1}^{V} \tilde{r}<em>{v} \operatorname{Ent}\left(\tilde{D}^{v}\right)\right)\<br>&amp;\operatorname{Ent}(\tilde{D})=-\sum</em>{k=1}^{|y|} \tilde{p}_{k} \log <em>{2} \tilde{p}</em>{k}<br>\end{aligned}<br>$$</p>
-<ul>
+<p>​        新的信息增益公式：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+&\operatorname{Gain}(D, a)=\rho \times \operatorname{Gain}(\tilde{D}, a)=\rho \times\left(\operatorname{Ent}(\tilde{D})-\sum_{v=1}^{V} \tilde{r}_{v} \operatorname{Ent}\left(\tilde{D}^{v}\right)\right)\\
+&\operatorname{Ent}(\tilde{D})=-\sum_{k=1}^{|y|} \tilde{p}_{k} \log _{2} \tilde{p}_{k}
+\end{aligned}</script><ul>
 <li><p>给定划分特征，若样本在该特征上的值是缺失的，那么该如何对这个样本进行划分？</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">（即到底把这个样本划分到哪个结点里？）</span><br></pre></td></tr></table></figure>
-
 <ul>
 <li>让包含缺失值的样本以不同的概率划分到不同的子节点中去。</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">比如缺失特征A的样本a之前权重为1，特征A有3个特征值A1,A2,A3。 3个特征值对应的无缺失A特征的样本个数为2,3,4.则a同时划分入A1，A2，A3。对应权重调节为2&#x2F;9,3&#x2F;9, 4&#x2F;9。</span><br></pre></td></tr></table></figure>
-
 </li>
 </ul>
-<h2 id="6-决策树的目标函数是什么？"><a href="#6-决策树的目标函数是什么？" class="headerlink" title="6. 决策树的目标函数是什么？"></a><strong>6. 决策树的目标函数是什么？</strong></h2><p>$$<br>C_{\alpha}(T)=\sum_{t=1}^{|T|} N_{t} H_{t}(T)+a|T|<br>$$</p>
-<p>$$<br>H_{t}(T)=-\sum_{k} \frac{N_{t k}}{N_{t}} \log \frac{N_{t k}}{N_{t}}<br>$$</p>
-<p>其中$|T|$代表叶节点个数</p>
+<h2 id="6-决策树的目标函数是什么？"><a href="#6-决策树的目标函数是什么？" class="headerlink" title="6. 决策树的目标函数是什么？"></a><strong>6. 决策树的目标函数是什么？</strong></h2><script type="math/tex; mode=display">
+C_{\alpha}(T)=\sum_{t=1}^{|T|} N_{t} H_{t}(T)+a|T|</script><script type="math/tex; mode=display">
+H_{t}(T)=-\sum_{k} \frac{N_{t k}}{N_{t}} \log \frac{N_{t k}}{N_{t}}</script><p>其中$|T|$代表叶节点个数</p>
 <p>$N_t$表示具体某个叶节点的样例数</p>
 <p> $H_t(T)$ 表示叶节点$t$上的经验熵</p>
 <p>$\alpha|T|$为正则项，$\alpha \geqslant 0 $ 为参数。</p>
@@ -1648,20 +1648,22 @@ f(\mathbf{x})=f\left(\mathbf{x}_{0}\right)+\nabla f\left(\mathbf{x}_{0}\right)^{
 </li>
 <li><p>对$A$的取值进行从小到大排序得到：${a_1,a_2\dots a_n}$</p>
 </li>
-<li><p>寻找划分点$t$，$t$将D分为子集$D_{t}^{-}$与$D_{t}^{+}$</p>
+<li><p>寻找划分点$t$，$t$将D分为子集$D<em>{t}^{-}$与$D</em>{t}^{+}$</p>
 <ul>
 <li>$D_{t}^{-}$：特征$A$上取值不大于$t$的样本</li>
 <li>$D_{t}^{+}$：特征$A$上取值大于$t$的样本</li>
 </ul>
 </li>
-<li><p>对相邻的特征取值$a_i$与$a_{i+1}$，t再区间$[a_i,a_{i+1})$中取值所产生的划分结果相同，因此对于连续特征$A$,包含有$n-1$个元素的后选划分点集合</p>
+<li><p>对相邻的特征取值$a<em>i$与$a</em>{i+1}$，t再区间$[a<em>i,a</em>{i+1})$中取值所产生的划分结果相同，因此对于连续特征$A$,包含有$n-1$个元素的后选划分点集合</p>
 </li>
 </ul>
-<p>$$<br>T_a = {\frac{a_i + a_{i+1}}{2}|1\leq{i}\leq{n-1} }<br>$$</p>
-<ul>
-<li><p>把区间$[a_i,a_{i+1})$的中位点$\frac{a_i + a_{i+1}}{2}$作为候选划分点</p>
+<script type="math/tex; mode=display">
+T_a = \{\frac{a_i + a_{i+1}}{2}|1\leq{i}\leq{n-1} \}</script><ul>
+<li><p>把区间$[a<em>i,a</em>{i+1})$的中位点$\frac{a<em>i + a</em>{i+1}}{2}$作为候选划分点</p>
 </li>
-<li><p>按照处理离散值那样来选择最优的划分点,使用公式：<br>$$<br>Gain(D,a) =\underbrace{max}_{t\in T_a}Gain(D,a,t) = \underbrace{max}_{t\in T_a}\ (Ent(D) - \sum_{\lambda \in {-,+ }}\frac{|D_t^{\lambda}|}{|D|}Ent(D_t^{\lambda}))<br>$$<br>其中$Gain(D,a,t)$是样本集$D$基于划分点$t$二分之后的信息增益。划分点时候选择使用$Gain(D,a,t)$最大的划分点。</p>
+<li><p>按照处理离散值那样来选择最优的划分点,使用公式：</p>
+<script type="math/tex; mode=display">
+Gain(D,a) =\underbrace{max}_{t\in T_a}Gain(D,a,t) = \underbrace{max}_{t\in T_a}\ (Ent(D) - \sum_{\lambda \in \{-,+ \}}\frac{|D_t^{\lambda}|}{|D|}Ent(D_t^{\lambda}))</script><p>其中$Gain(D,a,t)$是样本集$D$基于划分点$t$二分之后的信息增益。划分点时候选择使用$Gain(D,a,t)$最大的划分点。</p>
 </li>
 </ul>
 <h2 id="8-决策树怎么防止过拟合？"><a href="#8-决策树怎么防止过拟合？" class="headerlink" title="8. 决策树怎么防止过拟合？"></a><strong>8. 决策树怎么防止过拟合？</strong></h2><h3 id="构建随机森林"><a href="#构建随机森林" class="headerlink" title="构建随机森林"></a>构建随机森林</h3><ul>
@@ -1711,8 +1713,7 @@ f(\mathbf{x})=f\left(\mathbf{x}_{0}\right)+\nabla f\left(\mathbf{x}_{0}\right)^{
 </li>
 </ul>
 <h2 id="11-树形结构为什么不需要归一化"><a href="#11-树形结构为什么不需要归一化" class="headerlink" title="11. 树形结构为什么不需要归一化?"></a>11. 树形结构为什么不需要归一化?</h2><ul>
-<li><p><strong>数值缩放不影响分裂点位置，对树模型的结构不造成影响</strong>。</p>
-</li>
+<li><strong>数值缩放不影响分裂点位置，对树模型的结构不造成影响</strong>。</li>
 <li><p>按照特征值进行排序的，排序的顺序不变，那么所属的分支以及分裂点就不会有不同。</p>
 </li>
 <li><p>树模型是<strong>不能进行梯度下降</strong>的，因为构建树模型（回归树）寻找最优点时是通过寻找最优分裂点完成的，因此<strong>树模型是阶跃的，阶跃点是不可导</strong>的，并且求导没意义，也就不需要归一化。</p>
@@ -1770,7 +1771,7 @@ f(\mathbf{x})=f\left(\mathbf{x}_{0}\right)+\nabla f\left(\mathbf{x}_{0}\right)^{
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2020-10-25 10:54:33 / 修改时间：11:03:55" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
+      <time title="创建时间：2020-10-25 10:54:33 / 修改时间：16:36:01" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1793,11 +1794,11 @@ f(\mathbf{x})=f\left(\mathbf{x}_{0}\right)+\nabla f\left(\mathbf{x}_{0}\right)^{
     
     <div class="post-body" itemprop="articleBody">
           <p>[TOC]</p>
-<h2><span id="1-什么是集成学习算法">1. 什么是集成学习算法？</span></h2><p><strong>集成学习算法是一种优化手段或者策略</strong>，不算是一种机器学习算法。</p>
+<h2 id="1-什么是集成学习算法？"><a href="#1-什么是集成学习算法？" class="headerlink" title="1. 什么是集成学习算法？"></a>1. 什么是集成学习算法？</h2><p><strong>集成学习算法是一种优化手段或者策略</strong>，不算是一种机器学习算法。</p>
 <p>集成方法是由多个较弱的模型集成模型组，一般的弱分类器可以是决策树，SVM，KNN等构成。其中的模型可以单独进行训练，并且它们的预测能以某种方式结合起来去做出一个总体预测。</p>
 <p>该算法主要的问题是要找出哪些较弱的模型可以结合起来，以及如何结合的方法。</p>
-<h2><span id="2-集成学习主要有哪几种框架">2. 集成学习主要有哪几种框架？</span></h2><p>集成学习从集成思想的架构分为Bagging，Boosting，Stacking三种。</p>
-<h2><span id="3-简单介绍一下bagging常用bagging算法有哪些">3. 简单介绍一下bagging，常用bagging算法有哪些？</span></h2><ul>
+<h2 id="2-集成学习主要有哪几种框架？"><a href="#2-集成学习主要有哪几种框架？" class="headerlink" title="2. 集成学习主要有哪几种框架？"></a>2. 集成学习主要有哪几种框架？</h2><p>集成学习从集成思想的架构分为Bagging，Boosting，Stacking三种。</p>
+<h2 id="3-简单介绍一下bagging，常用bagging算法有哪些？"><a href="#3-简单介绍一下bagging，常用bagging算法有哪些？" class="headerlink" title="3. 简单介绍一下bagging，常用bagging算法有哪些？"></a>3. 简单介绍一下bagging，常用bagging算法有哪些？</h2><ul>
 <li>Bagging<ul>
 <li><strong>多次采样，训练多个分类器，集体投票，旨在减小方差</strong>，</li>
 </ul>
@@ -1819,7 +1820,7 @@ f(\mathbf{x})=f\left(\mathbf{x}_{0}\right)+\nabla f\left(\mathbf{x}_{0}\right)^{
 <li><p>如果是分类算法预测，则$T$个弱学习器投出最多票数的类别或者类别之一为最终类别。如果是回归算法，$T$个弱学习器得到的回归结果进行算术平均得到的值为最终的模型输出。<br>常用bagging算法：随机森林算法</p>
 </li>
 </ul>
-<h2><span id="4-简单介绍一下boosting常用boosting算法有哪些">4. 简单介绍一下boosting，常用boosting算法有哪些？</span></h2><ul>
+<h2 id="4-简单介绍一下boosting，常用boosting算法有哪些？"><a href="#4-简单介绍一下boosting，常用boosting算法有哪些？" class="headerlink" title="4. 简单介绍一下boosting，常用boosting算法有哪些？"></a>4. 简单介绍一下boosting，常用boosting算法有哪些？</h2><ul>
 <li>Boosting<ul>
 <li><strong>基分类器层层叠加，聚焦分错的样本，旨在减小方差</strong></li>
 </ul>
@@ -1851,9 +1852,9 @@ f(\mathbf{x})=f\left(\mathbf{x}_{0}\right)+\nabla f\left(\mathbf{x}_{0}\right)^{
 </ul>
 </li>
 </ul>
-<h2><span id="5-boosting思想的数学表达式是什么">5. boosting思想的数学表达式是什么？</span></h2><script type="math/tex; mode=display">
+<h2 id="5-boosting思想的数学表达式是什么？"><a href="#5-boosting思想的数学表达式是什么？" class="headerlink" title="5. boosting思想的数学表达式是什么？"></a>5. boosting思想的数学表达式是什么？</h2><script type="math/tex; mode=display">
 f(x)=w_{0}+\sum_{m=1}^{M} w_{m} \phi_{m}(x)</script><p>其中$w$是权重，$\phi$是弱分类器的集合，可以看出最终就是基函数的线性组合。</p>
-<h2><span id="6-简单介绍一下stacking常用stacking算法有哪些">6. 简单介绍一下stacking，常用stacking算法有哪些？</span></h2><ul>
+<h2 id="6-简单介绍一下stacking，常用stacking算法有哪些？"><a href="#6-简单介绍一下stacking，常用stacking算法有哪些？" class="headerlink" title="6. 简单介绍一下stacking，常用stacking算法有哪些？"></a>6. 简单介绍一下stacking，常用stacking算法有哪些？</h2><ul>
 <li>Stacking<ul>
 <li><strong>多次采样，训练多个分类器，将输出作为最后的输入特征</strong></li>
 </ul>
@@ -1866,20 +1867,20 @@ f(x)=w_{0}+\sum_{m=1}^{M} w_{m} \phi_{m}(x)</script><p>其中$w$是权重，$\ph
 </ul>
 </li>
 </ul>
-<h2><span id="7-你意识到你的模型受到低偏差和高方差问题的困扰应该使用哪种算法来解决问题呢为什么">7. 你意识到你的模型受到低偏差和高方差问题的困扰，应该使用哪种算法来解决问题呢？为什么？</span></h2><p>低偏差意味着模型的预测值接近实际值。换句话说，该模型有足够的灵活性，以模仿训练数据的分布。貌似很好，但是别忘了，一个灵活的模型没有泛化能力。这意味着，当这个模型用在对一个未曾见过的数据集进行测试的时候，它会令人很失望。<br>在这种情况下，我们可以使用bagging算法（如随机森林），以解决高方差问题。bagging算法把数据集分成重复随机取样形成的子集。然后，这些样本利用单个学习算法生成一组模型。接着，利用投票（分类）或平均（回归）把模型预测结合在一起。另外，为了应对大方差，我们可以：</p>
+<h2 id="7-你意识到你的模型受到低偏差和高方差问题的困扰，应该使用哪种算法来解决问题呢？为什么？"><a href="#7-你意识到你的模型受到低偏差和高方差问题的困扰，应该使用哪种算法来解决问题呢？为什么？" class="headerlink" title="7. 你意识到你的模型受到低偏差和高方差问题的困扰，应该使用哪种算法来解决问题呢？为什么？"></a>7. 你意识到你的模型受到低偏差和高方差问题的困扰，应该使用哪种算法来解决问题呢？为什么？</h2><p>低偏差意味着模型的预测值接近实际值。换句话说，该模型有足够的灵活性，以模仿训练数据的分布。貌似很好，但是别忘了，一个灵活的模型没有泛化能力。这意味着，当这个模型用在对一个未曾见过的数据集进行测试的时候，它会令人很失望。<br>在这种情况下，我们可以使用bagging算法（如随机森林），以解决高方差问题。bagging算法把数据集分成重复随机取样形成的子集。然后，这些样本利用单个学习算法生成一组模型。接着，利用投票（分类）或平均（回归）把模型预测结合在一起。另外，为了应对大方差，我们可以：</p>
 <ul>
 <li>使用正则化技术，惩罚更高的模型系数，从而降低了模型的复杂性。</li>
 <li>使用可变重要性图表中的前n个特征。</li>
 <li>可以用于当一个算法在数据集中的所有变量里很难寻找到有意义信号的时候。</li>
 </ul>
-<h2><span id="8-常用的基分类器是什么">8. 常用的基分类器是什么？</span></h2><p>最常用的基分类器是决策树,原因:</p>
+<h2 id="8-常用的基分类器是什么？"><a href="#8-常用的基分类器是什么？" class="headerlink" title="8. 常用的基分类器是什么？"></a>8. 常用的基分类器是什么？</h2><p>最常用的基分类器是决策树,原因:</p>
 <ul>
 <li>决策树是低偏差高方差的，适合作为基分类器</li>
 <li>决策树可以较为方便地将样本的权重整合到训练过程中，而不需要使用过采样的方法来调整样本权重。</li>
 <li>决策树的表达能力和泛化能力，可以通过调节树的层数来做折中。</li>
 <li>数据样本的扰动对于决策树的影响较大，因此不同子样本集合生成的决策树基分类器随机性较大，这样的“不稳定学习器”更适合作为基分类器。此外，在决策树节点分裂的时候，随机地选择一个特征子集，从中找出最优分裂属性，<strong>很好地引入了随机性。</strong></li>
 </ul>
-<h2><span id="9-可否将随机森林中的基分类器由决策树替换为线性分类器或k-近邻请解释为什么">9. 可否将随机森林中的基分类器，由决策树替换为线性分类器或K-近邻？请解释为什么？</span></h2><p>不能：</p>
+<h2 id="9-可否将随机森林中的基分类器，由决策树替换为线性分类器或K-近邻？请解释为什么？"><a href="#9-可否将随机森林中的基分类器，由决策树替换为线性分类器或K-近邻？请解释为什么？" class="headerlink" title="9. 可否将随机森林中的基分类器，由决策树替换为线性分类器或K-近邻？请解释为什么？"></a>9. 可否将随机森林中的基分类器，由决策树替换为线性分类器或K-近邻？请解释为什么？</h2><p>不能：</p>
 <ul>
 <li>Bagging的主要好处是集成后的分类器的方差，比基分类器的方差小。</li>
 <li><p>随机森林属于Bagging类的集成学习，对样本分布较为敏感的分类器更适用于Bagging。</p>
@@ -1940,7 +1941,7 @@ f(x)=w_{0}+\sum_{m=1}^{M} w_{m} \phi_{m}(x)</script><p>其中$w$是权重，$\ph
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2020-10-25 10:54:33 / 修改时间：11:13:17" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
+      <time title="创建时间：2020-10-25 10:54:33 / 修改时间：16:39:09" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1963,12 +1964,12 @@ f(x)=w_{0}+\sum_{m=1}^{M} w_{m} \phi_{m}(x)</script><p>其中$w$是权重，$\ph
     
     <div class="post-body" itemprop="articleBody">
           <p>[toc]<br><a target="_blank" rel="noopener" href="https://xgboost.readthedocs.io/en/latest/tutorials/model.html">Doc</a><br><a target="_blank" rel="noopener" href="https://homes.cs.washington.edu/~tqchen/pdf/BoostedTree.pdf">Slides</a></p>
-<h2><span id="summary">Summary</span></h2><p><img src="http://i.imgur.com/L7PhJwO.png" alt="Summary"><br><img src="https://img-blog.csdnimg.cn/2019031119461897.?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI0ODUyNDM5,size_16,color_FFFFFF,t_70" alt="Summary"></p>
-<h2><span id="原理">原理</span></h2><ul>
+<h2 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h2><p><img src="http://i.imgur.com/L7PhJwO.png" alt="Summary"><br><img src="https://img-blog.csdnimg.cn/2019031119461897.?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI0ODUyNDM5,size_16,color_FFFFFF,t_70" alt="Summary"></p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><ul>
 <li>每轮生成新的树，该树的生成标准为：损失函数最小化。损失函数代表的意义：保证模型复杂度越低的同时，使预测误差尽可能小。其中模型复杂度包括树的个数以及叶子数值尽可能不极端。<em>（这个怎么看，如果某个样本label数值为4，那么第一个回归树预测3，第二个预测为1；另外一组回归树，一个预测2，一个预测2，那么倾向后一种，为什么呢？前一种情况，第一棵树学的太多，太接近4，也就意味着有较大的过拟合的风险）</em></li>
 <li>每一轮产生新的树的时候，其loss是本轮加之前模型与y的差，然后通过泰勒展开做成<strong>t-1轮损失函数对于t-1轮模型即上一轮残差</strong>的一阶导和二阶导与当前树及其平方的乘积</li>
 </ul>
-<h3><span id="损失函数">损失函数</span></h3><script type="math/tex; mode=display">\text{obj} = \sum_{i=1}^n l(y_i, \hat{y}_i^{(t)}) + \sum_{i=1}^t\Omega(f_i)</script><p>其中l为loss，l为二次则利用二次优化，不是二次则用泰勒展开；Omega为正则项。</p>
+<h3 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h3><script type="math/tex; mode=display">\text{obj} = \sum_{i=1}^n l(y_i, \hat{y}_i^{(t)}) + \sum_{i=1}^t\Omega(f_i)</script><p>其中l为loss，l为二次则利用二次优化，不是二次则用泰勒展开；Omega为正则项。</p>
 <ul>
 <li><p>loss：采用加法策略，第t颗树时：</p>
 <script type="math/tex; mode=display">\hat{y}_i^{(0)} = 0</script><script type="math/tex; mode=display">\hat{y}_i^{(1)} = f_1(x_i) = \hat{y}_i^{(0)} + f_1(x_i)</script><script type="math/tex; mode=display">\dots</script><script type="math/tex; mode=display">\hat{y}_i^{(t)} = \sum_{k=1}^t f_k(x_i)= \hat{y}_i^{(t-1)} + f_t(x_i)</script><p>所以在添加第t颗树时，需要优化的目标函数为：</p>
@@ -1978,10 +1979,10 @@ f(x)=w_{0}+\sum_{m=1}^{M} w_{m} \phi_{m}(x)</script><p>其中$w$是权重，$\ph
 </li>
 <li>正则项：复杂度：<script type="math/tex; mode=display">\Omega(f) = \gamma T + \frac{1}{2}\lambda \sum_{j=1}^T w_j^2</script>其中w是叶子上的score vector，T是叶子数量</li>
 </ul>
-<h3><span id="损失函数求解">损失函数求解</span></h3><ul>
+<h3 id="损失函数求解"><a href="#损失函数求解" class="headerlink" title="损失函数求解"></a>损失函数求解</h3><ul>
 <li>最佳树结构（特征和分裂值）以及叶子节点的预测分数都是通过优化目标函数来得出的，其中叶子节点的预测分数是正则项的一部分；但其实分裂时是通过增益最大化来寻找最佳分裂特征和分裂值的，只有w是通过计算目标函数得出的<br><img src="https://upload-images.jianshu.io/upload_images/1371984-364c3b6e258cc671.PNG?imageMogr2/auto-orient/strip|imageView2/2/w/782/format/webp" alt="Summary"><br>求出各个叶子节点的最佳值以及此时目标函数的值:<br><img src="https://upload-images.jianshu.io/upload_images/1371984-3b24159e2a85b4a3.PNG?imageMogr2/auto-orient/strip|imageView2/2/w/365/format/webp" alt="Summary"></li>
 </ul>
-<h3><span id="分裂">分裂</span></h3><ul>
+<h3 id="分裂"><a href="#分裂" class="headerlink" title="分裂"></a>分裂</h3><ul>
 <li>分裂方式<ul>
 <li>枚举所有树结构的贪心法（先特征，再分裂点）：<ul>
 <li>首先，对所有特征都按照特征的数值进行预排序。</li>
@@ -2005,32 +2006,32 @@ f(x)=w_{0}+\sum_{m=1}^{M} w_{m} \phi_{m}(x)</script><p>其中$w$是权重，$\ph
 </ul>
 </li>
 </ul>
-<h3><span id="使用">使用</span></h3><ul>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><ul>
 <li>每个树的每个节点上的预测值相加<br><img src="https://upload-images.jianshu.io/upload_images/1371984-bbe17b3b253a6d1a.PNG?imageMogr2/auto-orient/strip|imageView2/2/w/901/format/webp" alt="Summary"></li>
 </ul>
-<h2><span id="dart-booster">DART Booster</span></h2><p>为了解决过拟合，会随机drop trees:</p>
+<h2 id="DART-Booster"><a href="#DART-Booster" class="headerlink" title="DART Booster"></a>DART Booster</h2><p>为了解决过拟合，会随机drop trees:</p>
 <ul>
 <li>训练速度可能慢于gbtree</li>
 <li>由于随机性，早停可能不稳定</li>
 </ul>
-<h2><span id="特性">特性</span></h2><ul>
+<h2 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h2><ul>
 <li>算法：二阶导、正则化、自定义loss、缺失数据处理、支持类别特征、早停</li>
 <li>工程：行采样、列采样、</li>
 </ul>
-<h3><span id="正则化amp行采样amp列采样amp早停">正则化&amp;行采样&amp;列采样&amp;早停</span></h3><ul>
+<h3 id="正则化-amp-行采样-amp-列采样-amp-早停"><a href="#正则化-amp-行采样-amp-列采样-amp-早停" class="headerlink" title="正则化&amp;行采样&amp;列采样&amp;早停"></a>正则化&amp;行采样&amp;列采样&amp;早停</h3><ul>
 <li>通过最优化求出w，而不是平均值或者多数表决</li>
 <li>防止过拟合</li>
 </ul>
-<h3><span id="支持自定义loss">支持自定义loss</span></h3><h3><span id="处理缺失值">处理缺失值</span></h3><h3><span id="并行">并行</span></h3><ul>
+<h3 id="支持自定义loss"><a href="#支持自定义loss" class="headerlink" title="支持自定义loss"></a>支持自定义loss</h3><h3 id="处理缺失值"><a href="#处理缺失值" class="headerlink" title="处理缺失值"></a>处理缺失值</h3><h3 id="并行"><a href="#并行" class="headerlink" title="并行"></a>并行</h3><ul>
 <li><strong>特征间并行</strong>：由于将数据按列存储，可以同时访问所有列，那么可以对所有属性同时执行split finding算法，从而并行化split finding（切分点寻找）</li>
 <li><strong>特征内并行</strong>：可以用多个block(Multiple blocks)分别存储不同的样本集，多个block可以并行计算-特征内并行</li>
 </ul>
-<h3><span id="monotonic-constraints单调性限制">Monotonic Constraints单调性限制</span></h3><ul>
+<h3 id="Monotonic-Constraints单调性限制"><a href="#Monotonic-Constraints单调性限制" class="headerlink" title="Monotonic Constraints单调性限制"></a>Monotonic Constraints单调性限制</h3><ul>
 <li><p>一个可选特性:<br>会限制模型的结果按照某个特征 单调的进行增减</p>
 <p>也就是说可以降低模型对数据的敏感度，如果明确已知某个特征与预测结果呈单调关系时，那在生成模型的时候就会跟特征数据的单调性有关。</p>
 </li>
 </ul>
-<h3><span id="feature-interaction-constraints单调性限制">Feature Interaction Constraints单调性限制</span></h3><ul>
+<h3 id="Feature-Interaction-Constraints单调性限制"><a href="#Feature-Interaction-Constraints单调性限制" class="headerlink" title="Feature Interaction Constraints单调性限制"></a>Feature Interaction Constraints单调性限制</h3><ul>
 <li><p>一个可选特性：<br>不用时，在tree生成的时候，一棵树上的节点会无限制地选用多个特征</p>
 <p>设置此特性时，可以规定，哪些特征可以有interaction（一般独立变量之间可以interaction，非独立变量的话可能会引入噪声）</p>
 </li>
@@ -2040,16 +2041,16 @@ f(x)=w_{0}+\sum_{m=1}^{M} w_{m} \phi_{m}(x)</script><p>其中$w$是权重，$\ph
 </ul>
 </li>
 </ul>
-<h3><span id="instance-weight-file">Instance Weight File</span></h3><ul>
+<h3 id="Instance-Weight-File"><a href="#Instance-Weight-File" class="headerlink" title="Instance Weight File"></a>Instance Weight File</h3><ul>
 <li>规定了模型训练时data中每一条instance的权重</li>
 <li>有些instance质量较差，或与前一示例相比变化不大，所以可以调节其所占权重</li>
 </ul>
-<h2><span id="调参">调参</span></h2><ul>
+<h2 id="调参"><a href="#调参" class="headerlink" title="调参"></a>调参</h2><ul>
 <li>通用参数：宏观函数控制。booster/slient/nthread</li>
 <li>Booster参数：控制每一步的booster(tree/regression)。</li>
 <li>学习目标参数：控制训练目标的表现。</li>
 </ul>
-<h3><span id="overfitting">Overfitting</span></h3><p>与overfitting有关的参数：</p>
+<h3 id="Overfitting"><a href="#Overfitting" class="headerlink" title="Overfitting"></a>Overfitting</h3><p>与overfitting有关的参数：</p>
 <ul>
 <li>学习率</li>
 <li>直接控制模型复杂度：max_depth, min_child_weight, gamma, lambda, alpha, max_leaf_nodes</li>
@@ -2058,7 +2059,7 @@ f(x)=w_{0}+\sum_{m=1}^{M} w_{m} \phi_{m}(x)</script><p>其中$w$是权重，$\ph
 </ul>
 </li>
 </ul>
-<h3><span id="过程">过程</span></h3><ul>
+<h3 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h3><ul>
 <li>选择较高的学习速率(learning rate)。XGBoost有一个很有用的函数“cv”，这个函数可以在每一次迭代中使用交叉验证，并返回理想的决策树数量。</li>
 <li>对于给定的学习速率和决策树数量，进行决策树特定参数调优(max_depth, min_child_weight, gamma, subsample, colsample_bytree)。在确定一棵树的过程中，我们可以选择不同的参数。</li>
 <li>xgboost的正则化参数的调优。(lambda, alpha)。这些参数可以降低模型的复杂度，从而提高模型的表现。</li>
