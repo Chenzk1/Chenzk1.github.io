@@ -119,6 +119,7 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
@@ -147,11 +148,35 @@
     <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
 
   </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
   </ul>
 </nav>
 
 
 
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+      
+    </div>
+  </div>
 
 </div>
         
@@ -858,8 +883,8 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
     
     <div class="post-body" itemprop="articleBody">
           <p>[TOC]</p>
-<h1 id="如何在-Kaggle-首战中进入前-10"><a href="#如何在-Kaggle-首战中进入前-10" class="headerlink" title="如何在 Kaggle 首战中进入前 10%"></a>如何在 Kaggle 首战中进入前 10%</h1><p><a target="_blank" rel="noopener" href="https://dnc1994.com/2016/04/rank-10-percent-in-first-kaggle-competition/">原文</a></p>
-<h2 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h2><h3 id="Exploration-Data-Analysis-EDA"><a href="#Exploration-Data-Analysis-EDA" class="headerlink" title="Exploration Data Analysis(EDA)"></a>Exploration Data Analysis(EDA)</h3><h4 id="Visualization"><a href="#Visualization" class="headerlink" title="Visualization"></a>Visualization</h4><p>matplotlib + seaborn</p>
+<h1><span id="如何在-kaggle-首战中进入前-10">如何在 Kaggle 首战中进入前 10%</span></h1><p><a target="_blank" rel="noopener" href="https://dnc1994.com/2016/04/rank-10-percent-in-first-kaggle-competition/">原文</a></p>
+<h2><span id="流程">流程</span></h2><h3><span id="exploration-data-analysiseda">Exploration Data Analysis(EDA)</span></h3><h4><span id="visualization">Visualization</span></h4><p>matplotlib + seaborn</p>
 <ul>
 <li>查看目标变量的分布。当分布不平衡时，根据评分标准和具体模型的使用不同，可能会严重影响性能。</li>
 <li>对 Numerical Variable，可以用 Box Plot 来直观地查看它的分布。</li>
@@ -868,9 +893,9 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
 <li>绘制变量之间两两的分布和相关度图表。</li>
 </ul>
 <p><a target="_blank" rel="noopener" href="https://www.kaggle.com/benhamner/python-data-visualizations">example_visualization</a></p>
-<h4 id="Statistical-Tests"><a href="#Statistical-Tests" class="headerlink" title="Statistical Tests"></a>Statistical Tests</h4><p>可视化为定性，这里专注于定量，例如对于新创造的特征，可以将其加入原模型当中，看结果的变化。</p>
+<h4><span id="statistical-tests">Statistical Tests</span></h4><p>可视化为定性，这里专注于定量，例如对于新创造的特征，可以将其加入原模型当中，看结果的变化。</p>
 <p>在某些比赛中，由于数据分布比较奇葩或是噪声过强，Public LB(Leader board)的分数可能会跟 Local CV(Cross Validation)的结果相去甚远。可以根据一些统计测试的结果来粗略地建立一个阈值，用来衡量一次分数的提高究竟是实质的提高还是由于数据的随机性导致的。</p>
-<h3 id="Data-Preprossing"><a href="#Data-Preprossing" class="headerlink" title="Data Preprossing"></a>Data Preprossing</h3><p>处理策略主要依赖于EDA中得到的结论。</p>
+<h3><span id="data-preprossing">Data Preprossing</span></h3><p>处理策略主要依赖于EDA中得到的结论。</p>
 <ul>
 <li>有时数据会分散在几个不同的文件中，需要 Join 起来。</li>
 <li>处理 Missing Data。</li>
@@ -878,7 +903,7 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
 <li>必要时转换某些 Categorical Variable 的表示方式。例如应用one-hot encoding(pd.get_dummies)将categorical variable转化为数字变量。</li>
 <li>有些 Float 变量可能是从未知的 Int 变量转换得到的，这个过程中发生精度损失会在数据中产生不必要的 Noise，即两个数值原本是相同的却在小数点后某一位开始有不同。这对 Model 可能会产生很负面的影响，需要设法去除或者减弱 Noise。</li>
 </ul>
-<h3 id="Feature-Engineering"><a href="#Feature-Engineering" class="headerlink" title="Feature Engineering"></a>Feature Engineering</h3><h4 id="Feature-Selection"><a href="#Feature-Selection" class="headerlink" title="Feature Selection"></a>Feature Selection</h4><p>总的来说，应该<strong>生成尽量多的 Feature，相信 Model 能够挑出最有用的 Feature</strong>。但有时先做一遍 Feature Selection 也能带来一些好处：</p>
+<h3><span id="feature-engineering">Feature Engineering</span></h3><h4><span id="feature-selection">Feature Selection</span></h4><p>总的来说，应该<strong>生成尽量多的 Feature，相信 Model 能够挑出最有用的 Feature</strong>。但有时先做一遍 Feature Selection 也能带来一些好处：</p>
 <ul>
 <li>Feature 越少，训练越快。</li>
 <li>有些 Feature 之间可能存在线性关系，影响 Model 的性能。</li>
@@ -886,8 +911,8 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
 <li>Feature Selection 最实用的方法也就是看 Random Forest 训练完以后得到的 Feature Importance 了。其他有一些更复杂的算法在理论上更加 Robust，但是缺乏实用高效的实现。从原理上来讲，增加 Random Forest 中树的数量可以在一定程度上加强其对于 Noisy Data 的 Robustness。</li>
 </ul>
 <p>看 Feature Importance 对于某些数据经过脱敏处理的比赛尤其重要。这可以免得你浪费大把时间在琢磨一个不重要的变量的意义上。(脱敏：数据脱敏(Data Masking),又称数据漂白、数据去隐私化或数据变形。百度百科对数据脱敏的定义为：指对某些敏感信息通过脱敏规则进行数据的变形，实现敏感隐私数据的可靠保护。在涉及客户安全数据或者一些商业性敏感数据的情况下，在不违反系统规则条件下，对真实数据进行改造并提供测试使用，如身份证号、手机号、卡号、客户号等个人信息都需要进行数据脱敏。)</p>
-<h4 id="Feature-Encoding"><a href="#Feature-Encoding" class="headerlink" title="Feature Encoding"></a>Feature Encoding</h4><p>假设有一个 Categorical Variable 一共有几万个取值可能，那么创建 Dummy Variables 的方法就不可行了。这时一个比较好的方法是根据 Feature Importance 或是这些取值本身在数据中的出现频率，为最重要（比如说前 95% 的 Importance）那些取值（有很大可能只有几个或是十几个）创建 Dummy Variables，而所有其他取值都归到一个“其他”类里面。</p>
-<h3 id="Model-Selection"><a href="#Model-Selection" class="headerlink" title="Model Selection"></a>Model Selection</h3><p>Base Model:</p>
+<h4><span id="feature-encoding">Feature Encoding</span></h4><p>假设有一个 Categorical Variable 一共有几万个取值可能，那么创建 Dummy Variables 的方法就不可行了。这时一个比较好的方法是根据 Feature Importance 或是这些取值本身在数据中的出现频率，为最重要（比如说前 95% 的 Importance）那些取值（有很大可能只有几个或是十几个）创建 Dummy Variables，而所有其他取值都归到一个“其他”类里面。</p>
+<h3><span id="model-selection">Model Selection</span></h3><p>Base Model:</p>
 <ul>
 <li>SVM</li>
 <li>Linear Regression</li>
@@ -902,7 +927,7 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
 <p><strong>XGBoost</strong></p>
 </li>
 </ul>
-<h4 id="Model-Training"><a href="#Model-Training" class="headerlink" title="Model Training"></a>Model Training</h4><p>通过Grid Search来确定模型的最佳参数。<br>e.g.</p>
+<h4><span id="model-training">Model Training</span></h4><p>通过Grid Search来确定模型的最佳参数。<br>e.g.</p>
 <ul>
 <li>sklearn 的 RandomForestClassifier 来说，比较重要的就是随机森林中树的数量 n_estimators 以及在训练每棵树时最多选择的特征数量 max_features。</li>
 <li><p>Xgboost 的调参。通常认为对它性能影响较大的参数有：</p>
@@ -925,9 +950,9 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
 <p><em>所有具有随机性的 Model 一般都会有一个 seed 或是 random_state 参数用于控制随机种子。得到一个好的 Model 后，在记录参数时务必也记录下这个值，从而能够在之后重现 Model。</em></p>
 </li>
 </ul>
-<h4 id="Cross-Validation"><a href="#Cross-Validation" class="headerlink" title="Cross Validation"></a>Cross Validation</h4><p>一般5-fold。</p>
+<h4><span id="cross-validation">Cross Validation</span></h4><p>一般5-fold。</p>
 <p>fold越多训练越慢。</p>
-<h4 id="Ensemble-Generation"><a href="#Ensemble-Generation" class="headerlink" title="Ensemble Generation"></a>Ensemble Generation</h4><p>常见的 Ensemble 方法有这么几种：</p>
+<h4><span id="ensemble-generation">Ensemble Generation</span></h4><p>常见的 Ensemble 方法有这么几种：</p>
 <ul>
 <li>Bagging：使用训练数据的不同随机子集来训练每个 Base Model，最后进行每个 Base Model 权重相同的 Vote。也即 Random Forest 的原理。</li>
 <li>Boosting：迭代地训练 Base Model，每次根据上一个迭代中预测错误的情况修改训练样本的权重。也即 Gradient Boosting 的原理。比 Bagging 效果好，但更容易 Overfit。</li>
@@ -939,7 +964,7 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
 <li>Base Model 之间的相关性要尽可能的小。这就是为什么非 Tree-based Model 往往表现不是最好但还是要将它们包括在 Ensemble 里面的原因。Ensemble 的 Diversity 越大，最终 Model 的 Bias 就越低。</li>
 <li>Base Model 之间的性能表现不能差距太大。这其实是一个 Trade-off，在实际中很有可能表现相近的 Model 只有寥寥几个而且它们之间相关性还不低。但是实践告诉我们即使在这种情况下 Ensemble 还是能大幅提高成绩。</li>
 </ul>
-<h3 id="Pipeline"><a href="#Pipeline" class="headerlink" title="Pipeline"></a>Pipeline</h3><p>workflow比较复杂，因此一个高自动化的pipeline比较重要。</p>
+<h3><span id="pipeline">Pipeline</span></h3><p>workflow比较复杂，因此一个高自动化的pipeline比较重要。</p>
 <p>这里是以一个例子：<a target="_blank" rel="noopener" href="https://github.com/ChenglongChen/Kaggle_CrowdFlower">example</a></p>
 
       
@@ -1296,8 +1321,8 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
     
     <div class="post-body" itemprop="articleBody">
           <p>[TOC]<br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/pinard/p/6208966.html">原文1</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/pinard/p/6217852.html">原文2</a><br>DBSCAN(Density-Based Spatial Clustering of Applications with Noise，具有噪声的基于密度的聚类方法)是一种很典型的<strong>密度聚类算法</strong>，和K-Means，BIRCH这些一般只适用于凸样本集的聚类相比，DBSCAN<strong>既可以适用于凸样本集，也可以适用于非凸样本集</strong>。</p>
-<h1 id="密度聚类"><a href="#密度聚类" class="headerlink" title="密度聚类"></a>密度聚类</h1><p>其原理为：同一类别的样本，其样本分布一定是紧密的；可以将各组紧密相连的样本划分为不同的类别来得到聚类类别结果。</p>
-<h1 id="DBSCAN"><a href="#DBSCAN" class="headerlink" title="DBSCAN"></a>DBSCAN</h1><h2 id="关键概念"><a href="#关键概念" class="headerlink" title="关键概念"></a>关键概念</h2><p>参数(ϵ, MinPts)描述领域的样本分布紧密程度，其中ϵ描述了某一样本的领域<strong>距离阈值</strong>，MinPts描述某一样本的距离为ϵ的领域中样本<strong>个数的阈值</strong>。</p>
+<h1><span id="密度聚类">密度聚类</span></h1><p>其原理为：同一类别的样本，其样本分布一定是紧密的；可以将各组紧密相连的样本划分为不同的类别来得到聚类类别结果。</p>
+<h1><span id="dbscan">DBSCAN</span></h1><h2><span id="关键概念">关键概念</span></h2><p>参数(ϵ, MinPts)描述领域的样本分布紧密程度，其中ϵ描述了某一样本的领域<strong>距离阈值</strong>，MinPts描述某一样本的距离为ϵ的领域中样本<strong>个数的阈值</strong>。</p>
 <p>假设样本集是D=(x1,x2,…,xm),则DBSCAN具体的密度描述定义如下：</p>
 <ol>
 <li>ϵ-邻域：对于xj∈D，其ϵ-邻域包含样本集D中与xj的距离不大于ϵ的子样本集，即Nϵ(xj)={xi∈D|distance(xi,xj)≤ϵ}, 这个子样本集的个数记为|Nϵ(xj)|</li>
@@ -1307,7 +1332,7 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
 <li>密度相连：对于xi和xj,如果存在核心对象样本xk，使xi和xj均由xk密度可达，则称xi和xj密度相连。注意密度相连关系是满足对称性的。</li>
 </ol>
 <p>图中MinPts = 5。红点为核心对象。<br><img src="https://images2015.cnblogs.com/blog/1042406/201612/1042406-20161222112847323-1346197243.png" alt="示意图"></p>
-<h2 id="聚类思想"><a href="#聚类思想" class="headerlink" title="聚类思想"></a>聚类思想</h2><p>由密度可达关系导出的最大密度相连的样本集合，即为最终聚类的一个类别。</p>
+<h2><span id="聚类思想">聚类思想</span></h2><p>由密度可达关系导出的最大密度相连的样本集合，即为最终聚类的一个类别。</p>
 <p>方法：任意选择一个没有类别的核心对象作为种子，然后找到该核心对象密度可达的样本集合，为一个聚类。接着选择另一个没有类比的核心对象…直到所有核心对象都有类别。</p>
 <p>问题：</p>
 <ol>
@@ -1315,7 +1340,7 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
 <li>距离。少量样本而言，搜索周围样本一般用最近邻的方法；大量样本，可以用KD树，球树等搜索最近邻。</li>
 <li>若某样本到两个核心对象的距离都小于ϵ，但这两个核心对象不可达，此时采取先来后到原则，标记其为先聚类的cluster类别。</li>
 </ol>
-<h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><p>输入：样本集D=(x1,x2,…,xm)，邻域参数(ϵ,MinPts), 样本距离度量方式</p>
+<h2><span id="算法">算法</span></h2><p>输入：样本集D=(x1,x2,…,xm)，邻域参数(ϵ,MinPts), 样本距离度量方式</p>
 <p>输出： 簇划分C.　</p>
 <ol>
 <li>初始化核心对象集合Ω=∅, 初始化聚类簇数k=0，初始化未访问样本集合Γ = D,  簇划分C = ∅</li>
@@ -1330,7 +1355,7 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
 <li>在当前簇核心对象队列Ωcur中取出一个核心对象o′,通过邻域距离阈值ϵ找出所有的ϵ-邻域子样本集Nϵ(o′)，令Δ=Nϵ(o′)∩Γ, 更新当前簇样本集合Ck=Ck∪Δ, 更新未访问样本集合Γ=Γ−Δ,  更新Ωcur=Ωcur∪(Δ∩Ω)−o′，转入步骤5.</li>
 </ol>
 <p>输出结果为： 簇划分C={C1,C2,…,Ck}</p>
-<h1 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h1><p>对比图：<img src="https://img-blog.csdn.net/20170419143546349?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvc2luYXRfMjY5MTczODM=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="与其他算法的对比图"><br>一般用于数据集稠密时的情况，或数据集是非凸的。</p>
+<h1><span id="对比">对比</span></h1><p>对比图：<img src="https://img-blog.csdn.net/20170419143546349?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvc2luYXRfMjY5MTczODM=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="与其他算法的对比图"><br>一般用于数据集稠密时的情况，或数据集是非凸的。</p>
 <p>DBSCAN的主要优点有：</p>
 <ol>
 <li>可以对任意形状的稠密数据集进行聚类，相对的，K-Means之类的聚类算法一般只适用于凸数据集。</li>
@@ -1343,7 +1368,7 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
 <li>如果样本集较大时，聚类收敛时间较长，此时可以对搜索最近邻时建立的KD树或者球树进行规模限制来改进。</li>
 <li>调参相对于传统的K-Means之类的聚类算法稍复杂，主要需要对距离阈值ϵ，邻域样本数阈值MinPts联合调参，不同的参数组合对最后的聚类效果有较大影响。</li>
 </ol>
-<h1 id="sklearn-cluster-DBSCAN"><a href="#sklearn-cluster-DBSCAN" class="headerlink" title="sklearn.cluster.DBSCAN"></a>sklearn.cluster.DBSCAN</h1><h2 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h2><p>按其算法，包括DBSCAN本身的参数，以及求取最近邻时的参数。</p>
+<h1><span id="sklearnclusterdbscan">sklearn.cluster.DBSCAN</span></h1><h2><span id="参数">参数</span></h2><p>按其算法，包括DBSCAN本身的参数，以及求取最近邻时的参数。</p>
 <ol>
 <li>eps：DBSCAN算法参数，ϵ-邻域的距离阈值。默认值是0.5.eps过大，则更多的点会落在核心对象的ϵ-邻域，此时我们的类别数可能会减少， 本来不应该是一类的样本也会被划为一类。反之则类别数可能会增大，本来是一类的样本却被划分开。</li>
 <li>min_samples：DBSCAN算法参数，上文的MinPts。默认值是5.通常和eps一起调参。在eps一定的情况下，min_samples过大，则核心对象会过少，此时簇内部分本来是一类的样本可能会被标为噪音点，类别数也会变多。反之min_samples过小的话，则会产生大量的核心对象，可能会导致类别数过少。</li>
@@ -1369,7 +1394,7 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
 <li>components_ ：核心样本的副本</li>
 </ul>
 <p>主要是<strong>eps和min_samples</strong>的调参。</p>
-<h2 id="代码实例"><a href="#代码实例" class="headerlink" title="代码实例"></a>代码实例</h2><p>原文2中有。<br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/pinard/p/6217852.html">原文2</a></p>
+<h2><span id="代码实例">代码实例</span></h2><p>原文2中有。<br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/pinard/p/6217852.html">原文2</a></p>
 
       
     </div>
@@ -1446,8 +1471,8 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
     <div class="post-body" itemprop="articleBody">
           <p>[TOC]</p>
 <p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/27642620">原贴</a></p>
-<h1 id="卷积神经网络"><a href="#卷积神经网络" class="headerlink" title="卷积神经网络"></a>卷积神经网络</h1><p>卷积神经网络大致就是covolutional layer, pooling layer, ReLu layer, fully-connected layer的组合，例如下图所示的结构。<br><img src="https://pic4.zhimg.com/80/v2-cf87890eb8f2358f23a1ac78eb764257_hd.png" alt="ex-1"></p>
-<h3 id="图片的识别"><a href="#图片的识别" class="headerlink" title="图片的识别"></a>图片的识别</h3><ul>
+<h1><span id="卷积神经网络">卷积神经网络</span></h1><p>卷积神经网络大致就是covolutional layer, pooling layer, ReLu layer, fully-connected layer的组合，例如下图所示的结构。<br><img src="https://pic4.zhimg.com/80/v2-cf87890eb8f2358f23a1ac78eb764257_hd.png" alt="ex-1"></p>
+<h3><span id="图片的识别">图片的识别</span></h3><ul>
 <li>生物所看到的景象并非世界的原貌，而是长期进化出来的适合自己生存环境的一种感知方式</li>
 <li>画面识别实际上是寻找/学习动物的视觉关联形式（即将能量与视觉关联在一起的方式）</li>
 <li>画面的识别取决于：<ul>
@@ -1460,11 +1485,11 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
 <li>viewpoint</li>
 <li>size</li>
 <li>illumination</li>
-<li>…<h3 id="前馈的不足"><a href="#前馈的不足" class="headerlink" title="前馈的不足"></a>前馈的不足</h3></li>
+<li>…<h3><span id="前馈的不足">前馈的不足</span></h3></li>
 </ul>
 </li>
 <li>当出现上述variance时，前馈无法做到适应，即前馈只能对同样的内容进行识别，若出现其他情况时，只能增加样本重新训练</li>
-<li>解决方法可以是让图片中不同的位置有相同的权重——<strong>共享权重</strong><h3 id="CNN"><a href="#CNN" class="headerlink" title="CNN"></a>CNN</h3><h4 id="局部连接"><a href="#局部连接" class="headerlink" title="局部连接"></a>局部连接</h4></li>
+<li>解决方法可以是让图片中不同的位置有相同的权重——<strong>共享权重</strong><h3><span id="cnn">CNN</span></h3><h4><span id="局部连接">局部连接</span></h4></li>
 <li><strong>空间共享</strong>（引入的先验知识）</li>
 <li><strong>局部连接</strong>（得到的下一层节点与该层并非全连接）</li>
 <li>depth上是<strong>全连接</strong>的<blockquote>
@@ -1472,7 +1497,7 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
 </blockquote>
 </li>
 </ul>
-<h5 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h5><p><img src="https://pic3.zhimg.com/80/v2-23db15ec3f783bbb5cf811711e46dbba_hd.png" alt="cnn_example"></p>
+<h5><span id="示例">示例</span></h5><p><img src="https://pic3.zhimg.com/80/v2-23db15ec3f783bbb5cf811711e46dbba_hd.png" alt="cnn_example"></p>
 <ul>
 <li>在输入depth为1时：被filter size为2x2所圈中的4个输入节点连接到1个输出节点上。</li>
 <li>在输入depth为3时：被filter size为2x2，但是贯串3个channels后，所圈中的12个输入节点连接到1个输出节点上。</li>
@@ -1481,19 +1506,19 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
 </blockquote>
 </li>
 </ul>
-<h5 id="zero-padding"><a href="#zero-padding" class="headerlink" title="zero padding"></a>zero padding</h5><p>有时为了保证feature map与输入层保持同样大小，会添加zero padding，一般3*3的卷积核padding为1，5*5为2</p>
+<h5><span id="zero-padding">zero padding</span></h5><p>有时为了保证feature map与输入层保持同样大小，会添加zero padding，一般3*3的卷积核padding为1，5*5为2</p>
 <p>Feature Map的尺寸等于(input_size + 2 *padding_size − filter_size)/stride+1</p>
-<h4 id="形状、概念抓取"><a href="#形状、概念抓取" class="headerlink" title="形状、概念抓取"></a>形状、概念抓取</h4><ul>
+<h4><span id="形状-概念抓取">形状、概念抓取</span></h4><ul>
 <li>卷积层可以对基础形状（包括边缘、棱角、模糊等）、对比度、颜色等概念进行抓取</li>
 <li>可以通过多层卷积实现对一个较大区域的抓取</li>
 <li>抓取的特征取决于卷积核的权重，而此权重由网络根据数据学习得到，即CNN会自己学习以什么样的方式观察图片</li>
 <li>可以有多个filter，从而可以学习到多种特征<ul>
 <li>此时卷积层的输出depth也就不是1了</li>
-<li>卷积层的输入输出均为长方体：其中depth与filters个数相同<br><img src="https://pic1.zhimg.com/80/v2-a9983c3cee935b68c73965bc1abe268c_hd.png" alt="ex4"><br><img src="https://pic1.zhimg.com/80/v2-d11e1d2f2c41b6df713573f8155bc324_hd.png" alt="ex2"><h4 id="非线性（以ReLu为例）"><a href="#非线性（以ReLu为例）" class="headerlink" title="非线性（以ReLu为例）"></a>非线性（以ReLu为例）</h4>增强模型的非线性拟合能力<br><img src="https://pic3.zhimg.com/80/v2-54a469b2873542e75abf2bc5d8fcaa1a_hd.png" alt="ex3"><h4 id="pooling"><a href="#pooling" class="headerlink" title="pooling"></a>pooling</h4><em>比如以步长为2，2x2的 filter pool</em><br><img src="https://pic4.zhimg.com/80/v2-cd717414dcf32dac4df73c00f1e7c6c3_hd.jpg" alt="ex5"></li>
+<li>卷积层的输入输出均为长方体：其中depth与filters个数相同<br><img src="https://pic1.zhimg.com/80/v2-a9983c3cee935b68c73965bc1abe268c_hd.png" alt="ex4"><br><img src="https://pic1.zhimg.com/80/v2-d11e1d2f2c41b6df713573f8155bc324_hd.png" alt="ex2"><h4><span id="非线性以relu为例">非线性（以ReLu为例）</span></h4>增强模型的非线性拟合能力<br><img src="https://pic3.zhimg.com/80/v2-54a469b2873542e75abf2bc5d8fcaa1a_hd.png" alt="ex3"><h4><span id="pooling">pooling</span></h4><em>比如以步长为2，2x2的 filter pool</em><br><img src="https://pic4.zhimg.com/80/v2-cd717414dcf32dac4df73c00f1e7c6c3_hd.jpg" alt="ex5"></li>
 </ul>
 </li>
-<li>pooling的主要功能是downsamping，有助减少conv过程中的冗余<h4 id="全连接"><a href="#全连接" class="headerlink" title="全连接"></a>全连接</h4></li>
-<li>当抓取到足以用来识别图片的特征后，接下来的就是如何进行分类。 全连接层（也叫前馈层）就可以用来将最后的输出映射到线性可分的空间。 通常卷积网络的最后会将末端得到的长方体平摊(flatten)成一个长长的向量，并送入全连接层配合输出层进行分类。<h4 id="一些变体中用到的技巧"><a href="#一些变体中用到的技巧" class="headerlink" title="一些变体中用到的技巧"></a>一些变体中用到的技巧</h4></li>
+<li>pooling的主要功能是downsamping，有助减少conv过程中的冗余<h4><span id="全连接">全连接</span></h4></li>
+<li>当抓取到足以用来识别图片的特征后，接下来的就是如何进行分类。 全连接层（也叫前馈层）就可以用来将最后的输出映射到线性可分的空间。 通常卷积网络的最后会将末端得到的长方体平摊(flatten)成一个长长的向量，并送入全连接层配合输出层进行分类。<h4><span id="一些变体中用到的技巧">一些变体中用到的技巧</span></h4></li>
 <li>1x1卷积核：选择不同的个数，用来降维或升维</li>
 <li>残差<blockquote>
 <p>所有的这些技巧都是对各种不变性的满足</p>
@@ -1581,13 +1606,16 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
     
     <div class="post-body" itemprop="articleBody">
           <h3 id="经验风险"><a href="#经验风险" class="headerlink" title="经验风险"></a>经验风险</h3><ul>
-<li>对训练样本误差的衡量，例如最典型的是每个样本损失函数的平均，Σ(loss(Yi, f(Xi))) / m</li>
-<li><p>基于经验风险最小化的模型泛化能力差，只代表了局部最优 —&gt; 过拟合</p>
+<li><p>对训练样本误差的衡量，例如最典型的是每个样本损失函数的平均，Σ(loss(Yi, f(Xi))) / m</p>
+</li>
+<li><p>基于经验风险最小化的模型泛化能力差，只代表了局部最优 –&gt; 过拟合</p>
 <h3 id="期望风险"><a href="#期望风险" class="headerlink" title="期望风险"></a>期望风险</h3></li>
 <li><p>要寻找全局最优，可以考虑使用损失函数的期望，即E(loss(Yi, f(Xi))) = ∫(P(Xi,Yi)loss(Yi, f(Xi)))dxdy</p>
 </li>
-<li>此处假设了(x, y)的联合分布</li>
-<li>问题：对于大部分样本无法获知其具体的分布 —&gt; 不现实</li>
+<li><p>此处假设了(x, y)的联合分布</p>
+</li>
+<li><p>问题：对于大部分样本无法获知其具体的分布 –&gt; 不现实</p>
+</li>
 </ul>
 <h3 id="结构风险"><a href="#结构风险" class="headerlink" title="结构风险"></a>结构风险</h3><p>在经验风险之上添加正则项，模拟期望风险</p>
 
@@ -1772,6 +1800,10 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
   
 
 
+
+
+  <script src="//cdn.jsdelivr.net/npm/algoliasearch@4.5.1/dist/algoliasearch-lite.umd.js"></script>
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@4.8.3/dist/instantsearch.production.min.js"></script><script src="/js/algolia-search.js"></script>
 
 
 

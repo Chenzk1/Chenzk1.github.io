@@ -125,6 +125,7 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
@@ -153,11 +154,35 @@
     <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
 
   </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
   </ul>
 </nav>
 
 
 
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+      
+    </div>
+  </div>
 
 </div>
         
@@ -182,7 +207,7 @@
 
       <!--noindex-->
       <section class="post-toc-wrap sidebar-panel">
-          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%86%E5%BA%A6%E8%81%9A%E7%B1%BB"><span class="nav-number">1.</span> <span class="nav-text">密度聚类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DBSCAN"><span class="nav-number">2.</span> <span class="nav-text">DBSCAN</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E6%A6%82%E5%BF%B5"><span class="nav-number">2.1.</span> <span class="nav-text">关键概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%81%9A%E7%B1%BB%E6%80%9D%E6%83%B3"><span class="nav-number">2.2.</span> <span class="nav-text">聚类思想</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%97%E6%B3%95"><span class="nav-number">2.3.</span> <span class="nav-text">算法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%B9%E6%AF%94"><span class="nav-number">3.</span> <span class="nav-text">对比</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sklearn-cluster-DBSCAN"><span class="nav-number">4.</span> <span class="nav-text">sklearn.cluster.DBSCAN</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E6%95%B0"><span class="nav-number">4.1.</span> <span class="nav-text">参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E4%BE%8B"><span class="nav-number">4.2.</span> <span class="nav-text">代码实例</span></a></li></ol></li></ol></div>
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">密度聚类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">DBSCAN</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">2.1.</span> <span class="nav-text">关键概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">2.2.</span> <span class="nav-text">聚类思想</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">2.3.</span> <span class="nav-text">算法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">3.</span> <span class="nav-text">对比</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">4.</span> <span class="nav-text">sklearn.cluster.DBSCAN</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">4.1.</span> <span class="nav-text">参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">4.2.</span> <span class="nav-text">代码实例</span></a></li></ol></li></ol></div>
       </section>
       <!--/noindex-->
 
@@ -303,8 +328,8 @@
     
     <div class="post-body" itemprop="articleBody">
         <p>[TOC]<br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/pinard/p/6208966.html">原文1</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/pinard/p/6217852.html">原文2</a><br>DBSCAN(Density-Based Spatial Clustering of Applications with Noise，具有噪声的基于密度的聚类方法)是一种很典型的<strong>密度聚类算法</strong>，和K-Means，BIRCH这些一般只适用于凸样本集的聚类相比，DBSCAN<strong>既可以适用于凸样本集，也可以适用于非凸样本集</strong>。</p>
-<h1 id="密度聚类"><a href="#密度聚类" class="headerlink" title="密度聚类"></a>密度聚类</h1><p>其原理为：同一类别的样本，其样本分布一定是紧密的；可以将各组紧密相连的样本划分为不同的类别来得到聚类类别结果。</p>
-<h1 id="DBSCAN"><a href="#DBSCAN" class="headerlink" title="DBSCAN"></a>DBSCAN</h1><h2 id="关键概念"><a href="#关键概念" class="headerlink" title="关键概念"></a>关键概念</h2><p>参数(ϵ, MinPts)描述领域的样本分布紧密程度，其中ϵ描述了某一样本的领域<strong>距离阈值</strong>，MinPts描述某一样本的距离为ϵ的领域中样本<strong>个数的阈值</strong>。</p>
+<h1><span id="密度聚类">密度聚类</span></h1><p>其原理为：同一类别的样本，其样本分布一定是紧密的；可以将各组紧密相连的样本划分为不同的类别来得到聚类类别结果。</p>
+<h1><span id="dbscan">DBSCAN</span></h1><h2><span id="关键概念">关键概念</span></h2><p>参数(ϵ, MinPts)描述领域的样本分布紧密程度，其中ϵ描述了某一样本的领域<strong>距离阈值</strong>，MinPts描述某一样本的距离为ϵ的领域中样本<strong>个数的阈值</strong>。</p>
 <p>假设样本集是D=(x1,x2,…,xm),则DBSCAN具体的密度描述定义如下：</p>
 <ol>
 <li>ϵ-邻域：对于xj∈D，其ϵ-邻域包含样本集D中与xj的距离不大于ϵ的子样本集，即Nϵ(xj)={xi∈D|distance(xi,xj)≤ϵ}, 这个子样本集的个数记为|Nϵ(xj)|</li>
@@ -314,7 +339,7 @@
 <li>密度相连：对于xi和xj,如果存在核心对象样本xk，使xi和xj均由xk密度可达，则称xi和xj密度相连。注意密度相连关系是满足对称性的。</li>
 </ol>
 <p>图中MinPts = 5。红点为核心对象。<br><img src="https://images2015.cnblogs.com/blog/1042406/201612/1042406-20161222112847323-1346197243.png" alt="示意图"></p>
-<h2 id="聚类思想"><a href="#聚类思想" class="headerlink" title="聚类思想"></a>聚类思想</h2><p>由密度可达关系导出的最大密度相连的样本集合，即为最终聚类的一个类别。</p>
+<h2><span id="聚类思想">聚类思想</span></h2><p>由密度可达关系导出的最大密度相连的样本集合，即为最终聚类的一个类别。</p>
 <p>方法：任意选择一个没有类别的核心对象作为种子，然后找到该核心对象密度可达的样本集合，为一个聚类。接着选择另一个没有类比的核心对象…直到所有核心对象都有类别。</p>
 <p>问题：</p>
 <ol>
@@ -322,7 +347,7 @@
 <li>距离。少量样本而言，搜索周围样本一般用最近邻的方法；大量样本，可以用KD树，球树等搜索最近邻。</li>
 <li>若某样本到两个核心对象的距离都小于ϵ，但这两个核心对象不可达，此时采取先来后到原则，标记其为先聚类的cluster类别。</li>
 </ol>
-<h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><p>输入：样本集D=(x1,x2,…,xm)，邻域参数(ϵ,MinPts), 样本距离度量方式</p>
+<h2><span id="算法">算法</span></h2><p>输入：样本集D=(x1,x2,…,xm)，邻域参数(ϵ,MinPts), 样本距离度量方式</p>
 <p>输出： 簇划分C.　</p>
 <ol>
 <li>初始化核心对象集合Ω=∅, 初始化聚类簇数k=0，初始化未访问样本集合Γ = D,  簇划分C = ∅</li>
@@ -337,7 +362,7 @@
 <li>在当前簇核心对象队列Ωcur中取出一个核心对象o′,通过邻域距离阈值ϵ找出所有的ϵ-邻域子样本集Nϵ(o′)，令Δ=Nϵ(o′)∩Γ, 更新当前簇样本集合Ck=Ck∪Δ, 更新未访问样本集合Γ=Γ−Δ,  更新Ωcur=Ωcur∪(Δ∩Ω)−o′，转入步骤5.</li>
 </ol>
 <p>输出结果为： 簇划分C={C1,C2,…,Ck}</p>
-<h1 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h1><p>对比图：<img src="https://img-blog.csdn.net/20170419143546349?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvc2luYXRfMjY5MTczODM=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="与其他算法的对比图"><br>一般用于数据集稠密时的情况，或数据集是非凸的。</p>
+<h1><span id="对比">对比</span></h1><p>对比图：<img src="https://img-blog.csdn.net/20170419143546349?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvc2luYXRfMjY5MTczODM=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="与其他算法的对比图"><br>一般用于数据集稠密时的情况，或数据集是非凸的。</p>
 <p>DBSCAN的主要优点有：</p>
 <ol>
 <li>可以对任意形状的稠密数据集进行聚类，相对的，K-Means之类的聚类算法一般只适用于凸数据集。</li>
@@ -350,7 +375,7 @@
 <li>如果样本集较大时，聚类收敛时间较长，此时可以对搜索最近邻时建立的KD树或者球树进行规模限制来改进。</li>
 <li>调参相对于传统的K-Means之类的聚类算法稍复杂，主要需要对距离阈值ϵ，邻域样本数阈值MinPts联合调参，不同的参数组合对最后的聚类效果有较大影响。</li>
 </ol>
-<h1 id="sklearn-cluster-DBSCAN"><a href="#sklearn-cluster-DBSCAN" class="headerlink" title="sklearn.cluster.DBSCAN"></a>sklearn.cluster.DBSCAN</h1><h2 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h2><p>按其算法，包括DBSCAN本身的参数，以及求取最近邻时的参数。</p>
+<h1><span id="sklearnclusterdbscan">sklearn.cluster.DBSCAN</span></h1><h2><span id="参数">参数</span></h2><p>按其算法，包括DBSCAN本身的参数，以及求取最近邻时的参数。</p>
 <ol>
 <li>eps：DBSCAN算法参数，ϵ-邻域的距离阈值。默认值是0.5.eps过大，则更多的点会落在核心对象的ϵ-邻域，此时我们的类别数可能会减少， 本来不应该是一类的样本也会被划为一类。反之则类别数可能会增大，本来是一类的样本却被划分开。</li>
 <li>min_samples：DBSCAN算法参数，上文的MinPts。默认值是5.通常和eps一起调参。在eps一定的情况下，min_samples过大，则核心对象会过少，此时簇内部分本来是一类的样本可能会被标为噪音点，类别数也会变多。反之min_samples过小的话，则会产生大量的核心对象，可能会导致类别数过少。</li>
@@ -376,7 +401,7 @@
 <li>components_ ：核心样本的副本</li>
 </ul>
 <p>主要是<strong>eps和min_samples</strong>的调参。</p>
-<h2 id="代码实例"><a href="#代码实例" class="headerlink" title="代码实例"></a>代码实例</h2><p>原文2中有。<br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/pinard/p/6217852.html">原文2</a></p>
+<h2><span id="代码实例">代码实例</span></h2><p>原文2中有。<br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/pinard/p/6217852.html">原文2</a></p>
 
     </div>
 
@@ -466,6 +491,10 @@
   
 
 
+
+
+  <script src="//cdn.jsdelivr.net/npm/algoliasearch@4.5.1/dist/algoliasearch-lite.umd.js"></script>
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@4.8.3/dist/instantsearch.production.min.js"></script><script src="/js/algolia-search.js"></script>
 
 
 

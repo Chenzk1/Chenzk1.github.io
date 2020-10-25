@@ -121,6 +121,7 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
@@ -149,11 +150,35 @@
     <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
 
   </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
   </ul>
 </nav>
 
 
 
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+      
+    </div>
+  </div>
 
 </div>
         
@@ -178,7 +203,7 @@
 
       <!--noindex-->
       <section class="post-toc-wrap sidebar-panel">
-          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%9E%E6%80%A7%E5%91%BD%E5%90%8D"><span class="nav-number">1.</span> <span class="nav-text">属性命名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E6%80%81"><span class="nav-number">2.</span> <span class="nav-text">多态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8B%A5%E5%B9%B2%E6%96%B9%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">若干方法</span></a></li></ol></div>
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">属性命名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">多态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">3.</span> <span class="nav-text">若干方法</span></a></li></ol></div>
       </section>
       <!--/noindex-->
 
@@ -298,17 +323,17 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h3 id="属性命名"><a href="#属性命名" class="headerlink" title="属性命名"></a>属性命名</h3><ul>
+        <h3><span id="属性命名">属性命名</span></h3><ul>
 <li>属性以双下划线开头，类内变量，实例无法访问。但可以通过某些方式访问，例如Student例中定义了__name变量，可以用_Student_name来实现访问，但不建议，因为不同的解释器的转化方式不一样。</li>
 <li>单下划线可以打开，但需要注意不能随意更改。</li>
 <li>双下划线结尾与开头，特殊变量，类内可以访问，实例不知。</li>
-<li><h3 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h3>开闭原则：定义一个类Animal及其多个之类Dog/Cat/…，当定义一个函数或操作时：</li>
+<li><h3><span id="多态">多态</span></h3>开闭原则：定义一个类Animal及其多个之类Dog/Cat/…，当定义一个函数或操作时：</li>
 </ul>
 <ul>
 <li>对扩展开放：允许新增Animal的子类；</li>
 <li>对修改封闭：不需要修改依赖Animal类型的run_twice()等函数，仍然可以传入Dog/Cat等类。<br>事实上，不需要继承也可以实现多态————鸭子类型。</li>
 </ul>
-<h3 id="若干方法"><a href="#若干方法" class="headerlink" title="若干方法"></a>若干方法</h3><ul>
+<h3><span id="若干方法">若干方法</span></h3><ul>
 <li>isinstance(object,class) 判断是否属于某个类</li>
 <li>dir() 列举出一个对象的属性和方法</li>
 <li>getattr()、setattr()、hasattr()可以获得、添加、查询是否需要某个属性<ul>
@@ -405,6 +430,10 @@
   
 
 
+
+
+  <script src="//cdn.jsdelivr.net/npm/algoliasearch@4.5.1/dist/algoliasearch-lite.umd.js"></script>
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@4.8.3/dist/instantsearch.production.min.js"></script><script src="/js/algolia-search.js"></script>
 
 
 
