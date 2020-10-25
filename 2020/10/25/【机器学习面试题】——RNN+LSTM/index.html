@@ -10,7 +10,7 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
-  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="mask-icon" href="/images/mylogo.svg" color="#222">
 
 <link rel="stylesheet" href="/css/main.css">
 
@@ -23,12 +23,12 @@
     var CONFIG = {"hostname":"chenzk1.github.io","root":"/","scheme":"Gemini","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}};
   </script>
 
-  <meta name="description" content="LSTM产生的原因RNN在处理长期依赖（时间序列上距离较远的节点）时会遇到巨大的困难，因为计算距离较远的节点之间的联系时会涉及雅可比矩阵的多次相乘，会造成梯度消失或者梯度膨胀的现象。RNN结构之所以出现梯度爆炸或者梯度消失，最本质的原因是因为梯度在传递过程中存在极大数量的连乘 。 相对于RNN，LSTM的神经元加入了输入门i、遗忘门f、输出门o 、内部记忆单元c  分别介绍一下输入门i、遗忘门f、">
+  <meta name="description" content="[TOC] LSTM产生的原因RNN在处理长期依赖（时间序列上距离较远的节点）时会遇到巨大的困难，因为计算距离较远的节点之间的联系时会涉及雅可比矩阵的多次相乘，会造成梯度消失或者梯度膨胀的现象。RNN结构之所以出现梯度爆炸或者梯度消失，最本质的原因是因为梯度在传递过程中存在极大数量的连乘 。 相对于RNN，LSTM的神经元加入了输入门i、遗忘门f、输出门o 、内部记忆单元c  分别介绍一下输入门i">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Kayden&#39;s Blog">
+<meta property="og:title" content="机器学习面试题-RNN&amp;LSTM">
 <meta property="og:url" content="https://chenzk1.github.io/2020/10/25/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94RNN+LSTM/index.html">
 <meta property="og:site_name" content="Kayden&#39;s Blog">
-<meta property="og:description" content="LSTM产生的原因RNN在处理长期依赖（时间序列上距离较远的节点）时会遇到巨大的困难，因为计算距离较远的节点之间的联系时会涉及雅可比矩阵的多次相乘，会造成梯度消失或者梯度膨胀的现象。RNN结构之所以出现梯度爆炸或者梯度消失，最本质的原因是因为梯度在传递过程中存在极大数量的连乘 。 相对于RNN，LSTM的神经元加入了输入门i、遗忘门f、输出门o 、内部记忆单元c  分别介绍一下输入门i、遗忘门f、">
+<meta property="og:description" content="[TOC] LSTM产生的原因RNN在处理长期依赖（时间序列上距离较远的节点）时会遇到巨大的困难，因为计算距离较远的节点之间的联系时会涉及雅可比矩阵的多次相乘，会造成梯度消失或者梯度膨胀的现象。RNN结构之所以出现梯度爆炸或者梯度消失，最本质的原因是因为梯度在传递过程中存在极大数量的连乘 。 相对于RNN，LSTM的神经元加入了输入门i、遗忘门f、输出门o 、内部记忆单元c  分别介绍一下输入门i">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://img-blog.csdn.net/20170919124608594?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbHJlYWRlcmw=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
 <meta property="og:image" content="c:/Users/heitao/AppData/Roaming/Typora/typora-user-images/1578624771053.png">
@@ -36,9 +36,10 @@
 <meta property="og:image" content="c:/Users/heitao/AppData/Roaming/Typora/typora-user-images/1578624724604.png">
 <meta property="og:image" content="c:/Users/heitao/AppData/Roaming/Typora/typora-user-images/1578625167504.png">
 <meta property="article:published_time" content="2020-10-25T02:54:33.572Z">
-<meta property="article:modified_time" content="2020-01-14T09:15:08.000Z">
+<meta property="article:modified_time" content="2020-10-25T06:48:45.618Z">
 <meta property="article:author" content="Kayden">
-<meta property="article:tag" content="code">
+<meta property="article:tag" content="DL">
+<meta property="article:tag" content="NLP">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://img-blog.csdn.net/20170919124608594?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbHJlYWRlcmw=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
 
@@ -56,7 +57,7 @@
   };
 </script>
 
-  <title> | Kayden's Blog</title>
+  <title>机器学习面试题-RNN&LSTM | Kayden's Blog</title>
   
 
 
@@ -122,7 +123,7 @@
       <h1 class="site-title">Kayden's Blog</h1>
       <i class="logo-line"></i>
     </a>
-      <p class="site-subtitle" itemprop="description">sometimes naive</p>
+      <p class="site-subtitle" itemprop="description">Mamba forever.</p>
   </div>
 
   <div class="site-nav-right">
@@ -218,8 +219,6 @@
 
       <section class="site-overview-wrap sidebar-panel">
         <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Kayden"
-      src="/images/kobe.jpg">
   <p class="site-author-name" itemprop="name">Kayden</p>
   <div class="site-description" itemprop="description">blog</div>
 </div>
@@ -228,7 +227,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-count">24</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -239,7 +238,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -290,7 +289,7 @@
     <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/25/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94RNN+LSTM/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/kobe.jpg">
+      <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Kayden">
       <meta itemprop="description" content="blog">
     </span>
@@ -300,7 +299,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          机器学习面试题-RNN&LSTM
         </h1>
 
         <div class="post-meta-container">
@@ -310,16 +309,19 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2020-10-25 10:54:33" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
+      <time title="创建时间：2020-10-25 10:54:33 / 修改时间：14:48:45" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2020-01-14 17:15:08" itemprop="dateModified" datetime="2020-01-14T17:15:08+08:00">2020-01-14</time>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
       </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+        </span>
+    </span>
 
   
 </div>
@@ -331,17 +333,18 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h2 id="LSTM产生的原因"><a href="#LSTM产生的原因" class="headerlink" title="LSTM产生的原因"></a>LSTM产生的原因</h2><p><strong>RNN在处理长期依赖</strong>（时间序列上距离较远的节点）时会遇到巨大的困难，因为计算距离较远的节点之间的联系时会涉及雅可比矩阵的多次相乘，会造成<strong>梯度消失或者梯度膨胀</strong>的现象。RNN结构之所以出现梯度爆炸或者梯度消失，最本质的原因是因为梯度在传递过程中存在极大数量的连乘 。</p>
+        <p>[TOC]</p>
+<h2 id="LSTM产生的原因"><a href="#LSTM产生的原因" class="headerlink" title="LSTM产生的原因"></a>LSTM产生的原因</h2><p><strong>RNN在处理长期依赖</strong>（时间序列上距离较远的节点）时会遇到巨大的困难，因为计算距离较远的节点之间的联系时会涉及雅可比矩阵的多次相乘，会造成<strong>梯度消失或者梯度膨胀</strong>的现象。RNN结构之所以出现梯度爆炸或者梯度消失，最本质的原因是因为梯度在传递过程中存在极大数量的连乘 。</p>
 <p>相对于RNN，LSTM的神经元加入了<strong>输入门i、遗忘门f、输出门o 、内部记忆单元c</strong> </p>
 <h2 id="分别介绍一下输入门i、遗忘门f、输出门o-、内部记忆单元c"><a href="#分别介绍一下输入门i、遗忘门f、输出门o-、内部记忆单元c" class="headerlink" title="分别介绍一下输入门i、遗忘门f、输出门o 、内部记忆单元c"></a>分别介绍一下输入门i、遗忘门f、输出门o 、内部记忆单元c</h2><ul>
 <li><p>内部记忆单元$c$</p>
 <ul>
-<li><p> 类似于传送带。直接在整个链上运行，只有一些少量的线性交互。信息在上面流传保持不变会很容易。  </p>
+<li><p>类似于传送带。直接在整个链上运行，只有一些少量的线性交互。信息在上面流传保持不变会很容易。  </p>
 </li>
 <li><p>操作步骤：</p>
 </li>
 <li><p>示意图：</p>
-<p><img src="https://img-blog.csdn.net/20170919124608594?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbHJlYWRlcmw=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"></p>
+<p><img src="https://img-blog.csdn.net/20170919124608594?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbHJlYWRlcmw=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt=""></p>
 </li>
 </ul>
 </li>
@@ -354,7 +357,7 @@
 <li><p>操作步骤：</p>
 <ul>
 <li>读取：$h_{t-1}$、$x_t$，</li>
-<li>输出：$f_{t}=\sigma\left(W_{f} \cdot\left[h_{t-1}, x_{t}\right]+b_{f}\right)$</li>
+<li>输出：$f<em>{t}=\sigma\left(W</em>{f} \cdot\left[h<em>{t-1}, x</em>{t}\right]+b_{f}\right)$</li>
 <li>$\sigma$表示一个在 0 到 1 之间的数值。1 表示“完全保留”，0 表示“完全舍弃”</li>
 </ul>
 </li>
@@ -362,8 +365,8 @@
 <p><img src="C:\Users\heitao\AppData\Roaming\Typora\typora-user-images\1578624771053.png" alt="1578624771053"></p>
 </li>
 </ul>
-<p>$$<br>f_{t}=\sigma\left(W_{f} \cdot\left[h_{t-1}, x_{t}\right]+b_{f}\right)<br>$$</p>
-</li>
+<script type="math/tex; mode=display">
+f_{t}=\sigma\left(W_{f} \cdot\left[h_{t-1}, x_{t}\right]+b_{f}\right)</script></li>
 <li><p>输入门$i$</p>
 <ul>
 <li><p>将新的信息记录到<strong>内部记忆单元</strong>中</p>
@@ -373,12 +376,14 @@
 <li><p>步骤一：$sigmoid$ 层称 <strong>输入门层</strong>决定什么值我们将要更新。</p>
 </li>
 <li><p>步骤二：$tanh$ 层创建一个新的候选值向量$\tilde{C}_t$加入到状态中。其示意图如下：</p>
-<p><img src="C:\Users\heitao\AppData\Roaming\Typora\typora-user-images\1578624753318.png" alt="1578624753318"><br>$$<br>i_{t}=\sigma\left(W_{i} \cdot\left[h_{t-1}, x_{t}\right]+b_{i}\right)<br>$$</p>
-<p>$$<br>\tilde{C}<em>{t}=\tanh \left(W</em>{C} \cdot\left[h_{t-1}, x_{t}\right]+b_{C}\right)<br>$$</p>
-</li>
-<li><p>步骤三：将$C_{t-1}$更新为$C_{t}$。将旧状态与$f_t$相乘，丢弃掉我们确定需要丢弃的信息。接着加上$i_t * \tilde{C}_t$得到新的候选值，根据我们决定更新每个状态的程度进行变化。其示意图如下：</p>
-<p><img src="C:\Users\heitao\AppData\Roaming\Typora\typora-user-images\1578624724604.png" alt="1578624724604"><br>$$<br>C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}<br>$$</p>
-</li>
+<p><img src="C:\Users\heitao\AppData\Roaming\Typora\typora-user-images\1578624753318.png" alt="1578624753318"></p>
+<script type="math/tex; mode=display">
+i_{t}=\sigma\left(W_{i} \cdot\left[h_{t-1}, x_{t}\right]+b_{i}\right)</script><script type="math/tex; mode=display">
+\tilde{C}_{t}=\tanh \left(W_{C} \cdot\left[h_{t-1}, x_{t}\right]+b_{C}\right)</script></li>
+<li><p>步骤三：将$C<em>{t-1}$更新为$C</em>{t}$。将旧状态与$f_t$相乘，丢弃掉我们确定需要丢弃的信息。接着加上$i_t * \tilde{C}_t$得到新的候选值，根据我们决定更新每个状态的程度进行变化。其示意图如下：</p>
+<p><img src="C:\Users\heitao\AppData\Roaming\Typora\typora-user-images\1578624724604.png" alt="1578624724604"></p>
+<script type="math/tex; mode=display">
+C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
 </ul>
 </li>
 </ul>
@@ -392,8 +397,12 @@
 <li><p>步骤一：通过sigmoid 层来确定细胞状态的哪个部分将输出。</p>
 </li>
 <li><p>步骤二：把细胞状态通过 tanh 进行处理，并将它和 sigmoid 门的输出相乘，最终我们仅仅会输出我们确定输出的那部分。</p>
-<p><img src="C:\Users\heitao\AppData\Roaming\Typora\typora-user-images\1578625167504.png" alt="1578625167504"><br>$$<br>\begin{array}{l}<br>{o_{t}=\sigma\left(W_{o}\left[h_{t-1}, x_{t}\right]+b_{o}\right)} \<br>{h_{t}=o_{t} * \tanh \left(C_{t}\right)}<br>\end{array}<br>$$</p>
-</li>
+<p><img src="C:\Users\heitao\AppData\Roaming\Typora\typora-user-images\1578625167504.png" alt="1578625167504"></p>
+<script type="math/tex; mode=display">
+\begin{array}{l}
+{o_{t}=\sigma\left(W_{o}\left[h_{t-1}, x_{t}\right]+b_{o}\right)} \\
+{h_{t}=o_{t} * \tanh \left(C_{t}\right)}
+\end{array}</script></li>
 </ul>
 </li>
 </ul>
@@ -407,18 +416,22 @@
     
 
     <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/DL/" rel="tag"># DL</a>
+              <a href="/tags/NLP/" rel="tag"># NLP</a>
+          </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2020/10/25/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94Apriori/" rel="prev" title="CNN">
-                  <i class="fa fa-chevron-left"></i> CNN
+                <a href="/2020/10/25/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94Apriori/" rel="prev" title="机器学习面试题-Apriori">
+                  <i class="fa fa-chevron-left"></i> 机器学习面试题-Apriori
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2020/10/25/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E8%B4%9D%E5%8F%B6%E6%96%AF/" rel="next" title="">
-                   <i class="fa fa-chevron-right"></i>
+                <a href="/2020/10/25/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E8%B4%9D%E5%8F%B6%E6%96%AF/" rel="next" title="机器学习面试题-贝叶斯">
+                  机器学习面试题-贝叶斯 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>
