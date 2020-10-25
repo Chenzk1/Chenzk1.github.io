@@ -232,27 +232,6 @@
       </tags>
   </entry>
   <entry>
-    <title>GBDT</title>
-    <url>/2020/10/25/GBDT/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><ul>
-<li>GBDT与传统的Boosting区别较大，它的每一次计算都是为了减少上一次的残差，而为了消除残差，我们可以在残差减小的梯度方向上建立模型,所以说，在GradientBoost中，每个新的模型的建立是为了使得之前的模型的残差往梯度下降的方法，与传统的Boosting中关注正确错误的样本加权有着很大的区别。</li>
-<li>在GradientBoosting算法中，关键就是利用损失函数的负梯度方向在当前模型的值作为残差的近似值，进而拟合一棵CART回归树。</li>
-<li>GBDT的会累加所有树的结果，而这种累加是无法通过分类完成的，因此<strong>GBDT的树都是CART回归树</strong>，而不是分类树（尽管GBDT调整后也可以用于分类但不代表GBDT的树为分类树）。</li>
-</ul>
-<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><ul>
-<li>GBDT的性能在RF的基础上又有一步提升，因此其优点也很明显，1、它能灵活的处理各种类型的数据；2、在相对较少的调参时间下，预测的准确度较高。</li>
-<li>当然由于它是Boosting，因此基学习器之前存在串行关系，难以并行训练数据。</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Learning</category>
-      </categories>
-      <tags>
-        <tag>ML</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Decision Tree</title>
     <url>/2020/10/25/Decision%20Tree/</url>
     <content><![CDATA[<p>[TOC]</p>
@@ -333,6 +312,59 @@
       </tags>
   </entry>
   <entry>
+    <title>GBDT</title>
+    <url>/2020/10/25/GBDT/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><ul>
+<li>GBDT与传统的Boosting区别较大，它的每一次计算都是为了减少上一次的残差，而为了消除残差，我们可以在残差减小的梯度方向上建立模型,所以说，在GradientBoost中，每个新的模型的建立是为了使得之前的模型的残差往梯度下降的方法，与传统的Boosting中关注正确错误的样本加权有着很大的区别。</li>
+<li>在GradientBoosting算法中，关键就是利用损失函数的负梯度方向在当前模型的值作为残差的近似值，进而拟合一棵CART回归树。</li>
+<li>GBDT的会累加所有树的结果，而这种累加是无法通过分类完成的，因此<strong>GBDT的树都是CART回归树</strong>，而不是分类树（尽管GBDT调整后也可以用于分类但不代表GBDT的树为分类树）。</li>
+</ul>
+<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><ul>
+<li>GBDT的性能在RF的基础上又有一步提升，因此其优点也很明显，1、它能灵活的处理各种类型的数据；2、在相对较少的调参时间下，预测的准确度较高。</li>
+<li>当然由于它是Boosting，因此基学习器之前存在串行关系，难以并行训练数据。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>ML</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Naive Bayes及其sklearn实现</title>
+    <url>/2020/10/25/Naive%20Bayes/</url>
+    <content><![CDATA[<p>[TOC]<br>P(B|A) = P(A|B)*P(B)/P(A)</p>
+<p>朴素：特征之间相互独立</p>
+<h1 id="算法流程"><a href="#算法流程" class="headerlink" title="算法流程"></a>算法流程</h1><ol>
+<li>x = {a1, a2, …, am}为待分类项，a是特征。</li>
+<li>类别集合C = {y1, …, yn}.</li>
+<li>计算P(y1|x), P(y2|x) …</li>
+<li>P(yk|x) = max{P(yi|x)}，则x属于yk类</li>
+</ol>
+<p><strong>总结：</strong>某类在待分类项出现的条件下的概率是所有类中最大的，这个分类项就属于这一类。</p>
+<p>e.g.判断一个黑人来自哪个洲，求取每个洲黑人的比率，非洲最高，选非洲。</p>
+<p>其中x = {a1, a2, …, am}，即P(C|a1,a2…) = P(C)*P(a1,a2,…|C)/P(a1,a2…)。posterior = prior * likelihood / evidence, 这里evidence是常数，不影响。</p>
+<p>——-&gt;求解P(C) * P(a1,a2,a3…|C)</p>
+<p>——-&gt;链式法则：P(C) * P(a2,a3…|C, a1) * P(a1|C)</p>
+<p>—-&gt; …</p>
+<p>—-&gt; P(C) * P(a1|C) * P(a2|C, a1) * P(a3|C, a1, a2)…<br>由于特征之间的相互独立性，a2发生于a1无关，转化为</p>
+<p>—-&gt; P(C) * P(a1|C) * P(a2|C) …  * P(am|C)</p>
+<p>——-&gt;问题转化为求取条件概率：</p>
+<ol>
+<li>找到一个已知分类的待分类项集合，这个集合叫做训练样本集。</li>
+<li>统计得到在各类别下各个特征属性的条件概率估计。</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>ML</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>LightGBM</title>
     <url>/2020/10/25/LightGBM/</url>
     <content><![CDATA[<p>[toc]</p>
@@ -386,38 +418,6 @@
     &#39;is_unbalance&#39;: True  
 &#125;  
 </code></pre>]]></content>
-      <categories>
-        <category>Learning</category>
-      </categories>
-      <tags>
-        <tag>ML</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Naive Bayes及其sklearn实现</title>
-    <url>/2020/10/25/Naive%20Bayes/</url>
-    <content><![CDATA[<p>[TOC]<br>P(B|A) = P(A|B)*P(B)/P(A)</p>
-<p>朴素：特征之间相互独立</p>
-<h1 id="算法流程"><a href="#算法流程" class="headerlink" title="算法流程"></a>算法流程</h1><ol>
-<li>x = {a1, a2, …, am}为待分类项，a是特征。</li>
-<li>类别集合C = {y1, …, yn}.</li>
-<li>计算P(y1|x), P(y2|x) …</li>
-<li>P(yk|x) = max{P(yi|x)}，则x属于yk类</li>
-</ol>
-<p><strong>总结：</strong>某类在待分类项出现的条件下的概率是所有类中最大的，这个分类项就属于这一类。</p>
-<p>e.g.判断一个黑人来自哪个洲，求取每个洲黑人的比率，非洲最高，选非洲。</p>
-<p>其中x = {a1, a2, …, am}，即P(C|a1,a2…) = P(C)*P(a1,a2,…|C)/P(a1,a2…)。posterior = prior * likelihood / evidence, 这里evidence是常数，不影响。</p>
-<p>——-&gt;求解P(C) * P(a1,a2,a3…|C)</p>
-<p>——-&gt;链式法则：P(C) * P(a2,a3…|C, a1) * P(a1|C)</p>
-<p>—-&gt; …</p>
-<p>—-&gt; P(C) * P(a1|C) * P(a2|C, a1) * P(a3|C, a1, a2)…<br>由于特征之间的相互独立性，a2发生于a1无关，转化为</p>
-<p>—-&gt; P(C) * P(a1|C) * P(a2|C) …  * P(am|C)</p>
-<p>——-&gt;问题转化为求取条件概率：</p>
-<ol>
-<li>找到一个已知分类的待分类项集合，这个集合叫做训练样本集。</li>
-<li>统计得到在各类别下各个特征属性的条件概率估计。</li>
-</ol>
-]]></content>
       <categories>
         <category>Learning</category>
       </categories>
@@ -582,6 +582,36 @@
       </tags>
   </entry>
   <entry>
+    <title>python面向对象</title>
+    <url>/2020/10/25/python%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/</url>
+    <content><![CDATA[<h3 id="属性命名"><a href="#属性命名" class="headerlink" title="属性命名"></a>属性命名</h3><ul>
+<li>属性以双下划线开头，类内变量，实例无法访问。但可以通过某些方式访问，例如Student例中定义了__name变量，可以用_Student_name来实现访问，但不建议，因为不同的解释器的转化方式不一样。</li>
+<li>单下划线可以打开，但需要注意不能随意更改。</li>
+<li>双下划线结尾与开头，特殊变量，类内可以访问，实例不知。</li>
+<li><h3 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h3>开闭原则：定义一个类Animal及其多个之类Dog/Cat/…，当定义一个函数或操作时：</li>
+</ul>
+<ul>
+<li>对扩展开放：允许新增Animal的子类；</li>
+<li>对修改封闭：不需要修改依赖Animal类型的run_twice()等函数，仍然可以传入Dog/Cat等类。<br>事实上，不需要继承也可以实现多态————鸭子类型。</li>
+</ul>
+<h3 id="若干方法"><a href="#若干方法" class="headerlink" title="若干方法"></a>若干方法</h3><ul>
+<li>isinstance(object,class) 判断是否属于某个类</li>
+<li>dir() 列举出一个对象的属性和方法</li>
+<li>getattr()、setattr()、hasattr()可以获得、添加、查询是否需要某个属性<ul>
+<li>__slots__ 限制可以添加的属性，__slots__ = (‘name’, ‘age’) # 用tuple定义允许绑定的属性名称</li>
+</ul>
+</li>
+<li>装饰器</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Kaggle相关</title>
     <url>/2020/10/25/kaggle%E7%9B%B8%E5%85%B3/</url>
     <content><![CDATA[<p>[TOC]</p>
@@ -675,36 +705,6 @@
       <tags>
         <tag>ML</tag>
         <tag>Kaggle</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>python面向对象</title>
-    <url>/2020/10/25/python%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/</url>
-    <content><![CDATA[<h3 id="属性命名"><a href="#属性命名" class="headerlink" title="属性命名"></a>属性命名</h3><ul>
-<li>属性以双下划线开头，类内变量，实例无法访问。但可以通过某些方式访问，例如Student例中定义了__name变量，可以用_Student_name来实现访问，但不建议，因为不同的解释器的转化方式不一样。</li>
-<li>单下划线可以打开，但需要注意不能随意更改。</li>
-<li>双下划线结尾与开头，特殊变量，类内可以访问，实例不知。</li>
-<li><h3 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h3>开闭原则：定义一个类Animal及其多个之类Dog/Cat/…，当定义一个函数或操作时：</li>
-</ul>
-<ul>
-<li>对扩展开放：允许新增Animal的子类；</li>
-<li>对修改封闭：不需要修改依赖Animal类型的run_twice()等函数，仍然可以传入Dog/Cat等类。<br>事实上，不需要继承也可以实现多态————鸭子类型。</li>
-</ul>
-<h3 id="若干方法"><a href="#若干方法" class="headerlink" title="若干方法"></a>若干方法</h3><ul>
-<li>isinstance(object,class) 判断是否属于某个类</li>
-<li>dir() 列举出一个对象的属性和方法</li>
-<li>getattr()、setattr()、hasattr()可以获得、添加、查询是否需要某个属性<ul>
-<li>__slots__ 限制可以添加的属性，__slots__ = (‘name’, ‘age’) # 用tuple定义允许绑定的属性名称</li>
-</ul>
-</li>
-<li>装饰器</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Learning</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
       </tags>
   </entry>
   <entry>

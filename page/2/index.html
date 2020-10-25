@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
@@ -20,7 +20,7 @@
 
 <script class="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"chenzk1.github.io","root":"/","scheme":"Gemini","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+    var CONFIG = {"hostname":"chenzk1.github.io","root":"/","scheme":"Gemini","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 
   <meta name="description" content="blog">
@@ -29,7 +29,7 @@
 <meta property="og:url" content="https://chenzk1.github.io/page/2/index.html">
 <meta property="og:site_name" content="Kayden&#39;s Blog">
 <meta property="og:description" content="blog">
-<meta property="og:locale" content="zh_CN">
+<meta property="og:locale" content="en_US">
 <meta property="article:author" content="Kayden">
 <meta property="article:tag" content="code">
 <meta name="twitter:card" content="summary">
@@ -44,7 +44,7 @@
     sidebar: "",
     isHome : true,
     isPost : false,
-    lang   : 'zh-CN'
+    lang   : 'en'
   };
 </script>
 
@@ -100,7 +100,7 @@
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-nav-toggle">
-    <div class="toggle" aria-label="切换导航栏">
+    <div class="toggle" aria-label="Toggle navigation bar">
         <span class="toggle-line"></span>
         <span class="toggle-line"></span>
         <span class="toggle-line"></span>
@@ -130,26 +130,26 @@
   <ul class="main-menu menu">
         <li class="menu-item menu-item-home">
 
-    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
 
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
 
   </li>
         <li class="menu-item menu-item-about">
 
-    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
 
   </li>
       <li class="menu-item menu-item-search">
-        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
       </li>
   </ul>
@@ -165,7 +165,7 @@
   </span>
   <div class="search-input-container">
     <input autocomplete="off" autocapitalize="off" maxlength="80"
-           placeholder="搜索..." spellcheck="false"
+           placeholder="Searching..." spellcheck="false"
            type="search" class="search-input">
   </div>
   <span class="popup-btn-close">
@@ -195,10 +195,10 @@
     <div class="sidebar-inner sidebar-overview-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
-          文章目录
+          Table of Contents
         </li>
         <li class="sidebar-nav-overview">
-          站点概览
+          Overview
         </li>
       </ul>
 
@@ -218,18 +218,18 @@
           <a href="/archives/">
         
           <span class="site-state-item-count">24</span>
-          <span class="site-state-item-name">日志</span>
+          <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
         <span class="site-state-item-count">2</span>
-        <span class="site-state-item-name">分类</span>
+        <span class="site-state-item-name">categories</span>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
         <span class="site-state-item-count">10</span>
-        <span class="site-state-item-name">标签</span></a>
+        <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
 </div>
@@ -274,7 +274,7 @@
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
     <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/25/GBDT/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -298,16 +298,16 @@
       <span class="post-meta-item-icon">
         <i class="far fa-calendar"></i>
       </span>
-      <span class="post-meta-item-text">发表于</span>
+      <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="创建时间：2020-10-25 10:54:33 / 修改时间：11:09:39" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
+      <time title="Created: 2020-10-25 10:54:33 / Modified: 11:09:39" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
       </span>
-      <span class="post-meta-item-text">分类于</span>
+      <span class="post-meta-item-text">In</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
           <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
         </span>
@@ -358,7 +358,7 @@
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
     <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/25/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E8%B4%9D%E5%8F%B6%E6%96%AF/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -382,16 +382,16 @@
       <span class="post-meta-item-icon">
         <i class="far fa-calendar"></i>
       </span>
-      <span class="post-meta-item-text">发表于</span>
+      <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="创建时间：2020-10-25 10:54:33 / 修改时间：18:56:36" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
+      <time title="Created: 2020-10-25 10:54:33 / Modified: 18:56:36" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
       </span>
-      <span class="post-meta-item-text">分类于</span>
+      <span class="post-meta-item-text">In</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
           <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
         </span>
@@ -598,7 +598,7 @@ p(y | \mathbf{x})=\frac{p(\mathbf{x} | y) p(y)}{p(\mathbf{x})}</script><p> 分�
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
     <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/25/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94RNN+LSTM/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -622,16 +622,16 @@ p(y | \mathbf{x})=\frac{p(\mathbf{x} | y) p(y)}{p(\mathbf{x})}</script><p> 分�
       <span class="post-meta-item-icon">
         <i class="far fa-calendar"></i>
       </span>
-      <span class="post-meta-item-text">发表于</span>
+      <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="创建时间：2020-10-25 10:54:33 / 修改时间：19:22:33" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
+      <time title="Created: 2020-10-25 10:54:33 / Modified: 19:22:33" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
       </span>
-      <span class="post-meta-item-text">分类于</span>
+      <span class="post-meta-item-text">In</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
           <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
         </span>
@@ -742,7 +742,7 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
     <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/25/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94Apriori/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -766,16 +766,16 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
       <span class="post-meta-item-icon">
         <i class="far fa-calendar"></i>
       </span>
-      <span class="post-meta-item-text">发表于</span>
+      <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="创建时间：2020-10-25 10:54:33 / 修改时间：20:11:27" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
+      <time title="Created: 2020-10-25 10:54:33 / Modified: 20:11:27" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
       </span>
-      <span class="post-meta-item-text">分类于</span>
+      <span class="post-meta-item-text">In</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
           <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
         </span>
@@ -915,7 +915,7 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
     <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/25/kaggle%E7%9B%B8%E5%85%B3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -939,16 +939,16 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
       <span class="post-meta-item-icon">
         <i class="far fa-calendar"></i>
       </span>
-      <span class="post-meta-item-text">发表于</span>
+      <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="创建时间：2020-10-25 09:35:05 / 修改时间：11:10:03" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:05+08:00">2020-10-25</time>
+      <time title="Created: 2020-10-25 09:35:05 / Modified: 11:10:03" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:05+08:00">2020-10-25</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
       </span>
-      <span class="post-meta-item-text">分类于</span>
+      <span class="post-meta-item-text">In</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
           <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
         </span>
@@ -1073,7 +1073,7 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
     <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/25/GBDT%20&%20XGBoost/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1097,16 +1097,16 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
       <span class="post-meta-item-icon">
         <i class="far fa-calendar"></i>
       </span>
-      <span class="post-meta-item-text">发表于</span>
+      <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="创建时间：2020-10-25 09:35:05 / 修改时间：16:38:15" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:05+08:00">2020-10-25</time>
+      <time title="Created: 2020-10-25 09:35:05 / Modified: 16:38:15" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:05+08:00">2020-10-25</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
       </span>
-      <span class="post-meta-item-text">分类于</span>
+      <span class="post-meta-item-text">In</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
           <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
         </span>
@@ -1210,7 +1210,7 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
     <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/25/Decision%20Tree/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1234,16 +1234,16 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
       <span class="post-meta-item-icon">
         <i class="far fa-calendar"></i>
       </span>
-      <span class="post-meta-item-text">发表于</span>
+      <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="创建时间：2020-10-25 09:35:05 / 修改时间：11:08:37" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:05+08:00">2020-10-25</time>
+      <time title="Created: 2020-10-25 09:35:05 / Modified: 11:08:37" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:05+08:00">2020-10-25</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
       </span>
-      <span class="post-meta-item-text">分类于</span>
+      <span class="post-meta-item-text">In</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
           <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
         </span>
@@ -1353,7 +1353,7 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
     <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/25/DBSCAN/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1377,16 +1377,16 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
       <span class="post-meta-item-icon">
         <i class="far fa-calendar"></i>
       </span>
-      <span class="post-meta-item-text">发表于</span>
+      <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="创建时间：2020-10-25 09:35:05 / 修改时间：20:14:04" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:05+08:00">2020-10-25</time>
+      <time title="Created: 2020-10-25 09:35:05 / Modified: 20:14:04" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:05+08:00">2020-10-25</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
       </span>
-      <span class="post-meta-item-text">分类于</span>
+      <span class="post-meta-item-text">In</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
           <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
         </span>
@@ -1504,7 +1504,7 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
     <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/25/CNN/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1528,16 +1528,16 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
       <span class="post-meta-item-icon">
         <i class="far fa-calendar"></i>
       </span>
-      <span class="post-meta-item-text">发表于</span>
+      <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="创建时间：2020-10-25 09:35:05 / 修改时间：11:08:47" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:05+08:00">2020-10-25</time>
+      <time title="Created: 2020-10-25 09:35:05 / Modified: 11:08:47" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:05+08:00">2020-10-25</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
       </span>
-      <span class="post-meta-item-text">分类于</span>
+      <span class="post-meta-item-text">In</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
           <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
         </span>
@@ -1634,7 +1634,7 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
     <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/25/%E7%BB%8F%E9%AA%8C%20%E6%9C%9F%E6%9C%9B%20%E7%BB%93%E6%9E%84/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1658,22 +1658,22 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
       <span class="post-meta-item-icon">
         <i class="far fa-calendar"></i>
       </span>
-      <span class="post-meta-item-text">发表于</span>
+      <span class="post-meta-item-text">Posted on</span>
 
-      <time title="创建时间：2020-10-25 09:35:05" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:05+08:00">2020-10-25</time>
+      <time title="Created: 2020-10-25 09:35:05" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:05+08:00">2020-10-25</time>
     </span>
       <span class="post-meta-item">
         <span class="post-meta-item-icon">
           <i class="far fa-calendar-check"></i>
         </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2019-04-17 14:03:39" itemprop="dateModified" datetime="2019-04-17T14:03:39+08:00">2019-04-17</time>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2019-04-17 14:03:39" itemprop="dateModified" datetime="2019-04-17T14:03:39+08:00">2019-04-17</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
       </span>
-      <span class="post-meta-item-text">分类于</span>
+      <span class="post-meta-item-text">In</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
           <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
         </span>
@@ -1720,7 +1720,7 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
