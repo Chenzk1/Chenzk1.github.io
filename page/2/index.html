@@ -17,11 +17,10 @@
 
 
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.0/css/all.min.css">
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
 
 <script class="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"chenzk1.github.io","root":"/","scheme":"Muse","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}};
+    var CONFIG = {"hostname":"chenzk1.github.io","root":"/","scheme":"Gemini","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}};
   </script>
 
   <meta name="description" content="blog">
@@ -94,7 +93,7 @@
 
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+<body itemscope itemtype="http://schema.org/WebPage">
   <div class="headband"></div>
 
   <main class="main">
@@ -102,6 +101,9 @@
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-nav-toggle">
     <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
     </div>
   </div>
 
@@ -117,15 +119,67 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
 
 
 
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
 
 
 
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
 
 </div>
         
@@ -155,14 +209,17 @@
 
       <section class="site-overview-wrap sidebar-panel">
         <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Kayden"
+      src="/images/kobe.jpg">
   <p class="site-author-name" itemprop="name">Kayden</p>
   <div class="site-description" itemprop="description">blog</div>
 </div>
 <div class="site-state-wrap site-overview-item animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-          <a href="/archives">
-          <span class="site-state-item-count">15</span>
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">23</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -171,11 +228,21 @@
         <span class="site-state-item-name">分类</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">14</span>
-        <span class="site-state-item-name">标签</span>
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Chenzk1" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Chenzk1" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:chenzk666@gmail.com" title="E-Mail → mailto:chenzk666@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
 
 
 
@@ -210,10 +277,10 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/25/python%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/25/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94RNN+LSTM/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/kobe.jpg">
       <meta itemprop="name" content="Kayden">
       <meta itemprop="description" content="blog">
     </span>
@@ -224,7 +291,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/10/25/python%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" class="post-title-link" itemprop="url">python面向对象</a>
+            <a href="/2020/10/25/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94RNN+LSTM/" class="post-title-link" itemprop="url">未命名</a>
         </h2>
 
         <div class="post-meta-container">
@@ -235,24 +302,15 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2020-10-25 09:35:04" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:04+08:00">2020-10-25</time>
+      <time title="创建时间：2020-10-25 10:54:33" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
     </span>
       <span class="post-meta-item">
         <span class="post-meta-item-icon">
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2018-11-27 13:26:19" itemprop="dateModified" datetime="2018-11-27T13:26:19+08:00">2018-11-27</time>
+        <time title="修改时间：2020-01-14 17:15:08" itemprop="dateModified" datetime="2020-01-14T17:15:08+08:00">2020-01-14</time>
       </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
-        </span>
-    </span>
 
   
 </div>
@@ -264,207 +322,74 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h3 id="属性命名"><a href="#属性命名" class="headerlink" title="属性命名"></a>属性命名</h3><ul>
-<li>属性以双下划线开头，类内变量，实例无法访问。但可以通过某些方式访问，例如Student例中定义了__name变量，可以用_Student_name来实现访问，但不建议，因为不同的解释器的转化方式不一样。</li>
-<li>单下划线可以打开，但需要注意不能随意更改。</li>
-<li>双下划线结尾与开头，特殊变量，类内可以访问，实例不知。</li>
-<li><h3 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h3>开闭原则：定义一个类Animal及其多个之类Dog/Cat/…，当定义一个函数或操作时：</li>
+          <h2 id="LSTM产生的原因"><a href="#LSTM产生的原因" class="headerlink" title="LSTM产生的原因"></a>LSTM产生的原因</h2><p><strong>RNN在处理长期依赖</strong>（时间序列上距离较远的节点）时会遇到巨大的困难，因为计算距离较远的节点之间的联系时会涉及雅可比矩阵的多次相乘，会造成<strong>梯度消失或者梯度膨胀</strong>的现象。RNN结构之所以出现梯度爆炸或者梯度消失，最本质的原因是因为梯度在传递过程中存在极大数量的连乘 。</p>
+<p>相对于RNN，LSTM的神经元加入了<strong>输入门i、遗忘门f、输出门o 、内部记忆单元c</strong> </p>
+<h2 id="分别介绍一下输入门i、遗忘门f、输出门o-、内部记忆单元c"><a href="#分别介绍一下输入门i、遗忘门f、输出门o-、内部记忆单元c" class="headerlink" title="分别介绍一下输入门i、遗忘门f、输出门o 、内部记忆单元c"></a>分别介绍一下输入门i、遗忘门f、输出门o 、内部记忆单元c</h2><ul>
+<li><p>内部记忆单元$c$</p>
+<ul>
+<li><p> 类似于传送带。直接在整个链上运行，只有一些少量的线性交互。信息在上面流传保持不变会很容易。  </p>
+</li>
+<li><p>操作步骤：</p>
+</li>
+<li><p>示意图：</p>
+<p><img src="https://img-blog.csdn.net/20170919124608594?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbHJlYWRlcmw=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"></p>
+</li>
+</ul>
+</li>
 </ul>
 <ul>
-<li>对扩展开放：允许新增Animal的子类；</li>
-<li>对修改封闭：不需要修改依赖Animal类型的run_twice()等函数，仍然可以传入Dog/Cat等类。<br>事实上，不需要继承也可以实现多态————鸭子类型。</li>
-</ul>
-<h3 id="若干方法"><a href="#若干方法" class="headerlink" title="若干方法"></a>若干方法</h3><ul>
-<li>isinstance(object,class) 判断是否属于某个类</li>
-<li>dir() 列举出一个对象的属性和方法</li>
-<li>getattr()、setattr()、hasattr()可以获得、添加、查询是否需要某个属性<ul>
-<li>__slots__ 限制可以添加的属性，__slots__ = (‘name’, ‘age’) # 用tuple定义允许绑定的属性名称</li>
-</ul>
-</li>
-<li>装饰器</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/25/Presentation%20of%20WNSP%20and%20IS/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Kayden">
-      <meta itemprop="description" content="blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Kayden's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/10/25/Presentation%20of%20WNSP%20and%20IS/" class="post-title-link" itemprop="url">Presentation of WNSP and IS</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2020-10-25 09:35:04" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:04+08:00">2020-10-25</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2018-10-04 22:08:34" itemprop="dateModified" datetime="2018-10-04T22:08:34+08:00">2018-10-04</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h1><ul>
-<li>Behavioral biomertics is the study of individual patterns(hand-writing, typing, mouse movements).</li>
-<li>最早：二战中的电报员keying pattern</li>
-<li>password hardening(secondary authentication)、password-less logins<ul>
-<li>Banks use typing information as an additional layer of security.</li>
-<li>Google is developing methods to authenticate users on mobile devices without passwords.</li>
-</ul>
-</li>
-<li>human chosen passwords are far from safe -&gt; additional authentication -&gt; explicit methods are usually disruptive to the user -&gt; use behavioral biometrics</li>
-</ul>
-<h1 id="goal-design-a-adversarial-algorithms"><a href="#goal-design-a-adversarial-algorithms" class="headerlink" title="goal: design a adversarial algorithms"></a>goal: design a adversarial algorithms</h1><ul>
-<li>前提：the attacker has access to the user’s password, but needs to overcome a keystroke dynamics based authentication layer</li>
-</ul>
-<h1 id="related-work"><a href="#related-work" class="headerlink" title="related work"></a>related work</h1><h2 id="behavioral-biometrics"><a href="#behavioral-biometrics" class="headerlink" title="behavioral biometrics"></a>behavioral biometrics</h2><blockquote>
-<p>hand-writing, typing, mouse movements, touchscreen swipes, gait analysis</p>
-</blockquote>
-<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><h2 id="Experimental-Setup"><a href="#Experimental-Setup" class="headerlink" title="Experimental Setup"></a>Experimental Setup</h2><h3 id="Protocols"><a href="#Protocols" class="headerlink" title="Protocols"></a>Protocols</h3><p><em>for collecting new data, and selecting new samples for training and testing</em></p>
-<ol>
-<li><p>collectign MTurk dataset</p>
+<li><p>遗忘门$f$</p>
 <ul>
-<li>pre-processing: drop any malformed samples(due to a combination of reasons that include: different behavior of browsers, differences in internet speed, or other noise as the subjects took the study simultaneously)</li>
-<li>describe the protocol for selecting samples for training and testing, and creating adversarial samples across all datasets.</li>
-<li></li>
+<li><p>将<strong>内部记忆单元</strong>中的信息选择性的遗忘</p>
+</li>
+<li><p>操作步骤：</p>
+<ul>
+<li>读取：$h_{t-1}$、$x_t$，</li>
+<li>输出：$f_{t}=\sigma\left(W_{f} \cdot\left[h_{t-1}, x_{t}\right]+b_{f}\right)$</li>
+<li>$\sigma$表示一个在 0 到 1 之间的数值。1 表示“完全保留”，0 表示“完全舍弃”</li>
 </ul>
-<p>生物行为学有两种分类器：一类分类器和两类分类器。前者只用正确样本，后者还会用到假样本。一般用一类分类器：1. because it is very impractical to expect negative samples for an arbitrary password.2. both the two class classifiers, and one class classifiers appear to give similar EER scores</p>
 </li>
-<li><p>Genuine User Samples真实样本<br>use the first half of the samples for training, the second half of the samples for testing</p>
-</li>
-<li><p>imposter training samples虚假训练样本<br>随机选择，与真实样本同数量</p>
-</li>
-<li><p>imposter testing samples虚假测试样本<br>DSN: first four samples of every user besides the genuine user<br>MYurk and touchscreen swipes dataset: randomly sampled the same number of impostor samples as the genuine user’s test samples</p>
-</li>
-<li><p>adversary对抗样本<br>The <strong>Targeted K-means++ adversary</strong> used all the samples from the data set excluding the ones from the target user and the ones used for training and testing the user’s classifier. For **the Indiscriminate K-means++ **adversary, we conducted a new MTurk study, as described before, a few months after the original study. We used all the samples from this new study. In Algorithm 2, we set the parameter “SAMPLE-SIZE” to 20000.</p>
-</li>
-</ol>
-<h3 id="Detection-Algorithms-检测算法"><a href="#Detection-Algorithms-检测算法" class="headerlink" title="Detection Algorithms 检测算法"></a>Detection Algorithms 检测算法</h3><h4 id="One-class-classifiers"><a href="#One-class-classifiers" class="headerlink" title="One class classifiers"></a>One class classifiers</h4><ul>
-<li><p>Manhattan distance<br>$$ \sum_{i=1}^m\frac{\left|{x_i-y_i}\right|}m $$</p>
-</li>
-<li><p>Gaussian高斯<br>training samples are modeled as a Gaussian distribution based on their mean and standard deviation</p>
-</li>
-<li><p>Gaussian mixture高斯混合模型</p>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/jinping_shi/article/details/59613054">https://blog.csdn.net/jinping_shi/article/details/59613054</a> </p>
-</blockquote>
-<blockquote>
-<p>高斯混合模型（Gaussian Mixed Model）指的是多个高斯分布函数的线性组合，理论上GMM可以拟合出任意类型的分布，通常用于解决同一集合下的数据包含多个不同的分布的情况（或者是同一类分布但参数不一样，或者是不同类型的分布，比如正态分布和伯努利分布）。<br>$$ \sum_{k=1}^Kπ<em>kN\left(x|μ_k,\sum_k\right) $$<br>$$ \sum</em>{k=1}^Kπ_k=1 $$<br>$$ 0 ≤ Kπ_k ≤ 1 $$<br>即$π_k$相当于每个分量的权重<br>GMM常用于聚类。如果要从 GMM 的分布中随机地取一个点的话，实际上可以分为两步：首先随机地在这 K 个 Component 之中选一个，每个 Component 被选中的概率实际上就是它的系数πkπk \pi_k ，选中 Component 之后，再单独地考虑从这个 Component 的分布中选取一个点就可以了──这里已经回到了普通的 Gaussian 分布，转化为已知的问题。将GMM用于聚类时，假设数据服从混合高斯分布（Mixture Gaussian Distribution），那么只要根据数据推出 GMM 的概率分布来就可以了；然后 GMM 的 K 个 Component 实际上对应KKK个 cluster 。根据数据来推算概率密度通常被称作 density estimation 。</p>
-</blockquote>
-</li>
-<li><p>one class SVM<br>used the Support Vector Machine(SVM) implementation in sklearn, with radial basis function (RBF) kernel, and kernel parameter 0.9.</p>
-</li>
-<li><p>Autoencoder and Contractive Autoencoder自动编码和收缩性自动编码<br>With the advent of deep learning, researchers have started using variants of neural networks in the domain of cybersecurity. One of the key structures used in the past are autoencoders and contractive autoencoders<br>随着深度学习的到来，研究人员开始在网络安全领域使用神经网络的变体。过去使用的关键结构之一是自动编码器和压缩自动编码器</p>
+<li><p>示意图</p>
+<p><img src="C:\Users\heitao\AppData\Roaming\Typora\typora-user-images\1578624771053.png" alt="1578624771053"></p>
 </li>
 </ul>
-<h4 id="Two-class-classifiers"><a href="#Two-class-classifiers" class="headerlink" title="Two class classifiers"></a>Two class classifiers</h4><ul>
-<li>Random Forest<br>used a model similar to the one described by Antal et al [4]. Random Forests with 100 trees was their best-performing classifier on the touchscreen swipes dataset. We used the Random Forest implementation in sklearn<br>我们使用了一个类似于Antal et al[4]所描述的模型。随机森林与100棵树是他们在触摸屏滑动数据集上表现最好的分类器。我们在sklearn中使用了Random Forest实现</li>
-<li>Nearest Neighbor<br>Here we classify a test sample based on the majority label among a fixed number of its nearest neighbors in the training set. The neighbours are determined using Euclidean distance. We used the implementation in [32]<br>在测试样本中用最近邻</li>
-<li>Fully Connected Neural Net全连接NN<br>We experimented with multiple variants of multi layer perceptron by using different hyper parameters. The network that performed the best had two hidden layers with 15 neurons each computing scores for genuine and impostor classes. There was no significant improvement in the performance of the network by increasing the number of layers or neurons per layer in the architecture of the neural network.<br>我们使用不同的超参数对多层感知器的多个变体进行了实验。表现最好的网络有两个隐藏层，每个层有15个神经元，计算真实和冒名顶替类的分数。在神经网络体系结构中，每层增加层数或神经元数量，网络性能没有显著改善。</li>
+<p>$$<br>f_{t}=\sigma\left(W_{f} \cdot\left[h_{t-1}, x_{t}\right]+b_{f}\right)<br>$$</p>
+</li>
+<li><p>输入门$i$</p>
+<ul>
+<li><p>将新的信息记录到<strong>内部记忆单元</strong>中</p>
+</li>
+<li><p>操作步骤：</p>
+<ul>
+<li><p>步骤一：$sigmoid$ 层称 <strong>输入门层</strong>决定什么值我们将要更新。</p>
+</li>
+<li><p>步骤二：$tanh$ 层创建一个新的候选值向量$\tilde{C}_t$加入到状态中。其示意图如下：</p>
+<p><img src="C:\Users\heitao\AppData\Roaming\Typora\typora-user-images\1578624753318.png" alt="1578624753318"><br>$$<br>i_{t}=\sigma\left(W_{i} \cdot\left[h_{t-1}, x_{t}\right]+b_{i}\right)<br>$$</p>
+<p>$$<br>\tilde{C}<em>{t}=\tanh \left(W</em>{C} \cdot\left[h_{t-1}, x_{t}\right]+b_{C}\right)<br>$$</p>
+</li>
+<li><p>步骤三：将$C_{t-1}$更新为$C_{t}$。将旧状态与$f_t$相乘，丢弃掉我们确定需要丢弃的信息。接着加上$i_t * \tilde{C}_t$得到新的候选值，根据我们决定更新每个状态的程度进行变化。其示意图如下：</p>
+<p><img src="C:\Users\heitao\AppData\Roaming\Typora\typora-user-images\1578624724604.png" alt="1578624724604"><br>$$<br>C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}<br>$$</p>
+</li>
 </ul>
-<h4 id="Monaco’s-Normalization-Technique-标准化"><a href="#Monaco’s-Normalization-Technique-标准化" class="headerlink" title="Monaco’s Normalization Technique 标准化"></a>Monaco’s Normalization Technique 标准化</h4><p>The <strong>key insight of this technique</strong> was that a user’s classifier could normalize future input samples based only on the genuine user’s data given to it at the start. Essentially, this acts like a filtering step - and features that are too far from the mean of the genuine user’s fitting data get filtered out.<br>后续样本基于刚开始给定的真实输入样本来做标准化<br>这个标准化很重要，没这个就无法得出结果we do not even mention our results without this<br>normalization.</p>
-<h2 id="Results"><a href="#Results" class="headerlink" title="Results"></a>Results</h2><h3 id="Equal-error-rate"><a href="#Equal-error-rate" class="headerlink" title="Equal error rate"></a>Equal error rate</h3><table>
-<thead>
-<tr>
-<th>Name of Classifier</th>
-<th>DSN EER</th>
-<th>MTurk EER</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Manhattan</td>
-<td>0.091</td>
-<td>0.097</td>
-</tr>
-<tr>
-<td>SVM</td>
-<td>0.087</td>
-<td>0.097</td>
-</tr>
-<tr>
-<td>Gaussian</td>
-<td>0.121</td>
-<td>0.109</td>
-</tr>
-<tr>
-<td>Gaussian Mixture</td>
-<td>0.137</td>
-<td>0.135</td>
-</tr>
-<tr>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-</tr>
-</tbody></table>
-<hr>
-<p>(具体见表2)</p>
-<p>注：没有标准化的EER都在0.15左右</p>
-<h3 id="Keystroke-Results"><a href="#Keystroke-Results" class="headerlink" title="Keystroke Results"></a>Keystroke Results</h3><p>In this section we discuss the results of testing our adversaries on the DSN and MTurk datasets, which are summarized in Tables III, IV. We conducted the tests independently on each of the five passwords in the MTurk dataset, but for a more compact presentation, we average the results of all passwords. A few interesting highlights based on these results are given below<br>在本节中,我们讨论的结果,测试DSN和MTurk数据集,总结在表III、IV。我们进行独立测试在MTurk数据集中的密码。为了更紧凑的表示,我们把所有的结果平均之后显示出来。</p>
-<h4 id="MasterKey-VS-K-means"><a href="#MasterKey-VS-K-means" class="headerlink" title="MasterKey VS K-means++"></a>MasterKey VS K-means++</h4><p>K-means++ performs better than MasterKey.<br>Figure 2 展示了最好的一类分类器和二类分类器下，Target K-means++和Indiscriminate K-means++以及MasterKey的性能对比<br>Targeted K-means++ seems to essentially <strong>be able<br>to compromise the security of all the users</strong> in the limit.</p>
-<p>Table3展示了K-means++强于asterKey</p>
-<p>本文中用到的样本量更大，选择train sample和test sample的protocol也不一样，但是EER与原文差不多。如图5所示。</p>
-<p>As can be seen by Table V, and Figure 4, the results on this dataset show the same trends as seen in the keystroke dynamics datasets before. The first try which hits the mean of the impostor samples is not very successful here. This is particularly bad for an adversary like MasterKey which stays around the mean of the distribution, and is reflected in the results in Table V. But the K-means++ adversary is quickly able to explore the sample space to find more challenging queries and in 10 tries itself, breaks into a sizeable proportion of the  classifiers as in the keystrokes dataset. And in the limit, essentially all the user’s classifiers are compromised.由表V和图4可以看出，该数据集上的结果显示了与之前击键动力学数据集相同的趋势。第一次尝试就击中了冒名顶替样本的均值，但并不是很成功。这是特别糟糕的敌人像万能钥匙保持周围分布的均值,并反映在结果表诉。但k - means + +对手很快就能够探索样本空间中找到更有挑战性的查询和10次尝试本身,闯进了一相当大的比例的数据集分类器的按键。在极限情况下，基本上所有用户的分类器都被破坏了。</p>
-<h1 id="Conclusion-and-future-work"><a href="#Conclusion-and-future-work" class="headerlink" title="Conclusion and future work"></a>Conclusion and future work</h1><p>Behavioral biometrics is a promising field of research, but it is not a reliable solution for authentication in its current state. <strong>行为生物识别技术是一个很有前途的研究领域，但在目前的状态下，它并不是一个可靠的认证解决方案。</strong>We proposed two adversarial agents that require a different amount of effort from the adversary. <strong>Both attack methods performed clearly better than the previously studied attack methods</strong> in the literature and show that current state of the art classifiers add little protection against such adversaries. In the case of Indiscriminate K-means++, more than its success rate, it is worrying for the keystroke dynamics systems that such an adversary could conduct its attack without any additional cost incurred to collect samples. Past research has focused much more on improving the classifiers against naive adversaries, but this work shows that a lot more research from the adversarialperspective is required before such authentication systems can be adopted in sensitive contexts.<br>The design of our K-means++ adversaries utilizes a <strong>common intuition about human behavior, which is that a person’s behavioral data belongs to a “cluster”, rather than being absolutely unique</strong>. Thus it is natural to expect such techniques to generalize to other types of behavioral data. The results on the touchscreen touchscreen swipes dataset also supports this claim.<br>我们提出了两种敌对代理人，它们需要不同于对手的努力。这两种攻击方法的性能明显优于文献中先前研究的攻击方法，表明当前的艺术分类器对这类敌人的保护很少。在不加区别的K-means++的情况下，对于击键动力学系统来说，这样的对手可以进行攻击而不需要额外的成本来收集样本，这比其成功率更令人担忧。过去的研究更多地关注于改进针对天真的对手的分类器，但这项工作表明，在这种身份验证系统可以在敏感的上下文中采用之前，需要从adversarialperspective的角度进行更多的研究。我们的k -means++敌人的设计利用了一种关于人类行为的共同直觉，即一个人的行为数据属于一个“集群”，而不是绝对独一无二的。因此，很自然地期望这些技术可以推广到其他类型的行为数据。触屏触摸屏上的结果也支持这一说法。<br>Of course, from a practical perspective, it is much harder to simulate an attack on a touchscreen based system, as opposed to a keystroke dynamics system, because of the diversity of the touchscreen features like pressure, finger size and so on. Unlike keystrokes - we can’t just write an easily automated script to carry out such an attack. This implies that a swipes based classifier is more secure for now. But given enough motivation, it is possible that methods could be devised to bypass such limitations. For instance, such attacks could be carried out by feeding false information to the android sensors, or in an extreme example, by building a robotic arm.<br>当然，从实际角度来看，由于触摸屏的压力、手指大小等特性的多样性，模拟攻击基于触摸屏的系统要比模拟击键动力学系统困难得多。与击键不同的是，我们不能仅仅编写一个易于自动化的脚本来执行这样的攻击。这意味着基于滑动的分类器现在更安全。但只要有足够的动力，就有可能设计出绕过这些限制的方法。例如，这种攻击可以通过向android传感器提供虚假信息来实施，或者在一个极端的例子中，通过制造机械手臂来实施。<br>Previous research has relied exclusively on the average Equal Error Rate scores across all subjects to measure the robustness of classifiers. To develop more robust behavioral biometric classifiers, it would be useful to <strong>benchmark against the adversarial agents proposed in this paper instead.</strong> For instance, one class classifiers have been the dominant method researched in the keystroke dynamics literature as they perform as well as the two class classifiers in terms of EER, while the two class classifiers are not practical because one can not expect impostor samples for arbitrary passwords. Yet, against both the adversarial algorithms, the two class classifiers performed clearly better than the one class classifiers. This suggests that a future direction of research would be to bridge the gap between the idealized and practical versions of such two class classifiers as explained in section IV A.<br>以往的研究完全依赖于所有科目的平均等错误率分数来衡量分类器的鲁棒性。为了开发出更健壮的行为生物特征分类器，我们将对本文提出的抗辩剂进行基准测试。例如，在击键力学文献中，一类分类器是主要的研究方法，因为它们的性能和EER的两个类分类器一样好，而这两个类分类器是不实用的，因为人们不能指望冒名顶替者样本来处理任意的密码。然而，与两种对抗性算法相比，这两个类分类器的性能明显优于一个类分类器。这表明，今后的研究方向将是弥补第四节a所解释的这两类分类器的理想化版本和实际版本之间的差距。<br>From the adversarial perspective, one possibility for future work would be to extend these methods to free text based classifiers. Free text classifiers utilize a continuous stream of input text, as opposed to fixed text passwords, in order to classify keystroke patterns. This leads to differences in the features and algorithms that are utilized for these classifiers. But conceptually, the Indiscriminate K-means++ adversary should be well suited to generate adversarial samples against free text classifiers as well.从敌对的角度来看，未来工作的一种可能是将这些方法扩展到基于自由文本的分类器。自由文本分类器使用连续的输入文本流(与固定文本密码相反)来分类击键模式。这导致了这些分类器所使用的特性和算法的差异。但从概念上讲，不加区分的K-means++对手也应该非常适合针对自由文本分类器生成对抗性样本。</p>
+</li>
+</ul>
+</li>
+<li><p>输出门$o$</p>
+<ul>
+<li><p>确定隐层$h_t$输出什么值</p>
+</li>
+<li><p>操作步骤：</p>
+<ul>
+<li><p>步骤一：通过sigmoid 层来确定细胞状态的哪个部分将输出。</p>
+</li>
+<li><p>步骤二：把细胞状态通过 tanh 进行处理，并将它和 sigmoid 门的输出相乘，最终我们仅仅会输出我们确定输出的那部分。</p>
+<p><img src="C:\Users\heitao\AppData\Roaming\Typora\typora-user-images\1578625167504.png" alt="1578625167504"><br>$$<br>\begin{array}{l}<br>{o_{t}=\sigma\left(W_{o}\left[h_{t-1}, x_{t}\right]+b_{o}\right)} \<br>{h_{t}=o_{t} * \tanh \left(C_{t}\right)}<br>\end{array}<br>$$</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 
       
     </div>
@@ -491,10 +416,10 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/25/Naive%20Bayes/">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/25/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94Apriori/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/kobe.jpg">
       <meta itemprop="name" content="Kayden">
       <meta itemprop="description" content="blog">
     </span>
@@ -505,7 +430,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/10/25/Naive%20Bayes/" class="post-title-link" itemprop="url">Naive Bayes及其sklearn实现</a>
+            <a href="/2020/10/25/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94Apriori/" class="post-title-link" itemprop="url">CNN</a>
         </h2>
 
         <div class="post-meta-container">
@@ -515,16 +440,10 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2020-10-25 09:35:04" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:04+08:00">2020-10-25</time>
+      <time title="创建时间：2020-10-25 10:54:33 / 修改时间：11:00:53" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2018-11-28 15:30:11" itemprop="dateModified" datetime="2018-11-28T15:30:11+08:00">2018-11-28</time>
-      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -545,26 +464,540 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>P(B|A) = P(A|B)*P(B)/P(A)</p>
-<p>朴素：特征之间相互独立</p>
-<h1 id="算法流程"><a href="#算法流程" class="headerlink" title="算法流程"></a>算法流程</h1><ol>
-<li>x = {a1, a2, …, am}为待分类项，a是特征。</li>
-<li>类别集合C = {y1, …, yn}.</li>
-<li>计算P(y1|x), P(y2|x) …</li>
-<li>P(yk|x) = max{P(yi|x)}，则x属于yk类</li>
-</ol>
-<p><strong>总结：</strong>某类在待分类项出现的条件下的概率是所有类中最大的，这个分类项就属于这一类。</p>
-<p>e.g.判断一个黑人来自哪个洲，求取每个洲黑人的比率，非洲最高，选非洲。</p>
-<p>其中x = {a1, a2, …, am}，即P(C|a1,a2…) = P(C)*P(a1,a2,…|C)/P(a1,a2…)。posterior = prior * likelihood / evidence, 这里evidence是常数，不影响。</p>
-<p>—–&gt;求解P(C) * P(a1,a2,a3…|C)</p>
-<p>—–&gt;链式法则：P(C) * P(a2,a3…|C, a1) * P(a1|C)</p>
-<p>—&gt; …</p>
-<p>—&gt; P(C) * P(a1|C) * P(a2|C, a1) * P(a3|C, a1, a2)…<br>由于特征之间的相互独立性，a2发生于a1无关，转化为</p>
-<p>—&gt; P(C) * P(a1|C) * P(a2|C) …  * P(am|C)</p>
-<p>—–&gt;问题转化为求取条件概率：</p>
+          <p>[TOC]</p>
+<h2 id="协同过滤推荐有哪些类型"><a href="#协同过滤推荐有哪些类型" class="headerlink" title="协同过滤推荐有哪些类型"></a>协同过滤推荐有哪些类型</h2><ul>
+<li><p>基于用户(user-based)的协同过滤</p>
+<p>基于用户(user-based)的协同过滤主要考虑的是用户和用户之间的相似度，只要找出相似用户喜欢的物品，并预测目标用户对对应物品的评分，就可以找到评分最高的若干个物品推荐给用户。 </p>
+</li>
+<li><p>基于项目(item-based)的协同过滤</p>
+<p>基于项目(item-based)的协同过滤和基于用户的协同过滤类似，只不过这时我们转向找到物品和物品之间的相似度，只有找到了目标用户对某些物品的评分，那么我们就可以对相似度高的类似物品进行预测，将评分最高的若干个相似物品推荐给用户 </p>
+</li>
+<li><p>基于模型(model based)的协同过滤 </p>
+<p>用机器学习的思想来建模解决，主流的方法可以分为：用关联算法，聚类算法，分类算法，回归算法，矩阵分解，神经网络,图模型以及隐语义模型来解决。</p>
+</li>
+</ul>
+<h2 id="基于模型的协同过滤"><a href="#基于模型的协同过滤" class="headerlink" title="基于模型的协同过滤"></a>基于模型的协同过滤</h2><ul>
+<li><p>用关联算法做协同过滤</p>
+<p>做频繁集挖掘，找到满足支持度阈值的关联物品的频繁N项集或者序列。将频繁项集或序列里的其他物品按一定的评分准则推荐给用户，这个评分准则可以包括<strong>支持度</strong>，<strong>置信度</strong>和<strong>提升度</strong>等。 常用的关联推荐算法有<strong>Apriori</strong>，<strong>FP Tree</strong>和<strong>PrefixSpan</strong> </p>
+</li>
+<li><p>用聚类算法做协同过滤</p>
+<ul>
+<li><p>基于用户聚类，则可以将用户按照一定距离度量方式分成不同的目标人群，将<strong>同样目标人群评分高的物品推荐给目标用户</strong>。</p>
+</li>
+<li><p>基于物品聚类，则是<strong>将用户评分高物品的相似同类物品推荐给用户</strong>。常用的聚类推荐算法有<strong>K-Means</strong>, <strong>BIRCH</strong>, <strong>DBSCAN</strong>和<strong>谱聚类</strong></p>
+</li>
+</ul>
+</li>
+<li><p>用分类算法做协同过滤</p>
+<p>设置一份评分阈值，评分高于阈值的就是推荐，评分低于阈值就是不推荐，我们<strong>将问题变成了一个二分类问题</strong>。虽然分类问题的算法多如牛毛，但是目前使用最广泛的是逻辑回归。因为<strong>逻辑回归的解释性比较强</strong>，每个物品是否推荐我们都有一个明确的概率放在这，同时可以对数据的特征做工程化，得到调优的目的。常见的分类推荐算法有逻辑回归和朴素贝叶斯，两者的特点是解释性很强。</p>
+</li>
+<li><p>用回归算法做协同过滤</p>
+<p>评分可以是一个连续的值而不是离散的值，<strong>通过回归模型</strong>我们可以得到目标用户对某商品的<strong>预测打分</strong>。常用的回归推荐算法有Ridge回归，回归树和支持向量回归。</p>
+</li>
+<li><p>用矩阵分解做协同过滤</p>
+<p>用矩阵分解做协同过滤是目前使用也很广泛的一种方法。由于传统的奇异值分解SVD要求矩阵不能有缺失数据，必须是稠密的，而我们的用户物品评分矩阵是一个很典型的稀疏矩阵，直接使用传统的SVD到协同过滤是比较复杂的。 </p>
+</li>
+<li><p>用神经网络做协同过滤</p>
+<p>用神经网络乃至深度学习做协同过滤应该是以后的一个趋势。目前比较主流的用两层神经网络来做推荐算法的是限制玻尔兹曼机(RBM) </p>
+</li>
+<li><p>用隐语义模型做协同过滤</p>
+<p>隐语义模型主要是基于NLP的，涉及到<strong>对用户行为的语义分析来做评分推荐</strong>，主要方法有隐性语义分析LSA和隐含狄利克雷分布LDA，</p>
+</li>
+<li><p>用图模型做协同过滤</p>
+<p>用图模型做协同过滤，则将用户之间的相似度放到了一个图模型里面去考虑，常用的算法是SimRank系列算法和马尔科夫模型算法。</p>
+<h2 id="频繁项集的评估标准"><a href="#频繁项集的评估标准" class="headerlink" title="频繁项集的评估标准"></a>频繁项集的评估标准</h2></li>
+<li><p>支持度: </p>
+<ul>
+<li>支持度就是几个关联的数据在数据集中出现的次数占总数据集的比重。或者说几个数据关联出现的概率。<br>$$<br>\text {Support} (X, Y)=P(X Y)=\frac{\text { number }(X Y)}{\text { num (AllSamples) }}<br>$$</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>置信度:</p>
+<ul>
+<li>一个数据出现后，另一个数据出现的概率，或者说数据的条件概率。<br>$$<br>\text {Confidence }(X \Leftarrow Y)=P(X | Y)=\frac{P(X Y)}{ P(Y)}<br>$$</li>
+</ul>
+</li>
+<li><p>提升度 ：</p>
+<ul>
+<li>提升度表示含有Y的条件下，同时含有X的概率，与X总体发生的概率之比<br>$$<br>\text {Lift }(X \Leftarrow Y)=\frac{P(X | Y)}{ P(X)} = \frac{\text { Confidence }(X \Leftarrow Y) }{ P(X)}<br>$$</li>
+</ul>
+</li>
+<li><p>注意：</p>
+<ul>
+<li> 支持度高的数据不一定构成频繁项集，但是支持度太低的数据肯定不构成频繁项集。 </li>
+<li> 提升度体先了$X$和$Y$之间的关联关系, 提升度大于1则$X\Leftarrow Y$是有效的强关联规则， 提升度小于等于1则$X\Leftarrow Y$是无效的强关联规则 。一个特殊的情况，如果$X$和$Y$独立,则$\operatorname{Lift}(X \Leftarrow Y)=1$，因此$P(X | Y)=P(X)$</li>
+</ul>
+</li>
+</ul>
+<h2 id="使用Aprior算法找出频繁k项集"><a href="#使用Aprior算法找出频繁k项集" class="headerlink" title="使用Aprior算法找出频繁k项集"></a>使用Aprior算法找出频繁k项集</h2><p>输入：数据集合$D$，支持度阈值$\alpha$</p>
+<p>输出：最大的频繁$k$项集</p>
+<ul>
+<li><p>扫描整个数据集，得到所有出现过的数据，作为候选频繁1项集。$k=1$，频繁0项集为空集。</p>
+</li>
+<li><p>挖掘频繁$k$项集</p>
+<ul>
+<li>扫描数据计算候选频繁$k$项集的支持度</li>
+<li>去除候选频繁$k$项集中支持度低于阈值的数据集,得到频繁$k$项集。如果得到的频繁$k$项集为空，则直接返回频繁$k-1$项集的集合作为算法结果，算法结束。如果得到的频繁$k$项集只有一项，则直接返回频繁$k$项集的集合作为算法结果，算法结束。</li>
+<li>基于频繁$k$项集，连接生成候选频繁$k+1$项集。</li>
+</ul>
+</li>
+<li><p>令$k=k+1$，转入步骤挖掘频繁$k$项集。</p>
+</li>
+</ul>
+<p>从算法的步骤可以看出，Aprior算法每轮迭代都要扫描数据集，因此在数据集很大，数据种类很多的时候，算法效率很低。</p>
+<p>具体实现:</p>
+<img src="https://images2015.cnblogs.com/blog/1042406/201701/1042406-20170117161036255-1753157633.png" style="zoom:50%;" />
+
+<h2 id="使用Aprior算法找出强关联规则"><a href="#使用Aprior算法找出强关联规则" class="headerlink" title="使用Aprior算法找出强关联规则"></a>使用Aprior算法找出强关联规则</h2><ul>
+<li><p>强关联规则:</p>
+<ul>
+<li> 如果规则$R$:$\Rightarrow $满足 :</li>
+</ul>
+<p>$$<br>\tag{1} { support }(X \Rightarrow Y) \geq \min {sup}<br>$$</p>
+<p>$$<br>\tag{2} confidence (X \Rightarrow Y) \geq \min conf<br>$$</p>
+<p>称关联规则$X\Rightarrow Y$为强关联规则,否则称关联规则$X\Rightarrow Y$为弱关联规则。在挖掘关联规则时,产生的关联规则要经过$\min sup$和$\min conf$的衡量筛选出来的强关联规则才能用商家的决策 </p>
+</li>
+</ul>
+<iframe height=498 width=510 src="https://www.bilibili.com/video/av80396534?from=search&seid=4799266719270840075"  controls="controls" width="500" height="300" >
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/25/kaggle%E7%9B%B8%E5%85%B3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/kobe.jpg">
+      <meta itemprop="name" content="Kayden">
+      <meta itemprop="description" content="blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kayden's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/10/25/kaggle%E7%9B%B8%E5%85%B3/" class="post-title-link" itemprop="url">Kaggle相关</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2020-10-25 09:35:05 / 修改时间：11:10:03" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:05+08:00">2020-10-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>[TOC]</p>
+<h1><span id="如何在-kaggle-首战中进入前-10">如何在 Kaggle 首战中进入前 10%</span></h1><p><a target="_blank" rel="noopener" href="https://dnc1994.com/2016/04/rank-10-percent-in-first-kaggle-competition/">原文</a></p>
+<h2><span id="流程">流程</span></h2><h3><span id="exploration-data-analysiseda">Exploration Data Analysis(EDA)</span></h3><h4><span id="visualization">Visualization</span></h4><p>matplotlib + seaborn</p>
+<ul>
+<li>查看目标变量的分布。当分布不平衡时，根据评分标准和具体模型的使用不同，可能会严重影响性能。</li>
+<li>对 Numerical Variable，可以用 Box Plot 来直观地查看它的分布。</li>
+<li>对于坐标类数据，可以用 Scatter Plot 来查看它们的分布趋势和是否有离群点的存在。</li>
+<li>对于分类问题，将数据根据 Label 的不同着不同的颜色绘制出来，这对 Feature 的构造很有帮助。</li>
+<li>绘制变量之间两两的分布和相关度图表。</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://www.kaggle.com/benhamner/python-data-visualizations">example_visualization</a></p>
+<h4><span id="statistical-tests">Statistical Tests</span></h4><p>可视化为定性，这里专注于定量，例如对于新创造的特征，可以将其加入原模型当中，看结果的变化。</p>
+<p>在某些比赛中，由于数据分布比较奇葩或是噪声过强，Public LB(Leader board)的分数可能会跟 Local CV(Cross Validation)的结果相去甚远。可以根据一些统计测试的结果来粗略地建立一个阈值，用来衡量一次分数的提高究竟是实质的提高还是由于数据的随机性导致的。</p>
+<h3><span id="data-preprossing">Data Preprossing</span></h3><p>处理策略主要依赖于EDA中得到的结论。</p>
+<ul>
+<li>有时数据会分散在几个不同的文件中，需要 Join 起来。</li>
+<li>处理 Missing Data。</li>
+<li>处理 Outlier。</li>
+<li>必要时转换某些 Categorical Variable 的表示方式。例如应用one-hot encoding(pd.get_dummies)将categorical variable转化为数字变量。</li>
+<li>有些 Float 变量可能是从未知的 Int 变量转换得到的，这个过程中发生精度损失会在数据中产生不必要的 Noise，即两个数值原本是相同的却在小数点后某一位开始有不同。这对 Model 可能会产生很负面的影响，需要设法去除或者减弱 Noise。</li>
+</ul>
+<h3><span id="feature-engineering">Feature Engineering</span></h3><h4><span id="feature-selection">Feature Selection</span></h4><p>总的来说，应该<strong>生成尽量多的 Feature，相信 Model 能够挑出最有用的 Feature</strong>。但有时先做一遍 Feature Selection 也能带来一些好处：</p>
+<ul>
+<li>Feature 越少，训练越快。</li>
+<li>有些 Feature 之间可能存在线性关系，影响 Model 的性能。</li>
+<li>通过挑选出最重要的 Feature，可以将它们之间进行各种运算和操作的结果作为新的 Feature，可能带来意外的提高。</li>
+<li>Feature Selection 最实用的方法也就是看 Random Forest 训练完以后得到的 Feature Importance 了。其他有一些更复杂的算法在理论上更加 Robust，但是缺乏实用高效的实现。从原理上来讲，增加 Random Forest 中树的数量可以在一定程度上加强其对于 Noisy Data 的 Robustness。</li>
+</ul>
+<p>看 Feature Importance 对于某些数据经过脱敏处理的比赛尤其重要。这可以免得你浪费大把时间在琢磨一个不重要的变量的意义上。(脱敏：数据脱敏(Data Masking),又称数据漂白、数据去隐私化或数据变形。百度百科对数据脱敏的定义为：指对某些敏感信息通过脱敏规则进行数据的变形，实现敏感隐私数据的可靠保护。在涉及客户安全数据或者一些商业性敏感数据的情况下，在不违反系统规则条件下，对真实数据进行改造并提供测试使用，如身份证号、手机号、卡号、客户号等个人信息都需要进行数据脱敏。)</p>
+<h4><span id="feature-encoding">Feature Encoding</span></h4><p>假设有一个 Categorical Variable 一共有几万个取值可能，那么创建 Dummy Variables 的方法就不可行了。这时一个比较好的方法是根据 Feature Importance 或是这些取值本身在数据中的出现频率，为最重要（比如说前 95% 的 Importance）那些取值（有很大可能只有几个或是十几个）创建 Dummy Variables，而所有其他取值都归到一个“其他”类里面。</p>
+<h3><span id="model-selection">Model Selection</span></h3><p>Base Model:</p>
+<ul>
+<li>SVM</li>
+<li>Linear Regression</li>
+<li>Logistic Regression</li>
+<li>Neural Networks</li>
+</ul>
+<p>Most Used Models:</p>
+<ul>
+<li>Gradient Boosting</li>
+<li>Random Forest</li>
+<li><p>Extra Randomized Trees</p>
+<p><strong>XGBoost</strong></p>
+</li>
+</ul>
+<h4><span id="model-training">Model Training</span></h4><p>通过Grid Search来确定模型的最佳参数。<br>e.g.</p>
+<ul>
+<li>sklearn 的 RandomForestClassifier 来说，比较重要的就是随机森林中树的数量 n_estimators 以及在训练每棵树时最多选择的特征数量 max_features。</li>
+<li><p>Xgboost 的调参。通常认为对它性能影响较大的参数有：</p>
+<ul>
+<li>eta：每次迭代完成后更新权重时的步长。越小训练越慢。</li>
+<li>num_round：总共迭代的次数。</li>
+<li>subsample：训练每棵树时用来训练的数据占全部的比例。用于防止 Overfitting。</li>
+<li>colsample_bytree：训练每棵树时用来训练的特征的比例，类似 RandomForestClassifier 的 max_features。</li>
+<li>max_depth：每棵树的最大深度限制。与 Random Forest 不同，Gradient Boosting 如果不对深度加以限制，最终是会 Overfit 的。</li>
+<li>early_stopping_rounds：用于控制在 Out Of Sample 的验证集上连续多少个迭代的分数都没有提高后就提前终止训练。用于防止 Overfitting。</li>
+</ul>
+<p>一般的调参步骤是：</p>
 <ol>
-<li>找到一个已知分类的待分类项集合，这个集合叫做训练样本集。</li>
-<li>统计得到在各类别下各个特征属性的条件概率估计。</li>
+<li>将训练数据的一部分划出来作为验证集。</li>
+<li>先将 eta 设得比较高（比如 0.1），num_round 设为 300 ~ 500。</li>
+<li>用 Grid Search 对其他参数进行搜索。</li>
+<li>逐步将 eta 降低，找到最佳值。</li>
+<li>以验证集为 watchlist，用找到的最佳参数组合重新在训练集上训练。注意观察算法的输出，看每次迭代后在验证集上分数的变化情况，从而得到最佳的 early_stopping_rounds。</li>
+</ol>
+<p><em>所有具有随机性的 Model 一般都会有一个 seed 或是 random_state 参数用于控制随机种子。得到一个好的 Model 后，在记录参数时务必也记录下这个值，从而能够在之后重现 Model。</em></p>
+</li>
+</ul>
+<h4><span id="cross-validation">Cross Validation</span></h4><p>一般5-fold。</p>
+<p>fold越多训练越慢。</p>
+<h4><span id="ensemble-generation">Ensemble Generation</span></h4><p>常见的 Ensemble 方法有这么几种：</p>
+<ul>
+<li>Bagging：使用训练数据的不同随机子集来训练每个 Base Model，最后进行每个 Base Model 权重相同的 Vote。也即 Random Forest 的原理。</li>
+<li>Boosting：迭代地训练 Base Model，每次根据上一个迭代中预测错误的情况修改训练样本的权重。也即 Gradient Boosting 的原理。比 Bagging 效果好，但更容易 Overfit。</li>
+<li>Blending：用不相交的数据训练不同的 Base Model，将它们的输出取（加权）平均。实现简单，但对训练数据利用少了。</li>
+<li>Stacking：接下来会详细介绍。</li>
+</ul>
+<p>从理论上讲，Ensemble 要成功，有两个要素：</p>
+<ul>
+<li>Base Model 之间的相关性要尽可能的小。这就是为什么非 Tree-based Model 往往表现不是最好但还是要将它们包括在 Ensemble 里面的原因。Ensemble 的 Diversity 越大，最终 Model 的 Bias 就越低。</li>
+<li>Base Model 之间的性能表现不能差距太大。这其实是一个 Trade-off，在实际中很有可能表现相近的 Model 只有寥寥几个而且它们之间相关性还不低。但是实践告诉我们即使在这种情况下 Ensemble 还是能大幅提高成绩。</li>
+</ul>
+<h3><span id="pipeline">Pipeline</span></h3><p>workflow比较复杂，因此一个高自动化的pipeline比较重要。</p>
+<p>这里是以一个例子：<a target="_blank" rel="noopener" href="https://github.com/ChenglongChen/Kaggle_CrowdFlower">example</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/25/GBDT%20&%20XGBoost/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/kobe.jpg">
+      <meta itemprop="name" content="Kayden">
+      <meta itemprop="description" content="blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kayden's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/10/25/GBDT%20&%20XGBoost/" class="post-title-link" itemprop="url">GBDT & XGBoost</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2020-10-25 09:35:05 / 修改时间：11:09:11" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:05+08:00">2020-10-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>[TOC]</p>
+<p><a target="_blank" rel="noopener" href="https://xgboost.readthedocs.io/en/latest/tutorials/model.html">Doc</a><br><a target="_blank" rel="noopener" href="https://homes.cs.washington.edu/~tqchen/pdf/BoostedTree.pdf">Slides</a></p>
+<h1><span id="为何要推导出目标函数而不是直接增加树">为何要推导出目标函数而不是直接增加树</span></h1><p><img src="http://i.imgur.com/quPhp1K.png" alt="Objective function"></p>
+<ul>
+<li>理论上：搞清楚learning的目的，以及其收敛性。</li>
+<li>工程上：<ul>
+<li>gi和hi是对loss function的一次、二次导</li>
+<li>目标函数以及整个学习过程只依赖于gi和hi</li>
+<li>可以根据实际问题，自定义loss function</li>
+</ul>
+</li>
+</ul>
+<h1><span id="summary">Summary</span></h1><p><img src="http://i.imgur.com/L7PhJwO.png" alt="Summary"></p>
+<h1><span id="原理">原理</span></h1><h2><span id="损失函数">损失函数</span></h2><script type="math/tex; mode=display">\text{obj} = \sum_{i=1}^n l(y_i, \hat{y}_i^{(t)}) + \sum_{i=1}^t\Omega(f_i)</script><p>l为loss，\ \Omega \ 为正则项</p>
+<ul>
+<li>loss：采用加法策略，第t颗树时：<script type="math/tex; mode=display">\hat{y}_i^{(0)} = 0</script><script type="math/tex; mode=display">\hat{y}_i^{(1)} = f_1(x_i) = \hat{y}_i^{(0)} + f_1(x_i)</script><script type="math/tex; mode=display">\hat{y}_i^{(2)} = f_1(x_i) + f_2(x_i)= \hat{y}_i^{(1)} + f_2(x_i)</script><script type="math/tex; mode=display">\dots</script><script type="math/tex; mode=display">\hat{y}_i^{(t)} = \sum_{k=1}^t f_k(x_i)= \hat{y}_i^{(t-1)} + f_t(x_i)</script>在添加第t颗树时，需要优化的目标函数为：<script type="math/tex; mode=display">\sum_{i=1}^n [g_i f_t(x_i) + \frac{1}{2} h_i f_t^2(x_i)] + \Omega(f_t)</script>其中h和f：<script type="math/tex; mode=display">g_i = \partial_{\hat{y}_i^{(t-1)}} l(y_i, \hat{y}_i^{(t-1)})</script><script type="math/tex; mode=display">h_i = \partial_{\hat{y}_i^{(t-1)}}^2 l(y_i, \hat{y}_i^{(t-1)})</script>note: 是对谁的导</li>
+<li>正则项：复杂度：<script type="math/tex; mode=display">\Omega(f) = \gamma T + \frac{1}{2}\lambda \sum_{j=1}^T w_j^2</script>其中w是叶子上的score vector，T是叶子数量</li>
+</ul>
+<h2><span id="dart-booster">DART Booster</span></h2><p>为了解决过拟合，会随机drop trees:</p>
+<ul>
+<li>训练速度可能慢于gbtree</li>
+<li>由于随机性，早停可能不稳定</li>
+</ul>
+<h1><span id="特性">特性</span></h1><h2><span id="monotonic-constraints单调性限制">Monotonic Constraints单调性限制</span></h2><ul>
+<li><p>一个可选特性:<br>会限制模型的结果按照某个特征 单调的进行增减</p>
+<p>也就是说可以降低模型对数据的敏感度，如果明确已知某个特征与预测结果呈单调关系时，那在生成模型的时候就会跟特征数据的单调性有关。</p>
+</li>
+</ul>
+<h2><span id="feature-interaction-constraints单调性限制">Feature Interaction Constraints单调性限制</span></h2><ul>
+<li><p>一个可选特性：<br>不用时，在tree生成的时候，一棵树上的节点会无限制地选用多个特征</p>
+<p>设置此特性时，可以规定，哪些特征可以有interaction（一般独立变量之间可以interaction，非独立变量的话可能会引入噪声）</p>
+</li>
+<li>好处：<ul>
+<li>预测时更小的噪声</li>
+<li>对模型更好地控制</li>
+</ul>
+</li>
+</ul>
+<h2><span id="instance-weight-file">Instance Weight File</span></h2><ul>
+<li>规定了模型训练时data中每一条instance的权重</li>
+<li>有些instance质量较差，或与前一示例相比变化不大，所以可以调节其所占权重</li>
+</ul>
+<h1><span id="调参">调参</span></h1><h2><span id="overfitting">Overfitting</span></h2><p>与overfitting有关的参数：</p>
+<ul>
+<li>直接控制模型复杂度：max_depth, min_child_weight and gamma.</li>
+<li>增加模型随机性以使得模型对噪声有更强的鲁棒性：<ul>
+<li>subsample and colsample_bytree. </li>
+<li>Reduce stepsize eta. Remember to increase num_round when you do so.</li>
+</ul>
+</li>
+</ul>
+<h2><span id="imbalanced-dataset">Imbalanced Dataset</span></h2><ul>
+<li>只关注测量指标的大小<ul>
+<li>平衡数据集 via scale_pos_weight</li>
+<li>使用AUC作为metric</li>
+</ul>
+</li>
+<li>关注预测正确的概率<ul>
+<li>此时不能re-balance数据集</li>
+<li>Set parameter max_delta_step to a finite number (say 1) to help convergence</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/25/Decision%20Tree/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/kobe.jpg">
+      <meta itemprop="name" content="Kayden">
+      <meta itemprop="description" content="blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kayden's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/10/25/Decision%20Tree/" class="post-title-link" itemprop="url">Decision Tree</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2020-10-25 09:35:05 / 修改时间：11:08:37" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:05+08:00">2020-10-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>[TOC]</p>
+<ol>
+<li><p>决策树<br><strong><em>问题：如何挑选用于分裂节点的特征—&gt;ID3 C4.5 …(一个标准：使分裂出来的节点尽可能纯，即一个分支尽可能属于同类)</em></strong></p>
+</li>
+<li><p>ID3<br><em><strong>信息增益</strong></em></p>
+<p> 信息增益 = 信息熵 - 条件熵</p>
+<ul>
+<li>信息增益：针对每个 <em><strong>属性</strong></em></li>
+<li>信息熵：整个样本空间的不确定度。其中Pk一定是label取值的概率。</li>
+<li><p>条件熵：给定某个属性，求其信息熵</p>
+<p>—&gt; 问题：某属性所包括的类别越多，信息增益越大。极限：每个类别仅有1个实例（label数量为1），log p = log1 = 0， 所以最终条件熵=0。或：属性类别越多，条件熵越小，其纯度越高。</p>
+<p>—&gt; 信息增益准则其实是对可取值数目较多的属性有所偏好！</p>
+<p>—&gt; 泛化能力不强</p>
+</li>
+</ul>
+</li>
+<li><p>C4.5 <em><strong>信息增益率+信息增益</strong></em></p>
+<p> 属性a的信息增益率 = 属性a的信息增益 / a的某个固有统计量IV(a)</p>
+<p> <img src="https://pic4.zhimg.com/80/v2-812104c0291d20935e910919a9fa5c27_hd.png" alt="IV(a)公式"></p>
+<p> V为a的取值数目。<br> （实际上是属性a的信息熵）</p>
+<ul>
+<li>直接使用信息增益率：偏好取值数目小的属性。</li>
+<li>先选择高于平均水平信息增益的属性，再选择最高信息增益率的属性。</li>
+</ul>
+</li>
+<li><p>CART <em><strong>基尼系数+MAE/MSE</strong></em></p>
+<p>与ID3、C4.5的不同：形成二叉树，因此 —&gt; 既要确定要分割的属性，也要确定要分割的值</p>
+<ul>
+<li><p>回归树：MAE/MSE</p>
+<ul>
+<li>example(MSE)：<blockquote>
+<ol>
+<li>考虑数据集 D 上的所有特征 j，遍历每一个特征下所有可能的取值或者切分点 s，将数据集 D 划分成两部分 D1 和 D2</li>
+<li>分别计算上述两个子集的平方误差和，选择最小的平方误差对应的特征与分割点，生成两个子节点。</li>
+<li>对上述两个子节点递归调用步骤1 2,直到满足停止条件。</li>
+</ol>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>分类树：(Gini)</p>
+<p><img src="https://img-blog.csdn.net/20150109184544578?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvQW5kcm9pZGx1c2hhbmdkZXJlbg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="某属性A的基尼系数"><br>基尼系数越小，纯度越高</p>
+</li>
+</ul>
+<blockquote>
+<ol>
+<li>对每个特征 A，对它的所有可能取值 a，将数据集分为 A＝a，和 A!＝a 两个子集，计算集合 D 的基尼指数：<br>Gini(A) = D1/D <em> Gini(D1) + D2/D </em> Gini(D2)</li>
+<li>遍历所有的特征 A，计算其所有可能取值 a 的基尼指数，选择 D 的基尼指数最小值对应的特征及切分点作为最优的划分，将数据分为两个子集。</li>
+<li>对上述两个子节点递归调用步骤1 2, 直到满足停止条件。</li>
+<li>生成 CART 决策树。</li>
+</ol>
+</blockquote>
+<pre><code>停止条件有：
+1. 节点中的样本个数小于预定阈值;
+2. 样本集的Gini系数小于预定阈值（此时样本基本属于同一类）;
+3. 没有更多特征。
+</code></pre><ul>
+<li>剪枝</li>
+<li>例子：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/b90a9ce05b28">example</a></li>
+</ul>
+</li>
+<li><p>控制决策树过拟合的方法</p>
+<ul>
+<li>剪枝</li>
+<li>控制终止条件，避免树形结构过细</li>
+<li>构建随机森林</li>
+</ul>
+</li>
 </ol>
 
       
@@ -592,10 +1025,10 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/25/LightGBM/">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/25/DBSCAN/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/kobe.jpg">
       <meta itemprop="name" content="Kayden">
       <meta itemprop="description" content="blog">
     </span>
@@ -606,7 +1039,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/10/25/LightGBM/" class="post-title-link" itemprop="url">LightGBM</a>
+            <a href="/2020/10/25/DBSCAN/" class="post-title-link" itemprop="url">DBSCAN以及sklearn实现DBSCAN</a>
         </h2>
 
         <div class="post-meta-container">
@@ -616,16 +1049,10 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2020-10-25 09:35:04" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:04+08:00">2020-10-25</time>
+      <time title="创建时间：2020-10-25 09:35:05 / 修改时间：11:08:59" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:05+08:00">2020-10-25</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2019-01-18 19:38:52" itemprop="dateModified" datetime="2019-01-18T19:38:52+08:00">2019-01-18</time>
-      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -646,10 +1073,82 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h1><ul>
-<li>可以接受categorical features：LightGBM 可以直接使用 categorical features（分类特征）作为 input（输入）. 它不需要被转换成 one-hot coding（独热编码）, 并且它比 one-hot coding（独热编码）更快（约快上 8 倍）。注意: 在你构造 Dataset 之前, 你应该将分类特征转换为 int 类型的值.</li>
+          <p>[TOC]<br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/pinard/p/6208966.html">原文1</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/pinard/p/6217852.html">原文2</a><br>DBSCAN(Density-Based Spatial Clustering of Applications with Noise，具有噪声的基于密度的聚类方法)是一种很典型的<strong>密度聚类算法</strong>，和K-Means，BIRCH这些一般只适用于凸样本集的聚类相比，DBSCAN<strong>既可以适用于凸样本集，也可以适用于非凸样本集</strong>。</p>
+<h1><span id="密度聚类">密度聚类</span></h1><p>其原理为：同一类别的样本，其样本分布一定是紧密的；可以将各组紧密相连的样本划分为不同的类别来得到聚类类别结果。</p>
+<h1><span id="dbscan">DBSCAN</span></h1><h2><span id="关键概念">关键概念</span></h2><p>参数(ϵ, MinPts)描述领域的样本分布紧密程度，其中ϵ描述了某一样本的领域<strong>距离阈值</strong>，MinPts描述某一样本的距离为ϵ的领域中样本<strong>个数的阈值</strong>。</p>
+<p>假设样本集是D=(x1,x2,…,xm),则DBSCAN具体的密度描述定义如下：</p>
+<ol>
+<li>ϵ-邻域：对于xj∈D，其ϵ-邻域包含样本集D中与xj的距离不大于ϵ的子样本集，即Nϵ(xj)={xi∈D|distance(xi,xj)≤ϵ}, 这个子样本集的个数记为|Nϵ(xj)|</li>
+<li>核心对象：对于任一样本xj∈D，如果其ϵ-邻域对应的Nϵ(xj)至少包含MinPts个样本，即如果|Nϵ(xj)|≥MinPts，则xj是核心对象。</li>
+<li>密度直达：如果xi位于xj的ϵ-邻域中，且xj是核心对象，则称xi由xj密度直达。</li>
+<li>密度可达：对于xi和xj,如果存在样本样本序列p1,p2,…,pT,满足p1=xi,pT=xj, 且pt+1由pt密度直达，则称xj由xi密度可达。也就是说，密度可达满足传递性。此时序列中的传递样本p1,p2,…,pT−1均为核心对象，因为只有核心对象才能使其他样本密度直达。</li>
+<li>密度相连：对于xi和xj,如果存在核心对象样本xk，使xi和xj均由xk密度可达，则称xi和xj密度相连。注意密度相连关系是满足对称性的。</li>
+</ol>
+<p>图中MinPts = 5。红点为核心对象。<br><img src="https://images2015.cnblogs.com/blog/1042406/201612/1042406-20161222112847323-1346197243.png" alt="示意图"></p>
+<h2><span id="聚类思想">聚类思想</span></h2><p>由密度可达关系导出的最大密度相连的样本集合，即为最终聚类的一个类别。</p>
+<p>方法：任意选择一个没有类别的核心对象作为种子，然后找到该核心对象密度可达的样本集合，为一个聚类。接着选择另一个没有类比的核心对象…直到所有核心对象都有类别。</p>
+<p>问题：</p>
+<ol>
+<li>outlier.不在任何一个核心对象周围的点定义为异常样本点或噪声点，不考虑。</li>
+<li>距离。少量样本而言，搜索周围样本一般用最近邻的方法；大量样本，可以用KD树，球树等搜索最近邻。</li>
+<li>若某样本到两个核心对象的距离都小于ϵ，但这两个核心对象不可达，此时采取先来后到原则，标记其为先聚类的cluster类别。</li>
+</ol>
+<h2><span id="算法">算法</span></h2><p>输入：样本集D=(x1,x2,…,xm)，邻域参数(ϵ,MinPts), 样本距离度量方式</p>
+<p>输出： 簇划分C.　</p>
+<ol>
+<li>初始化核心对象集合Ω=∅, 初始化聚类簇数k=0，初始化未访问样本集合Γ = D,  簇划分C = ∅</li>
+<li>对于j=1,2,…m, 按下面的步骤找出所有的核心对象：<ul>
+<li>通过距离度量方式，找到样本xj的ϵ-邻域子样本集Nϵ(xj)</li>
+<li>如果子样本集样本个数满足|Nϵ(xj)|≥MinPts， 将样本xj加入核心对象样本集合：Ω=Ω∪{xj}</li>
 </ul>
-<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1>
+</li>
+<li>如果核心对象集合Ω=∅，则算法结束，否则转入步骤4.</li>
+<li>在核心对象集合Ω中，随机选择一个核心对象o，初始化当前簇核心对象队列Ωcur={o}, 初始化类别序号k=k+1，初始化当前簇样本集合Ck={o}, 更新未访问样本集合Γ=Γ−{o}</li>
+<li>如果当前簇核心对象队列Ωcur=∅，则当前聚类簇Ck生成完毕, 更新簇划分C={C1,C2,…,Ck}, 更新核心对象集合Ω=Ω−Ck， 转入步骤3。</li>
+<li>在当前簇核心对象队列Ωcur中取出一个核心对象o′,通过邻域距离阈值ϵ找出所有的ϵ-邻域子样本集Nϵ(o′)，令Δ=Nϵ(o′)∩Γ, 更新当前簇样本集合Ck=Ck∪Δ, 更新未访问样本集合Γ=Γ−Δ,  更新Ωcur=Ωcur∪(Δ∩Ω)−o′，转入步骤5.</li>
+</ol>
+<p>输出结果为： 簇划分C={C1,C2,…,Ck}</p>
+<h1><span id="对比">对比</span></h1><p>对比图：<img src="https://img-blog.csdn.net/20170419143546349?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvc2luYXRfMjY5MTczODM=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="与其他算法的对比图"><br>一般用于数据集稠密时的情况，或数据集是非凸的。</p>
+<p>DBSCAN的主要优点有：</p>
+<ol>
+<li>可以对任意形状的稠密数据集进行聚类，相对的，K-Means之类的聚类算法一般只适用于凸数据集。</li>
+<li>可以在聚类的同时发现异常点，对数据集中的异常点不敏感。</li>
+<li>聚类结果没有偏倚，相对的，K-Means之类的聚类算法初始值对聚类结果有很大影响。</li>
+</ol>
+<p>DBSCAN的主要缺点有：</p>
+<ol>
+<li>如果样本集的密度不均匀、聚类间距差相差很大时，聚类质量较差，这时用DBSCAN聚类一般不适合。</li>
+<li>如果样本集较大时，聚类收敛时间较长，此时可以对搜索最近邻时建立的KD树或者球树进行规模限制来改进。</li>
+<li>调参相对于传统的K-Means之类的聚类算法稍复杂，主要需要对距离阈值ϵ，邻域样本数阈值MinPts联合调参，不同的参数组合对最后的聚类效果有较大影响。</li>
+</ol>
+<h1><span id="sklearnclusterdbscan">sklearn.cluster.DBSCAN</span></h1><h2><span id="参数">参数</span></h2><p>按其算法，包括DBSCAN本身的参数，以及求取最近邻时的参数。</p>
+<ol>
+<li>eps：DBSCAN算法参数，ϵ-邻域的距离阈值。默认值是0.5.eps过大，则更多的点会落在核心对象的ϵ-邻域，此时我们的类别数可能会减少， 本来不应该是一类的样本也会被划为一类。反之则类别数可能会增大，本来是一类的样本却被划分开。</li>
+<li>min_samples：DBSCAN算法参数，上文的MinPts。默认值是5.通常和eps一起调参。在eps一定的情况下，min_samples过大，则核心对象会过少，此时簇内部分本来是一类的样本可能会被标为噪音点，类别数也会变多。反之min_samples过小的话，则会产生大量的核心对象，可能会导致类别数过少。</li>
+<li>metric：最近邻距离度量参数。可以使用的距离度量较多，一般来说DBSCAN使用默认的欧式距离（即p=2的闵可夫斯基距离）就可以满足我们的需求。可以使用的距离度量参数有：<ul>
+<li>欧式距离 “euclidean”</li>
+<li>曼哈顿距离 “manhattan”</li>
+<li>切比雪夫距离“chebyshev”</li>
+<li>闵可夫斯基距离 “minkowski”</li>
+<li>带权重闵可夫斯基距离 “wminkowski”</li>
+<li>标准化欧式距离 “seuclidean”</li>
+<li>马氏距离“mahalanobis”</li>
+</ul>
+</li>
+<li>algorithm：最近邻搜索算法参数，算法一共有三种，第一种是蛮力实现，第二种是KD树实现，第三种是球树实现。对于这个参数，一共有4种可选输入，‘brute’对应第一种蛮力实现，‘kd_tree’对应第二种KD树实现，‘ball_tree’对应第三种的球树实现，‘auto’则会在上面三种算法中做权衡，选择一个拟合最好的最优算法。需要注意的是，如果输入样本特征是稀疏的时候，无论我们选择哪种算法，最后scikit-learn都会去用蛮力实现‘brute’。个人的经验，一般情况使用默认的 ‘auto’就够了。 如果数据量很大或者特征也很多，用”auto”建树时间可能会很长，效率不高，建议选择KD树实现‘kd_tree’，此时如果发现‘kd_tree’速度比较慢或者已经知道样本分布不是很均匀时，可以尝试用‘ball_tree’。而如果输入样本是稀疏的，无论你选择哪个算法最后实际运行的都是‘brute’。</li>
+<li>leaf_size：最近邻搜索算法参数，为使用KD树或者球树时， 停止建子树的叶子节点数量的阈值。这个值越小，则生成的KD树或者球树就越大，层数越深，建树时间越长，反之，则生成的KD树或者球树会小，层数较浅，建树时间较短。默认是30. 因为这个值一般只影响算法的运行速度和使用内存大小，因此一般情况下可以不管它。</li>
+<li>p: 最近邻距离度量参数。只用于闵可夫斯基距离和带权重闵可夫斯基距离中p值的选择，p=1为曼哈顿距离， p=2为欧式距离。如果使用默认的欧式距离不需要管这个参数。</li>
+<li>n_jobs ：使用CPU格式，-1代表全开。</li>
+</ol>
+<p>输出：</p>
+<ul>
+<li>core<em>sample_indices</em>:核心样本指数。（此参数在代码中有详细的解释）</li>
+<li>labels_:数据集中每个点的集合标签给,噪声点标签为-1。</li>
+<li>components_ ：核心样本的副本</li>
+</ul>
+<p>主要是<strong>eps和min_samples</strong>的调参。</p>
+<h2><span id="代码实例">代码实例</span></h2><p>原文2中有。<br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/pinard/p/6217852.html">原文2</a></p>
+
       
     </div>
 
@@ -675,10 +1174,10 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/25/hello-world/">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/25/CNN/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/kobe.jpg">
       <meta itemprop="name" content="Kayden">
       <meta itemprop="description" content="blog">
     </span>
@@ -689,7 +1188,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/10/25/hello-world/" class="post-title-link" itemprop="url">Hello World</a>
+            <a href="/2020/10/25/CNN/" class="post-title-link" itemprop="url">CNN</a>
         </h2>
 
         <div class="post-meta-container">
@@ -699,8 +1198,18 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2020-10-25 09:14:51" itemprop="dateCreated datePublished" datetime="2020-10-25T09:14:51+08:00">2020-10-25</time>
+      <time title="创建时间：2020-10-25 09:35:05 / 修改时间：11:08:47" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:05+08:00">2020-10-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+        </span>
     </span>
 
   
@@ -713,19 +1222,365 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+          <p>[TOC]</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/27642620">原贴</a></p>
+<h1><span id="卷积神经网络">卷积神经网络</span></h1><p>卷积神经网络大致就是covolutional layer, pooling layer, ReLu layer, fully-connected layer的组合，例如下图所示的结构。<br><img src="https://pic4.zhimg.com/80/v2-cf87890eb8f2358f23a1ac78eb764257_hd.png" alt="ex-1"></p>
+<h3><span id="图片的识别">图片的识别</span></h3><ul>
+<li>生物所看到的景象并非世界的原貌，而是长期进化出来的适合自己生存环境的一种感知方式</li>
+<li>画面识别实际上是寻找/学习动物的视觉关联形式（即将能量与视觉关联在一起的方式）</li>
+<li>画面的识别取决于：<ul>
+<li>图片本身</li>
+<li>被如何观察</li>
+</ul>
+</li>
+<li>图像不变性：<ul>
+<li>rotation</li>
+<li>viewpoint</li>
+<li>size</li>
+<li>illumination</li>
+<li>…<h3><span id="前馈的不足">前馈的不足</span></h3></li>
+</ul>
+</li>
+<li>当出现上述variance时，前馈无法做到适应，即前馈只能对同样的内容进行识别，若出现其他情况时，只能增加样本重新训练</li>
+<li>解决方法可以是让图片中不同的位置有相同的权重——<strong>共享权重</strong><h3><span id="cnn">CNN</span></h3><h4><span id="局部连接">局部连接</span></h4></li>
+<li><strong>空间共享</strong>（引入的先验知识）</li>
+<li><strong>局部连接</strong>（得到的下一层节点与该层并非全连接）</li>
+<li>depth上是<strong>全连接</strong>的<blockquote>
+<p>每个filter会在width维, height维上，以局部连接和空间共享，并贯串整个depth维的方式得到一个Feature Map。</p>
+</blockquote>
+</li>
+</ul>
+<h5><span id="示例">示例</span></h5><p><img src="https://pic3.zhimg.com/80/v2-23db15ec3f783bbb5cf811711e46dbba_hd.png" alt="cnn_example"></p>
+<ul>
+<li>在输入depth为1时：被filter size为2x2所圈中的4个输入节点连接到1个输出节点上。</li>
+<li>在输入depth为3时：被filter size为2x2，但是贯串3个channels后，所圈中的12个输入节点连接到1个输出节点上。</li>
+<li>在输入depth为n时：2x2xn个输入节点连接到1个输出节点上。<blockquote>
+<p>三个channels的权重并不共享。 即当深度变为3后，权重也跟着扩增到了三组。</p>
+</blockquote>
+</li>
+</ul>
+<h5><span id="zero-padding">zero padding</span></h5><p>有时为了保证feature map与输入层保持同样大小，会添加zero padding，一般3*3的卷积核padding为1，5*5为2</p>
+<p>Feature Map的尺寸等于(input_size + 2 *padding_size − filter_size)/stride+1</p>
+<h4><span id="形状-概念抓取">形状、概念抓取</span></h4><ul>
+<li>卷积层可以对基础形状（包括边缘、棱角、模糊等）、对比度、颜色等概念进行抓取</li>
+<li>可以通过多层卷积实现对一个较大区域的抓取</li>
+<li>抓取的特征取决于卷积核的权重，而此权重由网络根据数据学习得到，即CNN会自己学习以什么样的方式观察图片</li>
+<li>可以有多个filter，从而可以学习到多种特征<ul>
+<li>此时卷积层的输出depth也就不是1了</li>
+<li>卷积层的输入输出均为长方体：其中depth与filters个数相同<br><img src="https://pic1.zhimg.com/80/v2-a9983c3cee935b68c73965bc1abe268c_hd.png" alt="ex4"><br><img src="https://pic1.zhimg.com/80/v2-d11e1d2f2c41b6df713573f8155bc324_hd.png" alt="ex2"><h4><span id="非线性以relu为例">非线性（以ReLu为例）</span></h4>增强模型的非线性拟合能力<br><img src="https://pic3.zhimg.com/80/v2-54a469b2873542e75abf2bc5d8fcaa1a_hd.png" alt="ex3"><h4><span id="pooling">pooling</span></h4><em>比如以步长为2，2x2的 filter pool</em><br><img src="https://pic4.zhimg.com/80/v2-cd717414dcf32dac4df73c00f1e7c6c3_hd.jpg" alt="ex5"></li>
+</ul>
+</li>
+<li>pooling的主要功能是downsamping，有助减少conv过程中的冗余<h4><span id="全连接">全连接</span></h4></li>
+<li>当抓取到足以用来识别图片的特征后，接下来的就是如何进行分类。 全连接层（也叫前馈层）就可以用来将最后的输出映射到线性可分的空间。 通常卷积网络的最后会将末端得到的长方体平摊(flatten)成一个长长的向量，并送入全连接层配合输出层进行分类。<h4><span id="一些变体中用到的技巧">一些变体中用到的技巧</span></h4></li>
+<li>1x1卷积核：选择不同的个数，用来降维或升维</li>
+<li>残差<blockquote>
+<p>所有的这些技巧都是对各种不变性的满足</p>
+</blockquote>
+</li>
+</ul>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+      
+    </div>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+    
+    
+    
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/25/%E7%BB%8F%E9%AA%8C%20%E6%9C%9F%E6%9C%9B%20%E7%BB%93%E6%9E%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/kobe.jpg">
+      <meta itemprop="name" content="Kayden">
+      <meta itemprop="description" content="blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kayden's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/10/25/%E7%BB%8F%E9%AA%8C%20%E6%9C%9F%E6%9C%9B%20%E7%BB%93%E6%9E%84/" class="post-title-link" itemprop="url">经验风险、期望风险、结构风险</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-10-25 09:35:05" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:05+08:00">2020-10-25</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2019-04-17 14:03:39" itemprop="dateModified" datetime="2019-04-17T14:03:39+08:00">2019-04-17</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h3 id="经验风险"><a href="#经验风险" class="headerlink" title="经验风险"></a>经验风险</h3><ul>
+<li><p>对训练样本误差的衡量，例如最典型的是每个样本损失函数的平均，Σ(loss(Yi, f(Xi))) / m</p>
+</li>
+<li><p>基于经验风险最小化的模型泛化能力差，只代表了局部最优 –&gt; 过拟合</p>
+<h3 id="期望风险"><a href="#期望风险" class="headerlink" title="期望风险"></a>期望风险</h3></li>
+<li><p>要寻找全局最优，可以考虑使用损失函数的期望，即E(loss(Yi, f(Xi))) = ∫(P(Xi,Yi)loss(Yi, f(Xi)))dxdy</p>
+</li>
+<li><p>此处假设了(x, y)的联合分布</p>
+</li>
+<li><p>问题：对于大部分样本无法获知其具体的分布 –&gt; 不现实</p>
+</li>
+</ul>
+<h3 id="结构风险"><a href="#结构风险" class="headerlink" title="结构风险"></a>结构风险</h3><p>在经验风险之上添加正则项，模拟期望风险</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/25/WNSP#2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/kobe.jpg">
+      <meta itemprop="name" content="Kayden">
+      <meta itemprop="description" content="blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kayden's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/10/25/WNSP#2/" class="post-title-link" itemprop="url">WNSP#2</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-10-25 09:35:05" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:05+08:00">2020-10-25</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2018-09-29 13:17:09" itemprop="dateModified" datetime="2018-09-29T13:17:09+08:00">2018-09-29</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <ul>
+<li>50GHz<ul>
+<li>丰富的频谱资源，即频带宽</li>
+<li>速度快</li>
+<li>波长短，更适合短距传输。穿透性差。</li>
+<li>高度方向性</li>
+<li>安全性</li>
+</ul>
+</li>
+<li>Li-Fi(Light Fidelity)<ul>
+<li>安全性和低穿透性：灯光具有可遮挡性</li>
+<li>频谱资源丰富</li>
+<li>无电磁辐射和电磁干扰</li>
+</ul>
+</li>
+<li>LP-WAN<ul>
+<li>NB-IoT</li>
+<li>数据安全及隐私：公网传输导致数据泄露</li>
+<li>通信安全：通信网络面临攻击</li>
+<li>设备安全</li>
+</ul>
+</li>
+</ul>
+<h1 id="密码学"><a href="#密码学" class="headerlink" title="密码学"></a>密码学</h1><ul>
+<li>唯密文、唯明文、选择性密文、选择性明文</li>
+<li>保密性 完整性 可用性 真实性 可追溯性 不可抵赖性 匿名性</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/25/ROC%20%20AUC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/kobe.jpg">
+      <meta itemprop="name" content="Kayden">
+      <meta itemprop="description" content="blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kayden's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/10/25/ROC%20%20AUC/" class="post-title-link" itemprop="url">ROC AUC, Accuracy, Recall, F1</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2020-10-25 09:35:05 / 修改时间：11:11:50" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:05+08:00">2020-10-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>[toc]<br>类不平衡（class imbalance）现象：即负样本比正样本多很多（或者相反）</p>
+<ol>
+<li>ACCURACY/RECALL/F1</li>
+</ol>
+<ul>
+<li><p>Accuracy：TP/(TP+TN) 即预测对的数据个数与总数据个数的比</p>
+<p>  <strong><em>A和R的问题在于如果样本不平衡，则参考意义很小</em></strong></p>
+</li>
+<li><p>准确率（Precision）：P=TP/(TP+FP)。通俗地讲，就是预测正确的正例数据占预测为正例数据的比例。</p>
+<p>  <strong>针对判别结果 查准率</strong></p>
+</li>
+<li><p>召回率（Recall）：R=TP/(TP+FN)。通俗地讲，就是预测为正例的数据占实际为正例数据的比例。</p>
+<p>  <strong>针对样本 查全率</strong></p>
+</li>
+<li>F1 = 2*P*R/(P+R)：既有P又有R</li>
+<li><p>PRC， precision recall curve，与下面的ROC一样，先看是否光滑，光滑的话说明过拟合不大。越往右上越好。</p>
+<p>  <strong><em>A和R的问题在于如果样本不平衡，则参考意义很小</em></strong></p>
+</li>
+</ul>
+<ol>
+<li><p>ROC AUC<br>TPR=TP/(TP+FN)=TP/actual positives 也就是Recall<br>FPR=FP/(FP+TN)=FP/actual negatives<br>ROC是由点（TPR,FPR）组成的曲线，AUC就是ROC的面积。AUC越大越好。</p>
+<p> 一般来说，如果ROC是光滑的，那么基本可以判断没有太大的overfitting。</p>
+<p> 越往左上越好。</p>
+<p> 画法：ROC曲线其实是多个混淆矩阵的结果组合，如果在上述模型中我们没有定好阈值，而是将模型预测结果从高到低排序，将每个概率值依次作为阈值，那么就有多个混淆矩阵。对于每个混淆矩阵，我们计算两个指标TPR（True positive rate）和FPR（False positive rate），TPR=TP/(TP+FN)=Recall，TPR就是召回率。FPR=FP/(FP+TN)，FPR即为实际为好人的人中，预测为坏人的人占比。我们以FPR为x轴，TPR为y轴画图，就得到了ROC曲线。</p>
+<p><strong><em>也就是说，ROC曲线的阈值不是多次运行模型得到的，是同一个模型中通过对所得结果按照概率的排序得到了一个threshold</em></strong></p>
+<p> 所以使用ROC的话，它会先对预测到的结果进行排序，然后再根据排序的结果画图，所以他的曲线形状不会因为数据不平衡而发生大的改变。<br> <strong>但是当数据极度不平衡时，ROC仍然有问题，下面的PRC表现更好。</strong></p>
+</li>
+<li>PRC， precision recall curve，与上面的ROC一样，先看是否光滑，光滑的话说明过拟合不大。越往右上越好。</li>
+</ol>
 
       
     </div>
@@ -747,7 +1602,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -794,20 +1649,20 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Kayden</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
-  </div>
 
     </div>
   </footer>
 
   
   <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+<script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
 
   
 
 
 
+
+  <script src="/js/local-search.js"></script>
 
 
 

@@ -17,27 +17,25 @@
 
 
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.0/css/all.min.css">
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
 
 <script class="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"chenzk1.github.io","root":"/","scheme":"Muse","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}};
+    var CONFIG = {"hostname":"chenzk1.github.io","root":"/","scheme":"Gemini","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}};
   </script>
 
-  <meta name="description" content="DocSlides 为何要推导出目标函数而不是直接增加树  理论上：搞清楚learning的目的，以及其收敛性。 工程上： gi和hi是对loss function的一次、二次导 目标函数以及整个学习过程只依赖于gi和hi 可以根据实际问题，自定义loss function    Summary 原理损失函数$$ \text{obj} &#x3D; \sum_{i&#x3D;1}^n l(y_i, \hat{y}i^">
+  <meta name="description" content="[TOC] DocSlides 为何要推导出目标函数而不是直接增加树  理论上：搞清楚learning的目的，以及其收敛性。 工程上： gi和hi是对loss function的一次、二次导 目标函数以及整个学习过程只依赖于gi和hi 可以根据实际问题，自定义loss function    Summary 原理损失函数\text{obj} &#x3D; \sum_{i&#x3D;1}^n l(y_i, \hat{y">
 <meta property="og:type" content="article">
 <meta property="og:title" content="GBDT &amp; XGBoost">
 <meta property="og:url" content="https://chenzk1.github.io/2020/10/25/GBDT%20&%20XGBoost/index.html">
 <meta property="og:site_name" content="Kayden&#39;s Blog">
-<meta property="og:description" content="DocSlides 为何要推导出目标函数而不是直接增加树  理论上：搞清楚learning的目的，以及其收敛性。 工程上： gi和hi是对loss function的一次、二次导 目标函数以及整个学习过程只依赖于gi和hi 可以根据实际问题，自定义loss function    Summary 原理损失函数$$ \text{obj} &#x3D; \sum_{i&#x3D;1}^n l(y_i, \hat{y}i^">
+<meta property="og:description" content="[TOC] DocSlides 为何要推导出目标函数而不是直接增加树  理论上：搞清楚learning的目的，以及其收敛性。 工程上： gi和hi是对loss function的一次、二次导 目标函数以及整个学习过程只依赖于gi和hi 可以根据实际问题，自定义loss function    Summary 原理损失函数\text{obj} &#x3D; \sum_{i&#x3D;1}^n l(y_i, \hat{y">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://i.imgur.com/quPhp1K.png">
 <meta property="og:image" content="http://i.imgur.com/L7PhJwO.png">
 <meta property="article:published_time" content="2020-10-25T01:35:05.312Z">
-<meta property="article:modified_time" content="2019-01-23T12:07:15.419Z">
+<meta property="article:modified_time" content="2020-10-25T03:09:11.510Z">
 <meta property="article:author" content="Kayden">
 <meta property="article:tag" content="ML">
-<meta property="article:tag" content="DOC">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://i.imgur.com/quPhp1K.png">
 
@@ -100,7 +98,7 @@
 
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+<body itemscope itemtype="http://schema.org/WebPage">
   <div class="headband"></div>
 
   <main class="main">
@@ -108,6 +106,9 @@
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-nav-toggle">
     <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
     </div>
   </div>
 
@@ -123,15 +124,67 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
 
 
 
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
 
 
 
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
 
 </div>
         
@@ -156,20 +209,23 @@
 
       <!--noindex-->
       <section class="post-toc-wrap sidebar-panel">
-          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%BA%E4%BD%95%E8%A6%81%E6%8E%A8%E5%AF%BC%E5%87%BA%E7%9B%AE%E6%A0%87%E5%87%BD%E6%95%B0%E8%80%8C%E4%B8%8D%E6%98%AF%E7%9B%B4%E6%8E%A5%E5%A2%9E%E5%8A%A0%E6%A0%91"><span class="nav-number">1.</span> <span class="nav-text">为何要推导出目标函数而不是直接增加树</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Summary"><span class="nav-number">2.</span> <span class="nav-text">Summary</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8E%9F%E7%90%86"><span class="nav-number">3.</span> <span class="nav-text">原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="nav-number">3.1.</span> <span class="nav-text">损失函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DART-Booster"><span class="nav-number">3.2.</span> <span class="nav-text">DART Booster</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%89%B9%E6%80%A7"><span class="nav-number">4.</span> <span class="nav-text">特性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Monotonic-Constraints%E5%8D%95%E8%B0%83%E6%80%A7%E9%99%90%E5%88%B6"><span class="nav-number">4.1.</span> <span class="nav-text">Monotonic Constraints单调性限制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Feature-Interaction-Constraints%E5%8D%95%E8%B0%83%E6%80%A7%E9%99%90%E5%88%B6"><span class="nav-number">4.2.</span> <span class="nav-text">Feature Interaction Constraints单调性限制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Instance-Weight-File"><span class="nav-number">4.3.</span> <span class="nav-text">Instance Weight File</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B0%83%E5%8F%82"><span class="nav-number">5.</span> <span class="nav-text">调参</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Overfitting"><span class="nav-number">5.1.</span> <span class="nav-text">Overfitting</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Imbalanced-Dataset"><span class="nav-number">5.2.</span> <span class="nav-text">Imbalanced Dataset</span></a></li></ol></li></ol></div>
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">为何要推导出目标函数而不是直接增加树</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">Summary</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">3.</span> <span class="nav-text">原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">3.1.</span> <span class="nav-text">损失函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">3.2.</span> <span class="nav-text">DART Booster</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">4.</span> <span class="nav-text">特性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">4.1.</span> <span class="nav-text">Monotonic Constraints单调性限制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">4.2.</span> <span class="nav-text">Feature Interaction Constraints单调性限制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">4.3.</span> <span class="nav-text">Instance Weight File</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">5.</span> <span class="nav-text">调参</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">5.1.</span> <span class="nav-text">Overfitting</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">5.2.</span> <span class="nav-text">Imbalanced Dataset</span></a></li></ol></li></ol></div>
       </section>
       <!--/noindex-->
 
       <section class="site-overview-wrap sidebar-panel">
         <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Kayden"
+      src="/images/kobe.jpg">
   <p class="site-author-name" itemprop="name">Kayden</p>
   <div class="site-description" itemprop="description">blog</div>
 </div>
 <div class="site-state-wrap site-overview-item animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-          <a href="/archives">
-          <span class="site-state-item-count">15</span>
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">23</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -178,11 +234,21 @@
         <span class="site-state-item-name">分类</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">14</span>
-        <span class="site-state-item-name">标签</span>
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Chenzk1" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Chenzk1" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:chenzk666@gmail.com" title="E-Mail → mailto:chenzk666@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
 
 
 
@@ -221,7 +287,7 @@
     <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/25/GBDT%20&%20XGBoost/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/kobe.jpg">
       <meta itemprop="name" content="Kayden">
       <meta itemprop="description" content="blog">
     </span>
@@ -241,16 +307,10 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2020-10-25 09:35:05" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:05+08:00">2020-10-25</time>
+      <time title="创建时间：2020-10-25 09:35:05 / 修改时间：11:09:11" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:05+08:00">2020-10-25</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2019-01-23 20:07:15" itemprop="dateModified" datetime="2019-01-23T20:07:15+08:00">2019-01-23</time>
-      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -271,8 +331,9 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p><a target="_blank" rel="noopener" href="https://xgboost.readthedocs.io/en/latest/tutorials/model.html">Doc</a><br><a target="_blank" rel="noopener" href="https://homes.cs.washington.edu/~tqchen/pdf/BoostedTree.pdf">Slides</a></p>
-<h1 id="为何要推导出目标函数而不是直接增加树"><a href="#为何要推导出目标函数而不是直接增加树" class="headerlink" title="为何要推导出目标函数而不是直接增加树"></a>为何要推导出目标函数而不是直接增加树</h1><p><img src="http://i.imgur.com/quPhp1K.png" alt="Objective function"></p>
+        <p>[TOC]</p>
+<p><a target="_blank" rel="noopener" href="https://xgboost.readthedocs.io/en/latest/tutorials/model.html">Doc</a><br><a target="_blank" rel="noopener" href="https://homes.cs.washington.edu/~tqchen/pdf/BoostedTree.pdf">Slides</a></p>
+<h1><span id="为何要推导出目标函数而不是直接增加树">为何要推导出目标函数而不是直接增加树</span></h1><p><img src="http://i.imgur.com/quPhp1K.png" alt="Objective function"></p>
 <ul>
 <li>理论上：搞清楚learning的目的，以及其收敛性。</li>
 <li>工程上：<ul>
@@ -282,38 +343,37 @@
 </ul>
 </li>
 </ul>
-<h1 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h1><p><img src="http://i.imgur.com/L7PhJwO.png" alt="Summary"></p>
-<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><h2 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h2><p>$$ \text{obj} = \sum_{i=1}^n l(y_i, \hat{y}<em>i^{(t)}) + \sum</em>{i=1}^t\Omega(f_i)$$<br>l为loss，\ \Omega \ 为正则项</p>
+<h1><span id="summary">Summary</span></h1><p><img src="http://i.imgur.com/L7PhJwO.png" alt="Summary"></p>
+<h1><span id="原理">原理</span></h1><h2><span id="损失函数">损失函数</span></h2><script type="math/tex; mode=display">\text{obj} = \sum_{i=1}^n l(y_i, \hat{y}_i^{(t)}) + \sum_{i=1}^t\Omega(f_i)</script><p>l为loss，\ \Omega \ 为正则项</p>
 <ul>
-<li>loss：采用加法策略，第t颗树时：<br>$$ \hat{y}<em>i^{(0)} = 0 $$<br>$$ \hat{y}<em>i^{(1)} = f_1(x_i) = \hat{y}_i^{(0)} + f_1(x_i) $$<br>$$ \hat{y}_i^{(2)} = f_1(x_i) + f_2(x_i)= \hat{y}_i^{(1)} + f_2(x_i) $$<br>$$ \dots $$<br>$$ \hat{y}_i^{(t)} = \sum</em>{k=1}^t f_k(x_i)= \hat{y}<em>i^{(t-1)} + f_t(x_i) $$<br>在添加第t颗树时，需要优化的目标函数为：<br>$$ \sum</em>{i=1}^n [g_i f_t(x_i) + \frac{1}{2} h_i f_t^2(x_i)] + \Omega(f_t) $$<br>其中h和f：<br>$$ g_i = \partial</em>{\hat{y}_i^{(t-1)}} l(y_i, \hat{y}_i^{(t-1)}) $$<br>$$ h_i = \partial_{\hat{y}_i^{(t-1)}}^2 l(y_i, \hat{y}_i^{(t-1)}) $$<br>note: 是对谁的导</li>
-<li>正则项：复杂度：<br>$$ \Omega(f) = \gamma T + \frac{1}{2}\lambda \sum_{j=1}^T w_j^2 $$<br>其中w是叶子上的score vector，T是叶子数量</li>
+<li>loss：采用加法策略，第t颗树时：<script type="math/tex; mode=display">\hat{y}_i^{(0)} = 0</script><script type="math/tex; mode=display">\hat{y}_i^{(1)} = f_1(x_i) = \hat{y}_i^{(0)} + f_1(x_i)</script><script type="math/tex; mode=display">\hat{y}_i^{(2)} = f_1(x_i) + f_2(x_i)= \hat{y}_i^{(1)} + f_2(x_i)</script><script type="math/tex; mode=display">\dots</script><script type="math/tex; mode=display">\hat{y}_i^{(t)} = \sum_{k=1}^t f_k(x_i)= \hat{y}_i^{(t-1)} + f_t(x_i)</script>在添加第t颗树时，需要优化的目标函数为：<script type="math/tex; mode=display">\sum_{i=1}^n [g_i f_t(x_i) + \frac{1}{2} h_i f_t^2(x_i)] + \Omega(f_t)</script>其中h和f：<script type="math/tex; mode=display">g_i = \partial_{\hat{y}_i^{(t-1)}} l(y_i, \hat{y}_i^{(t-1)})</script><script type="math/tex; mode=display">h_i = \partial_{\hat{y}_i^{(t-1)}}^2 l(y_i, \hat{y}_i^{(t-1)})</script>note: 是对谁的导</li>
+<li>正则项：复杂度：<script type="math/tex; mode=display">\Omega(f) = \gamma T + \frac{1}{2}\lambda \sum_{j=1}^T w_j^2</script>其中w是叶子上的score vector，T是叶子数量</li>
 </ul>
-<h2 id="DART-Booster"><a href="#DART-Booster" class="headerlink" title="DART Booster"></a>DART Booster</h2><p>为了解决过拟合，会随机drop trees:</p>
+<h2><span id="dart-booster">DART Booster</span></h2><p>为了解决过拟合，会随机drop trees:</p>
 <ul>
 <li>训练速度可能慢于gbtree</li>
 <li>由于随机性，早停可能不稳定</li>
 </ul>
-<h1 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h1><h2 id="Monotonic-Constraints单调性限制"><a href="#Monotonic-Constraints单调性限制" class="headerlink" title="Monotonic Constraints单调性限制"></a>Monotonic Constraints单调性限制</h2><ul>
+<h1><span id="特性">特性</span></h1><h2><span id="monotonic-constraints单调性限制">Monotonic Constraints单调性限制</span></h2><ul>
 <li><p>一个可选特性:<br>会限制模型的结果按照某个特征 单调的进行增减</p>
 <p>也就是说可以降低模型对数据的敏感度，如果明确已知某个特征与预测结果呈单调关系时，那在生成模型的时候就会跟特征数据的单调性有关。</p>
 </li>
 </ul>
-<h2 id="Feature-Interaction-Constraints单调性限制"><a href="#Feature-Interaction-Constraints单调性限制" class="headerlink" title="Feature Interaction Constraints单调性限制"></a>Feature Interaction Constraints单调性限制</h2><ul>
+<h2><span id="feature-interaction-constraints单调性限制">Feature Interaction Constraints单调性限制</span></h2><ul>
 <li><p>一个可选特性：<br>不用时，在tree生成的时候，一棵树上的节点会无限制地选用多个特征</p>
 <p>设置此特性时，可以规定，哪些特征可以有interaction（一般独立变量之间可以interaction，非独立变量的话可能会引入噪声）</p>
 </li>
-<li><p>好处：</p>
-<ul>
+<li>好处：<ul>
 <li>预测时更小的噪声</li>
 <li>对模型更好地控制</li>
 </ul>
 </li>
 </ul>
-<h2 id="Instance-Weight-File"><a href="#Instance-Weight-File" class="headerlink" title="Instance Weight File"></a>Instance Weight File</h2><ul>
+<h2><span id="instance-weight-file">Instance Weight File</span></h2><ul>
 <li>规定了模型训练时data中每一条instance的权重</li>
 <li>有些instance质量较差，或与前一示例相比变化不大，所以可以调节其所占权重</li>
 </ul>
-<h1 id="调参"><a href="#调参" class="headerlink" title="调参"></a>调参</h1><h2 id="Overfitting"><a href="#Overfitting" class="headerlink" title="Overfitting"></a>Overfitting</h2><p>与overfitting有关的参数：</p>
+<h1><span id="调参">调参</span></h1><h2><span id="overfitting">Overfitting</span></h2><p>与overfitting有关的参数：</p>
 <ul>
 <li>直接控制模型复杂度：max_depth, min_child_weight and gamma.</li>
 <li>增加模型随机性以使得模型对噪声有更强的鲁棒性：<ul>
@@ -322,7 +382,7 @@
 </ul>
 </li>
 </ul>
-<h2 id="Imbalanced-Dataset"><a href="#Imbalanced-Dataset" class="headerlink" title="Imbalanced Dataset"></a>Imbalanced Dataset</h2><ul>
+<h2><span id="imbalanced-dataset">Imbalanced Dataset</span></h2><ul>
 <li>只关注测量指标的大小<ul>
 <li>平衡数据集 via scale_pos_weight</li>
 <li>使用AUC作为metric</li>
@@ -344,15 +404,14 @@
     <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/ML/" rel="tag"># ML</a>
-              <a href="/tags/DOC/" rel="tag"># DOC</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2020/10/25/Decision%20Tree/" rel="prev" title="ID3 C4.5 CART">
-                  <i class="fa fa-chevron-left"></i> ID3 C4.5 CART
+                <a href="/2020/10/25/Decision%20Tree/" rel="prev" title="Decision Tree">
+                  <i class="fa fa-chevron-left"></i> Decision Tree
                 </a>
             </div>
             <div class="post-nav-item">
@@ -412,20 +471,20 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Kayden</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
-  </div>
 
     </div>
   </footer>
 
   
   <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+<script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
 
   
 
 
 
+
+  <script src="/js/local-search.js"></script>
 
 
 

@@ -17,22 +17,21 @@
 
 
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.0/css/all.min.css">
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
 
 <script class="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"chenzk1.github.io","root":"/","scheme":"Muse","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}};
+    var CONFIG = {"hostname":"chenzk1.github.io","root":"/","scheme":"Gemini","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}};
   </script>
 
-  <meta name="description" content="类不平衡（class imbalance）现象：即负样本比正样本多很多（或者相反）  ACCURACY&#x2F;RECALL&#x2F;F1   Accuracy：TP&#x2F;(TP+TN) 即预测对的数据个数与总数据个数的比   A和R的问题在于如果样本不平衡，则参考意义很小  准确率（Precision）：P&#x3D;TP&#x2F;(TP+FP)。通俗地讲，就是预测正确的正例数据占预测为正例数据的比例。   针对判别结果 查准率">
+  <meta name="description" content="[toc]类不平衡（class imbalance）现象：即负样本比正样本多很多（或者相反）  ACCURACY&#x2F;RECALL&#x2F;F1   Accuracy：TP&#x2F;(TP+TN) 即预测对的数据个数与总数据个数的比   A和R的问题在于如果样本不平衡，则参考意义很小  准确率（Precision）：P&#x3D;TP&#x2F;(TP+FP)。通俗地讲，就是预测正确的正例数据占预测为正例数据的比例。   针对判别结果">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ROC AUC, Accuracy, Recall, F1">
 <meta property="og:url" content="https://chenzk1.github.io/2020/10/25/ROC%20%20AUC/index.html">
 <meta property="og:site_name" content="Kayden&#39;s Blog">
-<meta property="og:description" content="类不平衡（class imbalance）现象：即负样本比正样本多很多（或者相反）  ACCURACY&#x2F;RECALL&#x2F;F1   Accuracy：TP&#x2F;(TP+TN) 即预测对的数据个数与总数据个数的比   A和R的问题在于如果样本不平衡，则参考意义很小  准确率（Precision）：P&#x3D;TP&#x2F;(TP+FP)。通俗地讲，就是预测正确的正例数据占预测为正例数据的比例。   针对判别结果 查准率">
+<meta property="og:description" content="[toc]类不平衡（class imbalance）现象：即负样本比正样本多很多（或者相反）  ACCURACY&#x2F;RECALL&#x2F;F1   Accuracy：TP&#x2F;(TP+TN) 即预测对的数据个数与总数据个数的比   A和R的问题在于如果样本不平衡，则参考意义很小  准确率（Precision）：P&#x3D;TP&#x2F;(TP+FP)。通俗地讲，就是预测正确的正例数据占预测为正例数据的比例。   针对判别结果">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-10-25T01:35:05.005Z">
-<meta property="article:modified_time" content="2018-11-23T02:53:22.918Z">
+<meta property="article:modified_time" content="2020-10-25T03:11:50.980Z">
 <meta property="article:author" content="Kayden">
 <meta property="article:tag" content="ML">
 <meta property="article:tag" content="Metrics">
@@ -97,7 +96,7 @@
 
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+<body itemscope itemtype="http://schema.org/WebPage">
   <div class="headband"></div>
 
   <main class="main">
@@ -105,6 +104,9 @@
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-nav-toggle">
     <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
     </div>
   </div>
 
@@ -120,15 +122,67 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
 
 
 
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
 
 
 
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
 
 </div>
         
@@ -158,14 +212,17 @@
 
       <section class="site-overview-wrap sidebar-panel">
         <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Kayden"
+      src="/images/kobe.jpg">
   <p class="site-author-name" itemprop="name">Kayden</p>
   <div class="site-description" itemprop="description">blog</div>
 </div>
 <div class="site-state-wrap site-overview-item animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-          <a href="/archives">
-          <span class="site-state-item-count">15</span>
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">23</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -174,11 +231,21 @@
         <span class="site-state-item-name">分类</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">14</span>
-        <span class="site-state-item-name">标签</span>
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Chenzk1" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Chenzk1" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:chenzk666@gmail.com" title="E-Mail → mailto:chenzk666@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
 
 
 
@@ -217,7 +284,7 @@
     <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/25/ROC%20%20AUC/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/kobe.jpg">
       <meta itemprop="name" content="Kayden">
       <meta itemprop="description" content="blog">
     </span>
@@ -237,16 +304,10 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2020-10-25 09:35:05" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:05+08:00">2020-10-25</time>
+      <time title="创建时间：2020-10-25 09:35:05 / 修改时间：11:11:50" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:05+08:00">2020-10-25</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2018-11-23 10:53:22" itemprop="dateModified" datetime="2018-11-23T10:53:22+08:00">2018-11-23</time>
-      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -267,7 +328,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>类不平衡（class imbalance）现象：即负样本比正样本多很多（或者相反）</p>
+        <p>[toc]<br>类不平衡（class imbalance）现象：即负样本比正样本多很多（或者相反）</p>
 <ol>
 <li>ACCURACY/RECALL/F1</li>
 </ol>
@@ -281,13 +342,12 @@
 <li><p>召回率（Recall）：R=TP/(TP+FN)。通俗地讲，就是预测为正例的数据占实际为正例数据的比例。</p>
 <p>  <strong>针对样本 查全率</strong></p>
 </li>
-<li><p>F1 = 2*P*R/(P+R)：既有P又有R</p>
-</li>
+<li>F1 = 2*P*R/(P+R)：既有P又有R</li>
 <li><p>PRC， precision recall curve，与下面的ROC一样，先看是否光滑，光滑的话说明过拟合不大。越往右上越好。</p>
 <p>  <strong><em>A和R的问题在于如果样本不平衡，则参考意义很小</em></strong></p>
 </li>
 </ul>
-<ol start="2">
+<ol>
 <li><p>ROC AUC<br>TPR=TP/(TP+FN)=TP/actual positives 也就是Recall<br>FPR=FP/(FP+TN)=FP/actual negatives<br>ROC是由点（TPR,FPR）组成的曲线，AUC就是ROC的面积。AUC越大越好。</p>
 <p> 一般来说，如果ROC是光滑的，那么基本可以判断没有太大的overfitting。</p>
 <p> 越往左上越好。</p>
@@ -295,8 +355,7 @@
 <p><strong><em>也就是说，ROC曲线的阈值不是多次运行模型得到的，是同一个模型中通过对所得结果按照概率的排序得到了一个threshold</em></strong></p>
 <p> 所以使用ROC的话，它会先对预测到的结果进行排序，然后再根据排序的结果画图，所以他的曲线形状不会因为数据不平衡而发生大的改变。<br> <strong>但是当数据极度不平衡时，ROC仍然有问题，下面的PRC表现更好。</strong></p>
 </li>
-<li><p>PRC， precision recall curve，与上面的ROC一样，先看是否光滑，光滑的话说明过拟合不大。越往右上越好。</p>
-</li>
+<li>PRC， precision recall curve，与上面的ROC一样，先看是否光滑，光滑的话说明过拟合不大。越往右上越好。</li>
 </ol>
 
     </div>
@@ -376,20 +435,20 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Kayden</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
-  </div>
 
     </div>
   </footer>
 
   
   <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+<script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
 
   
 
 
 
+
+  <script src="/js/local-search.js"></script>
 
 
 

@@ -17,25 +17,23 @@
 
 
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.0/css/all.min.css">
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
 
 <script class="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"chenzk1.github.io","root":"/","scheme":"Muse","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}};
+    var CONFIG = {"hostname":"chenzk1.github.io","root":"/","scheme":"Gemini","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}};
   </script>
 
-  <meta name="description" content="特性 可以接受categorical features：LightGBM 可以直接使用 categorical features（分类特征）作为 input（输入）. 它不需要被转换成 one-hot coding（独热编码）, 并且它比 one-hot coding（独热编码）更快（约快上 8 倍）。注意: 在你构造 Dataset 之前, 你应该将分类特征转换为 int 类型的值.  原理">
+  <meta name="description" content="[toc] 原理动机解决GBDT遇到海量数据时的问题：GBDT 在每一次迭代的时候，都需要遍历整个训练数据多次。如果把整个训练数据装进内存则会限制训练数据的大小；如果不装进内存，反复地读写训练数据又会消耗非常大的时间。 对xgboost的优化 基于 Histogram 的决策树算法 带深度限制的 Leaf-wise 的叶子生长策略 直方图做差加速 直接支持类别特征(Categorical Feat">
 <meta property="og:type" content="article">
 <meta property="og:title" content="LightGBM">
 <meta property="og:url" content="https://chenzk1.github.io/2020/10/25/LightGBM/index.html">
 <meta property="og:site_name" content="Kayden&#39;s Blog">
-<meta property="og:description" content="特性 可以接受categorical features：LightGBM 可以直接使用 categorical features（分类特征）作为 input（输入）. 它不需要被转换成 one-hot coding（独热编码）, 并且它比 one-hot coding（独热编码）更快（约快上 8 倍）。注意: 在你构造 Dataset 之前, 你应该将分类特征转换为 int 类型的值.  原理">
+<meta property="og:description" content="[toc] 原理动机解决GBDT遇到海量数据时的问题：GBDT 在每一次迭代的时候，都需要遍历整个训练数据多次。如果把整个训练数据装进内存则会限制训练数据的大小；如果不装进内存，反复地读写训练数据又会消耗非常大的时间。 对xgboost的优化 基于 Histogram 的决策树算法 带深度限制的 Leaf-wise 的叶子生长策略 直方图做差加速 直接支持类别特征(Categorical Feat">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-10-25T01:35:04.926Z">
-<meta property="article:modified_time" content="2019-01-18T11:38:52.632Z">
+<meta property="article:modified_time" content="2020-10-25T03:10:52.855Z">
 <meta property="article:author" content="Kayden">
 <meta property="article:tag" content="ML">
-<meta property="article:tag" content="DOC">
 <meta name="twitter:card" content="summary">
 
 
@@ -97,7 +95,7 @@
 
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+<body itemscope itemtype="http://schema.org/WebPage">
   <div class="headband"></div>
 
   <main class="main">
@@ -105,6 +103,9 @@
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-nav-toggle">
     <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
     </div>
   </div>
 
@@ -120,15 +121,67 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
 
 
 
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
 
 
 
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
 
 </div>
         
@@ -153,20 +206,23 @@
 
       <!--noindex-->
       <section class="post-toc-wrap sidebar-panel">
-          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%89%B9%E6%80%A7"><span class="nav-number">1.</span> <span class="nav-text">特性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8E%9F%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">原理</span></a></li></ol></div>
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">1.1.</span> <span class="nav-text">动机</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">1.2.</span> <span class="nav-text">对xgboost的优化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-number">1.2.1.</span> <span class="nav-text">基于 Histogram 的决策树算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-number">1.2.2.</span> <span class="nav-text">带深度限制的 Leaf-wise 的叶子生长策略</span></a></li><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-number">1.2.3.</span> <span class="nav-text">直方图加速</span></a></li><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-number">1.2.4.</span> <span class="nav-text">接受categorical features</span></a></li><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-number">1.2.5.</span> <span class="nav-text">并行学习</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">参数</span></a></li></ol></div>
       </section>
       <!--/noindex-->
 
       <section class="site-overview-wrap sidebar-panel">
         <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Kayden"
+      src="/images/kobe.jpg">
   <p class="site-author-name" itemprop="name">Kayden</p>
   <div class="site-description" itemprop="description">blog</div>
 </div>
 <div class="site-state-wrap site-overview-item animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-          <a href="/archives">
-          <span class="site-state-item-count">15</span>
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">23</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -175,11 +231,21 @@
         <span class="site-state-item-name">分类</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">14</span>
-        <span class="site-state-item-name">标签</span>
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Chenzk1" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Chenzk1" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:chenzk666@gmail.com" title="E-Mail → mailto:chenzk666@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
 
 
 
@@ -218,7 +284,7 @@
     <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/25/LightGBM/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/kobe.jpg">
       <meta itemprop="name" content="Kayden">
       <meta itemprop="description" content="blog">
     </span>
@@ -238,16 +304,10 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2020-10-25 09:35:04" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:04+08:00">2020-10-25</time>
+      <time title="创建时间：2020-10-25 09:35:04 / 修改时间：11:10:52" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:04+08:00">2020-10-25</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2019-01-18 19:38:52" itemprop="dateModified" datetime="2019-01-18T19:38:52+08:00">2019-01-18</time>
-      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -268,10 +328,57 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h1><ul>
-<li>可以接受categorical features：LightGBM 可以直接使用 categorical features（分类特征）作为 input（输入）. 它不需要被转换成 one-hot coding（独热编码）, 并且它比 one-hot coding（独热编码）更快（约快上 8 倍）。注意: 在你构造 Dataset 之前, 你应该将分类特征转换为 int 类型的值.</li>
+        <p>[toc]</p>
+<h2><span id="原理">原理</span></h2><h3><span id="动机">动机</span></h3><p>解决GBDT遇到海量数据时的问题：GBDT 在每一次迭代的时候，都需要遍历整个训练数据多次。如果把整个训练数据装进内存则会限制训练数据的大小；如果不装进内存，反复地读写训练数据又会消耗非常大的时间。</p>
+<h3><span id="对xgboost的优化">对xgboost的优化</span></h3><ul>
+<li>基于 Histogram 的决策树算法</li>
+<li>带深度限制的 Leaf-wise 的叶子生长策略</li>
+<li>直方图做差加速</li>
+<li>直接支持类别特征(Categorical Feature)</li>
+<li>Cache 命中率优化</li>
+<li>基于直方图的稀疏特征优化</li>
+<li>多线程优化</li>
 </ul>
-<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1>
+<h4><span id="基于-histogram-的决策树算法">基于 Histogram 的决策树算法</span></h4><ul>
+<li>做法：把连续的浮点特征值离散化成k个整数，同时构造一个宽度为k的直方图。在遍历数据的时候，根据离散化后的值作为索引在直方图中累积统计量，当遍历一次数据后，直方图累积了需要的统计量，然后根据直方图的离散值，遍历寻找最优的分割点。</li>
+<li>优点<ul>
+<li>内存消耗小：不需要保存既保存数据的特征值，又保存预排序结果，只保存k个key-values即可</li>
+<li>时间消耗小：只需要计算k次增益</li>
+<li>泛化性能增强：决策树是弱模型，分割点精确与否不是很重要，更粗的分割点还可以引入噪音，增强泛化性能，防止过拟合</li>
+</ul>
+</li>
+</ul>
+<h4><span id="带深度限制的-leaf-wise-的叶子生长策略">带深度限制的 Leaf-wise 的叶子生长策略</span></h4><ul>
+<li>Level-wise 过一次数据可以<strong>同时分裂同一层的叶子</strong>，容易进行多线程优化，也好控制模型复杂度，不容易过拟合。但实际上 Level-wise 是一种低效的算法，因为它不加区分的对待同一层的叶子，带来了很多没必要的开销，因为实际上很多叶子的分裂增益较低，没必要进行搜索和分裂。</li>
+<li>Leaf-wise 则是一种更为高效的策略，每次从当前所有叶子中，找到<strong>分裂增益最大的一个叶子</strong>，然后分裂，如此循环。因此同 Level-wise 相比，在分裂次数相同的情况下，Leaf-wise 可以降低更多的误差，得到更好的精度。Leaf-wise 的缺点是可能会长出比较深的决策树，产生过拟合。因此 LightGBM 在 Leaf-wise 之上增加了一个最大深度的限制，在保证高效率的同时防止过拟合。</li>
+</ul>
+<h4><span id="直方图加速">直方图加速</span></h4><ul>
+<li>一个叶子的直方图可以由它的父亲节点的直方图与它兄弟的直方图做差得到。通常构造直方图，需要遍历该叶子上的所有数据，但直方图做差仅需遍历直方图的k个桶。利用这个方法，LightGBM 可以在构造一个叶子的直方图后，可以用非常微小的代价得到它兄弟叶子的直方图。加速一倍。</li>
+</ul>
+<h4><span id="接受categorical-features">接受categorical features</span></h4><p>LightGBM 可以直接使用 categorical features（分类特征）作为 input（输入）. 它不需要被转换成 one-hot coding（独热编码）, 并且它比 one-hot coding（独热编码）更快（约快上 8 倍）。</p>
+<h4><span id="并行学习">并行学习</span></h4><p>目前支持特征并行和数据并行的两种。</p>
+<ul>
+<li>特征并行：主要思想是在不同机器在不同的特征集合上分别寻找最优的分割点，然后在机器间同步最优的分割点。</li>
+<li>数据并行：让不同的机器先在本地构造直方图，然后进行全局的合并，最后在合并的直方图上面寻找最优分割点。</li>
+</ul>
+<h2><span id="参数">参数</span></h2><pre><code>params = &#123;  
+    &#39;boosting_type&#39;: &#39;gbdt&#39;,  
+    &#39;objective&#39;: &#39;binary&#39;,  
+    &#39;metric&#39;: &#123;&#39;binary_logloss&#39;, &#39;auc&#39;&#125;,  #二进制对数损失
+    &#39;num_leaves&#39;: 5,  
+    &#39;max_depth&#39;: 6,  
+    &#39;min_data_in_leaf&#39;: 450,  
+    &#39;learning_rate&#39;: 0.1,  
+    &#39;feature_fraction&#39;: 0.9,  
+    &#39;bagging_fraction&#39;: 0.95,  
+    &#39;bagging_freq&#39;: 5,  
+    &#39;lambda_l1&#39;: 1,    
+    &#39;lambda_l2&#39;: 0.001,  # 越小l2正则程度越高  
+    &#39;min_gain_to_split&#39;: 0.2,  
+    &#39;verbose&#39;: 5,  
+    &#39;is_unbalance&#39;: True  
+&#125;
+</code></pre>
     </div>
 
     
@@ -281,16 +388,12 @@
     <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/ML/" rel="tag"># ML</a>
-              <a href="/tags/DOC/" rel="tag"># DOC</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2020/10/25/hello-world/" rel="prev" title="Hello World">
-                  <i class="fa fa-chevron-left"></i> Hello World
-                </a>
             </div>
             <div class="post-nav-item">
                 <a href="/2020/10/25/Naive%20Bayes/" rel="next" title="Naive Bayes及其sklearn实现">
@@ -349,20 +452,20 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Kayden</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
-  </div>
 
     </div>
   </footer>
 
   
   <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+<script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
 
   
 
 
 
+
+  <script src="/js/local-search.js"></script>
 
 
 
