@@ -708,7 +708,7 @@
       </tags>
   </entry>
   <entry>
-    <title></title>
+    <title>vim&amp;tmux</title>
     <url>/2020/10/25/tools/</url>
     <content><![CDATA[<h1 id="Tools"><a href="#Tools" class="headerlink" title="Tools"></a>Tools</h1><p>Some useful tools.</p>
 <h2 id="Vim"><a href="#Vim" class="headerlink" title="Vim"></a>Vim</h2><p><a href="https://github.com/Chenzk1/vimrc">https://github.com/Chenzk1/vimrc</a></p>
