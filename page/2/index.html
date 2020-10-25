@@ -685,7 +685,7 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2020-10-25 10:54:33 / 修改时间：16:35:47" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
+      <time title="创建时间：2020-10-25 10:54:33 / 修改时间：20:11:27" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -707,7 +707,9 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>[TOC]</p>
+          <meta name="referrer" content="no-referrer"/>
+
+<p>[TOC]</p>
 <h2 id="协同过滤推荐有哪些类型"><a href="#协同过滤推荐有哪些类型" class="headerlink" title="协同过滤推荐有哪些类型"></a>协同过滤推荐有哪些类型</h2><ul>
 <li><p>基于用户(user-based)的协同过滤</p>
 <p>基于用户(user-based)的协同过滤主要考虑的是用户和用户之间的相似度，只要找出相似用户喜欢的物品，并预测目标用户对对应物品的评分，就可以找到评分最高的若干个物品推荐给用户。 </p>
@@ -793,7 +795,7 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
 </ul>
 <p>从算法的步骤可以看出，Aprior算法每轮迭代都要扫描数据集，因此在数据集很大，数据种类很多的时候，算法效率很低。</p>
 <p>具体实现:</p>
-<p><img src="https://images2015.cnblogs.com/blog/1042406/201701/1042406-20170117161036255-1753157633.png" style="zoom:50%;" /></p>
+<p><img src="https://images2015.cnblogs.com/blog/1042406/201701/1042406-20170117161036255-1753157633.png" alt=""></p>
 <h2 id="使用Aprior算法找出强关联规则"><a href="#使用Aprior算法找出强关联规则" class="headerlink" title="使用Aprior算法找出强关联规则"></a>使用Aprior算法找出强关联规则</h2><ul>
 <li><p>强关联规则:</p>
 <ul>
@@ -804,8 +806,6 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
 \tag{2} confidence (X \Rightarrow Y) \geq \min conf</script><p>称关联规则$X\Rightarrow Y$为强关联规则,否则称关联规则$X\Rightarrow Y$为弱关联规则。在挖掘关联规则时,产生的关联规则要经过$\min sup$和$\min conf$的衡量筛选出来的强关联规则才能用商家的决策 </p>
 </li>
 </ul>
-<iframe height=498 width=510 src="https://www.bilibili.com/video/av80396534?from=search&seid=4799266719270840075"  controls="controls" width="500" height="300" >
-
 
       
     </div>
@@ -1296,7 +1296,7 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2020-10-25 09:35:05 / 修改时间：11:08:59" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:05+08:00">2020-10-25</time>
+      <time title="创建时间：2020-10-25 09:35:05 / 修改时间：20:14:04" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:05+08:00">2020-10-25</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1318,7 +1318,9 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>[TOC]<br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/pinard/p/6208966.html">原文1</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/pinard/p/6217852.html">原文2</a><br>DBSCAN(Density-Based Spatial Clustering of Applications with Noise，具有噪声的基于密度的聚类方法)是一种很典型的<strong>密度聚类算法</strong>，和K-Means，BIRCH这些一般只适用于凸样本集的聚类相比，DBSCAN<strong>既可以适用于凸样本集，也可以适用于非凸样本集</strong>。</p>
+          <meta name="referrer" content="no-referrer"/>
+
+<p>[TOC]<br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/pinard/p/6208966.html">原文1</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/pinard/p/6217852.html">原文2</a><br>DBSCAN(Density-Based Spatial Clustering of Applications with Noise，具有噪声的基于密度的聚类方法)是一种很典型的<strong>密度聚类算法</strong>，和K-Means，BIRCH这些一般只适用于凸样本集的聚类相比，DBSCAN<strong>既可以适用于凸样本集，也可以适用于非凸样本集</strong>。</p>
 <h1 id="密度聚类"><a href="#密度聚类" class="headerlink" title="密度聚类"></a>密度聚类</h1><p>其原理为：同一类别的样本，其样本分布一定是紧密的；可以将各组紧密相连的样本划分为不同的类别来得到聚类类别结果。</p>
 <h1 id="DBSCAN"><a href="#DBSCAN" class="headerlink" title="DBSCAN"></a>DBSCAN</h1><h2 id="关键概念"><a href="#关键概念" class="headerlink" title="关键概念"></a>关键概念</h2><p>参数(ϵ, MinPts)描述领域的样本分布紧密程度，其中ϵ描述了某一样本的领域<strong>距离阈值</strong>，MinPts描述某一样本的距离为ϵ的领域中样本<strong>个数的阈值</strong>。</p>
 <p>假设样本集是D=(x1,x2,…,xm),则DBSCAN具体的密度描述定义如下：</p>
@@ -1383,7 +1385,7 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
 <li>algorithm：最近邻搜索算法参数，算法一共有三种，第一种是蛮力实现，第二种是KD树实现，第三种是球树实现。对于这个参数，一共有4种可选输入，‘brute’对应第一种蛮力实现，‘kd_tree’对应第二种KD树实现，‘ball_tree’对应第三种的球树实现，‘auto’则会在上面三种算法中做权衡，选择一个拟合最好的最优算法。需要注意的是，如果输入样本特征是稀疏的时候，无论我们选择哪种算法，最后scikit-learn都会去用蛮力实现‘brute’。个人的经验，一般情况使用默认的 ‘auto’就够了。 如果数据量很大或者特征也很多，用”auto”建树时间可能会很长，效率不高，建议选择KD树实现‘kd_tree’，此时如果发现‘kd_tree’速度比较慢或者已经知道样本分布不是很均匀时，可以尝试用‘ball_tree’。而如果输入样本是稀疏的，无论你选择哪个算法最后实际运行的都是‘brute’。</li>
 <li>leaf_size：最近邻搜索算法参数，为使用KD树或者球树时， 停止建子树的叶子节点数量的阈值。这个值越小，则生成的KD树或者球树就越大，层数越深，建树时间越长，反之，则生成的KD树或者球树会小，层数较浅，建树时间较短。默认是30. 因为这个值一般只影响算法的运行速度和使用内存大小，因此一般情况下可以不管它。</li>
 <li>p: 最近邻距离度量参数。只用于闵可夫斯基距离和带权重闵可夫斯基距离中p值的选择，p=1为曼哈顿距离， p=2为欧式距离。如果使用默认的欧式距离不需要管这个参数。</li>
-<li>n_jobs ：使用CPU格式，-1代表全开。</li>
+<li>n_jobs：使用CPU格式，-1代表全开。</li>
 </ol>
 <p>输出：</p>
 <ul>

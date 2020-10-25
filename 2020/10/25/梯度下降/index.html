@@ -30,14 +30,12 @@
 <meta property="og:site_name" content="Kayden&#39;s Blog">
 <meta property="og:description" content="[TOC] 1. 机器学习中为什么需要梯度下降梯度下降的作用：  梯度下降是迭代法的一种，可以用于求解最小二乘问题。 在求解损失函数的最小值时，可以通过梯度下降法来一步步的迭代求解，得到最小化的损失函数和模型参数值。 如果我们需要求解损失函数的最大值，可通过梯度上升法来迭代。梯度下降法和梯度上升法可相互转换。  2. 梯度下降法缺点缺点：  靠近极小值时收敛速度减慢。 直线搜索时可能会产生一些问题">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20200105185646429.jpg">
 <meta property="article:published_time" content="2020-10-25T02:54:33.725Z">
-<meta property="article:modified_time" content="2020-10-25T08:42:46.074Z">
+<meta property="article:modified_time" content="2020-10-25T11:35:26.737Z">
 <meta property="article:author" content="Kayden">
-<meta property="article:tag" content="DL">
 <meta property="article:tag" content="ML">
+<meta property="article:tag" content="DL">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200105185646429.jpg">
 
 
 <link rel="canonical" href="https://chenzk1.github.io/2020/10/25/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D/">
@@ -307,7 +305,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2020-10-25 10:54:33 / 修改时间：16:42:46" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
+      <time title="创建时间：2020-10-25 10:54:33 / 修改时间：19:35:26" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -492,11 +490,11 @@ f\left(\mathbf{x}_{0}\right) \geq f\left(\mathbf{x}_{1}\right) \geq f\left(\math
 <h2 id="14-什么是鞍点？"><a href="#14-什么是鞍点？" class="headerlink" title="14. 什么是鞍点？"></a>14. 什么是鞍点？</h2><p><strong>Hessian 矩阵不定的点称为鞍点</strong>，它不是函数的极值点。</p>
 <h2 id="15-解释什么是局部极小值，什么是全局极小值。"><a href="#15-解释什么是局部极小值，什么是全局极小值。" class="headerlink" title="15. 解释什么是局部极小值，什么是全局极小值。"></a>15. 解释什么是局部极小值，什么是全局极小值。</h2><ul>
 <li>全局极小值<ul>
-<li>假设$\mathbf{x}^{<em>}$是一个可行解，如果对可行域内所有点$\mathbf{x}$都有$f\left(\mathbf{x}^{</em>}\right) \leq f(\mathbf{x})$，则<br>称$\mathbf{x}^{*}$为全局极小值。</li>
+<li>假设$\mathbf{x}^{*}$是一个可行解，如果对可行域内所有点$\mathbf{x}$都有$f\left(\mathbf{x}^{*}\right) \leq f(\mathbf{x})$，则<br>称$\mathbf{x}^{*}$为全局极小值。</li>
 </ul>
 </li>
 <li>局部极小值<ul>
-<li>对于可行解$\mathbf{x}^{<em>}$，如果存在其$\delta$邻域，使得该邻域内的所有点即所有满足<br>$\left|\mathbf{x}-\mathbf{x}^{</em>}\right| \leq \delta$的点$\mathbf{x}$，都有$f\left(x^{<em>}\right) \leq f(x)$，则称$\mathbf{x}^{</em>}$为局部极小值。</li>
+<li>对于可行解$\mathbf{x}^{*}$，如果存在其$\delta$邻域，使得该邻域内的所有点即所有满足<br>$\left|\mathbf{x}-\mathbf{x}^{*}\right| \leq \delta$的点$\mathbf{x}$，都有$f\left(x^{*}\right) \leq f(x)$，则称$\mathbf{x}^{*}$为局部极小值。</li>
 </ul>
 </li>
 </ul>
@@ -517,8 +515,6 @@ f(\mathbf{x})=f\left(\mathbf{x}_{0}\right)+\nabla f\left(\mathbf{x}_{0}\right)^{
 \tag{3} \mathbf{x}_{k+1}=\mathbf{x}_{k}-\alpha \mathbf{H}_{k}^{-1} \mathbf{g}_{k}</script><p>直至收敛到驻点处。迭代终止的条件是梯度的模接近于0 ，或达到指定的迭代次数。其中$\alpha$是人工设置的学习率。需要学习率的原因与梯度下降法相同，是为了保证能够忽略泰勒公式中的高阶无穷小项。</p>
 <h2 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h2><p>深度学习500问： <a target="_blank" rel="noopener" href="https://github.com/scutan90/DeepLearning-500-questions">https://github.com/scutan90/DeepLearning-500-questions</a> </p>
 <p>机器学习与深度学习习题集答案-1：<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/4kWUE8ml_o6iF0F1TREyiA">https://mp.weixin.qq.com/s/4kWUE8ml_o6iF0F1TREyiA</a></p>
-<p><center>个人总结 ，如有错误，请批评指正！</p>
-<p><center><img src="https://img-blog.csdnimg.cn/20200105185646429.jpg" width="30%"></p>
 
     </div>
 
@@ -528,8 +524,8 @@ f(\mathbf{x})=f\left(\mathbf{x}_{0}\right)+\nabla f\left(\mathbf{x}_{0}\right)^{
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/DL/" rel="tag"># DL</a>
               <a href="/tags/ML/" rel="tag"># ML</a>
+              <a href="/tags/DL/" rel="tag"># DL</a>
           </div>
 
         

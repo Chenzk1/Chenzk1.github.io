@@ -735,7 +735,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2020-10-25 10:54:33 / 修改时间：16:37:25" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
+      <time title="创建时间：2020-10-25 10:54:33 / 修改时间：19:32:12" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -803,7 +803,7 @@ J(\theta)=\frac{1}{2 m} \sum_{i=1}^{m}\left(h_{\theta}\left(x^{(i)}\right)-y^{(i
 J(\theta)=\frac{1}{2 m} \sum_{i=1}^{m}\left(h_{\theta}\left(x^{(i)}\right)-y^{(i)}\right)^{2}+\lambda \sum_{j=1}^{n} |\theta_{j}|</script><p>本来Lasso回归与岭回归的解空间是全部区域，但通过正则化添加了一些约束，使得解空间变小了，甚至在个别正则化方式下，解变得稀疏了。<br><img src="https://img-blog.csdnimg.cn/20200101212656597.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0hlaXRhbzUyMDA=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述" style="zoom:50%;" /><br>如图所示，这里的$w_1$，$w_2$都是模型的参数，要优化的目标参数，那个红色边框包含的区域，其实就是解空间，正如上面所说，这个时候，解空间“缩小了”，你只能在这个缩小了的空间中，寻找使得目标函数最小的$w_1$，$w_2$。左边图的解空间是圆的，是由于采用了$L2$范数正则化项的缘故，右边的是个四边形，是由于采用了$L1$范数作为正则化项的缘故，大家可以在纸上画画，$L2$构成的区域一定是个圆，$L1$构成的区域一定是个四边形。</p>
 <p>再看看那蓝色的圆圈，再次提醒大家，这个<strong>坐标轴和特征（数据）没关系</strong>，它完全是参数的坐标系，每一个圆圈上，可以取无数个$w_1$，$w_2$，这些$w_1$，$w_2$有个共同的特点，用它们计算的目标函数值是相等的！那个蓝色的圆心，就是实际最优参数，但是由于我们对解空间做了限制，所以最优解只能在“缩小的”解空间中产生。</p>
 <p>蓝色的圈圈一圈又一圈，代表着参数$w_1$，$w_2$在不停的变化，并且是在解空间中进行变化（这点注意，图上面没有画出来，估计画出来就不好看了），直到脱离了解空间，也就得到了图上面的那个$w^*$，这便是目标函数的最优参数。</p>
-<p>对比一下左右两幅图的$w^<em>$，我们明显可以发现，右图的$w^</em>$的$w_1$分量是0，有没有感受到一丝丝凉意？稀疏解诞生了！是的，这就是我们想要的稀疏解，我们想要的简单模型。$L1$比$L2$正则化更容易产生稀疏矩阵。</p>
+<p>对比一下左右两幅图的$w^*$，我们明显可以发现，右图的$w^*$的$w_1$分量是0，有没有感受到一丝丝凉意？稀疏解诞生了！是的，这就是我们想要的稀疏解，我们想要的简单模型。$L1$比$L2$正则化更容易产生稀疏矩阵。</p>
 <ul>
 <li><p>补充</p>
 <ul>
@@ -921,9 +921,41 @@ J(\theta) = -lnL(\theta) = -\sum\limits_{i=1}^{m}(y^{(i)}log(h_{\theta}(x^{(i)})
 <ul>
 <li><p>这个时候就能看出区别，在线性回归中$\theta ^{T}x$为预测值的拟合函数；而在逻辑回归中$\theta ^{T}x$为决策边界。下表为线性回归和逻辑回归的区别。</p>
 <p><center>线性回归和逻辑回归的区别</p>
-<p>|              |  线性回归  |   逻辑回归   |<br>| :—————: | :————: | :—————: |<br>|     目的     |    预测    |     分类     |<br>|  $y^{(i)}$   |    未知    |   （0,1）    |<br>|     函数     |  拟合函数  |   预测函数   |<br>| 参数计算方式 | 最小二乘法 | 极大似然估计 |</p>
 </li>
 </ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center">线性回归</th>
+<th style="text-align:center">逻辑回归</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">目的</td>
+<td style="text-align:center">预测</td>
+<td style="text-align:center">分类</td>
+</tr>
+<tr>
+<td style="text-align:center">$y^{(i)}$</td>
+<td style="text-align:center">未知</td>
+<td style="text-align:center">（0,1）</td>
+</tr>
+<tr>
+<td style="text-align:center">函数</td>
+<td style="text-align:center">拟合函数</td>
+<td style="text-align:center">预测函数</td>
+</tr>
+<tr>
+<td style="text-align:center">参数计算方式</td>
+<td style="text-align:center">最小二乘法</td>
+<td style="text-align:center">极大似然估计</td>
+</tr>
+</tbody>
+</table>
+</div>
 <p> 下面具体解释一下： </p>
 <ol>
 <li>拟合函数和预测函数什么关系呢？简单来说就是将拟合函数做了一个逻辑函数的转换，转换后使得$y^{(i)} \in (0,1)$;</li>
@@ -988,7 +1020,7 @@ J(\theta) = -lnL(\theta) = -\sum\limits_{i=1}^{m}(y^{(i)}log(h_{\theta}(x^{(i)})
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2020-10-25 10:54:33 / 修改时间：16:42:46" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
+      <time title="创建时间：2020-10-25 10:54:33 / 修改时间：19:35:26" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1173,11 +1205,11 @@ f\left(\mathbf{x}_{0}\right) \geq f\left(\mathbf{x}_{1}\right) \geq f\left(\math
 <h2 id="14-什么是鞍点？"><a href="#14-什么是鞍点？" class="headerlink" title="14. 什么是鞍点？"></a>14. 什么是鞍点？</h2><p><strong>Hessian 矩阵不定的点称为鞍点</strong>，它不是函数的极值点。</p>
 <h2 id="15-解释什么是局部极小值，什么是全局极小值。"><a href="#15-解释什么是局部极小值，什么是全局极小值。" class="headerlink" title="15. 解释什么是局部极小值，什么是全局极小值。"></a>15. 解释什么是局部极小值，什么是全局极小值。</h2><ul>
 <li>全局极小值<ul>
-<li>假设$\mathbf{x}^{<em>}$是一个可行解，如果对可行域内所有点$\mathbf{x}$都有$f\left(\mathbf{x}^{</em>}\right) \leq f(\mathbf{x})$，则<br>称$\mathbf{x}^{*}$为全局极小值。</li>
+<li>假设$\mathbf{x}^{*}$是一个可行解，如果对可行域内所有点$\mathbf{x}$都有$f\left(\mathbf{x}^{*}\right) \leq f(\mathbf{x})$，则<br>称$\mathbf{x}^{*}$为全局极小值。</li>
 </ul>
 </li>
 <li>局部极小值<ul>
-<li>对于可行解$\mathbf{x}^{<em>}$，如果存在其$\delta$邻域，使得该邻域内的所有点即所有满足<br>$\left|\mathbf{x}-\mathbf{x}^{</em>}\right| \leq \delta$的点$\mathbf{x}$，都有$f\left(x^{<em>}\right) \leq f(x)$，则称$\mathbf{x}^{</em>}$为局部极小值。</li>
+<li>对于可行解$\mathbf{x}^{*}$，如果存在其$\delta$邻域，使得该邻域内的所有点即所有满足<br>$\left|\mathbf{x}-\mathbf{x}^{*}\right| \leq \delta$的点$\mathbf{x}$，都有$f\left(x^{*}\right) \leq f(x)$，则称$\mathbf{x}^{*}$为局部极小值。</li>
 </ul>
 </li>
 </ul>
@@ -1198,8 +1230,6 @@ f(\mathbf{x})=f\left(\mathbf{x}_{0}\right)+\nabla f\left(\mathbf{x}_{0}\right)^{
 \tag{3} \mathbf{x}_{k+1}=\mathbf{x}_{k}-\alpha \mathbf{H}_{k}^{-1} \mathbf{g}_{k}</script><p>直至收敛到驻点处。迭代终止的条件是梯度的模接近于0 ，或达到指定的迭代次数。其中$\alpha$是人工设置的学习率。需要学习率的原因与梯度下降法相同，是为了保证能够忽略泰勒公式中的高阶无穷小项。</p>
 <h2 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h2><p>深度学习500问： <a target="_blank" rel="noopener" href="https://github.com/scutan90/DeepLearning-500-questions">https://github.com/scutan90/DeepLearning-500-questions</a> </p>
 <p>机器学习与深度学习习题集答案-1：<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/4kWUE8ml_o6iF0F1TREyiA">https://mp.weixin.qq.com/s/4kWUE8ml_o6iF0F1TREyiA</a></p>
-<p><center>个人总结 ，如有错误，请批评指正！</p>
-<p><center><img src="https://img-blog.csdnimg.cn/20200105185646429.jpg" width="30%"></p>
 
       
     </div>
@@ -1252,7 +1282,7 @@ f(\mathbf{x})=f\left(\mathbf{x}_{0}\right)+\nabla f\left(\mathbf{x}_{0}\right)^{
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2020-10-25 10:54:33 / 修改时间：11:05:07" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
+      <time title="创建时间：2020-10-25 10:54:33 / 修改时间：19:37:14" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1281,7 +1311,7 @@ f(\mathbf{x})=f\left(\mathbf{x}_{0}\right)+\nabla f\left(\mathbf{x}_{0}\right)^{
 <li><strong>离散化后的特征对异常数据有很强的鲁棒性</strong><br>比如一个特征是年龄&gt;30是1，否则0。如果特征没有离散化，一个异常数据“年龄300岁”会给模型造成很大的干扰；离散化后年龄300岁也只对应于一个权重，如果训练数据中没有出现特征”年龄-300岁”，那么在LR模型中，其权重对应于0，所以，即使测试数据中出现特征”年龄-300岁”,也不会对预测结果产生影响。特征离散化的过程，比如特征A，如果当做连续特征使用，在LR模型中，A会对应一个权重w,如果离散化，那么A就拓展为特征A-1，A-2，A-3…,每个特征对应于一个权重，如果训练样本中没有出现特征A-4，那么训练的模型对于A-4就没有权重，如果测试样本中出现特征A-4,该特征A-4也不会起作用。相当于无效。但是，如果使用连续特征，在LR模型中，y = w*a,a是特征，w是a对应的权重,比如a代表年龄，那么a的取值范围是[0..100]，如果测试样本中,出现了一个测试用例，a的取值是300，显然a是异常值，但是w*a还是有值，而且值还非常大，所以，异常值会对最后结果产生非常大的影响。</li>
 <li><strong>特征离散化后，模型会更稳定</strong><br>比如如果对用户年龄离散化，20-30作为一个区间，不会因为一个用户年龄长了一岁就变成一个完全不同的人。当然处于区间相邻处的样本会刚好相反，所以怎么划分区间是门学问；按区间离散化，划分区间是非常关键的。</li>
 <li><strong>特征离散化以后，起到了简化了逻辑回归模型的作用，降低了模型过拟合的风险</strong><br>当使用连续特征时，一个特征对应于一个权重，那么，如果这个特征权重较大，模型就会很依赖于这个特征，这个特征的一个微小变化可能会导致最终结果产生很大的变化，这样子的模型很危险，当遇到新样本的时候很可能因为对这个特征过分敏感而得到错误的分类结果，也就是泛化能力差，容易过拟合。而使用离散特征的时候，一个特征变成了多个，权重也变为多个，那么之前连续特征对模型的影响力就被分散弱化了，从而降低了过拟合的风险。</li>
-<li><strong>引入非线性</strong><br>单变量离散化为N个后，每个变量有单独的权重，相当于为模型引入了非线性，能够提升模型表达能力，加大拟合；在LR模型中，特征A作为连续特征对应的权重是Wa。A是线性特征，因为y = Wa<em>A,y对于A的导数就是Wa,如果离散化后，A按区间离散化为A_1,A_2,A_3。那么y = w_1</em>A_1+w_2<em>A_2+w_3</em>A_3.那么y对于A的函数就相当于分段的线性函数，y对于A的导数也随A的取值变动，所以，相当于引入了非线性。</li>
+<li><strong>引入非线性</strong><br>单变量离散化为N个后，每个变量有单独的权重，相当于为模型引入了非线性，能够提升模型表达能力，加大拟合；在LR模型中，特征A作为连续特征对应的权重是Wa。A是线性特征，因为y = Wa*A,y对于A的导数就是Wa,如果离散化后，A按区间离散化为A_1,A_2,A_3。那么y = w_1*A_1+w_2*A_2+w_3*A_3.那么y对于A的函数就相当于分段的线性函数，y对于A的导数也随A的取值变动，所以，相当于引入了非线性。</li>
 <li><strong>离散化后方便进行特征交叉</strong><br>离散化后变为了类别，方便特征交叉。进一步引入非线性，提升表达能力。</li>
 <li>离散特征的增加和减少都很容易，易于模型的快速迭代。(离散特征的增加和减少，模型也不需要调整，重新训练是必须的，相比贝叶斯推断方法或者树模型方法迭代快)</li>
 <li>稀疏向量内积乘法运算速度快，计算结果方便存储，容易扩展；</li>
@@ -1338,7 +1368,7 @@ f(\mathbf{x})=f\left(\mathbf{x}_{0}\right)+\nabla f\left(\mathbf{x}_{0}\right)^{
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2020-10-25 10:54:33 / 修改时间：16:36:29" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
+      <time title="创建时间：2020-10-25 10:54:33 / 修改时间：19:38:14" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1392,7 +1422,7 @@ f(\mathbf{x})=f\left(\mathbf{x}_{0}\right)+\nabla f\left(\mathbf{x}_{0}\right)^{
 <li>GBDT用到的是<strong>Boosting算法</strong>，在迭代的每一步构建弱学习器弥补原有模型的不足。GBDT中的Gradient Boost就是通过每次迭代的时候构建一个沿梯度下降最快的方向的学习器。并且通过设置不同的损失函数可以处理各类学习任务(多分类、回归等)。</li>
 </ul>
 <h2 id="7-RF为什么比Bagging效率高？"><a href="#7-RF为什么比Bagging效率高？" class="headerlink" title="7. RF为什么比Bagging效率高？"></a>7. RF为什么比Bagging效率高？</h2><p>Bagging无随机特征，使得训练决策树时效率更低</p>
-<h2 id="8-你已经建了一个有10000棵树的随机森林模型。在得到0-00的训练误差后，你非常高兴。但是，验证错误是34-23。到底是怎么回事？你还没有训练好你的模型吗？"><a href="#8-你已经建了一个有10000棵树的随机森林模型。在得到0-00的训练误差后，你非常高兴。但是，验证错误是34-23。到底是怎么回事？你还没有训练好你的模型吗？" class="headerlink" title="8. 你已经建了一个有10000棵树的随机森林模型。在得到0.00的训练误差后，你非常高兴。但是，验证错误是34.23。到底是怎么回事？你还没有训练好你的模型吗？"></a>8. 你已经建了一个有10000棵树的随机森林模型。在得到0.00的训练误差后，你非常高兴。但是，验证错误是34.23。到底是怎么回事？你还没有训练好你的模型吗？</h2><p>训练误差为0：<strong>模型过度拟合</strong></p>
+<h2 id="8-你已经建了一个有10000棵树的随机森林模型。在得到0-001的训练误差后，你非常高兴。但是，验证错误是34-23。到底是怎么回事？你还没有训练好你的模型吗？"><a href="#8-你已经建了一个有10000棵树的随机森林模型。在得到0-001的训练误差后，你非常高兴。但是，验证错误是34-23。到底是怎么回事？你还没有训练好你的模型吗？" class="headerlink" title="8. 你已经建了一个有10000棵树的随机森林模型。在得到0.001的训练误差后，你非常高兴。但是，验证错误是34.23。到底是怎么回事？你还没有训练好你的模型吗？"></a>8. 你已经建了一个有10000棵树的随机森林模型。在得到0.001的训练误差后，你非常高兴。但是，验证错误是34.23。到底是怎么回事？你还没有训练好你的模型吗？</h2><p>训练误差为0：<strong>模型过度拟合</strong></p>
 <p>验证错误为34.23：该分类器用于<strong>未看见的样本</strong>上时，找不到已有的模式</p>
 <p>因此，为了避免这些情况，要用交叉验证来调整树的数量。</p>
 <h2 id="9-如何使用随机森林对特征重要性进行评估？"><a href="#9-如何使用随机森林对特征重要性进行评估？" class="headerlink" title="9. 如何使用随机森林对特征重要性进行评估？"></a>9. 如何使用随机森林对特征重要性进行评估？</h2><p><strong>袋外数据(OOB)</strong>： 大约有1/3的训练实例没有参与第k棵树的生成，它们称为第$k$棵树的袋外数据样本。 </p>
@@ -1506,7 +1536,7 @@ f(\mathbf{x})=f\left(\mathbf{x}_{0}\right)+\nabla f\left(\mathbf{x}_{0}\right)^{
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/25/%E5%86%B3%E7%AD%96%E6%A0%91/">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/25/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E5%86%B3%E7%AD%96%E6%A0%91/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -1520,7 +1550,7 @@ f(\mathbf{x})=f\left(\mathbf{x}_{0}\right)+\nabla f\left(\mathbf{x}_{0}\right)^{
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/10/25/%E5%86%B3%E7%AD%96%E6%A0%91/" class="post-title-link" itemprop="url">机器学习面试题-决策树</a>
+            <a href="/2020/10/25/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E5%86%B3%E7%AD%96%E6%A0%91/" class="post-title-link" itemprop="url">机器学习面试题-决策树</a>
         </h2>
 
         <div class="post-meta-container">
@@ -1532,7 +1562,7 @@ f(\mathbf{x})=f\left(\mathbf{x}_{0}\right)+\nabla f\left(\mathbf{x}_{0}\right)^{
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2020-10-25 10:54:33 / 修改时间：16:41:06" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
+      <time title="创建时间：2020-10-25 10:54:33 / 修改时间：19:52:11" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1554,10 +1584,12 @@ f(\mathbf{x})=f\left(\mathbf{x}_{0}\right)+\nabla f\left(\mathbf{x}_{0}\right)^{
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>[TOC]</p>
+          <meta name="referrer" content="no-referrer"/>
+
+<p>[TOC]</p>
 <h2 id="1-简单介绍决策树算法"><a href="#1-简单介绍决策树算法" class="headerlink" title="1. 简单介绍决策树算法"></a>1. 简单介绍决策树算法</h2><p>决策树将算法组织成一颗树的形式。其实这就是将平时所说的<strong>if-then语句</strong>构建成了树的形式。决策树主要包括<strong>三个部分：内部节点、叶节点、边。内部节点是划分的特征，边代表划分的条件，叶节点表示类别。</strong></p>
 <p>构建决策树 就是一个递归的选择内部节点，计算划分条件的边，最后到达叶子节点的过程。 决策树在本质上是一组嵌套的if-else判定规则，从数学上看是分段常数函数，对应于用平行于坐标轴的平面对空间的划分。判定规则是人类处理很多问题时的常用方法，这些规则是我们通过经验总结出来的，而决策树的这些规则是通过训练样本自动学习得到的。下面是一棵简单的决策树以及它对空间的划分结果： </p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_png/75DkJnThACkAo4IibbcQjEuyibRfEFSaemBGYWpM6AOLwCJHk4ByqIje7otdia0PUj9mWKQBK5btVmIFbSQ9bdSbA/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" style="zoom:33%;" /></p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/75DkJnThACkAo4IibbcQjEuyibRfEFSaemBGYWpM6AOLwCJHk4ByqIje7otdia0PUj9mWKQBK5btVmIFbSQ9bdSbA/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></p>
 <p>训练时，通过最大化Gini或者其他指标来寻找最佳分裂。决策树可以输特征向量每个分量的重要性。</p>
 <p><strong>决策树是一种判别模型，既支持分类问题，也支持回归问题，是一种非线性模型（分段线性函数不是线性的）。它天然的支持多分类问题。</strong></p>
 <h2 id="2-决策树和条件概率分布的关系？"><a href="#2-决策树和条件概率分布的关系？" class="headerlink" title="2. 决策树和条件概率分布的关系？"></a>2. 决策树和条件概率分布的关系？</h2><p><strong>决策树可以表示成给定条件下类的条件概率分布。</strong> </p>
@@ -1941,7 +1973,7 @@ f(x)=w_{0}+\sum_{m=1}^{M} w_{m} \phi_{m}(x)</script><p>其中$w$是权重，$\ph
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2020-10-25 10:54:33 / 修改时间：16:39:09" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
+      <time title="创建时间：2020-10-25 10:54:33 / 修改时间：19:55:12" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1963,7 +1995,9 @@ f(x)=w_{0}+\sum_{m=1}^{M} w_{m} \phi_{m}(x)</script><p>其中$w$是权重，$\ph
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>[toc]<br><a target="_blank" rel="noopener" href="https://xgboost.readthedocs.io/en/latest/tutorials/model.html">Doc</a><br><a target="_blank" rel="noopener" href="https://homes.cs.washington.edu/~tqchen/pdf/BoostedTree.pdf">Slides</a></p>
+          <meta name="referrer" content="no-referrer"/>
+
+<p>[toc]<br><a target="_blank" rel="noopener" href="https://xgboost.readthedocs.io/en/latest/tutorials/model.html">Doc</a><br><a target="_blank" rel="noopener" href="https://homes.cs.washington.edu/~tqchen/pdf/BoostedTree.pdf">Slides</a></p>
 <h2 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h2><p><img src="http://i.imgur.com/L7PhJwO.png" alt="Summary"><br><img src="https://img-blog.csdnimg.cn/2019031119461897.?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI0ODUyNDM5,size_16,color_FFFFFF,t_70" alt="Summary"></p>
 <h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><ul>
 <li>每轮生成新的树，该树的生成标准为：损失函数最小化。损失函数代表的意义：保证模型复杂度越低的同时，使预测误差尽可能小。其中模型复杂度包括树的个数以及叶子数值尽可能不极端。<em>（这个怎么看，如果某个样本label数值为4，那么第一个回归树预测3，第二个预测为1；另外一组回归树，一个预测2，一个预测2，那么倾向后一种，为什么呢？前一种情况，第一棵树学的太多，太接近4，也就意味着有较大的过拟合的风险）</em></li>
@@ -2117,7 +2151,7 @@ f(x)=w_{0}+\sum_{m=1}^{M} w_{m} \phi_{m}(x)</script><p>其中$w$是权重，$\ph
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2020-10-25 10:54:33 / 修改时间：11:13:10" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
+      <time title="创建时间：2020-10-25 10:54:33 / 修改时间：20:04:43" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -2139,7 +2173,7 @@ f(x)=w_{0}+\sum_{m=1}^{M} w_{m} \phi_{m}(x)</script><p>其中$w$是权重，$\ph
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>[TOC]</p>
+          <p><meta name="referrer" content="no-referrer"/><br>[TOC]</p>
 <h2 id="1-RF和GBDT的区别"><a href="#1-RF和GBDT的区别" class="headerlink" title="1. RF和GBDT的区别"></a>1. RF和GBDT的区别</h2><p><strong>相同点：</strong></p>
 <ul>
 <li>都是由多棵树组成，最终的结果都是由多棵树一起决定。</li>
@@ -2208,7 +2242,7 @@ f(x)=w_{0}+\sum_{m=1}^{M} w_{m} \phi_{m}(x)</script><p>其中$w$是权重，$\ph
 <li>$XGBoost$<strong>在构建树的节点过程中只考虑非缺失值的数据遍历</strong>，而为每个节点增加了一个缺省方向，当样本相应的特征值缺失时，可以被归类到缺省方向上，最优的缺省方向可以从数据中学到。至于如何学到缺省值的分支，其实很简单，分别枚举特征缺省的样本归为左右分支后的增益，选择增益最大的枚举项即为最优缺省方向。 </li>
 <li>如果在<strong>训练中没有缺失值而在预测中出现缺失，那么会自动将缺失值的划分方向放到右子结点</strong>。缺失值处理的伪代码如下：</li>
 </ul>
-<p><img src="https://ask.qcloudimg.com/http-save/yehe-1622140/x5jfcrynnp.jpeg?imageView2/2/w/1620" alt="img" style="zoom: 33%;" /></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/8166116-d771bed713a887d8.png?imageMogr2/auto-orient/strip|imageView2/2/w/802/format/webp" alt=""></p>
 <ul>
 <li><p><strong>树模型对缺失值的敏感度低，大部分时候可以在数据缺失时时使用</strong>。</p>
 <p>原因就是：<strong>一棵树中每个结点在分裂时，寻找的是某个特征的最佳分裂点（特征值）</strong>，完全可以不考虑存在特征值缺失的样本，也就是说，如果某些样本缺失的特征值缺失，对寻找最佳分割点的影响不是很大。</p>
