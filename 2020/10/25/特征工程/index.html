@@ -23,15 +23,15 @@
     var CONFIG = {"hostname":"chenzk1.github.io","root":"/","scheme":"Gemini","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 
-  <meta name="description" content="特征离散的作用   离散化后的特征对异常数据有很强的鲁棒性比如一个特征是年龄&gt;30是1，否则0。如果特征没有离散化，一个异常数据“年龄300岁”会给模型造成很大的干扰；离散化后年龄300岁也只对应于一个权重，如果训练数据中没有出现特征”年龄-300岁”，那么在LR模型中，其权重对应于0，所以，即使测试数据中出现特征”年龄-300岁”,也不会对预测结果产生影响。特征离散化的过程，比如特征A，">
+  <meta name="description" content="特征离散的作用 离散化后的特征对异常数据有很强的鲁棒性比如一个特征是年龄&gt;30是1，否则0。如果特征没有离散化，一个异常数据“年龄300岁”会给模型造成很大的干扰；离散化后年龄300岁也只对应于一个权重，如果训练数据中没有出现特征”年龄-300岁”，那么在LR模型中，其权重对应于0，所以，即使测试数据中出现特征”年龄-300岁”,也不会对预测结果产生影响。特征离散化的过程，比如特征A，如果当">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Feature Engineering">
 <meta property="og:url" content="https://chenzk1.github.io/2020/10/25/%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/index.html">
 <meta property="og:site_name" content="Kayden&#39;s Blog">
-<meta property="og:description" content="特征离散的作用   离散化后的特征对异常数据有很强的鲁棒性比如一个特征是年龄&gt;30是1，否则0。如果特征没有离散化，一个异常数据“年龄300岁”会给模型造成很大的干扰；离散化后年龄300岁也只对应于一个权重，如果训练数据中没有出现特征”年龄-300岁”，那么在LR模型中，其权重对应于0，所以，即使测试数据中出现特征”年龄-300岁”,也不会对预测结果产生影响。特征离散化的过程，比如特征A，">
+<meta property="og:description" content="特征离散的作用 离散化后的特征对异常数据有很强的鲁棒性比如一个特征是年龄&gt;30是1，否则0。如果特征没有离散化，一个异常数据“年龄300岁”会给模型造成很大的干扰；离散化后年龄300岁也只对应于一个权重，如果训练数据中没有出现特征”年龄-300岁”，那么在LR模型中，其权重对应于0，所以，即使测试数据中出现特征”年龄-300岁”,也不会对预测结果产生影响。特征离散化的过程，比如特征A，如果当">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-10-25T02:54:33.712Z">
-<meta property="article:modified_time" content="2020-10-25T11:37:14.615Z">
+<meta property="article:modified_time" content="2020-10-26T02:18:55.279Z">
 <meta property="article:author" content="Kayden">
 <meta property="article:tag" content="ML">
 <meta name="twitter:card" content="summary">
@@ -194,7 +194,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           Table of Contents
@@ -206,6 +206,7 @@
 
       <!--noindex-->
       <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E7%A6%BB%E6%95%A3%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="nav-number">1.</span> <span class="nav-text">特征离散的作用</span></a></li></ol></div>
       </section>
       <!--/noindex-->
 
@@ -219,7 +220,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-count">25</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -301,10 +302,16 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2020-10-25 10:54:33 / Modified: 19:37:14" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
+      <time title="Created: 2020-10-25 10:54:33" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
     </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2020-10-26 10:18:55" itemprop="dateModified" datetime="2020-10-26T10:18:55+08:00">2020-10-26</time>
+      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -325,10 +332,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <ol>
-<li>特征离散的作用</li>
-</ol>
-<ul>
+        <h2 id="特征离散的作用"><a href="#特征离散的作用" class="headerlink" title="特征离散的作用"></a>特征离散的作用</h2><ul>
 <li><strong>离散化后的特征对异常数据有很强的鲁棒性</strong><br>比如一个特征是年龄&gt;30是1，否则0。如果特征没有离散化，一个异常数据“年龄300岁”会给模型造成很大的干扰；离散化后年龄300岁也只对应于一个权重，如果训练数据中没有出现特征”年龄-300岁”，那么在LR模型中，其权重对应于0，所以，即使测试数据中出现特征”年龄-300岁”,也不会对预测结果产生影响。特征离散化的过程，比如特征A，如果当做连续特征使用，在LR模型中，A会对应一个权重w,如果离散化，那么A就拓展为特征A-1，A-2，A-3…,每个特征对应于一个权重，如果训练样本中没有出现特征A-4，那么训练的模型对于A-4就没有权重，如果测试样本中出现特征A-4,该特征A-4也不会起作用。相当于无效。但是，如果使用连续特征，在LR模型中，y = w*a,a是特征，w是a对应的权重,比如a代表年龄，那么a的取值范围是[0..100]，如果测试样本中,出现了一个测试用例，a的取值是300，显然a是异常值，但是w*a还是有值，而且值还非常大，所以，异常值会对最后结果产生非常大的影响。</li>
 <li><strong>特征离散化后，模型会更稳定</strong><br>比如如果对用户年龄离散化，20-30作为一个区间，不会因为一个用户年龄长了一岁就变成一个完全不同的人。当然处于区间相邻处的样本会刚好相反，所以怎么划分区间是门学问；按区间离散化，划分区间是非常关键的。</li>
 <li><strong>特征离散化以后，起到了简化了逻辑回归模型的作用，降低了模型过拟合的风险</strong><br>当使用连续特征时，一个特征对应于一个权重，那么，如果这个特征权重较大，模型就会很依赖于这个特征，这个特征的一个微小变化可能会导致最终结果产生很大的变化，这样子的模型很危险，当遇到新样本的时候很可能因为对这个特征过分敏感而得到错误的分类结果，也就是泛化能力差，容易过拟合。而使用离散特征的时候，一个特征变成了多个，权重也变为多个，那么之前连续特征对模型的影响力就被分散弱化了，从而降低了过拟合的风险。</li>
@@ -353,13 +357,13 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2020/10/25/%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/" rel="prev" title="Random Forest">
-                  <i class="fa fa-chevron-left"></i> Random Forest
+                <a href="/2020/10/25/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/" rel="prev" title="机器学习面试题-Random Forest">
+                  <i class="fa fa-chevron-left"></i> 机器学习面试题-Random Forest
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2020/10/25/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D/" rel="next" title="梯度下降">
-                  梯度下降 <i class="fa fa-chevron-right"></i>
+                <a href="/2020/10/25/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D/" rel="next" title="机器学习面试题-梯度下降">
+                  机器学习面试题-梯度下降 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>
