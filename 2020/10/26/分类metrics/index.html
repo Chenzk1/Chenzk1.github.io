@@ -23,15 +23,15 @@
     var CONFIG = {"hostname":"chenzk1.github.io","root":"/","scheme":"Gemini","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 
-  <meta name="description" content="[TOC] 分类Accuracy Accuracy &#x3D; 预测正确的样本数量 &#x2F; 总样本数量 &#x3D; (TP+TN) &#x2F; (TP+FP+TN+FN)  Precision查准 Precision &#x3D; TP &#x2F; (TP+FP)  Recall 查全 Recall &#x3D; TP &#x2F; (TP+FN)  F1&amp;FnF1 precision和recall的调和平均  Fn 可用来解决分类不均衡问题&#x2F;对pr">
+  <meta name="description" content="[TOC] 分类ACC(Accuracy) Accuracy &#x3D; 预测正确的样本数量 &#x2F; 总样本数量 &#x3D; (TP+TN) &#x2F; (TP+FP+TN+FN)  Precision查准 Precision &#x3D; TP &#x2F; (TP+FP)  Recall&#x2F;TPR查全 Recall &#x3D; TPR &#x3D; TP &#x2F; (TP+FN)  F1&amp;FnF1 precision和recall的调和平均  Fn 可用">
 <meta property="og:type" content="article">
 <meta property="og:title" content="机器学习-Metrics">
 <meta property="og:url" content="https://chenzk1.github.io/2020/10/26/%E5%88%86%E7%B1%BBmetrics/index.html">
 <meta property="og:site_name" content="Kayden&#39;s Blog">
-<meta property="og:description" content="[TOC] 分类Accuracy Accuracy &#x3D; 预测正确的样本数量 &#x2F; 总样本数量 &#x3D; (TP+TN) &#x2F; (TP+FP+TN+FN)  Precision查准 Precision &#x3D; TP &#x2F; (TP+FP)  Recall 查全 Recall &#x3D; TP &#x2F; (TP+FN)  F1&amp;FnF1 precision和recall的调和平均  Fn 可用来解决分类不均衡问题&#x2F;对pr">
+<meta property="og:description" content="[TOC] 分类ACC(Accuracy) Accuracy &#x3D; 预测正确的样本数量 &#x2F; 总样本数量 &#x3D; (TP+TN) &#x2F; (TP+FP+TN+FN)  Precision查准 Precision &#x3D; TP &#x2F; (TP+FP)  Recall&#x2F;TPR查全 Recall &#x3D; TPR &#x3D; TP &#x2F; (TP+FN)  F1&amp;FnF1 precision和recall的调和平均  Fn 可用">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-10-26T09:04:58.308Z">
-<meta property="article:modified_time" content="2020-10-26T09:26:46.859Z">
+<meta property="article:modified_time" content="2020-10-26T10:13:28.938Z">
 <meta property="article:author" content="Kayden">
 <meta property="article:tag" content="ML">
 <meta property="article:tag" content="Metrics">
@@ -207,7 +207,7 @@
 
       <!--noindex-->
       <section class="post-toc-wrap sidebar-panel">
-          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E7%B1%BB"><span class="nav-number">1.</span> <span class="nav-text">分类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Accuracy"><span class="nav-number">1.1.</span> <span class="nav-text">Accuracy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Precision%E6%9F%A5%E5%87%86"><span class="nav-number">1.2.</span> <span class="nav-text">Precision查准</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Recall-%E6%9F%A5%E5%85%A8"><span class="nav-number">1.3.</span> <span class="nav-text">Recall 查全</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#F1-amp-Fn"><span class="nav-number">1.4.</span> <span class="nav-text">F1&amp;Fn</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#F1"><span class="nav-number">1.4.1.</span> <span class="nav-text">F1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Fn"><span class="nav-number">1.4.2.</span> <span class="nav-text">Fn</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#P-R%E6%9B%B2%E7%BA%BF"><span class="nav-number">1.5.</span> <span class="nav-text">P-R曲线</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TPR"><span class="nav-number">1.6.</span> <span class="nav-text">TPR</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FPR"><span class="nav-number">1.7.</span> <span class="nav-text">FPR</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ROC%E6%9B%B2%E7%BA%BF-amp-AUC"><span class="nav-number">1.8.</span> <span class="nav-text">ROC曲线&amp;AUC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ROC%E6%9B%B2%E7%BA%BF"><span class="nav-number">1.8.1.</span> <span class="nav-text">ROC曲线</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AUC"><span class="nav-number">1.8.2.</span> <span class="nav-text">AUC</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E7%B1%BB"><span class="nav-number">1.</span> <span class="nav-text">分类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ACC-Accuracy"><span class="nav-number">1.1.</span> <span class="nav-text">ACC(Accuracy)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Precision%E6%9F%A5%E5%87%86"><span class="nav-number">1.2.</span> <span class="nav-text">Precision查准</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Recall-TPR%E6%9F%A5%E5%85%A8"><span class="nav-number">1.3.</span> <span class="nav-text">Recall&#x2F;TPR查全</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#F1-amp-Fn"><span class="nav-number">1.4.</span> <span class="nav-text">F1&amp;Fn</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#F1"><span class="nav-number">1.4.1.</span> <span class="nav-text">F1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Fn"><span class="nav-number">1.4.2.</span> <span class="nav-text">Fn</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#P-R%E6%9B%B2%E7%BA%BF-Precision-Recall"><span class="nav-number">1.5.</span> <span class="nav-text">P-R曲线(Precision-Recall)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FPR"><span class="nav-number">1.6.</span> <span class="nav-text">FPR</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ROC%E6%9B%B2%E7%BA%BF-amp-AUC"><span class="nav-number">1.7.</span> <span class="nav-text">ROC曲线&amp;AUC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ROC-Receiver-operating-characteristic-curve"><span class="nav-number">1.7.1.</span> <span class="nav-text">ROC(Receiver operating characteristic curve)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AUC-Area-under-Curve"><span class="nav-number">1.7.2.</span> <span class="nav-text">AUC(Area under Curve)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8C%BA%E5%88%86%E5%BA%A6"><span class="nav-number">2.</span> <span class="nav-text">区分度</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#KS-Kolmogorov-Smirnov"><span class="nav-number">2.1.</span> <span class="nav-text">KS(Kolmogorov-Smirnov)</span></a></li></ol></li></ol></div>
       </section>
       <!--/noindex-->
 
@@ -305,7 +305,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2020-10-26 17:04:58 / Modified: 17:26:46" itemprop="dateCreated datePublished" datetime="2020-10-26T17:04:58+08:00">2020-10-26</time>
+      <time title="Created: 2020-10-26 17:04:58 / Modified: 18:13:28" itemprop="dateCreated datePublished" datetime="2020-10-26T17:04:58+08:00">2020-10-26</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -330,14 +330,14 @@
         <meta name="referrer" content="no-referrer"/>
 
 <p>[TOC]</p>
-<h1 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h1><h2 id="Accuracy"><a href="#Accuracy" class="headerlink" title="Accuracy"></a>Accuracy</h2><ul>
+<h1 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h1><h2 id="ACC-Accuracy"><a href="#ACC-Accuracy" class="headerlink" title="ACC(Accuracy)"></a>ACC(Accuracy)</h2><ul>
 <li>Accuracy = 预测正确的样本数量 / 总样本数量 = (TP+TN) / (TP+FP+TN+FN)</li>
 </ul>
 <h2 id="Precision查准"><a href="#Precision查准" class="headerlink" title="Precision查准"></a>Precision查准</h2><ul>
 <li>Precision = TP / (TP+FP)</li>
 </ul>
-<h2 id="Recall-查全"><a href="#Recall-查全" class="headerlink" title="Recall 查全"></a>Recall 查全</h2><ul>
-<li>Recall = TP / (TP+FN)</li>
+<h2 id="Recall-TPR查全"><a href="#Recall-TPR查全" class="headerlink" title="Recall/TPR查全"></a>Recall/TPR查全</h2><ul>
+<li>Recall = TPR = TP / (TP+FN)</li>
 </ul>
 <h2 id="F1-amp-Fn"><a href="#F1-amp-Fn" class="headerlink" title="F1&amp;Fn"></a>F1&amp;Fn</h2><h3 id="F1"><a href="#F1" class="headerlink" title="F1"></a>F1</h3><ul>
 <li>precision和recall的调和平均</li>
@@ -350,24 +350,41 @@ F_{\beta}=\left(1+\beta^{2}\right) \cdot \frac{\text { precision } \cdot \text {
 </li>
 </ul>
 <script type="math/tex; mode=display">
-F_{\beta}=\frac{\left(1+\beta^{2}\right) \cdot \text { true positive }}{\left(1+\beta^{2}\right) \cdot \text { true positive }+\beta^{2} \cdot \text { false negative }+\text { false positive }}</script><h2 id="P-R曲线"><a href="#P-R曲线" class="headerlink" title="P-R曲线"></a>P-R曲线</h2><h2 id="TPR"><a href="#TPR" class="headerlink" title="TPR"></a>TPR</h2><ul>
-<li>TPR = TP/(TP+FN) 真实label为1的样本中，被预测为1的样本占的比例</li>
+F_{\beta}=\frac{\left(1+\beta^{2}\right) \cdot \text { true positive }}{\left(1+\beta^{2}\right) \cdot \text { true positive }+\beta^{2} \cdot \text { false negative }+\text { false positive }}</script><h2 id="P-R曲线-Precision-Recall"><a href="#P-R曲线-Precision-Recall" class="headerlink" title="P-R曲线(Precision-Recall)"></a>P-R曲线(Precision-Recall)</h2><ul>
+<li>P为纵轴，R为横轴</li>
+<li>主要关心正例</li>
+<li>公式：<script type="math/tex; mode=display">
+\sum_{n}\left(R_{n}-R_{n-1}\right) P_{n}</script></li>
 </ul>
 <h2 id="FPR"><a href="#FPR" class="headerlink" title="FPR"></a>FPR</h2><ul>
 <li>FPR = FP/(FP+TN) 真实label为0的样本中，被预测为1的样本占的比例</li>
 </ul>
 <h2 id="ROC曲线-amp-AUC"><a href="#ROC曲线-amp-AUC" class="headerlink" title="ROC曲线&amp;AUC"></a>ROC曲线&amp;AUC</h2><ul>
-<li>衡量分类准确性，同时考虑了模型对正样本和负样本的分类能力，因此在样本非均衡的情况下也能做出合理的评价。侧重于<strong>排序</strong>。</li>
+<li>衡量分类准确性，同时考虑了模型对正样本(TPR)和负样本(FPR)的分类能力，因此在样本非均衡的情况下也能做出合理的评价。侧重于<strong>排序</strong>。</li>
 </ul>
-<h3 id="ROC曲线"><a href="#ROC曲线" class="headerlink" title="ROC曲线"></a>ROC曲线</h3><ul>
+<h3 id="ROC-Receiver-operating-characteristic-curve"><a href="#ROC-Receiver-operating-characteristic-curve" class="headerlink" title="ROC(Receiver operating characteristic curve)"></a>ROC(Receiver operating characteristic curve)</h3><ul>
 <li>横轴FPR，纵轴TPR</li>
 <li>ROC曲线在绘制时，需要先对所有样本的预测概率做排序，并不断取不同的阈值计算TPR和FPR，因此AUC在计算时会侧重于排序。</li>
 </ul>
-<h3 id="AUC"><a href="#AUC" class="headerlink" title="AUC"></a>AUC</h3><ul>
+<h3 id="AUC-Area-under-Curve"><a href="#AUC-Area-under-Curve" class="headerlink" title="AUC(Area under Curve)"></a>AUC(Area under Curve)</h3><ul>
 <li>ROC曲线与x轴的面积</li>
 <li>一般认为：AUC最小值=0.5（其实存在AUC小于0.5的情况，例如每次都预测与真实值相反的情况，但是这种情况，只要把预测值取反就可以得到大于0.5的值，因此还是认为AUC最小值=0.5）</li>
 <li>AUC的物理意义为<strong>任取一对例和负例，正例得分大于负例得分的概率</strong>，AUC越大，表明方法效果越好。—&gt; 排序<script type="math/tex; mode=display">A U C=\frac{\sum p r e d_{p o s}>p r e d_{n e g}}{p o s i t i v e N u m * n e g a ti v e N u m}</script>分母是正负样本总的组合数，分子是正样本大于负样本的组合数<script type="math/tex; mode=display">
 A U C=\frac{\sum_{\text {ins}_{i} \in \text {positiveclass}} \operatorname{rank}_{\text {ins}_{i}}-\frac{M \times(M+1)}{2}}{M \times N}</script></li>
+</ul>
+<h1 id="区分度"><a href="#区分度" class="headerlink" title="区分度"></a>区分度</h1><h2 id="KS-Kolmogorov-Smirnov"><a href="#KS-Kolmogorov-Smirnov" class="headerlink" title="KS(Kolmogorov-Smirnov)"></a>KS(Kolmogorov-Smirnov)</h2><ul>
+<li>KS用于模型风险区分能力进行评估，指标衡量的是好坏样本累计分布之间的差值。好坏样本累计差异越大，KS指标越大，那么模型的风险区分能力越强。</li>
+<li>KS的计算步骤如下： <ul>
+<li>1)计算每个评分区间的好坏账户数。 </li>
+<li>2)计算每个评分区间的累计好账户数占总好账户数比率(good%)和累计坏账户数占总坏账户数比率(bad%)。 </li>
+<li>3)计算每个评分区间累计坏账户占比与累计好账户占比差的绝对值（累计good%-累计bad%），然后对这些绝对值取最大值即得此评分卡的K-S值。</li>
+</ul>
+</li>
+<li>低分段累计坏百分比应高于累计好百分比，之后会经历两者差距先扩大再缩小的变化</li>
+<li>和ROC曲线无本质区别<ul>
+<li><strong>ROC曲线是把真正率（TPR）和假正率（FPR）当作横纵轴，而K-S曲线是把真正率（TPR）和假正率（FPR）都当作是纵轴，横轴则由选定的阈值来充当</strong>。</li>
+</ul>
+</li>
 </ul>
 
     </div>
