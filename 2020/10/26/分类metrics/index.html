@@ -30,12 +30,14 @@
 <meta property="og:site_name" content="Kayden&#39;s Blog">
 <meta property="og:description" content="[TOC] 分类ACC(Accuracy) Accuracy &#x3D; 预测正确的样本数量 &#x2F; 总样本数量 &#x3D; (TP+TN) &#x2F; (TP+FP+TN+FN)  Precision查准 Precision &#x3D; TP &#x2F; (TP+FP)  Recall&#x2F;TPR查全 Recall &#x3D; TPR &#x3D; TP &#x2F; (TP+FN)  F1&amp;FnF1 precision和recall的调和平均  Fn 可用">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2019013111150139.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NzY2NfbGVhcm5pbmc=,size_16,color_FFFFFF,t_70">
 <meta property="article:published_time" content="2020-10-26T09:04:58.308Z">
-<meta property="article:modified_time" content="2020-10-26T10:13:28.938Z">
+<meta property="article:modified_time" content="2020-10-26T12:07:15.685Z">
 <meta property="article:author" content="Kayden">
 <meta property="article:tag" content="ML">
 <meta property="article:tag" content="Metrics">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/2019013111150139.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NzY2NfbGVhcm5pbmc=,size_16,color_FFFFFF,t_70">
 
 
 <link rel="canonical" href="https://chenzk1.github.io/2020/10/26/%E5%88%86%E7%B1%BBmetrics/">
@@ -207,7 +209,7 @@
 
       <!--noindex-->
       <section class="post-toc-wrap sidebar-panel">
-          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E7%B1%BB"><span class="nav-number">1.</span> <span class="nav-text">分类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ACC-Accuracy"><span class="nav-number">1.1.</span> <span class="nav-text">ACC(Accuracy)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Precision%E6%9F%A5%E5%87%86"><span class="nav-number">1.2.</span> <span class="nav-text">Precision查准</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Recall-TPR%E6%9F%A5%E5%85%A8"><span class="nav-number">1.3.</span> <span class="nav-text">Recall&#x2F;TPR查全</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#F1-amp-Fn"><span class="nav-number">1.4.</span> <span class="nav-text">F1&amp;Fn</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#F1"><span class="nav-number">1.4.1.</span> <span class="nav-text">F1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Fn"><span class="nav-number">1.4.2.</span> <span class="nav-text">Fn</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#P-R%E6%9B%B2%E7%BA%BF-Precision-Recall"><span class="nav-number">1.5.</span> <span class="nav-text">P-R曲线(Precision-Recall)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FPR"><span class="nav-number">1.6.</span> <span class="nav-text">FPR</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ROC%E6%9B%B2%E7%BA%BF-amp-AUC"><span class="nav-number">1.7.</span> <span class="nav-text">ROC曲线&amp;AUC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ROC-Receiver-operating-characteristic-curve"><span class="nav-number">1.7.1.</span> <span class="nav-text">ROC(Receiver operating characteristic curve)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AUC-Area-under-Curve"><span class="nav-number">1.7.2.</span> <span class="nav-text">AUC(Area under Curve)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8C%BA%E5%88%86%E5%BA%A6"><span class="nav-number">2.</span> <span class="nav-text">区分度</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#KS-Kolmogorov-Smirnov"><span class="nav-number">2.1.</span> <span class="nav-text">KS(Kolmogorov-Smirnov)</span></a></li></ol></li></ol></div>
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E7%B1%BB"><span class="nav-number">1.</span> <span class="nav-text">分类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ACC-Accuracy"><span class="nav-number">1.1.</span> <span class="nav-text">ACC(Accuracy)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Precision%E6%9F%A5%E5%87%86"><span class="nav-number">1.2.</span> <span class="nav-text">Precision查准</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Recall-TPR%E6%9F%A5%E5%85%A8"><span class="nav-number">1.3.</span> <span class="nav-text">Recall&#x2F;TPR查全</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#F1-amp-Fn"><span class="nav-number">1.4.</span> <span class="nav-text">F1&amp;Fn</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#F1"><span class="nav-number">1.4.1.</span> <span class="nav-text">F1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Fn"><span class="nav-number">1.4.2.</span> <span class="nav-text">Fn</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#P-R%E6%9B%B2%E7%BA%BF-Precision-Recall"><span class="nav-number">1.5.</span> <span class="nav-text">P-R曲线(Precision-Recall)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FPR"><span class="nav-number">1.6.</span> <span class="nav-text">FPR</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ROC%E6%9B%B2%E7%BA%BF-amp-AUC"><span class="nav-number">1.7.</span> <span class="nav-text">ROC曲线&amp;AUC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ROC-Receiver-operating-characteristic-curve"><span class="nav-number">1.7.1.</span> <span class="nav-text">ROC(Receiver operating characteristic curve)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AUC-Area-under-Curve"><span class="nav-number">1.7.2.</span> <span class="nav-text">AUC(Area under Curve)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8C%BA%E5%88%86%E5%BA%A6"><span class="nav-number">2.</span> <span class="nav-text">区分度</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#KS-Kolmogorov-Smirnov"><span class="nav-number">2.1.</span> <span class="nav-text">KS(Kolmogorov-Smirnov)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gini"><span class="nav-number">2.2.</span> <span class="nav-text">gini</span></a></li></ol></li></ol></div>
       </section>
       <!--/noindex-->
 
@@ -221,7 +223,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-count">27</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -232,7 +234,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -305,7 +307,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2020-10-26 17:04:58 / Modified: 18:13:28" itemprop="dateCreated datePublished" datetime="2020-10-26T17:04:58+08:00">2020-10-26</time>
+      <time title="Created: 2020-10-26 17:04:58 / Modified: 20:07:15" itemprop="dateCreated datePublished" datetime="2020-10-26T17:04:58+08:00">2020-10-26</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -380,11 +382,13 @@ A U C=\frac{\sum_{\text {ins}_{i} \in \text {positiveclass}} \operatorname{rank}
 <li>3)计算每个评分区间累计坏账户占比与累计好账户占比差的绝对值（累计good%-累计bad%），然后对这些绝对值取最大值即得此评分卡的K-S值。</li>
 </ul>
 </li>
-<li>低分段累计坏百分比应高于累计好百分比，之后会经历两者差距先扩大再缩小的变化</li>
-<li>和ROC曲线无本质区别<ul>
-<li><strong>ROC曲线是把真正率（TPR）和假正率（FPR）当作横纵轴，而K-S曲线是把真正率（TPR）和假正率（FPR）都当作是纵轴，横轴则由选定的阈值来充当</strong>。</li>
+<li>低分段累计坏百分比应高于累计好百分比，之后会经历两者差距先扩大再缩小的变化<br><img src="https://img-blog.csdnimg.cn/2019013111150139.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NzY2NfbGVhcm5pbmc=,size_16,color_FFFFFF,t_70" alt="KS-曲线"></li>
 </ul>
-</li>
+<h2 id="gini"><a href="#gini" class="headerlink" title="gini"></a>gini</h2><ul>
+<li>计算每个评分区间的好坏账户数。 </li>
+<li>计算每个评分区间的累计好账户数占总好账户数比率（累计good%）和累计坏账户数占总坏账户数比率(累计bad%)。 </li>
+<li>按照累计好账户占比和累计坏账户占比得出下图所示曲线ADC。 </li>
+<li>计算出图中阴影部分面积，阴影面积占直角三角形ABC面积的百分比，即为GINI系数。</li>
 </ul>
 
     </div>
@@ -408,6 +412,9 @@ A U C=\frac{\sum_{\text {ins}_{i} \in \text {positiveclass}} \operatorname{rank}
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/2020/10/26/%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99-%E4%BC%9A%E8%AE%AE&%E6%9C%9F%E5%88%8A/" rel="next" title="学习资料-会议&期刊">
+                  学习资料-会议&期刊 <i class="fa fa-chevron-right"></i>
+                </a>
             </div>
           </div>
     </footer>

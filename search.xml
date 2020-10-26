@@ -200,8 +200,8 @@
 </li>
 </ul>
 </li>
-<li><p>分类树：(Gini)</p>
-<p><img src="https://img-blog.csdn.net/20150109184544578?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvQW5kcm9pZGx1c2hhbmdkZXJlbg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="某属性A的基尼系数"><br>基尼系数越小，纯度越高</p>
+<li><p>分类树：(Gini不纯度)</p>
+<p><img src="https://img-blog.csdn.net/20150109184544578?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvQW5kcm9pZGx1c2hhbmdkZXJlbg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="某属性A的基尼不纯度"><br>基尼不纯度越小，纯度越高</p>
 </li>
 </ul>
 <blockquote>
@@ -2032,11 +2032,13 @@ A U C=\frac{\sum_{\text {ins}_{i} \in \text {positiveclass}} \operatorname{rank}
 <li>3)计算每个评分区间累计坏账户占比与累计好账户占比差的绝对值（累计good%-累计bad%），然后对这些绝对值取最大值即得此评分卡的K-S值。</li>
 </ul>
 </li>
-<li>低分段累计坏百分比应高于累计好百分比，之后会经历两者差距先扩大再缩小的变化</li>
-<li>和ROC曲线无本质区别<ul>
-<li><strong>ROC曲线是把真正率（TPR）和假正率（FPR）当作横纵轴，而K-S曲线是把真正率（TPR）和假正率（FPR）都当作是纵轴，横轴则由选定的阈值来充当</strong>。</li>
+<li>低分段累计坏百分比应高于累计好百分比，之后会经历两者差距先扩大再缩小的变化<br><img src="https://img-blog.csdnimg.cn/2019013111150139.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NzY2NfbGVhcm5pbmc=,size_16,color_FFFFFF,t_70" alt="KS-曲线"></li>
 </ul>
-</li>
+<h2 id="gini"><a href="#gini" class="headerlink" title="gini"></a>gini</h2><ul>
+<li>计算每个评分区间的好坏账户数。 </li>
+<li>计算每个评分区间的累计好账户数占总好账户数比率（累计good%）和累计坏账户数占总坏账户数比率(累计bad%)。 </li>
+<li>按照累计好账户占比和累计坏账户占比得出下图所示曲线ADC。 </li>
+<li>计算出图中阴影部分面积，阴影面积占直角三角形ABC面积的百分比，即为GINI系数。</li>
 </ul>
 ]]></content>
       <categories>
@@ -2636,6 +2638,43 @@ A U C=\frac{\sum_{\text {ins}_{i} \in \text {positiveclass}} \operatorname{rank}
       </categories>
       <tags>
         <tag>Leetcode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>学习资料-会议&amp;期刊</title>
+    <url>/2020/10/26/%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99-%E4%BC%9A%E8%AE%AE&amp;%E6%9C%9F%E5%88%8A/</url>
+    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
+
+<h2 id="推荐系统"><a href="#推荐系统" class="headerlink" title="推荐系统"></a>推荐系统</h2><ul>
+<li><a href="https://recsys.acm.org/">RecSys</a> -The ACM Conference Series on Recommender Systems.</li>
+</ul>
+<h2 id="信息检索"><a href="#信息检索" class="headerlink" title="信息检索"></a>信息检索</h2><ul>
+<li><a href="http://sigir.org/">SIGIR</a>- The ACM International Conference on Research and Development in Information Retrieval</li>
+</ul>
+<h2 id="数据挖掘"><a href="#数据挖掘" class="headerlink" title="数据挖掘"></a>数据挖掘</h2><ul>
+<li><a href="http://www.kdd.org/">KDD</a> - The ACM SIGKDD Conference on Knowledge Discovery and Data Mining.</li>
+<li><a href="http://www.wsdm-conference.org/">WSDM</a> - The International Conference on Web Search and Data Mining.</li>
+<li><a href="http://cs.uvm.edu/~icdm/">ICDM</a> - The IEEE International Conference on Data Mining.</li>
+<li><a href="http://www.siam.org/meetings/sdm19/">SDM</a> -The SIAM International Conference on Data Mining.</li>
+<li><a href="https://ecmlpkdd2020.net/">ECML-PKDD</a> - The European Conference on Machine Learning and Principles and Practice of Knowledge Discovery in Databases</li>
+</ul>
+<h2 id="机器学习"><a href="#机器学习" class="headerlink" title="机器学习"></a>机器学习</h2><ul>
+<li><a href="https://icml.cc/">ICML</a> - The International Conference on Machine Learning.</li>
+<li><a href="https://nips.cc/">NIPS</a> - The Conference on Neural Information Processing Systems</li>
+</ul>
+<h2 id="AI"><a href="#AI" class="headerlink" title="AI"></a>AI</h2><ul>
+<li><a href="https://aaai.org/Conferences/AAAI-18/">AAAI</a> - The National Conference of the American Association for Artificial Intelligence.</li>
+<li><a href="http://www.ijcai.org/">IJCAI</a> - The International Joint Conference on Artificial Intelligence.</li>
+<li><a href="http://ecai2020.eu/">ECAI</a> -European Conference on Artificial Intelligence</li>
+<li><a href="http://www.auai.org/uai2020/">UAI</a> - The Conference on Uncertainty in Artificial Intelligence</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>ML</tag>
+        <tag>Resource</tag>
       </tags>
   </entry>
 </search>

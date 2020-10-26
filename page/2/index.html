@@ -217,7 +217,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-count">27</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -228,7 +228,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -267,6 +267,182 @@
       
 
       
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/25/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Kayden">
+      <meta itemprop="description" content="blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kayden's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/10/25/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/" class="post-title-link" itemprop="url">机器学习面试题-集成学习</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-10-25 10:54:33" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2020-10-26 10:17:49" itemprop="dateModified" datetime="2020-10-26T10:17:49+08:00">2020-10-26</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>[TOC]</p>
+<h2 id="1-什么是集成学习算法？"><a href="#1-什么是集成学习算法？" class="headerlink" title="1. 什么是集成学习算法？"></a>1. 什么是集成学习算法？</h2><p><strong>集成学习算法是一种优化手段或者策略</strong>，不算是一种机器学习算法。</p>
+<p>集成方法是由多个较弱的模型集成模型组，一般的弱分类器可以是决策树，SVM，KNN等构成。其中的模型可以单独进行训练，并且它们的预测能以某种方式结合起来去做出一个总体预测。</p>
+<p>该算法主要的问题是要找出哪些较弱的模型可以结合起来，以及如何结合的方法。</p>
+<h2 id="2-集成学习主要有哪几种框架？"><a href="#2-集成学习主要有哪几种框架？" class="headerlink" title="2. 集成学习主要有哪几种框架？"></a>2. 集成学习主要有哪几种框架？</h2><p>集成学习从集成思想的架构分为Bagging，Boosting，Stacking三种。</p>
+<h2 id="3-简单介绍一下bagging，常用bagging算法有哪些？"><a href="#3-简单介绍一下bagging，常用bagging算法有哪些？" class="headerlink" title="3. 简单介绍一下bagging，常用bagging算法有哪些？"></a>3. 简单介绍一下bagging，常用bagging算法有哪些？</h2><ul>
+<li>Bagging<ul>
+<li><strong>多次采样，训练多个分类器，集体投票，旨在减小方差</strong>，</li>
+</ul>
+</li>
+<li><p>基于数据<strong>随机重抽样</strong>的分类器构建方法。从训练集中进行子抽样组成每个基模型所需要的子训练集，对所有基模型预测的结果进行综合产生最终的预测结果。</p>
+</li>
+<li><p>算法流程：</p>
+<ul>
+<li>输入为样本集$D={(x_1，y_1)，(x_2，y_2) \dots (x_m，y_m)}$，弱学习器算法，弱分类器迭代次数$T$。</li>
+<li>输出为最终的强分类器$f(x)$</li>
+</ul>
+</li>
+<li><p>对于$t=1，2 \dots T$</p>
+<ul>
+<li>对训练集进行第t次随机采样，共采集$T$次，得到包含$T$个样本的采样集$D_t$</li>
+<li>用采样集$D_t$训练第$t$个弱学习器$G_t(x)$</li>
+</ul>
+</li>
+<li><p>如果是分类算法预测，则$T$个弱学习器投出最多票数的类别或者类别之一为最终类别。如果是回归算法，$T$个弱学习器得到的回归结果进行算术平均得到的值为最终的模型输出。<br>常用bagging算法：随机森林算法</p>
+</li>
+</ul>
+<h2 id="4-简单介绍一下boosting，常用boosting算法有哪些？"><a href="#4-简单介绍一下boosting，常用boosting算法有哪些？" class="headerlink" title="4. 简单介绍一下boosting，常用boosting算法有哪些？"></a>4. 简单介绍一下boosting，常用boosting算法有哪些？</h2><ul>
+<li>Boosting<ul>
+<li><strong>基分类器层层叠加，聚焦分错的样本，旨在减小方差</strong></li>
+</ul>
+</li>
+<li>涉及到两个部分，加法模型和前向分步算法。<ul>
+<li>加法模型就是说强分类器由一系列弱分类器线性相加而成。</li>
+<li>前向分步就是说在训练过程中，下一轮迭代产生的分类器是在上一轮的基础上训练得来的。</li>
+</ul>
+</li>
+<li><p>算法流程：</p>
+<ul>
+<li><p>给定初始训练数据，由此训练出第一个基学习器；</p>
+</li>
+<li><p>根据基学习器的表现对样本进行调整，在之前学习器做错的样本上投入更多关注；</p>
+</li>
+<li>用调整后的样本，训练下一个基学习器；</li>
+<li>重复上述过程T次，将T个学习器加权结合。</li>
+</ul>
+</li>
+<li><p>常用boosting算法：</p>
+<ul>
+<li>Adaboost<ul>
+<li>样本权重：思想是将关注点放在被错误分类的样本上，减小上一轮被正确分类的样本权值，提高那些被错误分类的样本权值。——会因为错误分类样本的权重不断提高而使得模型对噪声敏感。</li>
+<li>弱分类器权重：采用加权多数表决的方法，加大分类误差率小的弱分类器的权重，减小分类误差率大的弱分类器的权重。</li>
+</ul>
+</li>
+<li>GBDT</li>
+<li>XGBoost</li>
+</ul>
+</li>
+</ul>
+<h2 id="5-boosting思想的数学表达式是什么？"><a href="#5-boosting思想的数学表达式是什么？" class="headerlink" title="5. boosting思想的数学表达式是什么？"></a>5. boosting思想的数学表达式是什么？</h2><script type="math/tex; mode=display">
+f(x)=w_{0}+\sum_{m=1}^{M} w_{m} \phi_{m}(x)</script><p>其中$w$是权重，$\phi$是弱分类器的集合，可以看出最终就是基函数的线性组合。</p>
+<h2 id="6-简单介绍一下stacking，常用stacking算法有哪些？"><a href="#6-简单介绍一下stacking，常用stacking算法有哪些？" class="headerlink" title="6. 简单介绍一下stacking，常用stacking算法有哪些？"></a>6. 简单介绍一下stacking，常用stacking算法有哪些？</h2><ul>
+<li>Stacking<ul>
+<li><strong>多次采样，训练多个分类器，将输出作为最后的输入特征</strong></li>
+</ul>
+</li>
+<li><p>将训练好的所有基模型对训练集进行预测，第个$i$基模型对第$i$个训练样本的预测值将作为新的训练集中第$i$个样本的第$i$个特征值，最后基于新的训练集进行训练。同理，预测的过程也要先经过所有基模型的预测形成新的测试集，最后再对测试集进行预测。</p>
+</li>
+<li><p>stacking常见的使用方式：</p>
+<ul>
+<li>由k-NN、随机森林和朴素贝叶斯基础分类器组成，它的预测结果由作为元分类器的Loqistic 回归组合。</li>
+</ul>
+</li>
+</ul>
+<h2 id="7-你意识到你的模型受到低偏差和高方差问题的困扰，应该使用哪种算法来解决问题呢？为什么？"><a href="#7-你意识到你的模型受到低偏差和高方差问题的困扰，应该使用哪种算法来解决问题呢？为什么？" class="headerlink" title="7. 你意识到你的模型受到低偏差和高方差问题的困扰，应该使用哪种算法来解决问题呢？为什么？"></a>7. 你意识到你的模型受到低偏差和高方差问题的困扰，应该使用哪种算法来解决问题呢？为什么？</h2><p>低偏差意味着模型的预测值接近实际值。换句话说，该模型有足够的灵活性，以模仿训练数据的分布。貌似很好，但是别忘了，一个灵活的模型没有泛化能力。这意味着，当这个模型用在对一个未曾见过的数据集进行测试的时候，它会令人很失望。<br>在这种情况下，我们可以使用bagging算法（如随机森林），以解决高方差问题。bagging算法把数据集分成重复随机取样形成的子集。然后，这些样本利用单个学习算法生成一组模型。接着，利用投票（分类）或平均（回归）把模型预测结合在一起。另外，为了应对大方差，我们可以：</p>
+<ul>
+<li>使用正则化技术，惩罚更高的模型系数，从而降低了模型的复杂性。</li>
+<li>使用可变重要性图表中的前n个特征。</li>
+<li>可以用于当一个算法在数据集中的所有变量里很难寻找到有意义信号的时候。</li>
+</ul>
+<h2 id="8-常用的基分类器是什么？"><a href="#8-常用的基分类器是什么？" class="headerlink" title="8. 常用的基分类器是什么？"></a>8. 常用的基分类器是什么？</h2><p>最常用的基分类器是决策树,原因:</p>
+<ul>
+<li>决策树是低偏差高方差的，适合作为基分类器</li>
+<li>决策树可以较为方便地将样本的权重整合到训练过程中，而不需要使用过采样的方法来调整样本权重。</li>
+<li>决策树的表达能力和泛化能力，可以通过调节树的层数来做折中。</li>
+<li>数据样本的扰动对于决策树的影响较大，因此不同子样本集合生成的决策树基分类器随机性较大，这样的“不稳定学习器”更适合作为基分类器。此外，在决策树节点分裂的时候，随机地选择一个特征子集，从中找出最优分裂属性，<strong>很好地引入了随机性。</strong></li>
+</ul>
+<h2 id="9-可否将随机森林中的基分类器，由决策树替换为线性分类器或K-近邻？请解释为什么？"><a href="#9-可否将随机森林中的基分类器，由决策树替换为线性分类器或K-近邻？请解释为什么？" class="headerlink" title="9. 可否将随机森林中的基分类器，由决策树替换为线性分类器或K-近邻？请解释为什么？"></a>9. 可否将随机森林中的基分类器，由决策树替换为线性分类器或K-近邻？请解释为什么？</h2><p>不能：</p>
+<ul>
+<li>Bagging的主要好处是集成后的分类器的方差，比基分类器的方差小。</li>
+<li><p>随机森林属于Bagging类的集成学习，对样本分布较为敏感的分类器更适用于Bagging。</p>
+</li>
+<li><p>线性分类器或者K-近邻都是较为稳定的分类器，本身方差就不大。</p>
+</li>
+<li>线性分类器或者K-近邻可能会由于Bagging的采样，导致在训练中更难收敛，增大偏差。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
     
 
 
@@ -1665,10 +1841,16 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2020-10-25 09:35:05 / Modified: 11:08:37" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:05+08:00">2020-10-25</time>
+      <time title="Created: 2020-10-25 09:35:05" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:05+08:00">2020-10-25</time>
     </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2020-10-26 20:07:17" itemprop="dateModified" datetime="2020-10-26T20:07:17+08:00">2020-10-26</time>
+      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -1729,8 +1911,8 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
 </li>
 </ul>
 </li>
-<li><p>分类树：(Gini)</p>
-<p><img src="https://img-blog.csdn.net/20150109184544578?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvQW5kcm9pZGx1c2hhbmdkZXJlbg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="某属性A的基尼系数"><br>基尼系数越小，纯度越高</p>
+<li><p>分类树：(Gini不纯度)</p>
+<p><img src="https://img-blog.csdn.net/20150109184544578?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvQW5kcm9pZGx1c2hhbmdkZXJlbg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="某属性A的基尼不纯度"><br>基尼不纯度越小，纯度越高</p>
 </li>
 </ul>
 <blockquote>
@@ -1758,157 +1940,6 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
 </ul>
 </li>
 </ol>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/25/DBSCAN/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Kayden">
-      <meta itemprop="description" content="blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Kayden's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/10/25/DBSCAN/" class="post-title-link" itemprop="url">DBSCAN以及sklearn实现DBSCAN</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2020-10-25 09:35:05 / Modified: 20:14:04" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:05+08:00">2020-10-25</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <meta name="referrer" content="no-referrer"/>
-
-<p>[TOC]<br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/pinard/p/6208966.html">原文1</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/pinard/p/6217852.html">原文2</a><br>DBSCAN(Density-Based Spatial Clustering of Applications with Noise，具有噪声的基于密度的聚类方法)是一种很典型的<strong>密度聚类算法</strong>，和K-Means，BIRCH这些一般只适用于凸样本集的聚类相比，DBSCAN<strong>既可以适用于凸样本集，也可以适用于非凸样本集</strong>。</p>
-<h1 id="密度聚类"><a href="#密度聚类" class="headerlink" title="密度聚类"></a>密度聚类</h1><p>其原理为：同一类别的样本，其样本分布一定是紧密的；可以将各组紧密相连的样本划分为不同的类别来得到聚类类别结果。</p>
-<h1 id="DBSCAN"><a href="#DBSCAN" class="headerlink" title="DBSCAN"></a>DBSCAN</h1><h2 id="关键概念"><a href="#关键概念" class="headerlink" title="关键概念"></a>关键概念</h2><p>参数(ϵ, MinPts)描述领域的样本分布紧密程度，其中ϵ描述了某一样本的领域<strong>距离阈值</strong>，MinPts描述某一样本的距离为ϵ的领域中样本<strong>个数的阈值</strong>。</p>
-<p>假设样本集是D=(x1,x2,…,xm),则DBSCAN具体的密度描述定义如下：</p>
-<ol>
-<li>ϵ-邻域：对于xj∈D，其ϵ-邻域包含样本集D中与xj的距离不大于ϵ的子样本集，即Nϵ(xj)={xi∈D|distance(xi,xj)≤ϵ}, 这个子样本集的个数记为|Nϵ(xj)|</li>
-<li>核心对象：对于任一样本xj∈D，如果其ϵ-邻域对应的Nϵ(xj)至少包含MinPts个样本，即如果|Nϵ(xj)|≥MinPts，则xj是核心对象。</li>
-<li>密度直达：如果xi位于xj的ϵ-邻域中，且xj是核心对象，则称xi由xj密度直达。</li>
-<li>密度可达：对于xi和xj,如果存在样本样本序列p1,p2,…,pT,满足p1=xi,pT=xj, 且pt+1由pt密度直达，则称xj由xi密度可达。也就是说，密度可达满足传递性。此时序列中的传递样本p1,p2,…,pT−1均为核心对象，因为只有核心对象才能使其他样本密度直达。</li>
-<li>密度相连：对于xi和xj,如果存在核心对象样本xk，使xi和xj均由xk密度可达，则称xi和xj密度相连。注意密度相连关系是满足对称性的。</li>
-</ol>
-<p>图中MinPts = 5。红点为核心对象。<br><img src="https://images2015.cnblogs.com/blog/1042406/201612/1042406-20161222112847323-1346197243.png" alt="示意图"></p>
-<h2 id="聚类思想"><a href="#聚类思想" class="headerlink" title="聚类思想"></a>聚类思想</h2><p>由密度可达关系导出的最大密度相连的样本集合，即为最终聚类的一个类别。</p>
-<p>方法：任意选择一个没有类别的核心对象作为种子，然后找到该核心对象密度可达的样本集合，为一个聚类。接着选择另一个没有类比的核心对象…直到所有核心对象都有类别。</p>
-<p>问题：</p>
-<ol>
-<li>outlier.不在任何一个核心对象周围的点定义为异常样本点或噪声点，不考虑。</li>
-<li>距离。少量样本而言，搜索周围样本一般用最近邻的方法；大量样本，可以用KD树，球树等搜索最近邻。</li>
-<li>若某样本到两个核心对象的距离都小于ϵ，但这两个核心对象不可达，此时采取先来后到原则，标记其为先聚类的cluster类别。</li>
-</ol>
-<h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><p>输入：样本集D=(x1,x2,…,xm)，邻域参数(ϵ,MinPts), 样本距离度量方式</p>
-<p>输出： 簇划分C.　</p>
-<ol>
-<li>初始化核心对象集合Ω=∅, 初始化聚类簇数k=0，初始化未访问样本集合Γ = D,  簇划分C = ∅</li>
-<li>对于j=1,2,…m, 按下面的步骤找出所有的核心对象：<ul>
-<li>通过距离度量方式，找到样本xj的ϵ-邻域子样本集Nϵ(xj)</li>
-<li>如果子样本集样本个数满足|Nϵ(xj)|≥MinPts， 将样本xj加入核心对象样本集合：Ω=Ω∪{xj}</li>
-</ul>
-</li>
-<li>如果核心对象集合Ω=∅，则算法结束，否则转入步骤4.</li>
-<li>在核心对象集合Ω中，随机选择一个核心对象o，初始化当前簇核心对象队列Ωcur={o}, 初始化类别序号k=k+1，初始化当前簇样本集合Ck={o}, 更新未访问样本集合Γ=Γ−{o}</li>
-<li>如果当前簇核心对象队列Ωcur=∅，则当前聚类簇Ck生成完毕, 更新簇划分C={C1,C2,…,Ck}, 更新核心对象集合Ω=Ω−Ck， 转入步骤3。</li>
-<li>在当前簇核心对象队列Ωcur中取出一个核心对象o′,通过邻域距离阈值ϵ找出所有的ϵ-邻域子样本集Nϵ(o′)，令Δ=Nϵ(o′)∩Γ, 更新当前簇样本集合Ck=Ck∪Δ, 更新未访问样本集合Γ=Γ−Δ,  更新Ωcur=Ωcur∪(Δ∩Ω)−o′，转入步骤5.</li>
-</ol>
-<p>输出结果为： 簇划分C={C1,C2,…,Ck}</p>
-<h1 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h1><p>对比图：<img src="https://img-blog.csdn.net/20170419143546349?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvc2luYXRfMjY5MTczODM=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="与其他算法的对比图"><br>一般用于数据集稠密时的情况，或数据集是非凸的。</p>
-<p>DBSCAN的主要优点有：</p>
-<ol>
-<li>可以对任意形状的稠密数据集进行聚类，相对的，K-Means之类的聚类算法一般只适用于凸数据集。</li>
-<li>可以在聚类的同时发现异常点，对数据集中的异常点不敏感。</li>
-<li>聚类结果没有偏倚，相对的，K-Means之类的聚类算法初始值对聚类结果有很大影响。</li>
-</ol>
-<p>DBSCAN的主要缺点有：</p>
-<ol>
-<li>如果样本集的密度不均匀、聚类间距差相差很大时，聚类质量较差，这时用DBSCAN聚类一般不适合。</li>
-<li>如果样本集较大时，聚类收敛时间较长，此时可以对搜索最近邻时建立的KD树或者球树进行规模限制来改进。</li>
-<li>调参相对于传统的K-Means之类的聚类算法稍复杂，主要需要对距离阈值ϵ，邻域样本数阈值MinPts联合调参，不同的参数组合对最后的聚类效果有较大影响。</li>
-</ol>
-<h1 id="sklearn-cluster-DBSCAN"><a href="#sklearn-cluster-DBSCAN" class="headerlink" title="sklearn.cluster.DBSCAN"></a>sklearn.cluster.DBSCAN</h1><h2 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h2><p>按其算法，包括DBSCAN本身的参数，以及求取最近邻时的参数。</p>
-<ol>
-<li>eps：DBSCAN算法参数，ϵ-邻域的距离阈值。默认值是0.5.eps过大，则更多的点会落在核心对象的ϵ-邻域，此时我们的类别数可能会减少， 本来不应该是一类的样本也会被划为一类。反之则类别数可能会增大，本来是一类的样本却被划分开。</li>
-<li>min_samples：DBSCAN算法参数，上文的MinPts。默认值是5.通常和eps一起调参。在eps一定的情况下，min_samples过大，则核心对象会过少，此时簇内部分本来是一类的样本可能会被标为噪音点，类别数也会变多。反之min_samples过小的话，则会产生大量的核心对象，可能会导致类别数过少。</li>
-<li>metric：最近邻距离度量参数。可以使用的距离度量较多，一般来说DBSCAN使用默认的欧式距离（即p=2的闵可夫斯基距离）就可以满足我们的需求。可以使用的距离度量参数有：<ul>
-<li>欧式距离 “euclidean”</li>
-<li>曼哈顿距离 “manhattan”</li>
-<li>切比雪夫距离“chebyshev”</li>
-<li>闵可夫斯基距离 “minkowski”</li>
-<li>带权重闵可夫斯基距离 “wminkowski”</li>
-<li>标准化欧式距离 “seuclidean”</li>
-<li>马氏距离“mahalanobis”</li>
-</ul>
-</li>
-<li>algorithm：最近邻搜索算法参数，算法一共有三种，第一种是蛮力实现，第二种是KD树实现，第三种是球树实现。对于这个参数，一共有4种可选输入，‘brute’对应第一种蛮力实现，‘kd_tree’对应第二种KD树实现，‘ball_tree’对应第三种的球树实现，‘auto’则会在上面三种算法中做权衡，选择一个拟合最好的最优算法。需要注意的是，如果输入样本特征是稀疏的时候，无论我们选择哪种算法，最后scikit-learn都会去用蛮力实现‘brute’。个人的经验，一般情况使用默认的 ‘auto’就够了。 如果数据量很大或者特征也很多，用”auto”建树时间可能会很长，效率不高，建议选择KD树实现‘kd_tree’，此时如果发现‘kd_tree’速度比较慢或者已经知道样本分布不是很均匀时，可以尝试用‘ball_tree’。而如果输入样本是稀疏的，无论你选择哪个算法最后实际运行的都是‘brute’。</li>
-<li>leaf_size：最近邻搜索算法参数，为使用KD树或者球树时， 停止建子树的叶子节点数量的阈值。这个值越小，则生成的KD树或者球树就越大，层数越深，建树时间越长，反之，则生成的KD树或者球树会小，层数较浅，建树时间较短。默认是30. 因为这个值一般只影响算法的运行速度和使用内存大小，因此一般情况下可以不管它。</li>
-<li>p: 最近邻距离度量参数。只用于闵可夫斯基距离和带权重闵可夫斯基距离中p值的选择，p=1为曼哈顿距离， p=2为欧式距离。如果使用默认的欧式距离不需要管这个参数。</li>
-<li>n_jobs：使用CPU格式，-1代表全开。</li>
-</ol>
-<p>输出：</p>
-<ul>
-<li>core_sample_indices_:核心样本指数。（此参数在代码中有详细的解释）</li>
-<li>labels_:数据集中每个点的集合标签给,噪声点标签为-1。</li>
-<li>components_ ：核心样本的副本</li>
-</ul>
-<p>主要是<strong>eps和min_samples</strong>的调参。</p>
-<h2 id="代码实例"><a href="#代码实例" class="headerlink" title="代码实例"></a>代码实例</h2><p>原文2中有。<br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/pinard/p/6217852.html">原文2</a></p>
 
       
     </div>
