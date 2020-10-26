@@ -23,21 +23,22 @@
     var CONFIG = {"hostname":"chenzk1.github.io","root":"/","scheme":"Gemini","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 
-  <meta name="description" content="特征离散的作用 离散化后的特征对异常数据有很强的鲁棒性比如一个特征是年龄&gt;30是1，否则0。如果特征没有离散化，一个异常数据“年龄300岁”会给模型造成很大的干扰；离散化后年龄300岁也只对应于一个权重，如果训练数据中没有出现特征”年龄-300岁”，那么在LR模型中，其权重对应于0，所以，即使测试数据中出现特征”年龄-300岁”,也不会对预测结果产生影响。特征离散化的过程，比如特征A，如果当">
+  <meta name="description" content="[TOC] 分类Accuracy Accuracy &#x3D; 预测正确的样本数量 &#x2F; 总样本数量 &#x3D; (TP+TN) &#x2F; (TP+FP+TN+FN)  Precision查准 Precision &#x3D; TP &#x2F; (TP+FP)  Recall 查全 Recall &#x3D; TP &#x2F; (TP+FN)  F1&amp;FnF1 precision和recall的调和平均  Fn 可用来解决分类不均衡问题&#x2F;对pr">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Feature Engineering">
-<meta property="og:url" content="https://chenzk1.github.io/2020/10/25/%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/index.html">
+<meta property="og:title" content="机器学习-Metrics">
+<meta property="og:url" content="https://chenzk1.github.io/2020/10/26/%E5%88%86%E7%B1%BBmetrics/index.html">
 <meta property="og:site_name" content="Kayden&#39;s Blog">
-<meta property="og:description" content="特征离散的作用 离散化后的特征对异常数据有很强的鲁棒性比如一个特征是年龄&gt;30是1，否则0。如果特征没有离散化，一个异常数据“年龄300岁”会给模型造成很大的干扰；离散化后年龄300岁也只对应于一个权重，如果训练数据中没有出现特征”年龄-300岁”，那么在LR模型中，其权重对应于0，所以，即使测试数据中出现特征”年龄-300岁”,也不会对预测结果产生影响。特征离散化的过程，比如特征A，如果当">
+<meta property="og:description" content="[TOC] 分类Accuracy Accuracy &#x3D; 预测正确的样本数量 &#x2F; 总样本数量 &#x3D; (TP+TN) &#x2F; (TP+FP+TN+FN)  Precision查准 Precision &#x3D; TP &#x2F; (TP+FP)  Recall 查全 Recall &#x3D; TP &#x2F; (TP+FN)  F1&amp;FnF1 precision和recall的调和平均  Fn 可用来解决分类不均衡问题&#x2F;对pr">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2020-10-25T02:54:33.712Z">
-<meta property="article:modified_time" content="2020-10-26T02:18:55.279Z">
+<meta property="article:published_time" content="2020-10-26T09:04:58.308Z">
+<meta property="article:modified_time" content="2020-10-26T09:26:46.859Z">
 <meta property="article:author" content="Kayden">
 <meta property="article:tag" content="ML">
+<meta property="article:tag" content="Metrics">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://chenzk1.github.io/2020/10/25/%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/">
+<link rel="canonical" href="https://chenzk1.github.io/2020/10/26/%E5%88%86%E7%B1%BBmetrics/">
 
 
 <script class="page-configurations">
@@ -50,7 +51,7 @@
   };
 </script>
 
-  <title>Feature Engineering | Kayden's Blog</title>
+  <title>机器学习-Metrics | Kayden's Blog</title>
   
 
 
@@ -206,7 +207,7 @@
 
       <!--noindex-->
       <section class="post-toc-wrap sidebar-panel">
-          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E7%A6%BB%E6%95%A3%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="nav-number">1.</span> <span class="nav-text">特征离散的作用</span></a></li></ol></div>
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E7%B1%BB"><span class="nav-number">1.</span> <span class="nav-text">分类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Accuracy"><span class="nav-number">1.1.</span> <span class="nav-text">Accuracy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Precision%E6%9F%A5%E5%87%86"><span class="nav-number">1.2.</span> <span class="nav-text">Precision查准</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Recall-%E6%9F%A5%E5%85%A8"><span class="nav-number">1.3.</span> <span class="nav-text">Recall 查全</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#F1-amp-Fn"><span class="nav-number">1.4.</span> <span class="nav-text">F1&amp;Fn</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#F1"><span class="nav-number">1.4.1.</span> <span class="nav-text">F1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Fn"><span class="nav-number">1.4.2.</span> <span class="nav-text">Fn</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#P-R%E6%9B%B2%E7%BA%BF"><span class="nav-number">1.5.</span> <span class="nav-text">P-R曲线</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TPR"><span class="nav-number">1.6.</span> <span class="nav-text">TPR</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FPR"><span class="nav-number">1.7.</span> <span class="nav-text">FPR</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ROC%E6%9B%B2%E7%BA%BF-amp-AUC"><span class="nav-number">1.8.</span> <span class="nav-text">ROC曲线&amp;AUC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ROC%E6%9B%B2%E7%BA%BF"><span class="nav-number">1.8.1.</span> <span class="nav-text">ROC曲线</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AUC"><span class="nav-number">1.8.2.</span> <span class="nav-text">AUC</span></a></li></ol></li></ol></li></ol></div>
       </section>
       <!--/noindex-->
 
@@ -279,7 +280,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/25/%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/26/%E5%88%86%E7%B1%BBmetrics/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -292,7 +293,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Feature Engineering
+          机器学习-Metrics
         </h1>
 
         <div class="post-meta-container">
@@ -302,16 +303,10 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
+      
 
-      <time title="Created: 2020-10-25 10:54:33" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
+      <time title="Created: 2020-10-26 17:04:58 / Modified: 17:26:46" itemprop="dateCreated datePublished" datetime="2020-10-26T17:04:58+08:00">2020-10-26</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2020-10-26 10:18:55" itemprop="dateModified" datetime="2020-10-26T10:18:55+08:00">2020-10-26</time>
-      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -332,14 +327,47 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h2 id="特征离散的作用"><a href="#特征离散的作用" class="headerlink" title="特征离散的作用"></a>特征离散的作用</h2><ul>
-<li><strong>离散化后的特征对异常数据有很强的鲁棒性</strong><br>比如一个特征是年龄&gt;30是1，否则0。如果特征没有离散化，一个异常数据“年龄300岁”会给模型造成很大的干扰；离散化后年龄300岁也只对应于一个权重，如果训练数据中没有出现特征”年龄-300岁”，那么在LR模型中，其权重对应于0，所以，即使测试数据中出现特征”年龄-300岁”,也不会对预测结果产生影响。特征离散化的过程，比如特征A，如果当做连续特征使用，在LR模型中，A会对应一个权重w,如果离散化，那么A就拓展为特征A-1，A-2，A-3…,每个特征对应于一个权重，如果训练样本中没有出现特征A-4，那么训练的模型对于A-4就没有权重，如果测试样本中出现特征A-4,该特征A-4也不会起作用。相当于无效。但是，如果使用连续特征，在LR模型中，y = w*a,a是特征，w是a对应的权重,比如a代表年龄，那么a的取值范围是[0..100]，如果测试样本中,出现了一个测试用例，a的取值是300，显然a是异常值，但是w*a还是有值，而且值还非常大，所以，异常值会对最后结果产生非常大的影响。</li>
-<li><strong>特征离散化后，模型会更稳定</strong><br>比如如果对用户年龄离散化，20-30作为一个区间，不会因为一个用户年龄长了一岁就变成一个完全不同的人。当然处于区间相邻处的样本会刚好相反，所以怎么划分区间是门学问；按区间离散化，划分区间是非常关键的。</li>
-<li><strong>特征离散化以后，起到了简化了逻辑回归模型的作用，降低了模型过拟合的风险</strong><br>当使用连续特征时，一个特征对应于一个权重，那么，如果这个特征权重较大，模型就会很依赖于这个特征，这个特征的一个微小变化可能会导致最终结果产生很大的变化，这样子的模型很危险，当遇到新样本的时候很可能因为对这个特征过分敏感而得到错误的分类结果，也就是泛化能力差，容易过拟合。而使用离散特征的时候，一个特征变成了多个，权重也变为多个，那么之前连续特征对模型的影响力就被分散弱化了，从而降低了过拟合的风险。</li>
-<li><strong>引入非线性</strong><br>单变量离散化为N个后，每个变量有单独的权重，相当于为模型引入了非线性，能够提升模型表达能力，加大拟合；在LR模型中，特征A作为连续特征对应的权重是Wa。A是线性特征，因为y = Wa*A,y对于A的导数就是Wa,如果离散化后，A按区间离散化为A_1,A_2,A_3。那么y = w_1*A_1+w_2*A_2+w_3*A_3.那么y对于A的函数就相当于分段的线性函数，y对于A的导数也随A的取值变动，所以，相当于引入了非线性。</li>
-<li><strong>离散化后方便进行特征交叉</strong><br>离散化后变为了类别，方便特征交叉。进一步引入非线性，提升表达能力。</li>
-<li>离散特征的增加和减少都很容易，易于模型的快速迭代。(离散特征的增加和减少，模型也不需要调整，重新训练是必须的，相比贝叶斯推断方法或者树模型方法迭代快)</li>
-<li>稀疏向量内积乘法运算速度快，计算结果方便存储，容易扩展；</li>
+        <meta name="referrer" content="no-referrer"/>
+
+<p>[TOC]</p>
+<h1 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h1><h2 id="Accuracy"><a href="#Accuracy" class="headerlink" title="Accuracy"></a>Accuracy</h2><ul>
+<li>Accuracy = 预测正确的样本数量 / 总样本数量 = (TP+TN) / (TP+FP+TN+FN)</li>
+</ul>
+<h2 id="Precision查准"><a href="#Precision查准" class="headerlink" title="Precision查准"></a>Precision查准</h2><ul>
+<li>Precision = TP / (TP+FP)</li>
+</ul>
+<h2 id="Recall-查全"><a href="#Recall-查全" class="headerlink" title="Recall 查全"></a>Recall 查全</h2><ul>
+<li>Recall = TP / (TP+FN)</li>
+</ul>
+<h2 id="F1-amp-Fn"><a href="#F1-amp-Fn" class="headerlink" title="F1&amp;Fn"></a>F1&amp;Fn</h2><h3 id="F1"><a href="#F1" class="headerlink" title="F1"></a>F1</h3><ul>
+<li>precision和recall的调和平均</li>
+</ul>
+<h3 id="Fn"><a href="#Fn" class="headerlink" title="Fn"></a>Fn</h3><ul>
+<li>可用来解决分类不均衡问题/对precision和recall进行强调<ul>
+<li>如F1认为precision和recall同等重要，F2认为recall的重要程度是precision的2倍<script type="math/tex; mode=display">
+F_{\beta}=\left(1+\beta^{2}\right) \cdot \frac{\text { precision } \cdot \text { recall }}{\left(\beta^{2} \cdot \text { precision }\right)+\text { recall }}</script></li>
+</ul>
+</li>
+</ul>
+<script type="math/tex; mode=display">
+F_{\beta}=\frac{\left(1+\beta^{2}\right) \cdot \text { true positive }}{\left(1+\beta^{2}\right) \cdot \text { true positive }+\beta^{2} \cdot \text { false negative }+\text { false positive }}</script><h2 id="P-R曲线"><a href="#P-R曲线" class="headerlink" title="P-R曲线"></a>P-R曲线</h2><h2 id="TPR"><a href="#TPR" class="headerlink" title="TPR"></a>TPR</h2><ul>
+<li>TPR = TP/(TP+FN) 真实label为1的样本中，被预测为1的样本占的比例</li>
+</ul>
+<h2 id="FPR"><a href="#FPR" class="headerlink" title="FPR"></a>FPR</h2><ul>
+<li>FPR = FP/(FP+TN) 真实label为0的样本中，被预测为1的样本占的比例</li>
+</ul>
+<h2 id="ROC曲线-amp-AUC"><a href="#ROC曲线-amp-AUC" class="headerlink" title="ROC曲线&amp;AUC"></a>ROC曲线&amp;AUC</h2><ul>
+<li>衡量分类准确性，同时考虑了模型对正样本和负样本的分类能力，因此在样本非均衡的情况下也能做出合理的评价。侧重于<strong>排序</strong>。</li>
+</ul>
+<h3 id="ROC曲线"><a href="#ROC曲线" class="headerlink" title="ROC曲线"></a>ROC曲线</h3><ul>
+<li>横轴FPR，纵轴TPR</li>
+<li>ROC曲线在绘制时，需要先对所有样本的预测概率做排序，并不断取不同的阈值计算TPR和FPR，因此AUC在计算时会侧重于排序。</li>
+</ul>
+<h3 id="AUC"><a href="#AUC" class="headerlink" title="AUC"></a>AUC</h3><ul>
+<li>ROC曲线与x轴的面积</li>
+<li>一般认为：AUC最小值=0.5（其实存在AUC小于0.5的情况，例如每次都预测与真实值相反的情况，但是这种情况，只要把预测值取反就可以得到大于0.5的值，因此还是认为AUC最小值=0.5）</li>
+<li>AUC的物理意义为<strong>任取一对例和负例，正例得分大于负例得分的概率</strong>，AUC越大，表明方法效果越好。—&gt; 排序<script type="math/tex; mode=display">A U C=\frac{\sum p r e d_{p o s}>p r e d_{n e g}}{p o s i t i v e N u m * n e g a ti v e N u m}</script>分母是正负样本总的组合数，分子是正样本大于负样本的组合数<script type="math/tex; mode=display">
+A U C=\frac{\sum_{\text {ins}_{i} \in \text {positiveclass}} \operatorname{rank}_{\text {ins}_{i}}-\frac{M \times(M+1)}{2}}{M \times N}</script></li>
 </ul>
 
     </div>
@@ -351,20 +379,18 @@
     <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/ML/" rel="tag"># ML</a>
+              <a href="/tags/Metrics/" rel="tag"># Metrics</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2020/10/25/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/" rel="prev" title="机器学习面试题-Random Forest">
-                  <i class="fa fa-chevron-left"></i> 机器学习面试题-Random Forest
+                <a href="/2020/10/26/Python-sort&sorted%E5%87%BD%E6%95%B0/" rel="prev" title="Python-sort&sorted">
+                  <i class="fa fa-chevron-left"></i> Python-sort&sorted
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2020/10/25/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D/" rel="next" title="机器学习面试题-梯度下降">
-                  机器学习面试题-梯度下降 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
@@ -459,6 +485,50 @@
   
 
   
+      <script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              const target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    const script = document.createElement('script');
+    script.src = '//cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js';
+    script.defer = true;
+    document.head.appendChild(script);
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.typesetClear();
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 

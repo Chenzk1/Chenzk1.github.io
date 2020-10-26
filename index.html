@@ -217,7 +217,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-count">26</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -275,6 +275,122 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/26/%E5%88%86%E7%B1%BBmetrics/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Kayden">
+      <meta itemprop="description" content="blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kayden's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/10/26/%E5%88%86%E7%B1%BBmetrics/" class="post-title-link" itemprop="url">机器学习-Metrics</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2020-10-26 17:04:58 / Modified: 17:26:46" itemprop="dateCreated datePublished" datetime="2020-10-26T17:04:58+08:00">2020-10-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <meta name="referrer" content="no-referrer"/>
+
+<p>[TOC]</p>
+<h1 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h1><h2 id="Accuracy"><a href="#Accuracy" class="headerlink" title="Accuracy"></a>Accuracy</h2><ul>
+<li>Accuracy = 预测正确的样本数量 / 总样本数量 = (TP+TN) / (TP+FP+TN+FN)</li>
+</ul>
+<h2 id="Precision查准"><a href="#Precision查准" class="headerlink" title="Precision查准"></a>Precision查准</h2><ul>
+<li>Precision = TP / (TP+FP)</li>
+</ul>
+<h2 id="Recall-查全"><a href="#Recall-查全" class="headerlink" title="Recall 查全"></a>Recall 查全</h2><ul>
+<li>Recall = TP / (TP+FN)</li>
+</ul>
+<h2 id="F1-amp-Fn"><a href="#F1-amp-Fn" class="headerlink" title="F1&amp;Fn"></a>F1&amp;Fn</h2><h3 id="F1"><a href="#F1" class="headerlink" title="F1"></a>F1</h3><ul>
+<li>precision和recall的调和平均</li>
+</ul>
+<h3 id="Fn"><a href="#Fn" class="headerlink" title="Fn"></a>Fn</h3><ul>
+<li>可用来解决分类不均衡问题/对precision和recall进行强调<ul>
+<li>如F1认为precision和recall同等重要，F2认为recall的重要程度是precision的2倍<script type="math/tex; mode=display">
+F_{\beta}=\left(1+\beta^{2}\right) \cdot \frac{\text { precision } \cdot \text { recall }}{\left(\beta^{2} \cdot \text { precision }\right)+\text { recall }}</script></li>
+</ul>
+</li>
+</ul>
+<script type="math/tex; mode=display">
+F_{\beta}=\frac{\left(1+\beta^{2}\right) \cdot \text { true positive }}{\left(1+\beta^{2}\right) \cdot \text { true positive }+\beta^{2} \cdot \text { false negative }+\text { false positive }}</script><h2 id="P-R曲线"><a href="#P-R曲线" class="headerlink" title="P-R曲线"></a>P-R曲线</h2><h2 id="TPR"><a href="#TPR" class="headerlink" title="TPR"></a>TPR</h2><ul>
+<li>TPR = TP/(TP+FN) 真实label为1的样本中，被预测为1的样本占的比例</li>
+</ul>
+<h2 id="FPR"><a href="#FPR" class="headerlink" title="FPR"></a>FPR</h2><ul>
+<li>FPR = FP/(FP+TN) 真实label为0的样本中，被预测为1的样本占的比例</li>
+</ul>
+<h2 id="ROC曲线-amp-AUC"><a href="#ROC曲线-amp-AUC" class="headerlink" title="ROC曲线&amp;AUC"></a>ROC曲线&amp;AUC</h2><ul>
+<li>衡量分类准确性，同时考虑了模型对正样本和负样本的分类能力，因此在样本非均衡的情况下也能做出合理的评价。侧重于<strong>排序</strong>。</li>
+</ul>
+<h3 id="ROC曲线"><a href="#ROC曲线" class="headerlink" title="ROC曲线"></a>ROC曲线</h3><ul>
+<li>横轴FPR，纵轴TPR</li>
+<li>ROC曲线在绘制时，需要先对所有样本的预测概率做排序，并不断取不同的阈值计算TPR和FPR，因此AUC在计算时会侧重于排序。</li>
+</ul>
+<h3 id="AUC"><a href="#AUC" class="headerlink" title="AUC"></a>AUC</h3><ul>
+<li>ROC曲线与x轴的面积</li>
+<li>一般认为：AUC最小值=0.5（其实存在AUC小于0.5的情况，例如每次都预测与真实值相反的情况，但是这种情况，只要把预测值取反就可以得到大于0.5的值，因此还是认为AUC最小值=0.5）</li>
+<li>AUC的物理意义为<strong>任取一对例和负例，正例得分大于负例得分的概率</strong>，AUC越大，表明方法效果越好。—&gt; 排序<script type="math/tex; mode=display">A U C=\frac{\sum p r e d_{p o s}>p r e d_{n e g}}{p o s i t i v e N u m * n e g a ti v e N u m}</script>分母是正负样本总的组合数，分子是正样本大于负样本的组合数<script type="math/tex; mode=display">
+A U C=\frac{\sum_{\text {ins}_{i} \in \text {positiveclass}} \operatorname{rank}_{\text {ins}_{i}}-\frac{M \times(M+1)}{2}}{M \times N}</script></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
     <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/26/Python-sort&sorted%E5%87%BD%E6%95%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -301,7 +417,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2020-10-26 10:35:12 / Modified: 10:57:47" itemprop="dateCreated datePublished" datetime="2020-10-26T10:35:12+08:00">2020-10-26</time>
+      <time title="Created: 2020-10-26 10:35:12 / Modified: 14:08:47" itemprop="dateCreated datePublished" datetime="2020-10-26T10:35:12+08:00">2020-10-26</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -2134,184 +2250,6 @@ f(x)=w_{0}+\sum_{m=1}^{M} w_{m} \phi_{m}(x)</script><p>其中$w$是权重，$\ph
 <li><p>线性分类器或者K-近邻都是较为稳定的分类器，本身方差就不大。</p>
 </li>
 <li>线性分类器或者K-近邻可能会由于Bagging的采样，导致在训练中更难收敛，增大偏差。</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/25/XGBoost/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Kayden">
-      <meta itemprop="description" content="blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Kayden's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/10/25/XGBoost/" class="post-title-link" itemprop="url">XGBoost</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2020-10-25 10:54:33 / Modified: 19:55:12" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <meta name="referrer" content="no-referrer"/>
-
-<p>[toc]<br><a target="_blank" rel="noopener" href="https://xgboost.readthedocs.io/en/latest/tutorials/model.html">Doc</a><br><a target="_blank" rel="noopener" href="https://homes.cs.washington.edu/~tqchen/pdf/BoostedTree.pdf">Slides</a></p>
-<h2 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h2><p><img src="http://i.imgur.com/L7PhJwO.png" alt="Summary"><br><img src="https://img-blog.csdnimg.cn/2019031119461897.?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI0ODUyNDM5,size_16,color_FFFFFF,t_70" alt="Summary"></p>
-<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><ul>
-<li>每轮生成新的树，该树的生成标准为：损失函数最小化。损失函数代表的意义：保证模型复杂度越低的同时，使预测误差尽可能小。其中模型复杂度包括树的个数以及叶子数值尽可能不极端。<em>（这个怎么看，如果某个样本label数值为4，那么第一个回归树预测3，第二个预测为1；另外一组回归树，一个预测2，一个预测2，那么倾向后一种，为什么呢？前一种情况，第一棵树学的太多，太接近4，也就意味着有较大的过拟合的风险）</em></li>
-<li>每一轮产生新的树的时候，其loss是本轮加之前模型与y的差，然后通过泰勒展开做成<strong>t-1轮损失函数对于t-1轮模型即上一轮残差</strong>的一阶导和二阶导与当前树及其平方的乘积</li>
-</ul>
-<h3 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h3><script type="math/tex; mode=display">\text{obj} = \sum_{i=1}^n l(y_i, \hat{y}_i^{(t)}) + \sum_{i=1}^t\Omega(f_i)</script><p>其中l为loss，l为二次则利用二次优化，不是二次则用泰勒展开；Omega为正则项。</p>
-<ul>
-<li><p>loss：采用加法策略，第t颗树时：</p>
-<script type="math/tex; mode=display">\hat{y}_i^{(0)} = 0</script><script type="math/tex; mode=display">\hat{y}_i^{(1)} = f_1(x_i) = \hat{y}_i^{(0)} + f_1(x_i)</script><script type="math/tex; mode=display">\dots</script><script type="math/tex; mode=display">\hat{y}_i^{(t)} = \sum_{k=1}^t f_k(x_i)= \hat{y}_i^{(t-1)} + f_t(x_i)</script><p>所以在添加第t颗树时，需要优化的目标函数为：</p>
-<script type="math/tex; mode=display">l(y_i, \hat{y}_i^{(t)}) = l(y_i, \hat{y}_i^{(t-1)} + f_{t-1}(x_i)) = \sum_{i=1}^n [l(y_i, \hat{y}_i^{(t-1)}) + g_i f_t(x_i) + \frac{1}{2} h_i f_t^2(x_i)] + \Omega(f_t)</script><p>其中g和h分别为t-1轮损失函数对于t-1轮模型的一阶导和二阶导：</p>
-<script type="math/tex; mode=display">g_i = \partial_{\hat{y}_i^{(t-1)}} l(y_i, \hat{y}_i^{(t-1)})</script><script type="math/tex; mode=display">h_i = \partial_{\hat{y}_i^{(t-1)}}^2 l(y_i, \hat{y}_i^{(t-1)})</script><p>note: 是对谁的导</p>
-<p>此处为了简化目标函数，用到了泰勒二阶展开：<br><img src="https://img-blog.csdnimg.cn/20190311165107976.?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI0ODUyNDM5,size_16,color_FFFFFF,t_70" alt="Summary"><br>loss第一项是真实值与t-1轮预测结果的loss，对t轮不明显，因此删去。所以对于一个模型来说，在每一次优化时，先定义好loss函数，然后计算每一轮loss的一阶导和二阶导即可写出loss，优化即可（每个特征求最佳分裂点，使用最小的特征）。</p>
-</li>
-<li>正则项：复杂度：<script type="math/tex; mode=display">\Omega(f) = \gamma T + \frac{1}{2}\lambda \sum_{j=1}^T w_j^2</script>其中w是叶子上的score vector，T是叶子数量</li>
-</ul>
-<h3 id="损失函数求解"><a href="#损失函数求解" class="headerlink" title="损失函数求解"></a>损失函数求解</h3><ul>
-<li>最佳树结构（特征和分裂值）以及叶子节点的预测分数都是通过优化目标函数来得出的，其中叶子节点的预测分数是正则项的一部分；但其实分裂时是通过增益最大化来寻找最佳分裂特征和分裂值的，只有w是通过计算目标函数得出的<br><img src="https://upload-images.jianshu.io/upload_images/1371984-364c3b6e258cc671.PNG?imageMogr2/auto-orient/strip|imageView2/2/w/782/format/webp" alt="Summary"><br>求出各个叶子节点的最佳值以及此时目标函数的值:<br><img src="https://upload-images.jianshu.io/upload_images/1371984-3b24159e2a85b4a3.PNG?imageMogr2/auto-orient/strip|imageView2/2/w/365/format/webp" alt="Summary"></li>
-</ul>
-<h3 id="分裂"><a href="#分裂" class="headerlink" title="分裂"></a>分裂</h3><ul>
-<li>分裂方式<ul>
-<li>枚举所有树结构的贪心法（先特征，再分裂点）：<ul>
-<li>首先，对所有特征都按照特征的数值进行预排序。</li>
-<li>其次，在遍历分割点的时候用O(#data)的代价找到一个特征上的最好分割点。</li>
-<li>最后，找到一个特征的分割点后，将数据分裂成左右子节点。</li>
-</ul>
-</li>
-<li>优缺点：<ul>
-<li>优点：精确找到分裂点</li>
-<li>缺点：<strong>空间消耗大</strong>（保存数据的特征值，还保存了特征排序的结果，即2<em>数据大小）、<strong>时间开销大</strong>（遍历每一个分割点的时候，都需要进行分裂增益的计算）、<em>*cache优化不友好</em></em>（预排序后，特征对梯度的访问是一种随机访问，并且不同的特征访问的顺序不一样，无法对 cache 进行优化）</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>分裂的标准：<strong>增益最大化</strong>，每次节点分裂，loss function被影响的只有这个节点的样本，因而每次分裂，计算分裂的<strong>增益</strong>（loss function的降低量）只需要关注打算分裂的那个节点的样本<br><img src="https://upload-images.jianshu.io/upload_images/1371984-d0a9c89dbbc34f7c.PNG?imageMogr2/auto-orient/strip|imageView2/2/w/544/format/webp" alt="Summary"></li>
-<li>终止条件<ul>
-<li>树的最大数量</li>
-<li>max_depth</li>
-<li>最小增益：当引入的分裂带来的增益小于一个阀值的时候，我们可以剪掉这个分裂，所以并不是每一次分裂loss function整体都会增加的，有点预剪枝的意思</li>
-<li>当样本权重和小于设定阈值时则停止建树，这个解释一下，涉及到一个超参数-最小的样本权重和min_child_weight，和GBM的 min_child_leaf 参数类似，但不完全一样，大意就是一个叶子节点样本太少了终止</li>
-</ul>
-</li>
-</ul>
-<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><ul>
-<li>每个树的每个节点上的预测值相加<br><img src="https://upload-images.jianshu.io/upload_images/1371984-bbe17b3b253a6d1a.PNG?imageMogr2/auto-orient/strip|imageView2/2/w/901/format/webp" alt="Summary"></li>
-</ul>
-<h2 id="DART-Booster"><a href="#DART-Booster" class="headerlink" title="DART Booster"></a>DART Booster</h2><p>为了解决过拟合，会随机drop trees:</p>
-<ul>
-<li>训练速度可能慢于gbtree</li>
-<li>由于随机性，早停可能不稳定</li>
-</ul>
-<h2 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h2><ul>
-<li>算法：二阶导、正则化、自定义loss、缺失数据处理、支持类别特征、早停</li>
-<li>工程：行采样、列采样、</li>
-</ul>
-<h3 id="正则化-amp-行采样-amp-列采样-amp-早停"><a href="#正则化-amp-行采样-amp-列采样-amp-早停" class="headerlink" title="正则化&amp;行采样&amp;列采样&amp;早停"></a>正则化&amp;行采样&amp;列采样&amp;早停</h3><ul>
-<li>通过最优化求出w，而不是平均值或者多数表决</li>
-<li>防止过拟合</li>
-</ul>
-<h3 id="支持自定义loss"><a href="#支持自定义loss" class="headerlink" title="支持自定义loss"></a>支持自定义loss</h3><h3 id="处理缺失值"><a href="#处理缺失值" class="headerlink" title="处理缺失值"></a>处理缺失值</h3><h3 id="并行"><a href="#并行" class="headerlink" title="并行"></a>并行</h3><ul>
-<li><strong>特征间并行</strong>：由于将数据按列存储，可以同时访问所有列，那么可以对所有属性同时执行split finding算法，从而并行化split finding（切分点寻找）</li>
-<li><strong>特征内并行</strong>：可以用多个block(Multiple blocks)分别存储不同的样本集，多个block可以并行计算-特征内并行</li>
-</ul>
-<h3 id="Monotonic-Constraints单调性限制"><a href="#Monotonic-Constraints单调性限制" class="headerlink" title="Monotonic Constraints单调性限制"></a>Monotonic Constraints单调性限制</h3><ul>
-<li><p>一个可选特性:<br>会限制模型的结果按照某个特征 单调的进行增减</p>
-<p>也就是说可以降低模型对数据的敏感度，如果明确已知某个特征与预测结果呈单调关系时，那在生成模型的时候就会跟特征数据的单调性有关。</p>
-</li>
-</ul>
-<h3 id="Feature-Interaction-Constraints单调性限制"><a href="#Feature-Interaction-Constraints单调性限制" class="headerlink" title="Feature Interaction Constraints单调性限制"></a>Feature Interaction Constraints单调性限制</h3><ul>
-<li><p>一个可选特性：<br>不用时，在tree生成的时候，一棵树上的节点会无限制地选用多个特征</p>
-<p>设置此特性时，可以规定，哪些特征可以有interaction（一般独立变量之间可以interaction，非独立变量的话可能会引入噪声）</p>
-</li>
-<li>好处：<ul>
-<li>预测时更小的噪声</li>
-<li>对模型更好地控制</li>
-</ul>
-</li>
-</ul>
-<h3 id="Instance-Weight-File"><a href="#Instance-Weight-File" class="headerlink" title="Instance Weight File"></a>Instance Weight File</h3><ul>
-<li>规定了模型训练时data中每一条instance的权重</li>
-<li>有些instance质量较差，或与前一示例相比变化不大，所以可以调节其所占权重</li>
-</ul>
-<h2 id="调参"><a href="#调参" class="headerlink" title="调参"></a>调参</h2><ul>
-<li>通用参数：宏观函数控制。booster/slient/nthread</li>
-<li>Booster参数：控制每一步的booster(tree/regression)。</li>
-<li>学习目标参数：控制训练目标的表现。</li>
-</ul>
-<h3 id="Overfitting"><a href="#Overfitting" class="headerlink" title="Overfitting"></a>Overfitting</h3><p>与overfitting有关的参数：</p>
-<ul>
-<li>学习率</li>
-<li>直接控制模型复杂度：max_depth, min_child_weight, gamma, lambda, alpha, max_leaf_nodes</li>
-<li>增加模型随机性以使得模型对噪声有更强的鲁棒性：<ul>
-<li>subsample and colsample_bytree. </li>
-</ul>
-</li>
-</ul>
-<h3 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h3><ul>
-<li>选择较高的学习速率(learning rate)。XGBoost有一个很有用的函数“cv”，这个函数可以在每一次迭代中使用交叉验证，并返回理想的决策树数量。</li>
-<li>对于给定的学习速率和决策树数量，进行决策树特定参数调优(max_depth, min_child_weight, gamma, subsample, colsample_bytree)。在确定一棵树的过程中，我们可以选择不同的参数。</li>
-<li>xgboost的正则化参数的调优。(lambda, alpha)。这些参数可以降低模型的复杂度，从而提高模型的表现。</li>
-<li>降低学习速率，确定理想参数。</li>
 </ul>
 
       
