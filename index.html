@@ -23,15 +23,15 @@
     var CONFIG = {"hostname":"chenzk1.github.io","root":"/","scheme":"Gemini","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 
-  <meta name="description" content="blog">
+  <meta name="description" content="陈仲锴的博客, Kayden&#39;s Blog">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Kayden&#39;s Blog">
 <meta property="og:url" content="https://chenzk1.github.io/index.html">
 <meta property="og:site_name" content="Kayden&#39;s Blog">
-<meta property="og:description" content="blog">
+<meta property="og:description" content="陈仲锴的博客, Kayden&#39;s Blog">
 <meta property="og:locale" content="en_US">
 <meta property="article:author" content="Kayden">
-<meta property="article:tag" content="code">
+<meta property="article:tag" content="blog, code, Machine Learning">
 <meta name="twitter:card" content="summary">
 
 
@@ -210,14 +210,14 @@
       <section class="site-overview-wrap sidebar-panel">
         <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
   <p class="site-author-name" itemprop="name">Kayden</p>
-  <div class="site-description" itemprop="description">blog</div>
+  <div class="site-description" itemprop="description">陈仲锴的博客, Kayden's Blog</div>
 </div>
 <div class="site-state-wrap site-overview-item animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-count">28</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -275,12 +275,238 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/27/CV-SIFT/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Kayden">
+      <meta itemprop="description" content="陈仲锴的博客, Kayden's Blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kayden's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/10/27/CV-SIFT/" class="post-title-link" itemprop="url">CV-SIFT</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2020-10-27 11:20:16 / Modified: 22:11:48" itemprop="dateCreated datePublished" datetime="2020-10-27T11:20:16+08:00">2020-10-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <meta name="referrer" content="no-referrer"/>
+
+<p>[TOC]</p>
+<h2 id="SIFT-Scale-invariant-feature-transform-综述"><a href="#SIFT-Scale-invariant-feature-transform-综述" class="headerlink" title="SIFT(Scale-invariant feature transform)综述"></a>SIFT(Scale-invariant feature transform)综述</h2><ul>
+<li>尺度不变特征转换：SIFT是一种在<strong>多尺度空间上提取局部特征</strong>的方法。它在空间尺度中寻找极值点，并提取出其位置、尺度、旋转不变量，此算法由 David Lowe在1999年所发表，2004年完善总结。</li>
+</ul>
+<h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3><ul>
+<li>SIFT特征是图像的局部特征，其对旋转、尺度缩放、亮度变化保持不变性，对视角变化、仿射变换、噪声也保持一定程度的稳定性；</li>
+<li>独特性（Distinctiveness）好，信息量丰富，适用于在海量特征数据库中进行快速、准确的匹配；</li>
+<li>多量性，即使少数的几个物体也可以产生大量的SIFT特征向量；</li>
+<li>高速性，经优化的SIFT匹配算法甚至可以达到实时的要求；</li>
+<li>可扩展性，可以很方便的与其他形式的特征向量进行联合。</li>
+</ul>
+<h3 id="整体流程"><a href="#整体流程" class="headerlink" title="整体流程"></a>整体流程</h3><p><img src="https://img2018.cnblogs.com/blog/1471528/201903/1471528-20190330204125547-535493662.png" alt="整体流程"></p>
+<h2 id="尺度空间极值检测"><a href="#尺度空间极值检测" class="headerlink" title="尺度空间极值检测"></a>尺度空间极值检测</h2><ul>
+<li>获取多尺度空间：Lindeberg等人已证明高斯卷积核是实现尺度变换的唯一变换核，并且是唯一的线性核</li>
+</ul>
+<h3 id="预备知识"><a href="#预备知识" class="headerlink" title="预备知识"></a>预备知识</h3><h4 id="二维高斯函数"><a href="#二维高斯函数" class="headerlink" title="二维高斯函数"></a>二维高斯函数</h4><ul>
+<li>以(m/2, n/2)为中心的二维高斯分布<script type="math/tex; mode=display">
+G(x, y)=\frac{1}{2 \pi \sigma^{2}} e^{-\frac{(x-m / 2)^{2}+(y-n / 2)^{2}}{2 \sigma^{2}}}</script></li>
+<li>生成的曲面等高线是从中心开始呈正态分布的同心圆，权重值从中心向周围越来越小。这样进行模糊处理比其它的均衡模糊滤波器更高地保留了边缘效果。</li>
+<li>实际应用中，在计算高斯函数的离散近似时，在大概3σ距离之外的像素都可以看作不起作用，因此图像处理程序只需要计算$<br>(6 \sigma+1) \times(6 \sigma+1)<br>$的矩阵</li>
+</ul>
+<h4 id="二维高斯函数的优化"><a href="#二维高斯函数的优化" class="headerlink" title="二维高斯函数的优化"></a>二维高斯函数的优化</h4><ol>
+<li>若高斯模板大小为m*n，当图像大小为M*N时，计算复杂度为O(m*n*M*N)</li>
+<li>$\sigma$越大，高斯模板分散性越强，处理边缘点时，丢失的图像信息越多，可能会造成黑边</li>
+</ol>
+<ul>
+<li>可以证明，二维高斯运算可以优化为：水平方向进行一维高斯矩阵变换加上竖直方向的一维高斯矩阵变换得到。时间复杂度为：$<br>O(n \times M \times N)+O(m \times M \times N)<br>$。<a target="_blank" rel="noopener" href="https://blog.csdn.net/lwx309025167/article/details/82761474">证明</a><br><img src="https://img-blog.csdn.net/20180919111255142?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x3eDMwOTAyNTE2Nw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="证明"></li>
+</ul>
+<h4 id="高斯拉普拉斯算子-Laplacion-of-Gaussian-LoG"><a href="#高斯拉普拉斯算子-Laplacion-of-Gaussian-LoG" class="headerlink" title="高斯拉普拉斯算子(Laplacion of Gaussian, LoG)"></a>高斯拉普拉斯算子(Laplacion of Gaussian, LoG)</h4><ul>
+<li>作用：突出边缘，更清晰，对比度更强</li>
+<li>拉普拉斯：拉普拉斯算子是图像二阶空间导数的二维各向同性测度。<strong>拉普拉斯算子可以突出图像中强度发生快速变化的区域</strong>，因此常用在边缘检测任务当中。</li>
+<li>高斯：在进行Laplacian操作之前通常需要先用高斯平滑滤波器对图像进行平滑处理，以<strong>降低Laplacian操作对于噪声的敏感性</strong>。</li>
+<li>输入输出均为灰度图</li>
+<li>连续拉普拉斯：<script type="math/tex; mode=display">
+L(x, y)=\frac{\partial^{2} I}{\partial x^{2}}+\frac{\partial^{2} I}{\partial y^{2}}</script></li>
+<li>离散拉普拉斯，例如：</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>0</th>
+<th>-1</th>
+<th>0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-1</td>
+<td>4</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>0</td>
+<td>-1</td>
+<td>-1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>-1</th>
+<th>-1</th>
+<th>-1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-1</td>
+<td>8</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>-1</td>
+<td>-1</td>
+<td>-1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>表达：以0为中心，$\sigma$为标准差的LoG<script type="math/tex; mode=display">
+L o G(x, y)=-\frac{1}{\pi \sigma^{4}}\left[1-\frac{x^{2}+y^{2}}{2 \sigma^{2}}\right] e^{-\frac{x^{2}+y^{2}}{2 \sigma^{2}}}</script><img src="https://pic1.zhimg.com/80/v2-f824bd5eae07235ebf531fa0b546ba98_1440w.jpg" alt="LoG示意图"><blockquote>
+<p>推导过程：<img src="https://pic4.zhimg.com/80/v2-b220086b94625a8a00ce68eb2a4bd0e3_1440w.jpg" alt="推导过程"></p>
+</blockquote>
+</li>
+<li>示例：一维LoG滤波器对于边缘的响应：<img src="https://pic4.zhimg.com/80/v2-12ce9caee0278bf8855efdecfcba7fc7_1440w.jpg" alt="一维LoG滤波器对于边缘的响应"></li>
+</ul>
+<h4 id="高斯差分算子-Difference-of-Gaussian-DOG"><a href="#高斯差分算子-Difference-of-Gaussian-DOG" class="headerlink" title="高斯差分算子(Difference of Gaussian, DOG)"></a>高斯差分算子(Difference of Gaussian, DOG)</h4><ul>
+<li>可以近似LoG算子，减少运算量，由Lindeberg在1994证明</li>
+<li>DoG的运算如下，即DoG为两不同尺度的高斯算子平滑后的图像之差，具体证明见：<a target="_blank" rel="noopener" href="https://blog.csdn.net/kieven2008/article/details/104309440">证明</a><script type="math/tex; mode=display">
+\begin{aligned}
+D(x, y, \sigma) &=(G(x, y, k \sigma)-G(x, y, \sigma)) * I(x, y) \\
+&=L(x, y, k \sigma)-L(x, y, \sigma)
+\end{aligned}</script></li>
+</ul>
+<h4 id="尺度空间理论"><a href="#尺度空间理论" class="headerlink" title="尺度空间理论"></a>尺度空间理论</h4><ul>
+<li>定义<ul>
+<li>单尺度 —-&gt; 多尺度</li>
+<li>尺度空间中各尺度图像的模糊程度逐渐变大，能够模拟人在距离目标由近到远时目标在视网膜上的形成过程。</li>
+</ul>
+</li>
+<li>要求：满足视觉不变性<ul>
+<li>亮度/灰度不变性，对比度不变性</li>
+<li>平移不变性、尺度不变性、欧几里得不变性、仿射不变性</li>
+</ul>
+</li>
+<li>方法：<ul>
+<li>Tony Lindeberg指出<strong>尺度规范化的LoG(Laplacion of Gaussian)算子具有真正的尺度不变性</strong>。Lowe使用高斯差分金字塔近似LoG算子，是尺度空间检测稳定的关键点。</li>
+</ul>
+</li>
+<li>表示：一个图像的尺度空间$L(x,y,\sigma)$，可以表示为一个变化尺度的高斯函数与原图像的卷积<script type="math/tex; mode=display">
+L(x, y, \sigma)=G(x, y, \sigma) * I(x, y)</script><script type="math/tex; mode=display">
+G(x, y, \sigma)=\frac{1}{2 \pi \sigma^{2}} e^{-\frac{(x-m / 2)^{2}+(y-n / 2)^{2}}{2 \sigma^{2}}}</script><ul>
+<li>m，n表示高斯模板中心，维度为$<br>(6 \sigma+1) \times(6 \sigma+1)<br>$，(x, y)代表图像的像素位置。$\sigma$是尺度空间因子，值越小表示图像被平滑的越少，相应的尺度也就越小。<strong>大尺度对应于图像的概貌特征，小尺度对应于图像的细节特征。</strong></li>
+</ul>
+</li>
+</ul>
+<h3 id="尺度空间极值检测-1"><a href="#尺度空间极值检测-1" class="headerlink" title="尺度空间极值检测"></a>尺度空间极值检测</h3><ul>
+<li>极值：图像域和尺度域上的极值<br><img src="https://img2018.cnblogs.com/blog/1471528/201903/1471528-20190330204227104-18141123.png" alt="步骤"></li>
+</ul>
+<h4 id="构建高斯金字塔"><a href="#构建高斯金字塔" class="headerlink" title="构建高斯金字塔"></a>构建高斯金字塔</h4><ol>
+<li>先将原图像扩大一倍之后作为高斯金字塔的第1组第1层，将第1组第1层图像经高斯卷积（其实就是高斯平滑或称高斯滤波）之后作为第1组金字塔的第2层。对于参数σ，在Sift算子中取的是固定值1.6。</li>
+<li>将σ乘以一个比例系数k，得到一个新的平滑因子σ=k*σ，用它来平滑第1组第2层图像，结果图像作为第3层。</li>
+<li>如此这般重复，最后得到L层图像，在同一组中，每一层图像的尺寸都是一样的，只是平滑系数不一样。它们对应的平滑系数分别为：0，σ，kσ，k^2σ,k^3σ……k^(L-2)σ。</li>
+<li>将第1组<strong>倒数第三层</strong>图像作比例因子为2的降采样，得到的图像作为第2组的第1层，然后对第2组的第1层图像做平滑因子为σ的高斯平滑，得到第2组的第2层，就像步骤2中一样，如此得到第2组的L层图像，同组内它们的尺寸是一样的，对应的平滑系数分别为：0，σ，kσ，k^2σ,k^3σ……k^(L-2)σ。但是在尺寸方面第2组是第1组图像的一半。</li>
+<li>反复执行，得到一共O组，每组L层，共计O*L个图像，这些图像一起就构成了高斯金字塔，结构如下：<br><img src="https://img-blog.csdn.net/20160917212318336" alt="高斯金字塔"></li>
+</ol>
+<h4 id="构建高斯差分-DOG-金字塔"><a href="#构建高斯差分-DOG-金字塔" class="headerlink" title="构建高斯差分(DOG)金字塔"></a>构建高斯差分(DOG)金字塔</h4><ul>
+<li>方法<br><img src="https://img-blog.csdn.net/20160917223500317" alt="高斯差分金字塔"></li>
+<li>经过归一化的高斯差分金字塔<br><img src="https://img-blog.csdn.net/20160917232151713" alt="一个示例"></li>
+</ul>
+<h4 id="空间极值点检测"><a href="#空间极值点检测" class="headerlink" title="空间极值点检测"></a>空间极值点检测</h4><ul>
+<li>极值点：每一个像素点要和它所有的相邻点比较，看其是否比它的图像域和尺度域的相邻点大或者小。要获取S个尺度的极值点—-&gt;需要S+2个DOG空间—&gt;S+3层高斯金字塔</li>
+<li>实际计算时S在3到5之间</li>
+</ul>
+<h4 id="具体构建过程中的参数计算"><a href="#具体构建过程中的参数计算" class="headerlink" title="具体构建过程中的参数计算"></a>具体构建过程中的参数计算</h4><ul>
+<li>输入：组数o，层数S，$k=2^{\frac{1}{S}}$，以及计算每组每层的尺度参数$\sigma(o, s)=\sigma_{0} 2^{\circ+\frac{s}{S}} o \in[0, \ldots, O-1], s \in[0, \ldots, S+2]$<ul>
+<li>$\sigma_{0}$为初始尺度</li>
+</ul>
+</li>
+<li>相同组间不同层的尺度参数$\sigma$为k倍之差，不同组相同层之间尺度参数$\sigma$为2倍之差</li>
+</ul>
+<h3 id="关键点定位"><a href="#关键点定位" class="headerlink" title="关键点定位"></a>关键点定位</h3><h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/Alliswell-WP/p/SIFT.html">https://www.cnblogs.com/Alliswell-WP/p/SIFT.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/zddblog/article/details/7521424">https://blog.csdn.net/zddblog/article/details/7521424</a></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
     <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/26/%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99-%E4%BC%9A%E8%AE%AE&%E6%9C%9F%E5%88%8A/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Kayden">
-      <meta itemprop="description" content="blog">
+      <meta itemprop="description" content="陈仲锴的博客, Kayden's Blog">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -379,7 +605,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Kayden">
-      <meta itemprop="description" content="blog">
+      <meta itemprop="description" content="陈仲锴的博客, Kayden's Blog">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -514,7 +740,7 @@ A U C=\frac{\sum_{\text {ins}_{i} \in \text {positiveclass}} \operatorname{rank}
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Kayden">
-      <meta itemprop="description" content="blog">
+      <meta itemprop="description" content="陈仲锴的博客, Kayden's Blog">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -624,7 +850,7 @@ A U C=\frac{\sum_{\text {ins}_{i} \in \text {positiveclass}} \operatorname{rank}
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Kayden">
-      <meta itemprop="description" content="blog">
+      <meta itemprop="description" content="陈仲锴的博客, Kayden's Blog">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -707,7 +933,7 @@ A U C=\frac{\sum_{\text {ins}_{i} \in \text {positiveclass}} \operatorname{rank}
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Kayden">
-      <meta itemprop="description" content="blog">
+      <meta itemprop="description" content="陈仲锴的博客, Kayden's Blog">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1141,7 +1367,7 @@ A U C=\frac{\sum_{\text {ins}_{i} \in \text {positiveclass}} \operatorname{rank}
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Kayden">
-      <meta itemprop="description" content="blog">
+      <meta itemprop="description" content="陈仲锴的博客, Kayden's Blog">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1432,7 +1658,7 @@ J(\theta) = -lnL(\theta) = -\sum\limits_{i=1}^{m}(y^{(i)}log(h_{\theta}(x^{(i)})
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Kayden">
-      <meta itemprop="description" content="blog">
+      <meta itemprop="description" content="陈仲锴的博客, Kayden's Blog">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1700,7 +1926,7 @@ f(\mathbf{x})=f\left(\mathbf{x}_{0}\right)+\nabla f\left(\mathbf{x}_{0}\right)^{
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Kayden">
-      <meta itemprop="description" content="blog">
+      <meta itemprop="description" content="陈仲锴的博客, Kayden's Blog">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1789,7 +2015,7 @@ f(\mathbf{x})=f\left(\mathbf{x}_{0}\right)+\nabla f\left(\mathbf{x}_{0}\right)^{
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Kayden">
-      <meta itemprop="description" content="blog">
+      <meta itemprop="description" content="陈仲锴的博客, Kayden's Blog">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1956,247 +2182,6 @@ f(\mathbf{x})=f\left(\mathbf{x}_{0}\right)+\nabla f\left(\mathbf{x}_{0}\right)^{
 <li>随机森林在训练每一棵树的时候，随机挑选了部分特征作为拆分特征，而不是所有的特征都去作为拆分特征。</li>
 <li>在预测新数据时，Adaboost中所有的树加权投票来决定因变量的预测值，每棵树的权重和错误率有关；随机森林按照所有树中少数服从多数树的分类值来决定因变量的预测值（或者求取树预测的平均值）。</li>
 </ul>
-</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/25/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E5%86%B3%E7%AD%96%E6%A0%91/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Kayden">
-      <meta itemprop="description" content="blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Kayden's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/10/25/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E5%86%B3%E7%AD%96%E6%A0%91/" class="post-title-link" itemprop="url">机器学习面试题-决策树</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2020-10-25 10:54:33 / Modified: 19:52:11" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <meta name="referrer" content="no-referrer"/>
-
-<p>[TOC]</p>
-<h2 id="1-简单介绍决策树算法"><a href="#1-简单介绍决策树算法" class="headerlink" title="1. 简单介绍决策树算法"></a>1. 简单介绍决策树算法</h2><p>决策树将算法组织成一颗树的形式。其实这就是将平时所说的<strong>if-then语句</strong>构建成了树的形式。决策树主要包括<strong>三个部分：内部节点、叶节点、边。内部节点是划分的特征，边代表划分的条件，叶节点表示类别。</strong></p>
-<p>构建决策树 就是一个递归的选择内部节点，计算划分条件的边，最后到达叶子节点的过程。 决策树在本质上是一组嵌套的if-else判定规则，从数学上看是分段常数函数，对应于用平行于坐标轴的平面对空间的划分。判定规则是人类处理很多问题时的常用方法，这些规则是我们通过经验总结出来的，而决策树的这些规则是通过训练样本自动学习得到的。下面是一棵简单的决策树以及它对空间的划分结果： </p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_png/75DkJnThACkAo4IibbcQjEuyibRfEFSaemBGYWpM6AOLwCJHk4ByqIje7otdia0PUj9mWKQBK5btVmIFbSQ9bdSbA/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></p>
-<p>训练时，通过最大化Gini或者其他指标来寻找最佳分裂。决策树可以输特征向量每个分量的重要性。</p>
-<p><strong>决策树是一种判别模型，既支持分类问题，也支持回归问题，是一种非线性模型（分段线性函数不是线性的）。它天然的支持多分类问题。</strong></p>
-<h2 id="2-决策树和条件概率分布的关系？"><a href="#2-决策树和条件概率分布的关系？" class="headerlink" title="2. 决策树和条件概率分布的关系？"></a>2. 决策树和条件概率分布的关系？</h2><p><strong>决策树可以表示成给定条件下类的条件概率分布。</strong> </p>
-<p>决策树中的每一条路径都对应是划分的一个条件概率分布. 每一个叶子节点都是通过多个条件之后的划分空间，在叶子节点中计算每个类的条件概率，必然会倾向于某一个类，即这个类的概率最大。</p>
-<h2 id="3-信息增益比相对信息增益有什么好处？"><a href="#3-信息增益比相对信息增益有什么好处？" class="headerlink" title="3. 信息增益比相对信息增益有什么好处？"></a>3. 信息增益比相对信息增益有什么好处？</h2><ul>
-<li><p>使用信息增益时：模型<strong>偏向于选择取值较多</strong>的特征</p>
-</li>
-<li><p>使用信息增益比时：<strong>对取值多的特征加上的惩罚</strong>，对这个问题进行了校正。</p>
-</li>
-</ul>
-<h2 id="4-ID3算法—-gt-C4-5算法—-gt-CART算法"><a href="#4-ID3算法—-gt-C4-5算法—-gt-CART算法" class="headerlink" title="4. ID3算法—&gt;C4.5算法—&gt; CART算法"></a>4. ID3算法—&gt;C4.5算法—&gt; CART算法</h2><ul>
-<li><p>$ID3$</p>
-<ul>
-<li>$ID3$算法没有考虑连续特征，比如长度，密度都是连续值，无法在ID3运用。这大大限制了ID3的用途。</li>
-<li>$ID3$算法采用信息增益大的特征优先建立决策树的节点，偏向于取值比较多的特征</li>
-<li>$ID3$算法对于缺失值的情况没有做考虑</li>
-<li>$ID3$算法没有考虑过拟合的问题</li>
-</ul>
-</li>
-<li><p>$C4.5$在$ID3$算法上面的改进</p>
-<ul>
-<li>连续的特征离散化 </li>
-<li>使用信息增益比 </li>
-<li>通过剪枝算法解决过拟合</li>
-</ul>
-</li>
-<li><p>$C4.5$的不足：</p>
-<ul>
-<li>$C4.5$生成的是多叉树</li>
-<li>$C4.5$只能用于分类，如果能将决策树用于回归的话可以扩大它的使用范围。</li>
-<li>$C4.5$由于使用了熵模型，里面有大量的耗时的对数运算,如果是连续值还有大量的排序运算</li>
-</ul>
-</li>
-<li><p>$CART$算法 </p>
-<ul>
-<li>可以做回归，也可以做分类， </li>
-<li>使用基尼系数来代替信息增益比 </li>
-<li>$CART$分类树离散值的处理问题，采用的思路是不停的二分离散特征。 </li>
-</ul>
-</li>
-</ul>
-<h2 id="5-决策树的缺失值是怎么处理的"><a href="#5-决策树的缺失值是怎么处理的" class="headerlink" title="5. 决策树的缺失值是怎么处理的"></a>5. 决策树的缺失值是怎么处理的</h2><ul>
-<li><p>如何在特征值缺失的情况下进行划分特征的选择？</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">（比如“色泽”这个特征有的样本在该特征上的值是缺失的，那么该如何计算“色泽”的信息增益？）</span><br></pre></td></tr></table></figure>
-<ul>
-<li><p>每个样本设置一个权重（初始可以都为1） </p>
-</li>
-<li><p>划分数据，一部分是有特征值$a$的数据，另一部分是没有特征值$a$的数据,记为$\tilde{D}$，</p>
-</li>
-<li><p><strong>对</strong>没有缺失特征值$a$的<strong>数据集$\tilde{D}$，</strong>来和对应的特征$A$的各个特征值一起<strong>计算加权重后的信息增益比</strong>，最后乘上一个系数$\rho$ 。</p>
-</li>
-</ul>
-</li>
-</ul>
-<script type="math/tex; mode=display">
-\rho=\frac{\sum_{x \in \tilde{D}} w_{x}}{\sum_{x \in {D}} w_{x}}</script><script type="math/tex; mode=display">
-\tilde{p}_{k}=\frac{\sum_{x \in \tilde{D}_{k}} w_{x}}{\sum_{x \in \tilde{D}} w_{x}} \quad(1 \leq \mathrm{k} \leq|y|)</script><script type="math/tex; mode=display">
-\tilde{r}_{v}=\frac{\sum_{x \in \tilde D^{v}} w_{x}}{\sum_{x \in \tilde{D}} w_{x}} \quad(1 \leq v \leq V)</script><p>​        假设特征$A$有$v$个取值$\{a_1,a_2 \dots a_v\}$</p>
-<p>​        $\tilde D$：该特征上没有缺失值的样本</p>
-<p>​        $\tilde D_k$：$\tilde D$中属于第$k$类的样本子集</p>
-<p>​        $\tilde D^v$：$\tilde D$中在特征$a$上取值为$a_v$的样本子集</p>
-<p>​        $\rho$：无特征$A$缺失的样本加权后所占加权总样本的比例。</p>
-<p>​        $\tilde{p}_{k}$：无缺失值样本第$k$类所占无缺失值样本的比例</p>
-<p>​        $\tilde{r}_{v}$：无缺失值样本在特征$a$上取值$a^v$的样本所占无缺失值样本的比例</p>
-<p>​        新的信息增益公式：</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-&\operatorname{Gain}(D, a)=\rho \times \operatorname{Gain}(\tilde{D}, a)=\rho \times\left(\operatorname{Ent}(\tilde{D})-\sum_{v=1}^{V} \tilde{r}_{v} \operatorname{Ent}\left(\tilde{D}^{v}\right)\right)\\
-&\operatorname{Ent}(\tilde{D})=-\sum_{k=1}^{|y|} \tilde{p}_{k} \log _{2} \tilde{p}_{k}
-\end{aligned}</script><ul>
-<li><p>给定划分特征，若样本在该特征上的值是缺失的，那么该如何对这个样本进行划分？</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">（即到底把这个样本划分到哪个结点里？）</span><br></pre></td></tr></table></figure>
-<ul>
-<li>让包含缺失值的样本以不同的概率划分到不同的子节点中去。</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">比如缺失特征A的样本a之前权重为1，特征A有3个特征值A1,A2,A3。 3个特征值对应的无缺失A特征的样本个数为2,3,4.则a同时划分入A1，A2，A3。对应权重调节为2&#x2F;9,3&#x2F;9, 4&#x2F;9。</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="6-决策树的目标函数是什么？"><a href="#6-决策树的目标函数是什么？" class="headerlink" title="6. 决策树的目标函数是什么？"></a><strong>6. 决策树的目标函数是什么？</strong></h2><script type="math/tex; mode=display">
-C_{\alpha}(T)=\sum_{t=1}^{|T|} N_{t} H_{t}(T)+a|T|</script><script type="math/tex; mode=display">
-H_{t}(T)=-\sum_{k} \frac{N_{t k}}{N_{t}} \log \frac{N_{t k}}{N_{t}}</script><p>其中$|T|$代表叶节点个数</p>
-<p>$N_t$表示具体某个叶节点的样例数</p>
-<p> $H_t(T)$ 表示叶节点$t$上的经验熵</p>
-<p>$\alpha|T|$为正则项，$\alpha \geqslant 0 $ 为参数。</p>
-<h2 id="7-决策树怎么处理连续性特征？"><a href="#7-决策树怎么处理连续性特征？" class="headerlink" title="7. 决策树怎么处理连续性特征？"></a>7. 决策树怎么处理连续性特征？</h2><p>因为连续特征的可取值数目不再有限，因此不能像前面处理离散特征枚举离散特征取值来对结点进行划分。因此需要连续特征离散化，常用的离散化策略是二分法，这个技术也是$C4.5$中采用的策略。下面来具体介绍下，如何采用二分法对连续特征离散化： </p>
-<ul>
-<li><p>训练集D，连续特征$A$，其中A有n个取值</p>
-</li>
-<li><p>对$A$的取值进行从小到大排序得到：$\{a_1,a_2\dots a_n\}$</p>
-</li>
-<li><p>寻找划分点$t$，$t$将D分为子集$D_{t}^{-}$与$D_{t}^{+}$</p>
-<ul>
-<li>$D_{t}^{-}$：特征$A$上取值不大于$t$的样本</li>
-<li>$D_{t}^{+}$：特征$A$上取值大于$t$的样本</li>
-</ul>
-</li>
-<li><p>对相邻的特征取值$a_i$与$a_{i+1}$，t再区间$[a_i,a_{i+1})$中取值所产生的划分结果相同，因此对于连续特征$A$,包含有$n-1$个元素的后选划分点集合</p>
-</li>
-</ul>
-<script type="math/tex; mode=display">
-T_a = \{\frac{a_i + a_{i+1}}{2}|1\leq{i}\leq{n-1} \}</script><ul>
-<li><p>把区间$[a_i,a_{i+1})$的中位点$\frac{a_i + a_{i+1}}{2}$作为候选划分点</p>
-</li>
-<li><p>按照处理离散值那样来选择最优的划分点,使用公式：</p>
-<script type="math/tex; mode=display">
-Gain(D,a) =\underbrace{max}_{t\in T_a}Gain(D,a,t) = \underbrace{max}_{t\in T_a}\ (Ent(D) - \sum_{\lambda \in \{-,+ \}}\frac{|D_t^{\lambda}|}{|D|}Ent(D_t^{\lambda}))</script><p>其中$Gain(D,a,t)$是样本集$D$基于划分点$t$二分之后的信息增益。划分点时候选择使用$Gain(D,a,t)$最大的划分点。</p>
-</li>
-</ul>
-<h2 id="8-决策树怎么防止过拟合？"><a href="#8-决策树怎么防止过拟合？" class="headerlink" title="8. 决策树怎么防止过拟合？"></a><strong>8. 决策树怎么防止过拟合？</strong></h2><h3 id="构建随机森林"><a href="#构建随机森林" class="headerlink" title="构建随机森林"></a>构建随机森林</h3><ul>
-<li>构建随机森林</li>
-</ul>
-<h3 id="控制树的结构复杂程度"><a href="#控制树的结构复杂程度" class="headerlink" title="控制树的结构复杂程度"></a>控制树的结构复杂程度</h3><ul>
-<li><p>预剪枝(提前停止)：控制<strong>深度、当前的节点数、分裂对测试集的准确度提升大小</strong></p>
-<ul>
-<li>限制树的高度，可以利用交叉验证选择</li>
-<li>利用分类指标，如果下一次切分没有降低误差，则停止切分</li>
-<li>限制树的节点个数，比如某个节点小于100个样本，停止对该节点切分</li>
-</ul>
-</li>
-<li><p>后剪枝(自底而上)：<strong>生成决策树、交叉验证剪枝：子树删除，节点代替子树、测试集准确率判断决定剪枝</strong></p>
-<ul>
-<li>在决策树构建完成之后，根据加上正则项的结构风险最小化自下向上进行的剪枝操作. 剪枝的目的就是防止过拟合，是模型在测试数据上变现良好，更加鲁棒。</li>
-</ul>
-</li>
-</ul>
-<h2 id="9-如果特征很多，决策树中最后没有用到的特征一定是无用吗？"><a href="#9-如果特征很多，决策树中最后没有用到的特征一定是无用吗？" class="headerlink" title="9. 如果特征很多，决策树中最后没有用到的特征一定是无用吗？"></a>9. 如果特征很多，决策树中最后没有用到的特征一定是无用吗？</h2><p>不是无用的，从两个角度考虑：</p>
-<ul>
-<li><p><strong>特征替代性</strong>，如果可以已经使用的特征$A$和特征$B$可以提点特征$C$，特征$C$可能就没有被使用，但是如果把特征$C$单独拿出来进行训练，依然有效</p>
-</li>
-<li><p>决策树的每一条路径就是<strong>计算条件概率的条件</strong>，前面的条件如果包含了后面的条件，只是这个条件在这棵树中是无用的，如果把这个条件拿出来也是可以帮助分析数据.</p>
-</li>
-</ul>
-<h2 id="10-决策树的优缺点？"><a href="#10-决策树的优缺点？" class="headerlink" title="10.决策树的优缺点？"></a>10.决策树的优缺点？</h2><ul>
-<li><p>优点: </p>
-<ul>
-<li>简单直观，生成的决策树很直观。</li>
-<li>基本不需要预处理，不需要提前归一化，处理缺失值。</li>
-<li>既可以处理离散值也可以处理连续值。很多算法只是专注于离散值或者连续值。</li>
-<li>可以处理多维度输出的分类问题。</li>
-<li>相比于神经网络之类的黑盒分类模型，决策树在逻辑上可以得到很好的解释</li>
-<li>可以交叉验证的剪枝来选择模型，从而提高泛化能力。</li>
-<li>对于异常点的容错能力好，健壮性高。</li>
-</ul>
-</li>
-<li><p>缺点:</p>
-<ul>
-<li>决策树算法非常容易过拟合，导致泛化能力不强。可以通过设置节点最少样本数量和限制决策树深度来改进。</li>
-<li>决策树会因为样本发生一点点的改动，就会导致树结构的剧烈改变。这个可以通过集成学习之类的方法解决。</li>
-<li>寻找最优的决策树是一个NP难的问题，我们一般是通过启发式方法，容易陷入局部最优。可以通过集成学习之类的方法来改善。</li>
-<li>有些比较复杂的关系，决策树很难学习，比如异或。这个就没有办法了，一般这种关系可以换神经网络分类方法来解决。</li>
-<li>如果某些特征的样本比例过大，生成决策树容易偏向于这些特征。这个可以通过调节样本权重来改善。</li>
-</ul>
-</li>
-</ul>
-<h2 id="11-树形结构为什么不需要归一化"><a href="#11-树形结构为什么不需要归一化" class="headerlink" title="11. 树形结构为什么不需要归一化?"></a>11. 树形结构为什么不需要归一化?</h2><ul>
-<li><strong>数值缩放不影响分裂点位置，对树模型的结构不造成影响</strong>。</li>
-<li><p>按照特征值进行排序的，排序的顺序不变，那么所属的分支以及分裂点就不会有不同。</p>
-</li>
-<li><p>树模型是<strong>不能进行梯度下降</strong>的，因为构建树模型（回归树）寻找最优点时是通过寻找最优分裂点完成的，因此<strong>树模型是阶跃的，阶跃点是不可导</strong>的，并且求导没意义，也就不需要归一化。</p>
 </li>
 </ul>
 

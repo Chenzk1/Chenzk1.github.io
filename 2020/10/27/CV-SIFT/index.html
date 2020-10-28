@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/mylogo-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/mylogo-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/mylogo-16x16-next.png">
+  <link rel="mask-icon" href="/images/mylogo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.0/css/all.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"chenzk1.github.io","root":"/","scheme":"Gemini","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+
+  <meta name="description" content="[TOC] SIFT(Scale-invariant feature transform)综述 尺度不变特征转换：SIFT是一种在多尺度空间上提取局部特征的方法。它在空间尺度中寻找极值点，并提取出其位置、尺度、旋转不变量，此算法由 David Lowe在1999年所发表，2004年完善总结。  特点 SIFT特征是图像的局部特征，其对旋转、尺度缩放、亮度变化保持不变性，对视角变化、仿射变换、噪">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CV-SIFT">
+<meta property="og:url" content="https://chenzk1.github.io/2020/10/27/CV-SIFT/index.html">
+<meta property="og:site_name" content="Kayden&#39;s Blog">
+<meta property="og:description" content="[TOC] SIFT(Scale-invariant feature transform)综述 尺度不变特征转换：SIFT是一种在多尺度空间上提取局部特征的方法。它在空间尺度中寻找极值点，并提取出其位置、尺度、旋转不变量，此算法由 David Lowe在1999年所发表，2004年完善总结。  特点 SIFT特征是图像的局部特征，其对旋转、尺度缩放、亮度变化保持不变性，对视角变化、仿射变换、噪">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img2018.cnblogs.com/blog/1471528/201903/1471528-20190330204125547-535493662.png">
+<meta property="og:image" content="https://img-blog.csdn.net/20180919111255142?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x3eDMwOTAyNTE2Nw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-f824bd5eae07235ebf531fa0b546ba98_1440w.jpg">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-b220086b94625a8a00ce68eb2a4bd0e3_1440w.jpg">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-12ce9caee0278bf8855efdecfcba7fc7_1440w.jpg">
+<meta property="og:image" content="https://img2018.cnblogs.com/blog/1471528/201903/1471528-20190330204227104-18141123.png">
+<meta property="og:image" content="https://img-blog.csdn.net/20160917212318336">
+<meta property="og:image" content="https://img-blog.csdn.net/20160917223500317">
+<meta property="og:image" content="https://img-blog.csdn.net/20160917232151713">
+<meta property="article:published_time" content="2020-10-27T03:20:16.450Z">
+<meta property="article:modified_time" content="2020-10-27T14:11:48.854Z">
+<meta property="article:author" content="Kayden">
+<meta property="article:tag" content="CV">
+<meta property="article:tag" content="ML">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img2018.cnblogs.com/blog/1471528/201903/1471528-20190330204125547-535493662.png">
+
+
+<link rel="canonical" href="https://chenzk1.github.io/2020/10/27/CV-SIFT/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>CV-SIFT | Kayden's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Kayden's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Mamba forever.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#SIFT-Scale-invariant-feature-transform-%E7%BB%BC%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">SIFT(Scale-invariant feature transform)综述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E7%82%B9"><span class="nav-number">1.1.</span> <span class="nav-text">特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B4%E4%BD%93%E6%B5%81%E7%A8%8B"><span class="nav-number">1.2.</span> <span class="nav-text">整体流程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%BA%E5%BA%A6%E7%A9%BA%E9%97%B4%E6%9E%81%E5%80%BC%E6%A3%80%E6%B5%8B"><span class="nav-number">2.</span> <span class="nav-text">尺度空间极值检测</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86"><span class="nav-number">2.1.</span> <span class="nav-text">预备知识</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8C%E7%BB%B4%E9%AB%98%E6%96%AF%E5%87%BD%E6%95%B0"><span class="nav-number">2.1.1.</span> <span class="nav-text">二维高斯函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8C%E7%BB%B4%E9%AB%98%E6%96%AF%E5%87%BD%E6%95%B0%E7%9A%84%E4%BC%98%E5%8C%96"><span class="nav-number">2.1.2.</span> <span class="nav-text">二维高斯函数的优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%AB%98%E6%96%AF%E6%8B%89%E6%99%AE%E6%8B%89%E6%96%AF%E7%AE%97%E5%AD%90-Laplacion-of-Gaussian-LoG"><span class="nav-number">2.1.3.</span> <span class="nav-text">高斯拉普拉斯算子(Laplacion of Gaussian, LoG)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%AB%98%E6%96%AF%E5%B7%AE%E5%88%86%E7%AE%97%E5%AD%90-Difference-of-Gaussian-DOG"><span class="nav-number">2.1.4.</span> <span class="nav-text">高斯差分算子(Difference of Gaussian, DOG)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B0%BA%E5%BA%A6%E7%A9%BA%E9%97%B4%E7%90%86%E8%AE%BA"><span class="nav-number">2.1.5.</span> <span class="nav-text">尺度空间理论</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%BA%E5%BA%A6%E7%A9%BA%E9%97%B4%E6%9E%81%E5%80%BC%E6%A3%80%E6%B5%8B-1"><span class="nav-number">2.2.</span> <span class="nav-text">尺度空间极值检测</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E9%AB%98%E6%96%AF%E9%87%91%E5%AD%97%E5%A1%94"><span class="nav-number">2.2.1.</span> <span class="nav-text">构建高斯金字塔</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E9%AB%98%E6%96%AF%E5%B7%AE%E5%88%86-DOG-%E9%87%91%E5%AD%97%E5%A1%94"><span class="nav-number">2.2.2.</span> <span class="nav-text">构建高斯差分(DOG)金字塔</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%A9%BA%E9%97%B4%E6%9E%81%E5%80%BC%E7%82%B9%E6%A3%80%E6%B5%8B"><span class="nav-number">2.2.3.</span> <span class="nav-text">空间极值点检测</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B7%E4%BD%93%E6%9E%84%E5%BB%BA%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E5%8F%82%E6%95%B0%E8%AE%A1%E7%AE%97"><span class="nav-number">2.2.4.</span> <span class="nav-text">具体构建过程中的参数计算</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E5%AE%9A%E4%BD%8D"><span class="nav-number">2.3.</span> <span class="nav-text">关键点定位</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#reference"><span class="nav-number">3.</span> <span class="nav-text">reference</span></a></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kayden</p>
+  <div class="site-description" itemprop="description">陈仲锴的博客, Kayden's Blog</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Chenzk1" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Chenzk1" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:chenzk666@gmail.com" title="E-Mail → mailto:chenzk666@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </section>
+        <div class="back-to-top animated">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/27/CV-SIFT/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Kayden">
+      <meta itemprop="description" content="陈仲锴的博客, Kayden's Blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kayden's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CV-SIFT
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2020-10-27 11:20:16 / Modified: 22:11:48" itemprop="dateCreated datePublished" datetime="2020-10-27T11:20:16+08:00">2020-10-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <meta name="referrer" content="no-referrer"/>
+
+<p>[TOC]</p>
+<h2 id="SIFT-Scale-invariant-feature-transform-综述"><a href="#SIFT-Scale-invariant-feature-transform-综述" class="headerlink" title="SIFT(Scale-invariant feature transform)综述"></a>SIFT(Scale-invariant feature transform)综述</h2><ul>
+<li>尺度不变特征转换：SIFT是一种在<strong>多尺度空间上提取局部特征</strong>的方法。它在空间尺度中寻找极值点，并提取出其位置、尺度、旋转不变量，此算法由 David Lowe在1999年所发表，2004年完善总结。</li>
+</ul>
+<h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3><ul>
+<li>SIFT特征是图像的局部特征，其对旋转、尺度缩放、亮度变化保持不变性，对视角变化、仿射变换、噪声也保持一定程度的稳定性；</li>
+<li>独特性（Distinctiveness）好，信息量丰富，适用于在海量特征数据库中进行快速、准确的匹配；</li>
+<li>多量性，即使少数的几个物体也可以产生大量的SIFT特征向量；</li>
+<li>高速性，经优化的SIFT匹配算法甚至可以达到实时的要求；</li>
+<li>可扩展性，可以很方便的与其他形式的特征向量进行联合。</li>
+</ul>
+<h3 id="整体流程"><a href="#整体流程" class="headerlink" title="整体流程"></a>整体流程</h3><p><img src="https://img2018.cnblogs.com/blog/1471528/201903/1471528-20190330204125547-535493662.png" alt="整体流程"></p>
+<h2 id="尺度空间极值检测"><a href="#尺度空间极值检测" class="headerlink" title="尺度空间极值检测"></a>尺度空间极值检测</h2><ul>
+<li>获取多尺度空间：Lindeberg等人已证明高斯卷积核是实现尺度变换的唯一变换核，并且是唯一的线性核</li>
+</ul>
+<h3 id="预备知识"><a href="#预备知识" class="headerlink" title="预备知识"></a>预备知识</h3><h4 id="二维高斯函数"><a href="#二维高斯函数" class="headerlink" title="二维高斯函数"></a>二维高斯函数</h4><ul>
+<li>以(m/2, n/2)为中心的二维高斯分布<script type="math/tex; mode=display">
+G(x, y)=\frac{1}{2 \pi \sigma^{2}} e^{-\frac{(x-m / 2)^{2}+(y-n / 2)^{2}}{2 \sigma^{2}}}</script></li>
+<li>生成的曲面等高线是从中心开始呈正态分布的同心圆，权重值从中心向周围越来越小。这样进行模糊处理比其它的均衡模糊滤波器更高地保留了边缘效果。</li>
+<li>实际应用中，在计算高斯函数的离散近似时，在大概3σ距离之外的像素都可以看作不起作用，因此图像处理程序只需要计算$<br>(6 \sigma+1) \times(6 \sigma+1)<br>$的矩阵</li>
+</ul>
+<h4 id="二维高斯函数的优化"><a href="#二维高斯函数的优化" class="headerlink" title="二维高斯函数的优化"></a>二维高斯函数的优化</h4><ol>
+<li>若高斯模板大小为m*n，当图像大小为M*N时，计算复杂度为O(m*n*M*N)</li>
+<li>$\sigma$越大，高斯模板分散性越强，处理边缘点时，丢失的图像信息越多，可能会造成黑边</li>
+</ol>
+<ul>
+<li>可以证明，二维高斯运算可以优化为：水平方向进行一维高斯矩阵变换加上竖直方向的一维高斯矩阵变换得到。时间复杂度为：$<br>O(n \times M \times N)+O(m \times M \times N)<br>$。<a target="_blank" rel="noopener" href="https://blog.csdn.net/lwx309025167/article/details/82761474">证明</a><br><img src="https://img-blog.csdn.net/20180919111255142?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x3eDMwOTAyNTE2Nw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="证明"></li>
+</ul>
+<h4 id="高斯拉普拉斯算子-Laplacion-of-Gaussian-LoG"><a href="#高斯拉普拉斯算子-Laplacion-of-Gaussian-LoG" class="headerlink" title="高斯拉普拉斯算子(Laplacion of Gaussian, LoG)"></a>高斯拉普拉斯算子(Laplacion of Gaussian, LoG)</h4><ul>
+<li>作用：突出边缘，更清晰，对比度更强</li>
+<li>拉普拉斯：拉普拉斯算子是图像二阶空间导数的二维各向同性测度。<strong>拉普拉斯算子可以突出图像中强度发生快速变化的区域</strong>，因此常用在边缘检测任务当中。</li>
+<li>高斯：在进行Laplacian操作之前通常需要先用高斯平滑滤波器对图像进行平滑处理，以<strong>降低Laplacian操作对于噪声的敏感性</strong>。</li>
+<li>输入输出均为灰度图</li>
+<li>连续拉普拉斯：<script type="math/tex; mode=display">
+L(x, y)=\frac{\partial^{2} I}{\partial x^{2}}+\frac{\partial^{2} I}{\partial y^{2}}</script></li>
+<li>离散拉普拉斯，例如：</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>0</th>
+<th>-1</th>
+<th>0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-1</td>
+<td>4</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>0</td>
+<td>-1</td>
+<td>-1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>-1</th>
+<th>-1</th>
+<th>-1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-1</td>
+<td>8</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>-1</td>
+<td>-1</td>
+<td>-1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>表达：以0为中心，$\sigma$为标准差的LoG<script type="math/tex; mode=display">
+L o G(x, y)=-\frac{1}{\pi \sigma^{4}}\left[1-\frac{x^{2}+y^{2}}{2 \sigma^{2}}\right] e^{-\frac{x^{2}+y^{2}}{2 \sigma^{2}}}</script><img src="https://pic1.zhimg.com/80/v2-f824bd5eae07235ebf531fa0b546ba98_1440w.jpg" alt="LoG示意图"><blockquote>
+<p>推导过程：<img src="https://pic4.zhimg.com/80/v2-b220086b94625a8a00ce68eb2a4bd0e3_1440w.jpg" alt="推导过程"></p>
+</blockquote>
+</li>
+<li>示例：一维LoG滤波器对于边缘的响应：<img src="https://pic4.zhimg.com/80/v2-12ce9caee0278bf8855efdecfcba7fc7_1440w.jpg" alt="一维LoG滤波器对于边缘的响应"></li>
+</ul>
+<h4 id="高斯差分算子-Difference-of-Gaussian-DOG"><a href="#高斯差分算子-Difference-of-Gaussian-DOG" class="headerlink" title="高斯差分算子(Difference of Gaussian, DOG)"></a>高斯差分算子(Difference of Gaussian, DOG)</h4><ul>
+<li>可以近似LoG算子，减少运算量，由Lindeberg在1994证明</li>
+<li>DoG的运算如下，即DoG为两不同尺度的高斯算子平滑后的图像之差，具体证明见：<a target="_blank" rel="noopener" href="https://blog.csdn.net/kieven2008/article/details/104309440">证明</a><script type="math/tex; mode=display">
+\begin{aligned}
+D(x, y, \sigma) &=(G(x, y, k \sigma)-G(x, y, \sigma)) * I(x, y) \\
+&=L(x, y, k \sigma)-L(x, y, \sigma)
+\end{aligned}</script></li>
+</ul>
+<h4 id="尺度空间理论"><a href="#尺度空间理论" class="headerlink" title="尺度空间理论"></a>尺度空间理论</h4><ul>
+<li>定义<ul>
+<li>单尺度 —-&gt; 多尺度</li>
+<li>尺度空间中各尺度图像的模糊程度逐渐变大，能够模拟人在距离目标由近到远时目标在视网膜上的形成过程。</li>
+</ul>
+</li>
+<li>要求：满足视觉不变性<ul>
+<li>亮度/灰度不变性，对比度不变性</li>
+<li>平移不变性、尺度不变性、欧几里得不变性、仿射不变性</li>
+</ul>
+</li>
+<li>方法：<ul>
+<li>Tony Lindeberg指出<strong>尺度规范化的LoG(Laplacion of Gaussian)算子具有真正的尺度不变性</strong>。Lowe使用高斯差分金字塔近似LoG算子，是尺度空间检测稳定的关键点。</li>
+</ul>
+</li>
+<li>表示：一个图像的尺度空间$L(x,y,\sigma)$，可以表示为一个变化尺度的高斯函数与原图像的卷积<script type="math/tex; mode=display">
+L(x, y, \sigma)=G(x, y, \sigma) * I(x, y)</script><script type="math/tex; mode=display">
+G(x, y, \sigma)=\frac{1}{2 \pi \sigma^{2}} e^{-\frac{(x-m / 2)^{2}+(y-n / 2)^{2}}{2 \sigma^{2}}}</script><ul>
+<li>m，n表示高斯模板中心，维度为$<br>(6 \sigma+1) \times(6 \sigma+1)<br>$，(x, y)代表图像的像素位置。$\sigma$是尺度空间因子，值越小表示图像被平滑的越少，相应的尺度也就越小。<strong>大尺度对应于图像的概貌特征，小尺度对应于图像的细节特征。</strong></li>
+</ul>
+</li>
+</ul>
+<h3 id="尺度空间极值检测-1"><a href="#尺度空间极值检测-1" class="headerlink" title="尺度空间极值检测"></a>尺度空间极值检测</h3><ul>
+<li>极值：图像域和尺度域上的极值<br><img src="https://img2018.cnblogs.com/blog/1471528/201903/1471528-20190330204227104-18141123.png" alt="步骤"></li>
+</ul>
+<h4 id="构建高斯金字塔"><a href="#构建高斯金字塔" class="headerlink" title="构建高斯金字塔"></a>构建高斯金字塔</h4><ol>
+<li>先将原图像扩大一倍之后作为高斯金字塔的第1组第1层，将第1组第1层图像经高斯卷积（其实就是高斯平滑或称高斯滤波）之后作为第1组金字塔的第2层。对于参数σ，在Sift算子中取的是固定值1.6。</li>
+<li>将σ乘以一个比例系数k，得到一个新的平滑因子σ=k*σ，用它来平滑第1组第2层图像，结果图像作为第3层。</li>
+<li>如此这般重复，最后得到L层图像，在同一组中，每一层图像的尺寸都是一样的，只是平滑系数不一样。它们对应的平滑系数分别为：0，σ，kσ，k^2σ,k^3σ……k^(L-2)σ。</li>
+<li>将第1组<strong>倒数第三层</strong>图像作比例因子为2的降采样，得到的图像作为第2组的第1层，然后对第2组的第1层图像做平滑因子为σ的高斯平滑，得到第2组的第2层，就像步骤2中一样，如此得到第2组的L层图像，同组内它们的尺寸是一样的，对应的平滑系数分别为：0，σ，kσ，k^2σ,k^3σ……k^(L-2)σ。但是在尺寸方面第2组是第1组图像的一半。</li>
+<li>反复执行，得到一共O组，每组L层，共计O*L个图像，这些图像一起就构成了高斯金字塔，结构如下：<br><img src="https://img-blog.csdn.net/20160917212318336" alt="高斯金字塔"></li>
+</ol>
+<h4 id="构建高斯差分-DOG-金字塔"><a href="#构建高斯差分-DOG-金字塔" class="headerlink" title="构建高斯差分(DOG)金字塔"></a>构建高斯差分(DOG)金字塔</h4><ul>
+<li>方法<br><img src="https://img-blog.csdn.net/20160917223500317" alt="高斯差分金字塔"></li>
+<li>经过归一化的高斯差分金字塔<br><img src="https://img-blog.csdn.net/20160917232151713" alt="一个示例"></li>
+</ul>
+<h4 id="空间极值点检测"><a href="#空间极值点检测" class="headerlink" title="空间极值点检测"></a>空间极值点检测</h4><ul>
+<li>极值点：每一个像素点要和它所有的相邻点比较，看其是否比它的图像域和尺度域的相邻点大或者小。要获取S个尺度的极值点—-&gt;需要S+2个DOG空间—&gt;S+3层高斯金字塔</li>
+<li>实际计算时S在3到5之间</li>
+</ul>
+<h4 id="具体构建过程中的参数计算"><a href="#具体构建过程中的参数计算" class="headerlink" title="具体构建过程中的参数计算"></a>具体构建过程中的参数计算</h4><ul>
+<li>输入：组数o，层数S，$k=2^{\frac{1}{S}}$，以及计算每组每层的尺度参数$\sigma(o, s)=\sigma_{0} 2^{\circ+\frac{s}{S}} o \in[0, \ldots, O-1], s \in[0, \ldots, S+2]$<ul>
+<li>$\sigma_{0}$为初始尺度</li>
+</ul>
+</li>
+<li>相同组间不同层的尺度参数$\sigma$为k倍之差，不同组相同层之间尺度参数$\sigma$为2倍之差</li>
+</ul>
+<h3 id="关键点定位"><a href="#关键点定位" class="headerlink" title="关键点定位"></a>关键点定位</h3><h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/Alliswell-WP/p/SIFT.html">https://www.cnblogs.com/Alliswell-WP/p/SIFT.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/zddblog/article/details/7521424">https://blog.csdn.net/zddblog/article/details/7521424</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CV/" rel="tag"># CV</a>
+              <a href="/tags/ML/" rel="tag"># ML</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/10/26/%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99-%E4%BC%9A%E8%AE%AE&%E6%9C%9F%E5%88%8A/" rel="prev" title="学习资料-会议&期刊">
+                  <i class="fa fa-chevron-left"></i> 学习资料-会议&期刊
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Kayden</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+      <script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              const target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    const script = document.createElement('script');
+    script.src = '//cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js';
+    script.defer = true;
+    document.head.appendChild(script);
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.typesetClear();
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

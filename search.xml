@@ -2677,4 +2677,168 @@ A U C=\frac{\sum_{\text {ins}_{i} \in \text {positiveclass}} \operatorname{rank}
         <tag>Resource</tag>
       </tags>
   </entry>
+  <entry>
+    <title>CV-SIFT</title>
+    <url>/2020/10/27/CV-SIFT/</url>
+    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
+
+<p>[TOC]</p>
+<h2 id="SIFT-Scale-invariant-feature-transform-综述"><a href="#SIFT-Scale-invariant-feature-transform-综述" class="headerlink" title="SIFT(Scale-invariant feature transform)综述"></a>SIFT(Scale-invariant feature transform)综述</h2><ul>
+<li>尺度不变特征转换：SIFT是一种在<strong>多尺度空间上提取局部特征</strong>的方法。它在空间尺度中寻找极值点，并提取出其位置、尺度、旋转不变量，此算法由 David Lowe在1999年所发表，2004年完善总结。</li>
+</ul>
+<h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3><ul>
+<li>SIFT特征是图像的局部特征，其对旋转、尺度缩放、亮度变化保持不变性，对视角变化、仿射变换、噪声也保持一定程度的稳定性；</li>
+<li>独特性（Distinctiveness）好，信息量丰富，适用于在海量特征数据库中进行快速、准确的匹配；</li>
+<li>多量性，即使少数的几个物体也可以产生大量的SIFT特征向量；</li>
+<li>高速性，经优化的SIFT匹配算法甚至可以达到实时的要求；</li>
+<li>可扩展性，可以很方便的与其他形式的特征向量进行联合。</li>
+</ul>
+<h3 id="整体流程"><a href="#整体流程" class="headerlink" title="整体流程"></a>整体流程</h3><p><img src="https://img2018.cnblogs.com/blog/1471528/201903/1471528-20190330204125547-535493662.png" alt="整体流程"></p>
+<h2 id="尺度空间极值检测"><a href="#尺度空间极值检测" class="headerlink" title="尺度空间极值检测"></a>尺度空间极值检测</h2><ul>
+<li>获取多尺度空间：Lindeberg等人已证明高斯卷积核是实现尺度变换的唯一变换核，并且是唯一的线性核</li>
+</ul>
+<h3 id="预备知识"><a href="#预备知识" class="headerlink" title="预备知识"></a>预备知识</h3><h4 id="二维高斯函数"><a href="#二维高斯函数" class="headerlink" title="二维高斯函数"></a>二维高斯函数</h4><ul>
+<li>以(m/2, n/2)为中心的二维高斯分布<script type="math/tex; mode=display">
+G(x, y)=\frac{1}{2 \pi \sigma^{2}} e^{-\frac{(x-m / 2)^{2}+(y-n / 2)^{2}}{2 \sigma^{2}}}</script></li>
+<li>生成的曲面等高线是从中心开始呈正态分布的同心圆，权重值从中心向周围越来越小。这样进行模糊处理比其它的均衡模糊滤波器更高地保留了边缘效果。</li>
+<li>实际应用中，在计算高斯函数的离散近似时，在大概3σ距离之外的像素都可以看作不起作用，因此图像处理程序只需要计算$<br>(6 \sigma+1) \times(6 \sigma+1)<br>$的矩阵</li>
+</ul>
+<h4 id="二维高斯函数的优化"><a href="#二维高斯函数的优化" class="headerlink" title="二维高斯函数的优化"></a>二维高斯函数的优化</h4><ol>
+<li>若高斯模板大小为m*n，当图像大小为M*N时，计算复杂度为O(m*n*M*N)</li>
+<li>$\sigma$越大，高斯模板分散性越强，处理边缘点时，丢失的图像信息越多，可能会造成黑边</li>
+</ol>
+<ul>
+<li>可以证明，二维高斯运算可以优化为：水平方向进行一维高斯矩阵变换加上竖直方向的一维高斯矩阵变换得到。时间复杂度为：$<br>O(n \times M \times N)+O(m \times M \times N)<br>$。<a href="https://blog.csdn.net/lwx309025167/article/details/82761474">证明</a><br><img src="https://img-blog.csdn.net/20180919111255142?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x3eDMwOTAyNTE2Nw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="证明"></li>
+</ul>
+<h4 id="高斯拉普拉斯算子-Laplacion-of-Gaussian-LoG"><a href="#高斯拉普拉斯算子-Laplacion-of-Gaussian-LoG" class="headerlink" title="高斯拉普拉斯算子(Laplacion of Gaussian, LoG)"></a>高斯拉普拉斯算子(Laplacion of Gaussian, LoG)</h4><ul>
+<li>作用：突出边缘，更清晰，对比度更强</li>
+<li>拉普拉斯：拉普拉斯算子是图像二阶空间导数的二维各向同性测度。<strong>拉普拉斯算子可以突出图像中强度发生快速变化的区域</strong>，因此常用在边缘检测任务当中。</li>
+<li>高斯：在进行Laplacian操作之前通常需要先用高斯平滑滤波器对图像进行平滑处理，以<strong>降低Laplacian操作对于噪声的敏感性</strong>。</li>
+<li>输入输出均为灰度图</li>
+<li>连续拉普拉斯：<script type="math/tex; mode=display">
+L(x, y)=\frac{\partial^{2} I}{\partial x^{2}}+\frac{\partial^{2} I}{\partial y^{2}}</script></li>
+<li>离散拉普拉斯，例如：</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>0</th>
+<th>-1</th>
+<th>0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-1</td>
+<td>4</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>0</td>
+<td>-1</td>
+<td>-1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>-1</th>
+<th>-1</th>
+<th>-1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-1</td>
+<td>8</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>-1</td>
+<td>-1</td>
+<td>-1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>表达：以0为中心，$\sigma$为标准差的LoG<script type="math/tex; mode=display">
+L o G(x, y)=-\frac{1}{\pi \sigma^{4}}\left[1-\frac{x^{2}+y^{2}}{2 \sigma^{2}}\right] e^{-\frac{x^{2}+y^{2}}{2 \sigma^{2}}}</script><img src="https://pic1.zhimg.com/80/v2-f824bd5eae07235ebf531fa0b546ba98_1440w.jpg" alt="LoG示意图"><blockquote>
+<p>推导过程：<img src="https://pic4.zhimg.com/80/v2-b220086b94625a8a00ce68eb2a4bd0e3_1440w.jpg" alt="推导过程"></p>
+</blockquote>
+</li>
+<li>示例：一维LoG滤波器对于边缘的响应：<img src="https://pic4.zhimg.com/80/v2-12ce9caee0278bf8855efdecfcba7fc7_1440w.jpg" alt="一维LoG滤波器对于边缘的响应"></li>
+</ul>
+<h4 id="高斯差分算子-Difference-of-Gaussian-DOG"><a href="#高斯差分算子-Difference-of-Gaussian-DOG" class="headerlink" title="高斯差分算子(Difference of Gaussian, DOG)"></a>高斯差分算子(Difference of Gaussian, DOG)</h4><ul>
+<li>可以近似LoG算子，减少运算量，由Lindeberg在1994证明</li>
+<li>DoG的运算如下，即DoG为两不同尺度的高斯算子平滑后的图像之差，具体证明见：<a href="https://blog.csdn.net/kieven2008/article/details/104309440">证明</a><script type="math/tex; mode=display">
+\begin{aligned}
+D(x, y, \sigma) &=(G(x, y, k \sigma)-G(x, y, \sigma)) * I(x, y) \\
+&=L(x, y, k \sigma)-L(x, y, \sigma)
+\end{aligned}</script></li>
+</ul>
+<h4 id="尺度空间理论"><a href="#尺度空间理论" class="headerlink" title="尺度空间理论"></a>尺度空间理论</h4><ul>
+<li>定义<ul>
+<li>单尺度 —-&gt; 多尺度</li>
+<li>尺度空间中各尺度图像的模糊程度逐渐变大，能够模拟人在距离目标由近到远时目标在视网膜上的形成过程。</li>
+</ul>
+</li>
+<li>要求：满足视觉不变性<ul>
+<li>亮度/灰度不变性，对比度不变性</li>
+<li>平移不变性、尺度不变性、欧几里得不变性、仿射不变性</li>
+</ul>
+</li>
+<li>方法：<ul>
+<li>Tony Lindeberg指出<strong>尺度规范化的LoG(Laplacion of Gaussian)算子具有真正的尺度不变性</strong>。Lowe使用高斯差分金字塔近似LoG算子，是尺度空间检测稳定的关键点。</li>
+</ul>
+</li>
+<li>表示：一个图像的尺度空间$L(x,y,\sigma)$，可以表示为一个变化尺度的高斯函数与原图像的卷积<script type="math/tex; mode=display">
+L(x, y, \sigma)=G(x, y, \sigma) * I(x, y)</script><script type="math/tex; mode=display">
+G(x, y, \sigma)=\frac{1}{2 \pi \sigma^{2}} e^{-\frac{(x-m / 2)^{2}+(y-n / 2)^{2}}{2 \sigma^{2}}}</script><ul>
+<li>m，n表示高斯模板中心，维度为$<br>(6 \sigma+1) \times(6 \sigma+1)<br>$，(x, y)代表图像的像素位置。$\sigma$是尺度空间因子，值越小表示图像被平滑的越少，相应的尺度也就越小。<strong>大尺度对应于图像的概貌特征，小尺度对应于图像的细节特征。</strong></li>
+</ul>
+</li>
+</ul>
+<h3 id="尺度空间极值检测-1"><a href="#尺度空间极值检测-1" class="headerlink" title="尺度空间极值检测"></a>尺度空间极值检测</h3><ul>
+<li>极值：图像域和尺度域上的极值<br><img src="https://img2018.cnblogs.com/blog/1471528/201903/1471528-20190330204227104-18141123.png" alt="步骤"></li>
+</ul>
+<h4 id="构建高斯金字塔"><a href="#构建高斯金字塔" class="headerlink" title="构建高斯金字塔"></a>构建高斯金字塔</h4><ol>
+<li>先将原图像扩大一倍之后作为高斯金字塔的第1组第1层，将第1组第1层图像经高斯卷积（其实就是高斯平滑或称高斯滤波）之后作为第1组金字塔的第2层。对于参数σ，在Sift算子中取的是固定值1.6。</li>
+<li>将σ乘以一个比例系数k，得到一个新的平滑因子σ=k*σ，用它来平滑第1组第2层图像，结果图像作为第3层。</li>
+<li>如此这般重复，最后得到L层图像，在同一组中，每一层图像的尺寸都是一样的，只是平滑系数不一样。它们对应的平滑系数分别为：0，σ，kσ，k^2σ,k^3σ……k^(L-2)σ。</li>
+<li>将第1组<strong>倒数第三层</strong>图像作比例因子为2的降采样，得到的图像作为第2组的第1层，然后对第2组的第1层图像做平滑因子为σ的高斯平滑，得到第2组的第2层，就像步骤2中一样，如此得到第2组的L层图像，同组内它们的尺寸是一样的，对应的平滑系数分别为：0，σ，kσ，k^2σ,k^3σ……k^(L-2)σ。但是在尺寸方面第2组是第1组图像的一半。</li>
+<li>反复执行，得到一共O组，每组L层，共计O*L个图像，这些图像一起就构成了高斯金字塔，结构如下：<br><img src="https://img-blog.csdn.net/20160917212318336" alt="高斯金字塔"></li>
+</ol>
+<h4 id="构建高斯差分-DOG-金字塔"><a href="#构建高斯差分-DOG-金字塔" class="headerlink" title="构建高斯差分(DOG)金字塔"></a>构建高斯差分(DOG)金字塔</h4><ul>
+<li>方法<br><img src="https://img-blog.csdn.net/20160917223500317" alt="高斯差分金字塔"></li>
+<li>经过归一化的高斯差分金字塔<br><img src="https://img-blog.csdn.net/20160917232151713" alt="一个示例"></li>
+</ul>
+<h4 id="空间极值点检测"><a href="#空间极值点检测" class="headerlink" title="空间极值点检测"></a>空间极值点检测</h4><ul>
+<li>极值点：每一个像素点要和它所有的相邻点比较，看其是否比它的图像域和尺度域的相邻点大或者小。要获取S个尺度的极值点—-&gt;需要S+2个DOG空间—&gt;S+3层高斯金字塔</li>
+<li>实际计算时S在3到5之间</li>
+</ul>
+<h4 id="具体构建过程中的参数计算"><a href="#具体构建过程中的参数计算" class="headerlink" title="具体构建过程中的参数计算"></a>具体构建过程中的参数计算</h4><ul>
+<li>输入：组数o，层数S，$k=2^{\frac{1}{S}}$，以及计算每组每层的尺度参数$\sigma(o, s)=\sigma_{0} 2^{\circ+\frac{s}{S}} o \in[0, \ldots, O-1], s \in[0, \ldots, S+2]$<ul>
+<li>$\sigma_{0}$为初始尺度</li>
+</ul>
+</li>
+<li>相同组间不同层的尺度参数$\sigma$为k倍之差，不同组相同层之间尺度参数$\sigma$为2倍之差</li>
+</ul>
+<h3 id="关键点定位"><a href="#关键点定位" class="headerlink" title="关键点定位"></a>关键点定位</h3><h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><ul>
+<li><a href="https://www.cnblogs.com/Alliswell-WP/p/SIFT.html">https://www.cnblogs.com/Alliswell-WP/p/SIFT.html</a></li>
+<li><a href="https://blog.csdn.net/zddblog/article/details/7521424">https://blog.csdn.net/zddblog/article/details/7521424</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>CV</tag>
+        <tag>ML</tag>
+      </tags>
+  </entry>
 </search>
