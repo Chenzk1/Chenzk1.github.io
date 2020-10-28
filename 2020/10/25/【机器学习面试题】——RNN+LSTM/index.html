@@ -23,12 +23,12 @@
     var CONFIG = {"hostname":"chenzk1.github.io","root":"/","scheme":"Gemini","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 
-  <meta name="description" content="[TOC] LSTM产生的原因RNN在处理长期依赖（时间序列上距离较远的节点）时会遇到巨大的困难，因为计算距离较远的节点之间的联系时会涉及雅可比矩阵的多次相乘，会造成梯度消失或者梯度膨胀的现象。RNN结构之所以出现梯度爆炸或者梯度消失，最本质的原因是因为梯度在传递过程中存在极大数量的连乘 。 相对于RNN，LSTM的神经元加入了输入门i、遗忘门f、输出门o 、内部记忆单元c  分别介绍一下输入门i">
+  <meta name="description" content="[TOC] LSTM产生的原因 RNN在处理长期依赖（时间序列上距离较远的节点）时会遇到巨大的困难，因为计算距离较远的节点之间的联系时会涉及雅可比矩阵的多次相乘，会造成梯度消失或者梯度膨胀的现象。RNN结构之所以出现梯度爆炸或者梯度消失，最本质的原因是因为梯度在传递过程中存在极大数量的连乘 。 相对于RNN，LSTM的神经元加入了输入门i、遗忘门f、输出门o 、内部记忆单元c">
 <meta property="og:type" content="article">
 <meta property="og:title" content="机器学习面试题-RNN&amp;LSTM">
 <meta property="og:url" content="https://chenzk1.github.io/2020/10/25/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94RNN+LSTM/index.html">
 <meta property="og:site_name" content="Kayden&#39;s Blog">
-<meta property="og:description" content="[TOC] LSTM产生的原因RNN在处理长期依赖（时间序列上距离较远的节点）时会遇到巨大的困难，因为计算距离较远的节点之间的联系时会涉及雅可比矩阵的多次相乘，会造成梯度消失或者梯度膨胀的现象。RNN结构之所以出现梯度爆炸或者梯度消失，最本质的原因是因为梯度在传递过程中存在极大数量的连乘 。 相对于RNN，LSTM的神经元加入了输入门i、遗忘门f、输出门o 、内部记忆单元c  分别介绍一下输入门i">
+<meta property="og:description" content="[TOC] LSTM产生的原因 RNN在处理长期依赖（时间序列上距离较远的节点）时会遇到巨大的困难，因为计算距离较远的节点之间的联系时会涉及雅可比矩阵的多次相乘，会造成梯度消失或者梯度膨胀的现象。RNN结构之所以出现梯度爆炸或者梯度消失，最本质的原因是因为梯度在传递过程中存在极大数量的连乘 。 相对于RNN，LSTM的神经元加入了输入门i、遗忘门f、输出门o 、内部记忆单元c">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://img-blog.csdn.net/20170919124608594?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbHJlYWRlcmw=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
 <meta property="og:image" content="https://pic4.zhimg.com/80/v2-11ca9e4a19504874202ac9880da9840f_1440w.jpg">
@@ -36,7 +36,7 @@
 <meta property="og:image" content="https://img-blog.csdn.net/20170301120227745?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvSmVycl9feQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
 <meta property="og:image" content="https://pic4.zhimg.com/80/v2-f928df2c02e17fb5da95bf8354880613_1440w.jpg">
 <meta property="article:published_time" content="2020-10-25T02:54:33.572Z">
-<meta property="article:modified_time" content="2020-10-25T11:22:33.728Z">
+<meta property="article:modified_time" content="2020-10-28T10:41:02.133Z">
 <meta property="article:author" content="Kayden">
 <meta property="article:tag" content="DL">
 <meta property="article:tag" content="NLP">
@@ -227,7 +227,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-count">27</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -309,10 +309,16 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2020-10-25 10:54:33 / Modified: 19:22:33" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
+      <time title="Created: 2020-10-25 10:54:33" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
     </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2020-10-28 18:41:02" itemprop="dateModified" datetime="2020-10-28T18:41:02+08:00">2020-10-28</time>
+      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -334,8 +340,11 @@
     
     <div class="post-body" itemprop="articleBody">
         <p><meta name="referrer" content="no-referrer"/><br>[TOC]</p>
-<h2 id="LSTM产生的原因"><a href="#LSTM产生的原因" class="headerlink" title="LSTM产生的原因"></a>LSTM产生的原因</h2><p><strong>RNN在处理长期依赖</strong>（时间序列上距离较远的节点）时会遇到巨大的困难，因为计算距离较远的节点之间的联系时会涉及雅可比矩阵的多次相乘，会造成<strong>梯度消失或者梯度膨胀</strong>的现象。RNN结构之所以出现梯度爆炸或者梯度消失，最本质的原因是因为梯度在传递过程中存在极大数量的连乘 。</p>
-<p>相对于RNN，LSTM的神经元加入了<strong>输入门i、遗忘门f、输出门o 、内部记忆单元c</strong> </p>
+<h2 id="LSTM产生的原因"><a href="#LSTM产生的原因" class="headerlink" title="LSTM产生的原因"></a>LSTM产生的原因</h2><ul>
+<li><strong>RNN在处理长期依赖</strong>（时间序列上距离较远的节点）时会遇到巨大的困难，因为计算距离较远的节点之间的联系时会涉及雅可比矩阵的多次相乘，会造成<strong>梯度消失或者梯度膨胀</strong>的现象。RNN结构之所以出现梯度爆炸或者梯度消失，最本质的原因是因为梯度在传递过程中存在极大数量的连乘 。</li>
+<li>相对于RNN，LSTM的神经元加入了<strong>输入门i、遗忘门f、输出门o 、内部记忆单元c</strong> </li>
+</ul>
+<a id="more"></a>
 <h2 id="分别介绍一下输入门i、遗忘门f、输出门o-、内部记忆单元c"><a href="#分别介绍一下输入门i、遗忘门f、输出门o-、内部记忆单元c" class="headerlink" title="分别介绍一下输入门i、遗忘门f、输出门o 、内部记忆单元c"></a>分别介绍一下输入门i、遗忘门f、输出门o 、内部记忆单元c</h2><ul>
 <li><p>内部记忆单元$c$</p>
 <ul>

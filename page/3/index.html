@@ -217,7 +217,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-count">27</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -289,7 +289,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/10/25/Decision%20Tree/" class="post-title-link" itemprop="url">Decision Tree</a>
+            <a href="/2020/10/25/Decision%20Tree/" class="post-title-link" itemprop="url">ML-Decision Tree</a>
         </h2>
 
         <div class="post-meta-container">
@@ -307,7 +307,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2020-10-26 20:07:17" itemprop="dateModified" datetime="2020-10-26T20:07:17+08:00">2020-10-26</time>
+        <time title="Modified: 2020-10-28 18:43:41" itemprop="dateModified" datetime="2020-10-28T18:43:41+08:00">2020-10-28</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -331,74 +331,17 @@
     <div class="post-body" itemprop="articleBody">
           <p>[TOC]</p>
 <ol>
-<li><p>决策树<br><strong>_问题：如何挑选用于分裂节点的特征—&gt;ID3 C4.5 …(一个标准：使分裂出来的节点尽可能纯，即一个分支尽可能属于同类)_</strong></p>
-</li>
-<li><p>ID3<br>_<strong>信息增益</strong>_</p>
-<p> 信息增益 = 信息熵 - 条件熵</p>
-<ul>
-<li>信息增益：针对每个 _<strong>属性</strong>_</li>
-<li>信息熵：整个样本空间的不确定度。其中Pk一定是label取值的概率。</li>
-<li><p>条件熵：给定某个属性，求其信息熵</p>
-<p>—&gt; 问题：某属性所包括的类别越多，信息增益越大。极限：每个类别仅有1个实例（label数量为1），log p = log1 = 0， 所以最终条件熵=0。或：属性类别越多，条件熵越小，其纯度越高。</p>
-<p>—&gt; 信息增益准则其实是对可取值数目较多的属性有所偏好！</p>
-<p>—&gt; 泛化能力不强</p>
-</li>
-</ul>
-</li>
-<li><p>C4.5 _<strong>信息增益率+信息增益</strong>_</p>
-<p> 属性a的信息增益率 = 属性a的信息增益 / a的某个固有统计量IV(a)</p>
-<p> <img src="https://pic4.zhimg.com/80/v2-812104c0291d20935e910919a9fa5c27_hd.png" alt="IV(a)公式"></p>
-<p> V为a的取值数目。<br> （实际上是属性a的信息熵）</p>
-<ul>
-<li>直接使用信息增益率：偏好取值数目小的属性。</li>
-<li>先选择高于平均水平信息增益的属性，再选择最高信息增益率的属性。</li>
-</ul>
-</li>
-<li><p>CART _<strong>基尼系数+MAE/MSE</strong>_</p>
-<p>与ID3、C4.5的不同：形成二叉树，因此 —&gt; 既要确定要分割的属性，也要确定要分割的值</p>
-<ul>
-<li><p>回归树：MAE/MSE</p>
-<ul>
-<li>example(MSE)：<blockquote>
-<ol>
-<li>考虑数据集 D 上的所有特征 j，遍历每一个特征下所有可能的取值或者切分点 s，将数据集 D 划分成两部分 D1 和 D2</li>
-<li>分别计算上述两个子集的平方误差和，选择最小的平方误差对应的特征与分割点，生成两个子节点。</li>
-<li>对上述两个子节点递归调用步骤1 2,直到满足停止条件。</li>
+<li>决策树</li>
 </ol>
-</blockquote>
-</li>
-</ul>
-</li>
-<li><p>分类树：(Gini不纯度)</p>
-<p><img src="https://img-blog.csdn.net/20150109184544578?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvQW5kcm9pZGx1c2hhbmdkZXJlbg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="某属性A的基尼不纯度"><br>基尼不纯度越小，纯度越高</p>
-</li>
-</ul>
-<blockquote>
-<ol>
-<li>对每个特征 A，对它的所有可能取值 a，将数据集分为 A＝a，和 A!＝a 两个子集，计算集合 D 的基尼指数：<br>Gini(A) = D1/D <em> Gini(D1) + D2/D </em> Gini(D2)</li>
-<li>遍历所有的特征 A，计算其所有可能取值 a 的基尼指数，选择 D 的基尼指数最小值对应的特征及切分点作为最优的划分，将数据分为两个子集。</li>
-<li>对上述两个子节点递归调用步骤1 2, 直到满足停止条件。</li>
-<li>生成 CART 决策树。</li>
-</ol>
-</blockquote>
-<pre><code>停止条件有：
-1. 节点中的样本个数小于预定阈值;
-2. 样本集的Gini系数小于预定阈值（此时样本基本属于同一类）;
-3. 没有更多特征。
-</code></pre><ul>
-<li>剪枝</li>
-<li>例子：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/b90a9ce05b28">example</a></li>
-</ul>
-</li>
-<li><p>控制决策树过拟合的方法</p>
-<ul>
-<li>剪枝</li>
-<li>控制终止条件，避免树形结构过细</li>
-<li>构建随机森林</li>
-</ul>
-</li>
-</ol>
-
+<p><strong>_问题：如何挑选用于分裂节点的特征—&gt;ID3 C4.5 …(一个标准：使分裂出来的节点尽可能纯，即一个分支尽可能属于同类)_</strong></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/10/25/Decision%20Tree/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -438,7 +381,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/10/25/DBSCAN/" class="post-title-link" itemprop="url">DBSCAN以及sklearn实现DBSCAN</a>
+            <a href="/2020/10/25/DBSCAN/" class="post-title-link" itemprop="url">ML-DBSCAN以及sklearn实现DBSCAN</a>
         </h2>
 
         <div class="post-meta-container">
@@ -448,10 +391,16 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2020-10-25 09:35:05 / Modified: 20:14:04" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:05+08:00">2020-10-25</time>
+      <time title="Created: 2020-10-25 09:35:05" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:05+08:00">2020-10-25</time>
     </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2020-10-28 18:43:11" itemprop="dateModified" datetime="2020-10-28T18:43:11+08:00">2020-10-28</time>
+      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -475,81 +424,14 @@
           <meta name="referrer" content="no-referrer"/>
 
 <p>[TOC]<br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/pinard/p/6208966.html">原文1</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/pinard/p/6217852.html">原文2</a><br>DBSCAN(Density-Based Spatial Clustering of Applications with Noise，具有噪声的基于密度的聚类方法)是一种很典型的<strong>密度聚类算法</strong>，和K-Means，BIRCH这些一般只适用于凸样本集的聚类相比，DBSCAN<strong>既可以适用于凸样本集，也可以适用于非凸样本集</strong>。</p>
-<h1 id="密度聚类"><a href="#密度聚类" class="headerlink" title="密度聚类"></a>密度聚类</h1><p>其原理为：同一类别的样本，其样本分布一定是紧密的；可以将各组紧密相连的样本划分为不同的类别来得到聚类类别结果。</p>
-<h1 id="DBSCAN"><a href="#DBSCAN" class="headerlink" title="DBSCAN"></a>DBSCAN</h1><h2 id="关键概念"><a href="#关键概念" class="headerlink" title="关键概念"></a>关键概念</h2><p>参数(ϵ, MinPts)描述领域的样本分布紧密程度，其中ϵ描述了某一样本的领域<strong>距离阈值</strong>，MinPts描述某一样本的距离为ϵ的领域中样本<strong>个数的阈值</strong>。</p>
-<p>假设样本集是D=(x1,x2,…,xm),则DBSCAN具体的密度描述定义如下：</p>
-<ol>
-<li>ϵ-邻域：对于xj∈D，其ϵ-邻域包含样本集D中与xj的距离不大于ϵ的子样本集，即Nϵ(xj)={xi∈D|distance(xi,xj)≤ϵ}, 这个子样本集的个数记为|Nϵ(xj)|</li>
-<li>核心对象：对于任一样本xj∈D，如果其ϵ-邻域对应的Nϵ(xj)至少包含MinPts个样本，即如果|Nϵ(xj)|≥MinPts，则xj是核心对象。</li>
-<li>密度直达：如果xi位于xj的ϵ-邻域中，且xj是核心对象，则称xi由xj密度直达。</li>
-<li>密度可达：对于xi和xj,如果存在样本样本序列p1,p2,…,pT,满足p1=xi,pT=xj, 且pt+1由pt密度直达，则称xj由xi密度可达。也就是说，密度可达满足传递性。此时序列中的传递样本p1,p2,…,pT−1均为核心对象，因为只有核心对象才能使其他样本密度直达。</li>
-<li>密度相连：对于xi和xj,如果存在核心对象样本xk，使xi和xj均由xk密度可达，则称xi和xj密度相连。注意密度相连关系是满足对称性的。</li>
-</ol>
-<p>图中MinPts = 5。红点为核心对象。<br><img src="https://images2015.cnblogs.com/blog/1042406/201612/1042406-20161222112847323-1346197243.png" alt="示意图"></p>
-<h2 id="聚类思想"><a href="#聚类思想" class="headerlink" title="聚类思想"></a>聚类思想</h2><p>由密度可达关系导出的最大密度相连的样本集合，即为最终聚类的一个类别。</p>
-<p>方法：任意选择一个没有类别的核心对象作为种子，然后找到该核心对象密度可达的样本集合，为一个聚类。接着选择另一个没有类比的核心对象…直到所有核心对象都有类别。</p>
-<p>问题：</p>
-<ol>
-<li>outlier.不在任何一个核心对象周围的点定义为异常样本点或噪声点，不考虑。</li>
-<li>距离。少量样本而言，搜索周围样本一般用最近邻的方法；大量样本，可以用KD树，球树等搜索最近邻。</li>
-<li>若某样本到两个核心对象的距离都小于ϵ，但这两个核心对象不可达，此时采取先来后到原则，标记其为先聚类的cluster类别。</li>
-</ol>
-<h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><p>输入：样本集D=(x1,x2,…,xm)，邻域参数(ϵ,MinPts), 样本距离度量方式</p>
-<p>输出： 簇划分C.　</p>
-<ol>
-<li>初始化核心对象集合Ω=∅, 初始化聚类簇数k=0，初始化未访问样本集合Γ = D,  簇划分C = ∅</li>
-<li>对于j=1,2,…m, 按下面的步骤找出所有的核心对象：<ul>
-<li>通过距离度量方式，找到样本xj的ϵ-邻域子样本集Nϵ(xj)</li>
-<li>如果子样本集样本个数满足|Nϵ(xj)|≥MinPts， 将样本xj加入核心对象样本集合：Ω=Ω∪{xj}</li>
-</ul>
-</li>
-<li>如果核心对象集合Ω=∅，则算法结束，否则转入步骤4.</li>
-<li>在核心对象集合Ω中，随机选择一个核心对象o，初始化当前簇核心对象队列Ωcur={o}, 初始化类别序号k=k+1，初始化当前簇样本集合Ck={o}, 更新未访问样本集合Γ=Γ−{o}</li>
-<li>如果当前簇核心对象队列Ωcur=∅，则当前聚类簇Ck生成完毕, 更新簇划分C={C1,C2,…,Ck}, 更新核心对象集合Ω=Ω−Ck， 转入步骤3。</li>
-<li>在当前簇核心对象队列Ωcur中取出一个核心对象o′,通过邻域距离阈值ϵ找出所有的ϵ-邻域子样本集Nϵ(o′)，令Δ=Nϵ(o′)∩Γ, 更新当前簇样本集合Ck=Ck∪Δ, 更新未访问样本集合Γ=Γ−Δ,  更新Ωcur=Ωcur∪(Δ∩Ω)−o′，转入步骤5.</li>
-</ol>
-<p>输出结果为： 簇划分C={C1,C2,…,Ck}</p>
-<h1 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h1><p>对比图：<img src="https://img-blog.csdn.net/20170419143546349?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvc2luYXRfMjY5MTczODM=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="与其他算法的对比图"><br>一般用于数据集稠密时的情况，或数据集是非凸的。</p>
-<p>DBSCAN的主要优点有：</p>
-<ol>
-<li>可以对任意形状的稠密数据集进行聚类，相对的，K-Means之类的聚类算法一般只适用于凸数据集。</li>
-<li>可以在聚类的同时发现异常点，对数据集中的异常点不敏感。</li>
-<li>聚类结果没有偏倚，相对的，K-Means之类的聚类算法初始值对聚类结果有很大影响。</li>
-</ol>
-<p>DBSCAN的主要缺点有：</p>
-<ol>
-<li>如果样本集的密度不均匀、聚类间距差相差很大时，聚类质量较差，这时用DBSCAN聚类一般不适合。</li>
-<li>如果样本集较大时，聚类收敛时间较长，此时可以对搜索最近邻时建立的KD树或者球树进行规模限制来改进。</li>
-<li>调参相对于传统的K-Means之类的聚类算法稍复杂，主要需要对距离阈值ϵ，邻域样本数阈值MinPts联合调参，不同的参数组合对最后的聚类效果有较大影响。</li>
-</ol>
-<h1 id="sklearn-cluster-DBSCAN"><a href="#sklearn-cluster-DBSCAN" class="headerlink" title="sklearn.cluster.DBSCAN"></a>sklearn.cluster.DBSCAN</h1><h2 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h2><p>按其算法，包括DBSCAN本身的参数，以及求取最近邻时的参数。</p>
-<ol>
-<li>eps：DBSCAN算法参数，ϵ-邻域的距离阈值。默认值是0.5.eps过大，则更多的点会落在核心对象的ϵ-邻域，此时我们的类别数可能会减少， 本来不应该是一类的样本也会被划为一类。反之则类别数可能会增大，本来是一类的样本却被划分开。</li>
-<li>min_samples：DBSCAN算法参数，上文的MinPts。默认值是5.通常和eps一起调参。在eps一定的情况下，min_samples过大，则核心对象会过少，此时簇内部分本来是一类的样本可能会被标为噪音点，类别数也会变多。反之min_samples过小的话，则会产生大量的核心对象，可能会导致类别数过少。</li>
-<li>metric：最近邻距离度量参数。可以使用的距离度量较多，一般来说DBSCAN使用默认的欧式距离（即p=2的闵可夫斯基距离）就可以满足我们的需求。可以使用的距离度量参数有：<ul>
-<li>欧式距离 “euclidean”</li>
-<li>曼哈顿距离 “manhattan”</li>
-<li>切比雪夫距离“chebyshev”</li>
-<li>闵可夫斯基距离 “minkowski”</li>
-<li>带权重闵可夫斯基距离 “wminkowski”</li>
-<li>标准化欧式距离 “seuclidean”</li>
-<li>马氏距离“mahalanobis”</li>
-</ul>
-</li>
-<li>algorithm：最近邻搜索算法参数，算法一共有三种，第一种是蛮力实现，第二种是KD树实现，第三种是球树实现。对于这个参数，一共有4种可选输入，‘brute’对应第一种蛮力实现，‘kd_tree’对应第二种KD树实现，‘ball_tree’对应第三种的球树实现，‘auto’则会在上面三种算法中做权衡，选择一个拟合最好的最优算法。需要注意的是，如果输入样本特征是稀疏的时候，无论我们选择哪种算法，最后scikit-learn都会去用蛮力实现‘brute’。个人的经验，一般情况使用默认的 ‘auto’就够了。 如果数据量很大或者特征也很多，用”auto”建树时间可能会很长，效率不高，建议选择KD树实现‘kd_tree’，此时如果发现‘kd_tree’速度比较慢或者已经知道样本分布不是很均匀时，可以尝试用‘ball_tree’。而如果输入样本是稀疏的，无论你选择哪个算法最后实际运行的都是‘brute’。</li>
-<li>leaf_size：最近邻搜索算法参数，为使用KD树或者球树时， 停止建子树的叶子节点数量的阈值。这个值越小，则生成的KD树或者球树就越大，层数越深，建树时间越长，反之，则生成的KD树或者球树会小，层数较浅，建树时间较短。默认是30. 因为这个值一般只影响算法的运行速度和使用内存大小，因此一般情况下可以不管它。</li>
-<li>p: 最近邻距离度量参数。只用于闵可夫斯基距离和带权重闵可夫斯基距离中p值的选择，p=1为曼哈顿距离， p=2为欧式距离。如果使用默认的欧式距离不需要管这个参数。</li>
-<li>n_jobs：使用CPU格式，-1代表全开。</li>
-</ol>
-<p>输出：</p>
-<ul>
-<li>core_sample_indices_:核心样本指数。（此参数在代码中有详细的解释）</li>
-<li>labels_:数据集中每个点的集合标签给,噪声点标签为-1。</li>
-<li>components_ ：核心样本的副本</li>
-</ul>
-<p>主要是<strong>eps和min_samples</strong>的调参。</p>
-<h2 id="代码实例"><a href="#代码实例" class="headerlink" title="代码实例"></a>代码实例</h2><p>原文2中有。<br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/pinard/p/6217852.html">原文2</a></p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/10/25/DBSCAN/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -589,7 +471,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/10/25/CNN/" class="post-title-link" itemprop="url">CNN</a>
+            <a href="/2020/10/25/CNN/" class="post-title-link" itemprop="url">CV-CNN</a>
         </h2>
 
         <div class="post-meta-container">
@@ -599,10 +481,16 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2020-10-25 09:35:05 / Modified: 11:08:47" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:05+08:00">2020-10-25</time>
+      <time title="Created: 2020-10-25 09:35:05" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:05+08:00">2020-10-25</time>
     </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2020-10-28 18:42:26" itemprop="dateModified" datetime="2020-10-28T18:42:26+08:00">2020-10-28</time>
+      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -625,61 +513,17 @@
     <div class="post-body" itemprop="articleBody">
           <p>[TOC]</p>
 <p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/27642620">原贴</a></p>
-<h1 id="卷积神经网络"><a href="#卷积神经网络" class="headerlink" title="卷积神经网络"></a>卷积神经网络</h1><p>卷积神经网络大致就是covolutional layer, pooling layer, ReLu layer, fully-connected layer的组合，例如下图所示的结构。<br><img src="https://pic4.zhimg.com/80/v2-cf87890eb8f2358f23a1ac78eb764257_hd.png" alt="ex-1"></p>
-<h3 id="图片的识别"><a href="#图片的识别" class="headerlink" title="图片的识别"></a>图片的识别</h3><ul>
-<li>生物所看到的景象并非世界的原貌，而是长期进化出来的适合自己生存环境的一种感知方式</li>
-<li>画面识别实际上是寻找/学习动物的视觉关联形式（即将能量与视觉关联在一起的方式）</li>
-<li>画面的识别取决于：<ul>
-<li>图片本身</li>
-<li>被如何观察</li>
+<h1 id="卷积神经网络"><a href="#卷积神经网络" class="headerlink" title="卷积神经网络"></a>卷积神经网络</h1><ul>
+<li>卷积神经网络大致就是covolutional layer, pooling layer, ReLu layer, fully-connected layer的组合，例如下图所示的结构。<br><img src="https://pic4.zhimg.com/80/v2-cf87890eb8f2358f23a1ac78eb764257_hd.png" alt="ex-1"></li>
 </ul>
-</li>
-<li>图像不变性：<ul>
-<li>rotation</li>
-<li>viewpoint</li>
-<li>size</li>
-<li>illumination</li>
-<li>…<h3 id="前馈的不足"><a href="#前馈的不足" class="headerlink" title="前馈的不足"></a>前馈的不足</h3></li>
-</ul>
-</li>
-<li>当出现上述variance时，前馈无法做到适应，即前馈只能对同样的内容进行识别，若出现其他情况时，只能增加样本重新训练</li>
-<li>解决方法可以是让图片中不同的位置有相同的权重——<strong>共享权重</strong><h3 id="CNN"><a href="#CNN" class="headerlink" title="CNN"></a>CNN</h3><h4 id="局部连接"><a href="#局部连接" class="headerlink" title="局部连接"></a>局部连接</h4></li>
-<li><strong>空间共享</strong>（引入的先验知识）</li>
-<li><strong>局部连接</strong>（得到的下一层节点与该层并非全连接）</li>
-<li>depth上是<strong>全连接</strong>的<blockquote>
-<p>每个filter会在width维, height维上，以局部连接和空间共享，并贯串整个depth维的方式得到一个Feature Map。</p>
-</blockquote>
-</li>
-</ul>
-<h5 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h5><p><img src="https://pic3.zhimg.com/80/v2-23db15ec3f783bbb5cf811711e46dbba_hd.png" alt="cnn_example"></p>
-<ul>
-<li>在输入depth为1时：被filter size为2x2所圈中的4个输入节点连接到1个输出节点上。</li>
-<li>在输入depth为3时：被filter size为2x2，但是贯串3个channels后，所圈中的12个输入节点连接到1个输出节点上。</li>
-<li>在输入depth为n时：2x2xn个输入节点连接到1个输出节点上。<blockquote>
-<p>三个channels的权重并不共享。 即当深度变为3后，权重也跟着扩增到了三组。</p>
-</blockquote>
-</li>
-</ul>
-<h5 id="zero-padding"><a href="#zero-padding" class="headerlink" title="zero padding"></a>zero padding</h5><p>有时为了保证feature map与输入层保持同样大小，会添加zero padding，一般3*3的卷积核padding为1，5*5为2</p>
-<p>Feature Map的尺寸等于(input_size + 2 *padding_size − filter_size)/stride+1</p>
-<h4 id="形状、概念抓取"><a href="#形状、概念抓取" class="headerlink" title="形状、概念抓取"></a>形状、概念抓取</h4><ul>
-<li>卷积层可以对基础形状（包括边缘、棱角、模糊等）、对比度、颜色等概念进行抓取</li>
-<li>可以通过多层卷积实现对一个较大区域的抓取</li>
-<li>抓取的特征取决于卷积核的权重，而此权重由网络根据数据学习得到，即CNN会自己学习以什么样的方式观察图片</li>
-<li>可以有多个filter，从而可以学习到多种特征<ul>
-<li>此时卷积层的输出depth也就不是1了</li>
-<li>卷积层的输入输出均为长方体：其中depth与filters个数相同<br><img src="https://pic1.zhimg.com/80/v2-a9983c3cee935b68c73965bc1abe268c_hd.png" alt="ex4"><br><img src="https://pic1.zhimg.com/80/v2-d11e1d2f2c41b6df713573f8155bc324_hd.png" alt="ex2"><h4 id="非线性（以ReLu为例）"><a href="#非线性（以ReLu为例）" class="headerlink" title="非线性（以ReLu为例）"></a>非线性（以ReLu为例）</h4>增强模型的非线性拟合能力<br><img src="https://pic3.zhimg.com/80/v2-54a469b2873542e75abf2bc5d8fcaa1a_hd.png" alt="ex3"><h4 id="pooling"><a href="#pooling" class="headerlink" title="pooling"></a>pooling</h4><em>比如以步长为2，2x2的 filter pool</em><br><img src="https://pic4.zhimg.com/80/v2-cd717414dcf32dac4df73c00f1e7c6c3_hd.jpg" alt="ex5"></li>
-</ul>
-</li>
-<li>pooling的主要功能是downsamping，有助减少conv过程中的冗余<h4 id="全连接"><a href="#全连接" class="headerlink" title="全连接"></a>全连接</h4></li>
-<li>当抓取到足以用来识别图片的特征后，接下来的就是如何进行分类。 全连接层（也叫前馈层）就可以用来将最后的输出映射到线性可分的空间。 通常卷积网络的最后会将末端得到的长方体平摊(flatten)成一个长长的向量，并送入全连接层配合输出层进行分类。<h4 id="一些变体中用到的技巧"><a href="#一些变体中用到的技巧" class="headerlink" title="一些变体中用到的技巧"></a>一些变体中用到的技巧</h4></li>
-<li>1x1卷积核：选择不同的个数，用来降维或升维</li>
-<li>残差<blockquote>
-<p>所有的这些技巧都是对各种不变性的满足</p>
-</blockquote>
-</li>
-</ul>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/10/25/CNN/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -719,7 +563,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/10/25/%E7%BB%8F%E9%AA%8C%20%E6%9C%9F%E6%9C%9B%20%E7%BB%93%E6%9E%84/" class="post-title-link" itemprop="url">经验风险、期望风险、结构风险</a>
+            <a href="/2020/10/25/%E7%BB%8F%E9%AA%8C%20%E6%9C%9F%E6%9C%9B%20%E7%BB%93%E6%9E%84/" class="post-title-link" itemprop="url">ML-经验风险、期望风险、结构风险</a>
         </h2>
 
         <div class="post-meta-container">
@@ -737,7 +581,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2020-10-26 10:18:02" itemprop="dateModified" datetime="2020-10-26T10:18:02+08:00">2020-10-26</time>
+        <time title="Modified: 2020-10-28 18:41:38" itemprop="dateModified" datetime="2020-10-28T18:41:38+08:00">2020-10-28</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -763,118 +607,14 @@
 <li>对训练样本误差的衡量，例如最典型的是每个样本损失函数的平均，Σ(loss(Yi, f(Xi))) / m</li>
 <li>基于经验风险最小化的模型泛化能力差，只代表了局部最优 —&gt; 过拟合</li>
 </ul>
-<h3 id="期望风险"><a href="#期望风险" class="headerlink" title="期望风险"></a>期望风险</h3><ul>
-<li>要寻找全局最优，可以考虑使用损失函数的期望，即E(loss(Yi, f(Xi))) = ∫(P(Xi,Yi)loss(Yi, f(Xi)))dxdy</li>
-<li>此处假设了(x, y)的联合分布</li>
-<li>问题：对于大部分样本无法获知其具体的分布 —&gt; 不现实</li>
-</ul>
-<h3 id="结构风险"><a href="#结构风险" class="headerlink" title="结构风险"></a>结构风险</h3><ul>
-<li>在经验风险之上添加正则项，模拟期望风险</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/25/ROC%20%20AUC/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Kayden">
-      <meta itemprop="description" content="陈仲锴的博客, Kayden's Blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Kayden's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/10/25/ROC%20%20AUC/" class="post-title-link" itemprop="url">ROC AUC, Accuracy, Recall, F1</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2020-10-25 09:35:05 / Modified: 11:11:50" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:05+08:00">2020-10-25</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>[toc]<br>类不平衡（class imbalance）现象：即负样本比正样本多很多（或者相反）</p>
-<ol>
-<li>ACCURACY/RECALL/F1</li>
-</ol>
-<ul>
-<li><p>Accuracy：TP/(TP+TN) 即预测对的数据个数与总数据个数的比</p>
-<p>  <strong><em>A和R的问题在于如果样本不平衡，则参考意义很小</em></strong></p>
-</li>
-<li><p>准确率（Precision）：P=TP/(TP+FP)。通俗地讲，就是预测正确的正例数据占预测为正例数据的比例。</p>
-<p>  <strong>针对判别结果 查准率</strong></p>
-</li>
-<li><p>召回率（Recall）：R=TP/(TP+FN)。通俗地讲，就是预测为正例的数据占实际为正例数据的比例。</p>
-<p>  <strong>针对样本 查全率</strong></p>
-</li>
-<li>F1 = 2*P*R/(P+R)：既有P又有R</li>
-<li><p>PRC， precision recall curve，与下面的ROC一样，先看是否光滑，光滑的话说明过拟合不大。越往右上越好。</p>
-<p>  <strong><em>A和R的问题在于如果样本不平衡，则参考意义很小</em></strong></p>
-</li>
-</ul>
-<ol>
-<li><p>ROC AUC<br>TPR=TP/(TP+FN)=TP/actual positives 也就是Recall<br>FPR=FP/(FP+TN)=FP/actual negatives<br>ROC是由点（TPR,FPR）组成的曲线，AUC就是ROC的面积。AUC越大越好。</p>
-<p> 一般来说，如果ROC是光滑的，那么基本可以判断没有太大的overfitting。</p>
-<p> 越往左上越好。</p>
-<p> 画法：ROC曲线其实是多个混淆矩阵的结果组合，如果在上述模型中我们没有定好阈值，而是将模型预测结果从高到低排序，将每个概率值依次作为阈值，那么就有多个混淆矩阵。对于每个混淆矩阵，我们计算两个指标TPR（True positive rate）和FPR（False positive rate），TPR=TP/(TP+FN)=Recall，TPR就是召回率。FPR=FP/(FP+TN)，FPR即为实际为好人的人中，预测为坏人的人占比。我们以FPR为x轴，TPR为y轴画图，就得到了ROC曲线。</p>
-<p><strong><em>也就是说，ROC曲线的阈值不是多次运行模型得到的，是同一个模型中通过对所得结果按照概率的排序得到了一个threshold</em></strong></p>
-<p> 所以使用ROC的话，它会先对预测到的结果进行排序，然后再根据排序的结果画图，所以他的曲线形状不会因为数据不平衡而发生大的改变。<br> <strong>但是当数据极度不平衡时，ROC仍然有问题，下面的PRC表现更好。</strong></p>
-</li>
-<li>PRC， precision recall curve，与上面的ROC一样，先看是否光滑，光滑的话说明过拟合不大。越往右上越好。</li>
-</ol>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/10/25/%E7%BB%8F%E9%AA%8C%20%E6%9C%9F%E6%9C%9B%20%E7%BB%93%E6%9E%84/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -932,7 +672,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2020-10-26 14:08:53" itemprop="dateModified" datetime="2020-10-26T14:08:53+08:00">2020-10-26</time>
+        <time title="Modified: 2020-10-28 18:45:51" itemprop="dateModified" datetime="2020-10-28T18:45:51+08:00">2020-10-28</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -958,23 +698,15 @@
 <li>属性以双下划线开头，类内变量，实例无法访问。但可以通过某些方式访问，例如Student例中定义了__name变量，可以用_Student_name来实现访问，但不建议，因为不同的解释器的转化方式不一样。</li>
 <li>单下划线可以打开，但需要注意不能随意更改。</li>
 <li>双下划线结尾与开头，特殊变量，类内可以访问，实例不知。</li>
-<li><h3 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h3></li>
 </ul>
-<p>开闭原则：定义一个类Animal及其多个之类Dog/Cat/…，当定义一个函数或操作时：</p>
-<ul>
-<li>对扩展开放：允许新增Animal的子类；</li>
-<li>对修改封闭：不需要修改依赖Animal类型的run_twice()等函数，仍然可以传入Dog/Cat等类。<br>事实上，不需要继承也可以实现多态————鸭子类型。</li>
-</ul>
-<h3 id="若干方法"><a href="#若干方法" class="headerlink" title="若干方法"></a>若干方法</h3><ul>
-<li>isinstance(object,class) 判断是否属于某个类</li>
-<li>dir() 列举出一个对象的属性和方法</li>
-<li>getattr()、setattr()、hasattr()可以获得、添加、查询是否需要某个属性<ul>
-<li>__slots__ 限制可以添加的属性，__slots__ = (‘name’, ‘age’) # 用tuple定义允许绑定的属性名称</li>
-</ul>
-</li>
-<li>装饰器</li>
-</ul>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/10/25/Python-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1014,7 +746,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/10/25/Naive%20Bayes/" class="post-title-link" itemprop="url">Naive Bayes及其sklearn实现</a>
+            <a href="/2020/10/25/Naive%20Bayes/" class="post-title-link" itemprop="url">ML-Naive Bayes及其sklearn实现</a>
         </h2>
 
         <div class="post-meta-container">
@@ -1024,10 +756,16 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2020-10-25 09:35:04 / Modified: 16:38:33" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:04+08:00">2020-10-25</time>
+      <time title="Created: 2020-10-25 09:35:04" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:04+08:00">2020-10-25</time>
     </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2020-10-28 18:45:44" itemprop="dateModified" datetime="2020-10-28T18:45:44+08:00">2020-10-28</time>
+      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -1048,7 +786,8 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>[TOC]<br>P(B|A) = P(A|B)*P(B)/P(A)</p>
+          <p>[TOC]</p>
+<p>P(B|A) = P(A|B)*P(B)/P(A)</p>
 <p>朴素：特征之间相互独立</p>
 <h1 id="算法流程"><a href="#算法流程" class="headerlink" title="算法流程"></a>算法流程</h1><ol>
 <li>x = {a1, a2, …, am}为待分类项，a是特征。</li>
@@ -1056,20 +795,14 @@
 <li>计算P(y1|x), P(y2|x) …</li>
 <li>P(yk|x) = max{P(yi|x)}，则x属于yk类</li>
 </ol>
-<p><strong>总结：</strong>某类在待分类项出现的条件下的概率是所有类中最大的，这个分类项就属于这一类。</p>
-<p>e.g.判断一个黑人来自哪个洲，求取每个洲黑人的比率，非洲最高，选非洲。</p>
-<p>其中x = {a1, a2, …, am}，即P(C|a1,a2…) = P(C)*P(a1,a2,…|C)/P(a1,a2…)。posterior = prior * likelihood / evidence, 这里evidence是常数，不影响。</p>
-<p>——-&gt;求解P(C) * P(a1,a2,a3…|C)</p>
-<p>——-&gt;链式法则：P(C) * P(a2,a3…|C, a1) * P(a1|C)</p>
-<p>—-&gt; …</p>
-<p>—-&gt; P(C) * P(a1|C) * P(a2|C, a1) * P(a3|C, a1, a2)…<br>由于特征之间的相互独立性，a2发生于a1无关，转化为</p>
-<p>—-&gt; P(C) * P(a1|C) * P(a2|C) …  * P(am|C)</p>
-<p>——-&gt;问题转化为求取条件概率：</p>
-<ol>
-<li>找到一个已知分类的待分类项集合，这个集合叫做训练样本集。</li>
-<li>统计得到在各类别下各个特征属性的条件概率估计。</li>
-</ol>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/10/25/Naive%20Bayes/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1109,7 +842,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/10/25/LightGBM/" class="post-title-link" itemprop="url">LightGBM</a>
+            <a href="/2020/10/25/LightGBM/" class="post-title-link" itemprop="url">ML-LightGBM</a>
         </h2>
 
         <div class="post-meta-container">
@@ -1119,10 +852,16 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2020-10-25 09:35:04 / Modified: 11:10:52" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:04+08:00">2020-10-25</time>
+      <time title="Created: 2020-10-25 09:35:04" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:04+08:00">2020-10-25</time>
     </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2020-10-28 18:45:25" itemprop="dateModified" datetime="2020-10-28T18:45:25+08:00">2020-10-28</time>
+      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -1145,55 +884,14 @@
     <div class="post-body" itemprop="articleBody">
           <p>[toc]</p>
 <h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><h3 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h3><p>解决GBDT遇到海量数据时的问题：GBDT 在每一次迭代的时候，都需要遍历整个训练数据多次。如果把整个训练数据装进内存则会限制训练数据的大小；如果不装进内存，反复地读写训练数据又会消耗非常大的时间。</p>
-<h3 id="对xgboost的优化"><a href="#对xgboost的优化" class="headerlink" title="对xgboost的优化"></a>对xgboost的优化</h3><ul>
-<li>基于 Histogram 的决策树算法</li>
-<li>带深度限制的 Leaf-wise 的叶子生长策略</li>
-<li>直方图做差加速</li>
-<li>直接支持类别特征(Categorical Feature)</li>
-<li>Cache 命中率优化</li>
-<li>基于直方图的稀疏特征优化</li>
-<li>多线程优化</li>
-</ul>
-<h4 id="基于-Histogram-的决策树算法"><a href="#基于-Histogram-的决策树算法" class="headerlink" title="基于 Histogram 的决策树算法"></a>基于 Histogram 的决策树算法</h4><ul>
-<li>做法：把连续的浮点特征值离散化成k个整数，同时构造一个宽度为k的直方图。在遍历数据的时候，根据离散化后的值作为索引在直方图中累积统计量，当遍历一次数据后，直方图累积了需要的统计量，然后根据直方图的离散值，遍历寻找最优的分割点。</li>
-<li>优点<ul>
-<li>内存消耗小：不需要保存既保存数据的特征值，又保存预排序结果，只保存k个key-values即可</li>
-<li>时间消耗小：只需要计算k次增益</li>
-<li>泛化性能增强：决策树是弱模型，分割点精确与否不是很重要，更粗的分割点还可以引入噪音，增强泛化性能，防止过拟合</li>
-</ul>
-</li>
-</ul>
-<h4 id="带深度限制的-Leaf-wise-的叶子生长策略"><a href="#带深度限制的-Leaf-wise-的叶子生长策略" class="headerlink" title="带深度限制的 Leaf-wise 的叶子生长策略"></a>带深度限制的 Leaf-wise 的叶子生长策略</h4><ul>
-<li>Level-wise 过一次数据可以<strong>同时分裂同一层的叶子</strong>，容易进行多线程优化，也好控制模型复杂度，不容易过拟合。但实际上 Level-wise 是一种低效的算法，因为它不加区分的对待同一层的叶子，带来了很多没必要的开销，因为实际上很多叶子的分裂增益较低，没必要进行搜索和分裂。</li>
-<li>Leaf-wise 则是一种更为高效的策略，每次从当前所有叶子中，找到<strong>分裂增益最大的一个叶子</strong>，然后分裂，如此循环。因此同 Level-wise 相比，在分裂次数相同的情况下，Leaf-wise 可以降低更多的误差，得到更好的精度。Leaf-wise 的缺点是可能会长出比较深的决策树，产生过拟合。因此 LightGBM 在 Leaf-wise 之上增加了一个最大深度的限制，在保证高效率的同时防止过拟合。</li>
-</ul>
-<h4 id="直方图加速"><a href="#直方图加速" class="headerlink" title="直方图加速"></a>直方图加速</h4><ul>
-<li>一个叶子的直方图可以由它的父亲节点的直方图与它兄弟的直方图做差得到。通常构造直方图，需要遍历该叶子上的所有数据，但直方图做差仅需遍历直方图的k个桶。利用这个方法，LightGBM 可以在构造一个叶子的直方图后，可以用非常微小的代价得到它兄弟叶子的直方图。加速一倍。</li>
-</ul>
-<h4 id="接受categorical-features"><a href="#接受categorical-features" class="headerlink" title="接受categorical features"></a>接受categorical features</h4><p>LightGBM 可以直接使用 categorical features（分类特征）作为 input（输入）. 它不需要被转换成 one-hot coding（独热编码）, 并且它比 one-hot coding（独热编码）更快（约快上 8 倍）。</p>
-<h4 id="并行学习"><a href="#并行学习" class="headerlink" title="并行学习"></a>并行学习</h4><p>目前支持特征并行和数据并行的两种。</p>
-<ul>
-<li>特征并行：主要思想是在不同机器在不同的特征集合上分别寻找最优的分割点，然后在机器间同步最优的分割点。</li>
-<li>数据并行：让不同的机器先在本地构造直方图，然后进行全局的合并，最后在合并的直方图上面寻找最优分割点。</li>
-</ul>
-<h2 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h2><pre><code>params = &#123;  
-    &#39;boosting_type&#39;: &#39;gbdt&#39;,  
-    &#39;objective&#39;: &#39;binary&#39;,  
-    &#39;metric&#39;: &#123;&#39;binary_logloss&#39;, &#39;auc&#39;&#125;,  #二进制对数损失
-    &#39;num_leaves&#39;: 5,  
-    &#39;max_depth&#39;: 6,  
-    &#39;min_data_in_leaf&#39;: 450,  
-    &#39;learning_rate&#39;: 0.1,  
-    &#39;feature_fraction&#39;: 0.9,  
-    &#39;bagging_fraction&#39;: 0.95,  
-    &#39;bagging_freq&#39;: 5,  
-    &#39;lambda_l1&#39;: 1,    
-    &#39;lambda_l2&#39;: 0.001,  # 越小l2正则程度越高  
-    &#39;min_gain_to_split&#39;: 0.2,  
-    &#39;verbose&#39;: 5,  
-    &#39;is_unbalance&#39;: True  
-&#125;  
-</code></pre>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/10/25/LightGBM/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 

@@ -25,13 +25,13 @@
 
   <meta name="description" content="[TOC] 原理 GBDT与传统的Boosting区别较大，它的每一次计算都是为了减少上一次的残差，而为了消除残差，我们可以在残差减小的梯度方向上建立模型,所以说，在GradientBoost中，每个新的模型的建立是为了使得之前的模型的残差往梯度下降的方法，与传统的Boosting中关注正确错误的样本加权有着很大的区别。 在GradientBoosting算法中，关键就是利用损失函数的负梯度方向在">
 <meta property="og:type" content="article">
-<meta property="og:title" content="GBDT">
+<meta property="og:title" content="ML-GBDT">
 <meta property="og:url" content="https://chenzk1.github.io/2020/10/25/GBDT/index.html">
 <meta property="og:site_name" content="Kayden&#39;s Blog">
 <meta property="og:description" content="[TOC] 原理 GBDT与传统的Boosting区别较大，它的每一次计算都是为了减少上一次的残差，而为了消除残差，我们可以在残差减小的梯度方向上建立模型,所以说，在GradientBoost中，每个新的模型的建立是为了使得之前的模型的残差往梯度下降的方法，与传统的Boosting中关注正确错误的样本加权有着很大的区别。 在GradientBoosting算法中，关键就是利用损失函数的负梯度方向在">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-10-25T02:54:33.612Z">
-<meta property="article:modified_time" content="2020-10-25T03:09:39.079Z">
+<meta property="article:modified_time" content="2020-10-28T10:46:59.813Z">
 <meta property="article:author" content="Kayden">
 <meta property="article:tag" content="ML">
 <meta name="twitter:card" content="summary">
@@ -50,7 +50,7 @@
   };
 </script>
 
-  <title>GBDT | Kayden's Blog</title>
+  <title>ML-GBDT | Kayden's Blog</title>
   
 
 
@@ -220,7 +220,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-count">27</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -292,7 +292,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          GBDT
+          ML-GBDT
         </h1>
 
         <div class="post-meta-container">
@@ -302,10 +302,16 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2020-10-25 10:54:33 / Modified: 11:09:39" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
+      <time title="Created: 2020-10-25 10:54:33" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
     </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2020-10-28 18:46:59" itemprop="dateModified" datetime="2020-10-28T18:46:59+08:00">2020-10-28</time>
+      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>

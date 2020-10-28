@@ -23,15 +23,15 @@
     var CONFIG = {"hostname":"chenzk1.github.io","root":"/","scheme":"Gemini","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 
-  <meta name="description" content="[toc] 原理动机解决GBDT遇到海量数据时的问题：GBDT 在每一次迭代的时候，都需要遍历整个训练数据多次。如果把整个训练数据装进内存则会限制训练数据的大小；如果不装进内存，反复地读写训练数据又会消耗非常大的时间。 对xgboost的优化 基于 Histogram 的决策树算法 带深度限制的 Leaf-wise 的叶子生长策略 直方图做差加速 直接支持类别特征(Categorical Feat">
+  <meta name="description" content="[toc] 原理动机解决GBDT遇到海量数据时的问题：GBDT 在每一次迭代的时候，都需要遍历整个训练数据多次。如果把整个训练数据装进内存则会限制训练数据的大小；如果不装进内存，反复地读写训练数据又会消耗非常大的时间。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="LightGBM">
+<meta property="og:title" content="ML-LightGBM">
 <meta property="og:url" content="https://chenzk1.github.io/2020/10/25/LightGBM/index.html">
 <meta property="og:site_name" content="Kayden&#39;s Blog">
-<meta property="og:description" content="[toc] 原理动机解决GBDT遇到海量数据时的问题：GBDT 在每一次迭代的时候，都需要遍历整个训练数据多次。如果把整个训练数据装进内存则会限制训练数据的大小；如果不装进内存，反复地读写训练数据又会消耗非常大的时间。 对xgboost的优化 基于 Histogram 的决策树算法 带深度限制的 Leaf-wise 的叶子生长策略 直方图做差加速 直接支持类别特征(Categorical Feat">
+<meta property="og:description" content="[toc] 原理动机解决GBDT遇到海量数据时的问题：GBDT 在每一次迭代的时候，都需要遍历整个训练数据多次。如果把整个训练数据装进内存则会限制训练数据的大小；如果不装进内存，反复地读写训练数据又会消耗非常大的时间。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-10-25T01:35:04.926Z">
-<meta property="article:modified_time" content="2020-10-25T03:10:52.855Z">
+<meta property="article:modified_time" content="2020-10-28T10:45:25.703Z">
 <meta property="article:author" content="Kayden">
 <meta property="article:tag" content="ML">
 <meta name="twitter:card" content="summary">
@@ -50,7 +50,7 @@
   };
 </script>
 
-  <title>LightGBM | Kayden's Blog</title>
+  <title>ML-LightGBM | Kayden's Blog</title>
   
 
 
@@ -220,7 +220,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-count">27</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -292,7 +292,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          LightGBM
+          ML-LightGBM
         </h1>
 
         <div class="post-meta-container">
@@ -302,10 +302,16 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2020-10-25 09:35:04 / Modified: 11:10:52" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:04+08:00">2020-10-25</time>
+      <time title="Created: 2020-10-25 09:35:04" itemprop="dateCreated datePublished" datetime="2020-10-25T09:35:04+08:00">2020-10-25</time>
     </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2020-10-28 18:45:25" itemprop="dateModified" datetime="2020-10-28T18:45:25+08:00">2020-10-28</time>
+      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -328,6 +334,7 @@
     <div class="post-body" itemprop="articleBody">
         <p>[toc]</p>
 <h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><h3 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h3><p>解决GBDT遇到海量数据时的问题：GBDT 在每一次迭代的时候，都需要遍历整个训练数据多次。如果把整个训练数据装进内存则会限制训练数据的大小；如果不装进内存，反复地读写训练数据又会消耗非常大的时间。</p>
+<a id="more"></a>
 <h3 id="对xgboost的优化"><a href="#对xgboost的优化" class="headerlink" title="对xgboost的优化"></a>对xgboost的优化</h3><ul>
 <li>基于 Histogram 的决策树算法</li>
 <li>带深度限制的 Leaf-wise 的叶子生长策略</li>
@@ -394,8 +401,8 @@
             <div class="post-nav-item">
             </div>
             <div class="post-nav-item">
-                <a href="/2020/10/25/Naive%20Bayes/" rel="next" title="Naive Bayes及其sklearn实现">
-                  Naive Bayes及其sklearn实现 <i class="fa fa-chevron-right"></i>
+                <a href="/2020/10/25/Naive%20Bayes/" rel="next" title="ML-Naive Bayes及其sklearn实现">
+                  ML-Naive Bayes及其sklearn实现 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>
