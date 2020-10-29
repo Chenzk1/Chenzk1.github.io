@@ -555,8 +555,9 @@ M I o U=\frac{1}{k+1} \sum_{i=0}^{k} \frac{T P}{F N+F P+T P}
     <title>ML-信息熵&amp;交叉熵&amp;条件熵&amp;相对熵(KL散度)&amp;互信息</title>
     <url>/2020/10/29/ML-%E4%BF%A1%E6%81%AF%E7%86%B5&amp;%E4%BA%A4%E5%8F%89%E7%86%B5&amp;%E6%9D%A1%E4%BB%B6%E7%86%B5&amp;%E7%9B%B8%E5%AF%B9%E7%86%B5(KL%E6%95%A3%E5%BA%A6)&amp;%E4%BA%92%E4%BF%A1%E6%81%AF/</url>
     <content><![CDATA[<ul>
-<li>设随机变量X，有n个事件x_i –&gt; x_n，概率分布为p(x)</li>
+<li>设随机变量X，有n个事件$x_i$ –&gt; $x_n$，概率分布为$p(x)$</li>
 </ul>
+<a id="more"></a>
 <h2 id="信息"><a href="#信息" class="headerlink" title="信息"></a>信息</h2><ul>
 <li>某随机变量X取值为xi的信息为 $I(X=xi)=log_2( 1 / p(x_i) ) = - log_2p(x_i)$</li>
 <li>某事件xi的信息代表这个事件能提供的信息，一个发生概率越小的事件能够提供的信息量越大。</li>
@@ -584,7 +585,7 @@ M I o U=\frac{1}{k+1} \sum_{i=0}^{k} \frac{T P}{F N+F P+T P}
 <h2 id="基尼不纯度-—-CART"><a href="#基尼不纯度-—-CART" class="headerlink" title="基尼不纯度 — CART"></a>基尼不纯度 — CART</h2><ul>
 <li>GINI：先对特征分区，对每个区中的label求gini系数，pk(1-pk)；然后对每个区的基尼系数求期望</li>
 <li>表示数据的不纯度。既有分类也有回归，既要确定特征，也要确定特征的分叉值。</li>
-<li>见<a href="https://chenzk1.github.io/2020/10/25/Decision%20Tree/">Decision Tree</a></li>
+<li>见<a href="https://chenzk1.github.io/2020/10/25/ML-Decision%20Tree/">Decision Tree</a></li>
 </ul>
 <h2 id="交叉熵"><a href="#交叉熵" class="headerlink" title="交叉熵"></a>交叉熵</h2><ul>
 <li>前面提到：信息熵是最优策略下，消除系统不确定性的最小代价。这里的前提是：我们得到了系统的真实分布。</li>
