@@ -26,21 +26,24 @@
   <meta name="description" content="[TOC] 分类ACC(Accuracy) Accuracy &#x3D; 预测正确的样本数量 &#x2F; 总样本数量 &#x3D; (TP+TN) &#x2F; (TP+FP+TN+FN)">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ML-Metrics">
-<meta property="og:url" content="https://chenzk1.github.io/2020/10/26/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%88%86%E7%B1%BBmetrics/index.html">
+<meta property="og:url" content="https://chenzk1.github.io/2020/10/26/ML-metrics/index.html">
 <meta property="og:site_name" content="Kayden&#39;s Blog">
 <meta property="og:description" content="[TOC] 分类ACC(Accuracy) Accuracy &#x3D; 预测正确的样本数量 &#x2F; 总样本数量 &#x3D; (TP+TN) &#x2F; (TP+FP+TN+FN)">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/2019013111150139.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NzY2NfbGVhcm5pbmc=,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-99faeb1f9876f11a32f90263ff1cafba_1440w.jpg">
 <meta property="article:published_time" content="2020-10-26T09:04:58.308Z">
-<meta property="article:modified_time" content="2020-10-28T10:41:29.585Z">
+<meta property="article:modified_time" content="2020-10-29T04:16:15.758Z">
 <meta property="article:author" content="Kayden">
+<meta property="article:tag" content="CV">
 <meta property="article:tag" content="ML">
 <meta property="article:tag" content="Metrics">
+<meta property="article:tag" content="搜索">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://img-blog.csdnimg.cn/2019013111150139.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NzY2NfbGVhcm5pbmc=,size_16,color_FFFFFF,t_70">
 
 
-<link rel="canonical" href="https://chenzk1.github.io/2020/10/26/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%88%86%E7%B1%BBmetrics/">
+<link rel="canonical" href="https://chenzk1.github.io/2020/10/26/ML-metrics/">
 
 
 <script class="page-configurations">
@@ -209,7 +212,7 @@
 
       <!--noindex-->
       <section class="post-toc-wrap sidebar-panel">
-          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E7%B1%BB"><span class="nav-number">1.</span> <span class="nav-text">分类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ACC-Accuracy"><span class="nav-number">1.1.</span> <span class="nav-text">ACC(Accuracy)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Precision%E6%9F%A5%E5%87%86"><span class="nav-number">1.2.</span> <span class="nav-text">Precision查准</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Recall-TPR%E6%9F%A5%E5%85%A8"><span class="nav-number">1.3.</span> <span class="nav-text">Recall&#x2F;TPR查全</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#F1-amp-Fn"><span class="nav-number">1.4.</span> <span class="nav-text">F1&amp;Fn</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#F1"><span class="nav-number">1.4.1.</span> <span class="nav-text">F1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Fn"><span class="nav-number">1.4.2.</span> <span class="nav-text">Fn</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#P-R%E6%9B%B2%E7%BA%BF-Precision-Recall"><span class="nav-number">1.5.</span> <span class="nav-text">P-R曲线(Precision-Recall)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FPR"><span class="nav-number">1.6.</span> <span class="nav-text">FPR</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ROC%E6%9B%B2%E7%BA%BF-amp-AUC"><span class="nav-number">1.7.</span> <span class="nav-text">ROC曲线&amp;AUC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ROC-Receiver-operating-characteristic-curve"><span class="nav-number">1.7.1.</span> <span class="nav-text">ROC(Receiver operating characteristic curve)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AUC-Area-under-Curve"><span class="nav-number">1.7.2.</span> <span class="nav-text">AUC(Area under Curve)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8C%BA%E5%88%86%E5%BA%A6"><span class="nav-number">2.</span> <span class="nav-text">区分度</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#KS-Kolmogorov-Smirnov"><span class="nav-number">2.1.</span> <span class="nav-text">KS(Kolmogorov-Smirnov)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gini"><span class="nav-number">2.2.</span> <span class="nav-text">gini</span></a></li></ol></li></ol></div>
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E7%B1%BB"><span class="nav-number">1.</span> <span class="nav-text">分类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ACC-Accuracy"><span class="nav-number">1.1.</span> <span class="nav-text">ACC(Accuracy)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Precision%E6%9F%A5%E5%87%86"><span class="nav-number">1.2.</span> <span class="nav-text">Precision查准</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Recall-TPR%E6%9F%A5%E5%85%A8"><span class="nav-number">1.3.</span> <span class="nav-text">Recall&#x2F;TPR查全</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#F1-amp-Fn"><span class="nav-number">1.4.</span> <span class="nav-text">F1&amp;Fn</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#F1"><span class="nav-number">1.4.1.</span> <span class="nav-text">F1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Fn"><span class="nav-number">1.4.2.</span> <span class="nav-text">Fn</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#P-R%E6%9B%B2%E7%BA%BF-Precision-Recall"><span class="nav-number">1.5.</span> <span class="nav-text">P-R曲线(Precision-Recall)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FPR"><span class="nav-number">1.6.</span> <span class="nav-text">FPR</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ROC%E6%9B%B2%E7%BA%BF-amp-AUC"><span class="nav-number">1.7.</span> <span class="nav-text">ROC曲线&amp;AUC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ROC-Receiver-operating-characteristic-curve"><span class="nav-number">1.7.1.</span> <span class="nav-text">ROC(Receiver operating characteristic curve)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AUC-Area-under-Curve"><span class="nav-number">1.7.2.</span> <span class="nav-text">AUC(Area under Curve)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8C%BA%E5%88%86%E5%BA%A6"><span class="nav-number">2.</span> <span class="nav-text">区分度</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#KS-Kolmogorov-Smirnov"><span class="nav-number">2.1.</span> <span class="nav-text">KS(Kolmogorov-Smirnov)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gini"><span class="nav-number">2.2.</span> <span class="nav-text">gini</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8E%92%E5%BA%8F"><span class="nav-number">3.</span> <span class="nav-text">排序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#map-k"><span class="nav-number">3.1.</span> <span class="nav-text">map@k</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#prec-k"><span class="nav-number">3.1.1.</span> <span class="nav-text">prec@k</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ap-k"><span class="nav-number">3.1.2.</span> <span class="nav-text">ap@k</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#map-k-1"><span class="nav-number">3.1.3.</span> <span class="nav-text">map@k</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ndcg"><span class="nav-number">3.2.</span> <span class="nav-text">ndcg</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#cg-Cumulative-Gain"><span class="nav-number">3.2.1.</span> <span class="nav-text">cg(Cumulative Gain)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dcg-Discounted-Cumulative-Gain"><span class="nav-number">3.2.2.</span> <span class="nav-text">dcg(Discounted Cumulative Gain)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ndcg-normalize-DCG"><span class="nav-number">3.2.3.</span> <span class="nav-text">ndcg(normalize DCG)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MRR-Mean-Reciprocal-Rank"><span class="nav-number">3.3.</span> <span class="nav-text">MRR(Mean Reciprocal Rank)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A3%80%E6%B5%8B"><span class="nav-number">4.</span> <span class="nav-text">检测</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#mAP"><span class="nav-number">4.1.</span> <span class="nav-text">mAP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IOU-Interest-Over-Union"><span class="nav-number">4.2.</span> <span class="nav-text">IOU(Interest Over Union)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A3%80%E6%B5%8B%E9%87%8C%E7%9A%84IOU"><span class="nav-number">4.2.1.</span> <span class="nav-text">检测里的IOU</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2%E9%87%8C%E7%9A%84IOU"><span class="nav-number">4.2.2.</span> <span class="nav-text">语义分割里的IOU</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mIOU-mean-IOU"><span class="nav-number">4.3.</span> <span class="nav-text">mIOU(mean IOU)</span></a></li></ol></li></ol></div>
       </section>
       <!--/noindex-->
 
@@ -223,7 +226,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-count">28</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -234,7 +237,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-count">12</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -249,6 +252,19 @@
   </div>
 
 
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://andrewsher.github.io/" title="https:&#x2F;&#x2F;andrewsher.github.io&#x2F;" rel="noopener" target="_blank">Andrewsher's blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://shorey.tech/" title="http:&#x2F;&#x2F;shorey.tech&#x2F;" rel="noopener" target="_blank">Shorey's blog</a>
+        </li>
+    </ul>
+  </div>
 
       </section>
         <div class="back-to-top animated">
@@ -282,7 +298,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/26/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%88%86%E7%B1%BBmetrics/">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/26/ML-metrics/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -313,7 +329,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2020-10-28 18:41:29" itemprop="dateModified" datetime="2020-10-28T18:41:29+08:00">2020-10-28</time>
+        <time title="Modified: 2020-10-29 12:16:15" itemprop="dateModified" datetime="2020-10-29T12:16:15+08:00">2020-10-29</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -397,6 +413,79 @@ A U C=\frac{\sum_{\text {ins}_{i} \in \text {positiveclass}} \operatorname{rank}
 <li>按照累计好账户占比和累计坏账户占比得出下图所示曲线ADC。 </li>
 <li>计算出图中阴影部分面积，阴影面积占直角三角形ABC面积的百分比，即为GINI系数。</li>
 </ul>
+<h1 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h1><ul>
+<li><a target="_blank" rel="noopener" href="http://note.youdao.com/s/D64Y5VaG">http://note.youdao.com/s/D64Y5VaG</a></li>
+<li>map和ndcg都是<strong>属于per item的评估</strong>，即逐条对搜索结果进行分等级的打分，并计算其指标。</li>
+<li><strong>基于precision的指标，例如MAP，每个条目的值是的评价用0或1表示；而DCG可以使用多值指标来评价</strong>。</li>
+<li><strong>基于precision的指标，天然考虑了排序信息</strong>。</li>
+</ul>
+<h2 id="map-k"><a href="#map-k" class="headerlink" title="map@k"></a>map@k</h2><h3 id="prec-k"><a href="#prec-k" class="headerlink" title="prec@k"></a>prec@k</h3><ul>
+<li>k指到第k个正确的召回结果，precision的值<script type="math/tex; mode=display">P @ k(\pi, l)=\frac{\left.\sum_{t \leq k} I_{\left\{l_{\pi}-1_{(t)}\right.}=1\right\}}{k}</script><ul>
+<li>这里$\pi$代表documents list，即推送结果列。$I$是指示函数，$\pi^{(-1)}(t)$代表排在位置$t$处的document的标签（相关为1，否则为0）。这一项可以理解为前k个documents中，标签为1的documents个数与k的比值。</li>
+</ul>
+</li>
+<li>只能表示单点的策略效果</li>
+</ul>
+<h3 id="ap-k"><a href="#ap-k" class="headerlink" title="ap@k"></a>ap@k</h3><script type="math/tex; mode=display">
+\mathrm{AP}(\pi, l)=\frac{\left.\sum_{k=1}^{m} P @ k \cdot I_{\left\{l_{\pi}-1(k)\right.}=1\right\}}{m_{1}}</script><ul>
+<li>其中$m_1$代表与该query相关的document的数量（即真实标签为1），$m$则代表模型找出的前$m$个documents，本例中 [公式] ，并假设 [公式] ，即真正和query相关的document有6个。（但是被模型找出来的7个doc中仅仅有3个标签为1，说明这个模型召回并不怎么样）</li>
+<li>@1到@k的precision的平均</li>
+</ul>
+<h3 id="map-k-1"><a href="#map-k-1" class="headerlink" title="map@k"></a>map@k</h3><ul>
+<li>多个query的ap@k平均</li>
+</ul>
+<h2 id="ndcg"><a href="#ndcg" class="headerlink" title="ndcg"></a>ndcg</h2><ul>
+<li>基于CG的评价指标允许我们使用多值评价一个item：例如对一个结果可评价为Good（好）、Fair（一般）、Bad（差），然后可以赋予为3、2、1.</li>
+</ul>
+<h3 id="cg-Cumulative-Gain"><a href="#cg-Cumulative-Gain" class="headerlink" title="cg(Cumulative Gain)"></a>cg(Cumulative Gain)</h3><script type="math/tex; mode=display">
+\mathrm{CG}_{\mathrm{p}}=\sum_{i=1}^{p} r e l_{i}</script><ul>
+<li>CG是在这个查询输出结果里面所有的结果的等级对应的得分的总和。如一个输出结果页面有P个结果.</li>
+</ul>
+<h3 id="dcg-Discounted-Cumulative-Gain"><a href="#dcg-Discounted-Cumulative-Gain" class="headerlink" title="dcg(Discounted Cumulative Gain)"></a>dcg(Discounted Cumulative Gain)</h3><script type="math/tex; mode=display">
+\mathrm{DCG}_{\mathrm{p}}=\sum_{i=1}^{p} \frac{r e l_{i}}{\log _{2}(i+1)}</script><ul>
+<li>取对数是因为：根据大量的用户点击与其所点内容的位置信息，模拟出一条衰减的曲线。</li>
+</ul>
+<h3 id="ndcg-normalize-DCG"><a href="#ndcg-normalize-DCG" class="headerlink" title="ndcg(normalize DCG)"></a>ndcg(normalize DCG)</h3><script type="math/tex; mode=display">nDCG = \frac{DCG}{IDCG}</script><ul>
+<li>IDCG（Ideal DCG）就是理想的DCG。</li>
+<li>IDCG如何计算？首先要拿到搜索的结果，然后对这些结果进行排序，排到最好的状态后，算出这个排列下的DCG，就是iDCG。因此nDCG是一个0-1的值，nDCG越靠近1，说明策略效果越好，或者说只要nDCG&lt;1，策略就存在优化调整空间。因为nDCG是一个相对比值，那么不同的搜索结果之间就可以通过比较nDCG来决定哪个排序比较好。</li>
+</ul>
+<h2 id="MRR-Mean-Reciprocal-Rank"><a href="#MRR-Mean-Reciprocal-Rank" class="headerlink" title="MRR(Mean Reciprocal Rank)"></a>MRR(Mean Reciprocal Rank)</h2><script type="math/tex; mode=display">
+\operatorname{MRR}=\frac{1}{|Q|} \sum_{i=1}^{|Q|} \frac{1}{\operatorname{rank}_{i}}</script><ul>
+<li>其中|Q|是查询个数，$rank_i$是第i个查询，第一个相关的结果所在的排列位置</li>
+</ul>
+<h1 id="检测"><a href="#检测" class="headerlink" title="检测"></a>检测</h1><ul>
+<li>评价一个检测算法时，主要看两个指标<ul>
+<li>是否正确的预测了框内物体的类别</li>
+<li>预测的框和人工标注框的重合程度</li>
+</ul>
+</li>
+</ul>
+<h2 id="mAP"><a href="#mAP" class="headerlink" title="mAP"></a>mAP</h2><ul>
+<li>求取每个<strong>类别</strong>的ap的平均值<ul>
+<li>即，对每个类别进行预测，得到其预测值的排序，求ap</li>
+<li>求map</li>
+</ul>
+</li>
+</ul>
+<h2 id="IOU-Interest-Over-Union"><a href="#IOU-Interest-Over-Union" class="headerlink" title="IOU(Interest Over Union)"></a>IOU(Interest Over Union)</h2><h3 id="检测里的IOU"><a href="#检测里的IOU" class="headerlink" title="检测里的IOU"></a>检测里的IOU</h3><ul>
+<li>框的IOU<script type="math/tex; mode=display">IOU = \frac{ {DetectionResult}\cap{GroundTruth}} { {DetectionResult}\cup{GroundTruth} }</script><img src="https://pic3.zhimg.com/80/v2-99faeb1f9876f11a32f90263ff1cafba_1440w.jpg" alt="示意"></li>
+</ul>
+<h3 id="语义分割里的IOU"><a href="#语义分割里的IOU" class="headerlink" title="语义分割里的IOU"></a>语义分割里的IOU</h3><ul>
+<li>像素集合的IOU<script type="math/tex; mode=display">
+\begin{array}{c}
+I O U=\frac{p_{i i}}{\sum_{j=0}^{k} p_{i j}+\sum_{j=0}^{k} p_{j i}-p_{i i}} \\
+I o U=\frac{T P}{F N+F P+T P}
+\end{array}</script></li>
+<li>$p_{ij}$表示真实值为i，被预测为j的数量， K+1是类别个数（包含空类）。$p_{ii}$是真正的数量。$p_{ij}$、$p_{ji}$则分别表示假正和假负。</li>
+</ul>
+<h2 id="mIOU-mean-IOU"><a href="#mIOU-mean-IOU" class="headerlink" title="mIOU(mean IOU)"></a>mIOU(mean IOU)</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/baidu_27643275/article/details/90445422">blog</a></li>
+<li>用于语义分割<script type="math/tex; mode=display">
+\begin{array}{c}
+M I O U=\frac{1}{k+1} \sum_{i=0}^{k} \frac{p_{i i}}{\sum_{j=0}^{k} p_{i j}+\sum_{j=0}^{k} p_{j i}-p_{i i}} \\
+M I o U=\frac{1}{k+1} \sum_{i=0}^{k} \frac{T P}{F N+F P+T P}
+\end{array}</script></li>
+</ul>
 
     </div>
 
@@ -406,8 +495,10 @@ A U C=\frac{\sum_{\text {ins}_{i} \in \text {positiveclass}} \operatorname{rank}
 
     <footer class="post-footer">
           <div class="post-tags">
+              <a href="/tags/CV/" rel="tag"># CV</a>
               <a href="/tags/ML/" rel="tag"># ML</a>
               <a href="/tags/Metrics/" rel="tag"># Metrics</a>
+              <a href="/tags/%E6%90%9C%E7%B4%A2/" rel="tag"># 搜索</a>
           </div>
 
         

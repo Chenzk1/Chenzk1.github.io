@@ -162,89 +162,6 @@
       </tags>
   </entry>
   <entry>
-    <title>ML-Decision Tree</title>
-    <url>/2020/10/25/Decision%20Tree/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<ol>
-<li>决策树</li>
-</ol>
-<p><strong>_问题：如何挑选用于分裂节点的特征—&gt;ID3 C4.5 …(一个标准：使分裂出来的节点尽可能纯，即一个分支尽可能属于同类)_</strong></p>
-<a id="more"></a>
-<ol>
-<li><p>ID3<br>_<strong>信息增益</strong>_</p>
-<p> 信息增益 = 信息熵 - 条件熵</p>
-<ul>
-<li>信息增益：针对每个 _<strong>属性</strong>_</li>
-<li>信息熵：整个样本空间的不确定度。其中Pk一定是label取值的概率。</li>
-<li><p>条件熵：给定某个属性，求其信息熵</p>
-<p>—&gt; 问题：某属性所包括的类别越多，信息增益越大。极限：每个类别仅有1个实例（label数量为1），log p = log1 = 0， 所以最终条件熵=0。或：属性类别越多，条件熵越小，其纯度越高。</p>
-<p>—&gt; 信息增益准则其实是对可取值数目较多的属性有所偏好！</p>
-<p>—&gt; 泛化能力不强</p>
-</li>
-</ul>
-</li>
-<li><p>C4.5 _<strong>信息增益率+信息增益</strong>_</p>
-<p> 属性a的信息增益率 = 属性a的信息增益 / a的某个固有统计量IV(a)</p>
-<p> <img src="https://pic4.zhimg.com/80/v2-812104c0291d20935e910919a9fa5c27_hd.png" alt="IV(a)公式"></p>
-<p> V为a的取值数目。<br> （实际上是属性a的信息熵）</p>
-<ul>
-<li>直接使用信息增益率：偏好取值数目小的属性。</li>
-<li>先选择高于平均水平信息增益的属性，再选择最高信息增益率的属性。</li>
-</ul>
-</li>
-<li><p>CART _<strong>基尼系数+MAE/MSE</strong>_</p>
-<p>与ID3、C4.5的不同：形成二叉树，因此 —&gt; 既要确定要分割的属性，也要确定要分割的值</p>
-<ul>
-<li><p>回归树：MAE/MSE</p>
-<ul>
-<li>example(MSE)：<blockquote>
-<ol>
-<li>考虑数据集 D 上的所有特征 j，遍历每一个特征下所有可能的取值或者切分点 s，将数据集 D 划分成两部分 D1 和 D2</li>
-<li>分别计算上述两个子集的平方误差和，选择最小的平方误差对应的特征与分割点，生成两个子节点。</li>
-<li>对上述两个子节点递归调用步骤1 2,直到满足停止条件。</li>
-</ol>
-</blockquote>
-</li>
-</ul>
-</li>
-<li><p>分类树：(Gini不纯度)</p>
-<p><img src="https://img-blog.csdn.net/20150109184544578?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvQW5kcm9pZGx1c2hhbmdkZXJlbg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="某属性A的基尼不纯度"><br>基尼不纯度越小，纯度越高</p>
-</li>
-</ul>
-<blockquote>
-<ol>
-<li>对每个特征 A，对它的所有可能取值 a，将数据集分为 A＝a，和 A!＝a 两个子集，计算集合 D 的基尼指数：<br>Gini(A) = D1/D <em> Gini(D1) + D2/D </em> Gini(D2)</li>
-<li>遍历所有的特征 A，计算其所有可能取值 a 的基尼指数，选择 D 的基尼指数最小值对应的特征及切分点作为最优的划分，将数据分为两个子集。</li>
-<li>对上述两个子节点递归调用步骤1 2, 直到满足停止条件。</li>
-<li>生成 CART 决策树。</li>
-</ol>
-</blockquote>
-<pre><code>停止条件有：
-1. 节点中的样本个数小于预定阈值;
-2. 样本集的Gini系数小于预定阈值（此时样本基本属于同一类）;
-3. 没有更多特征。
-</code></pre><ul>
-<li>剪枝</li>
-<li>例子：<a href="https://www.jianshu.com/p/b90a9ce05b28">example</a></li>
-</ul>
-</li>
-<li><p>控制决策树过拟合的方法</p>
-<ul>
-<li>剪枝</li>
-<li>控制终止条件，避免树形结构过细</li>
-<li>构建随机森林</li>
-</ul>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>Learning</category>
-      </categories>
-      <tags>
-        <tag>ML</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>ML-GBDT &amp; XGBoost</title>
     <url>/2020/10/25/GBDT%20&amp;%20XGBoost/</url>
     <content><![CDATA[<p>[TOC]</p>
@@ -403,6 +320,304 @@
       </tags>
   </entry>
   <entry>
+    <title>ML-Decision Tree</title>
+    <url>/2020/10/25/ML-Decision%20Tree/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<ol>
+<li>决策树</li>
+</ol>
+<p><strong>问题：如何挑选用于分裂节点的特征—&gt;ID3 C4.5 …(一个标准：使分裂出来的节点尽可能纯，即一个分支尽可能属于同类)</strong></p>
+<a id="more"></a>
+<ol>
+<li><p>ID3<br><strong>信息增益</strong></p>
+<p> 信息增益 = 信息熵 - 条件熵</p>
+<ul>
+<li>信息增益：针对每个 <strong>属性</strong></li>
+<li>信息熵：整个样本空间的不确定度。其中Pk一定是label取值的概率。</li>
+<li><p>条件熵：给定某个属性，求其信息熵</p>
+<p>—&gt; 问题：某属性所包括的类别越多，信息增益越大。极限：每个类别仅有1个实例（label数量为1），log p = log1 = 0， 所以最终条件熵=0。或：属性类别越多，条件熵越小，其纯度越高。</p>
+<p>—&gt; 信息增益准则其实是对可取值数目较多的属性有所偏好！</p>
+<p>—&gt; 泛化能力不强</p>
+</li>
+</ul>
+</li>
+<li><p>C4.5 <strong>信息增益率+信息增益</strong></p>
+<p> 属性a的信息增益率 = 属性a的信息增益 / a的某个固有统计量IV(a)</p>
+<p> <img src="https://pic4.zhimg.com/80/v2-812104c0291d20935e910919a9fa5c27_hd.png" alt="IV(a)公式"></p>
+<p> V为a的取值数目。<br> （实际上是属性a的信息熵）</p>
+<ul>
+<li>直接使用信息增益率：偏好取值数目小的属性。</li>
+<li>先选择高于平均水平信息增益的属性，再选择最高信息增益率的属性。</li>
+</ul>
+</li>
+<li><p>CART <strong>基尼系数+MAE/MSE</strong></p>
+<p>与ID3、C4.5的不同：形成二叉树，因此 —&gt; 既要确定要分割的属性，也要确定要分割的值</p>
+<ul>
+<li><p>回归树：MAE/MSE</p>
+<ul>
+<li>example(MSE)：<blockquote>
+<ol>
+<li>考虑数据集 D 上的所有特征 j，遍历每一个特征下所有可能的取值或者切分点 s，将数据集 D 划分成两部分 D1 和 D2</li>
+<li>分别计算上述两个子集的平方误差和，选择最小的平方误差对应的特征与分割点，生成两个子节点。</li>
+<li>对上述两个子节点递归调用步骤1 2,直到满足停止条件。</li>
+</ol>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>分类树：(Gini不纯度)</p>
+<p><img src="https://img-blog.csdn.net/20150109184544578?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvQW5kcm9pZGx1c2hhbmdkZXJlbg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="某属性A的基尼不纯度"><br>基尼不纯度越小，纯度越高</p>
+</li>
+</ul>
+<blockquote>
+<ol>
+<li>对每个特征 A，对它的所有可能取值 a，将数据集分为 A＝a，和 A!＝a 两个子集，计算集合 D 的基尼指数：<br>Gini(A) = D1/D <em> Gini(D1) + D2/D </em> Gini(D2)</li>
+<li>遍历所有的特征 A，计算其所有可能取值 a 的基尼指数，选择 D 的基尼指数最小值对应的特征及切分点作为最优的划分，将数据分为两个子集。</li>
+<li>对上述两个子节点递归调用步骤1 2, 直到满足停止条件。</li>
+<li>生成 CART 决策树。</li>
+</ol>
+</blockquote>
+<pre><code>停止条件有：
+1. 节点中的样本个数小于预定阈值;
+2. 样本集的Gini系数小于预定阈值（此时样本基本属于同一类）;
+3. 没有更多特征。
+</code></pre><ul>
+<li>剪枝</li>
+<li>例子：<a href="https://www.jianshu.com/p/b90a9ce05b28">example</a></li>
+</ul>
+</li>
+<li><p>控制决策树过拟合的方法</p>
+<ul>
+<li>剪枝</li>
+<li>控制终止条件，避免树形结构过细</li>
+<li>构建随机森林</li>
+</ul>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>ML</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ML-Metrics</title>
+    <url>/2020/10/26/ML-metrics/</url>
+    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
+
+<p>[TOC]</p>
+<h1 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h1><h2 id="ACC-Accuracy"><a href="#ACC-Accuracy" class="headerlink" title="ACC(Accuracy)"></a>ACC(Accuracy)</h2><ul>
+<li>Accuracy = 预测正确的样本数量 / 总样本数量 = (TP+TN) / (TP+FP+TN+FN)</li>
+</ul>
+<a id="more"></a>
+<h2 id="Precision查准"><a href="#Precision查准" class="headerlink" title="Precision查准"></a>Precision查准</h2><ul>
+<li>Precision = TP / (TP+FP)</li>
+</ul>
+<h2 id="Recall-TPR查全"><a href="#Recall-TPR查全" class="headerlink" title="Recall/TPR查全"></a>Recall/TPR查全</h2><ul>
+<li>Recall = TPR = TP / (TP+FN)</li>
+</ul>
+<h2 id="F1-amp-Fn"><a href="#F1-amp-Fn" class="headerlink" title="F1&amp;Fn"></a>F1&amp;Fn</h2><h3 id="F1"><a href="#F1" class="headerlink" title="F1"></a>F1</h3><ul>
+<li>precision和recall的调和平均</li>
+</ul>
+<h3 id="Fn"><a href="#Fn" class="headerlink" title="Fn"></a>Fn</h3><ul>
+<li>可用来解决分类不均衡问题/对precision和recall进行强调<ul>
+<li>如F1认为precision和recall同等重要，F2认为recall的重要程度是precision的2倍<script type="math/tex; mode=display">
+F_{\beta}=\left(1+\beta^{2}\right) \cdot \frac{\text { precision } \cdot \text { recall }}{\left(\beta^{2} \cdot \text { precision }\right)+\text { recall }}</script></li>
+</ul>
+</li>
+</ul>
+<script type="math/tex; mode=display">
+F_{\beta}=\frac{\left(1+\beta^{2}\right) \cdot \text { true positive }}{\left(1+\beta^{2}\right) \cdot \text { true positive }+\beta^{2} \cdot \text { false negative }+\text { false positive }}</script><h2 id="P-R曲线-Precision-Recall"><a href="#P-R曲线-Precision-Recall" class="headerlink" title="P-R曲线(Precision-Recall)"></a>P-R曲线(Precision-Recall)</h2><ul>
+<li>P为纵轴，R为横轴</li>
+<li>主要关心正例</li>
+<li>公式：<script type="math/tex; mode=display">
+\sum_{n}\left(R_{n}-R_{n-1}\right) P_{n}</script></li>
+</ul>
+<h2 id="FPR"><a href="#FPR" class="headerlink" title="FPR"></a>FPR</h2><ul>
+<li>FPR = FP/(FP+TN) 真实label为0的样本中，被预测为1的样本占的比例</li>
+</ul>
+<h2 id="ROC曲线-amp-AUC"><a href="#ROC曲线-amp-AUC" class="headerlink" title="ROC曲线&amp;AUC"></a>ROC曲线&amp;AUC</h2><ul>
+<li>衡量分类准确性，同时考虑了模型对正样本(TPR)和负样本(FPR)的分类能力，因此在样本非均衡的情况下也能做出合理的评价。侧重于<strong>排序</strong>。</li>
+</ul>
+<h3 id="ROC-Receiver-operating-characteristic-curve"><a href="#ROC-Receiver-operating-characteristic-curve" class="headerlink" title="ROC(Receiver operating characteristic curve)"></a>ROC(Receiver operating characteristic curve)</h3><ul>
+<li>横轴FPR，纵轴TPR</li>
+<li>ROC曲线在绘制时，需要先对所有样本的预测概率做排序，并不断取不同的阈值计算TPR和FPR，因此AUC在计算时会侧重于排序。</li>
+</ul>
+<h3 id="AUC-Area-under-Curve"><a href="#AUC-Area-under-Curve" class="headerlink" title="AUC(Area under Curve)"></a>AUC(Area under Curve)</h3><ul>
+<li>ROC曲线与x轴的面积</li>
+<li>一般认为：AUC最小值=0.5（其实存在AUC小于0.5的情况，例如每次都预测与真实值相反的情况，但是这种情况，只要把预测值取反就可以得到大于0.5的值，因此还是认为AUC最小值=0.5）</li>
+<li>AUC的物理意义为<strong>任取一对例和负例，正例得分大于负例得分的概率</strong>，AUC越大，表明方法效果越好。—&gt; 排序<script type="math/tex; mode=display">A U C=\frac{\sum p r e d_{p o s}>p r e d_{n e g}}{p o s i t i v e N u m * n e g a ti v e N u m}</script>分母是正负样本总的组合数，分子是正样本大于负样本的组合数<script type="math/tex; mode=display">
+A U C=\frac{\sum_{\text {ins}_{i} \in \text {positiveclass}} \operatorname{rank}_{\text {ins}_{i}}-\frac{M \times(M+1)}{2}}{M \times N}</script></li>
+</ul>
+<h1 id="区分度"><a href="#区分度" class="headerlink" title="区分度"></a>区分度</h1><h2 id="KS-Kolmogorov-Smirnov"><a href="#KS-Kolmogorov-Smirnov" class="headerlink" title="KS(Kolmogorov-Smirnov)"></a>KS(Kolmogorov-Smirnov)</h2><ul>
+<li>KS用于模型风险区分能力进行评估，指标衡量的是好坏样本累计分布之间的差值。好坏样本累计差异越大，KS指标越大，那么模型的风险区分能力越强。</li>
+<li>KS的计算步骤如下： <ul>
+<li>1)计算每个评分区间的好坏账户数。 </li>
+<li>2)计算每个评分区间的累计好账户数占总好账户数比率(good%)和累计坏账户数占总坏账户数比率(bad%)。 </li>
+<li>3)计算每个评分区间累计坏账户占比与累计好账户占比差的绝对值（累计good%-累计bad%），然后对这些绝对值取最大值即得此评分卡的K-S值。</li>
+</ul>
+</li>
+<li>低分段累计坏百分比应高于累计好百分比，之后会经历两者差距先扩大再缩小的变化<br><img src="https://img-blog.csdnimg.cn/2019013111150139.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NzY2NfbGVhcm5pbmc=,size_16,color_FFFFFF,t_70" alt="KS-曲线"></li>
+</ul>
+<h2 id="gini"><a href="#gini" class="headerlink" title="gini"></a>gini</h2><ul>
+<li>计算每个评分区间的好坏账户数。 </li>
+<li>计算每个评分区间的累计好账户数占总好账户数比率（累计good%）和累计坏账户数占总坏账户数比率(累计bad%)。 </li>
+<li>按照累计好账户占比和累计坏账户占比得出下图所示曲线ADC。 </li>
+<li>计算出图中阴影部分面积，阴影面积占直角三角形ABC面积的百分比，即为GINI系数。</li>
+</ul>
+<h1 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h1><ul>
+<li><a href="http://note.youdao.com/s/D64Y5VaG">http://note.youdao.com/s/D64Y5VaG</a></li>
+<li>map和ndcg都是<strong>属于per item的评估</strong>，即逐条对搜索结果进行分等级的打分，并计算其指标。</li>
+<li><strong>基于precision的指标，例如MAP，每个条目的值是的评价用0或1表示；而DCG可以使用多值指标来评价</strong>。</li>
+<li><strong>基于precision的指标，天然考虑了排序信息</strong>。</li>
+</ul>
+<h2 id="map-k"><a href="#map-k" class="headerlink" title="map@k"></a>map@k</h2><h3 id="prec-k"><a href="#prec-k" class="headerlink" title="prec@k"></a>prec@k</h3><ul>
+<li>k指到第k个正确的召回结果，precision的值<script type="math/tex; mode=display">P @ k(\pi, l)=\frac{\left.\sum_{t \leq k} I_{\left\{l_{\pi}-1_{(t)}\right.}=1\right\}}{k}</script><ul>
+<li>这里$\pi$代表documents list，即推送结果列。$I$是指示函数，$\pi^{(-1)}(t)$代表排在位置$t$处的document的标签（相关为1，否则为0）。这一项可以理解为前k个documents中，标签为1的documents个数与k的比值。</li>
+</ul>
+</li>
+<li>只能表示单点的策略效果</li>
+</ul>
+<h3 id="ap-k"><a href="#ap-k" class="headerlink" title="ap@k"></a>ap@k</h3><script type="math/tex; mode=display">
+\mathrm{AP}(\pi, l)=\frac{\left.\sum_{k=1}^{m} P @ k \cdot I_{\left\{l_{\pi}-1(k)\right.}=1\right\}}{m_{1}}</script><ul>
+<li>其中$m_1$代表与该query相关的document的数量（即真实标签为1），$m$则代表模型找出的前$m$个documents，本例中 [公式] ，并假设 [公式] ，即真正和query相关的document有6个。（但是被模型找出来的7个doc中仅仅有3个标签为1，说明这个模型召回并不怎么样）</li>
+<li>@1到@k的precision的平均</li>
+</ul>
+<h3 id="map-k-1"><a href="#map-k-1" class="headerlink" title="map@k"></a>map@k</h3><ul>
+<li>多个query的ap@k平均</li>
+</ul>
+<h2 id="ndcg"><a href="#ndcg" class="headerlink" title="ndcg"></a>ndcg</h2><ul>
+<li>基于CG的评价指标允许我们使用多值评价一个item：例如对一个结果可评价为Good（好）、Fair（一般）、Bad（差），然后可以赋予为3、2、1.</li>
+</ul>
+<h3 id="cg-Cumulative-Gain"><a href="#cg-Cumulative-Gain" class="headerlink" title="cg(Cumulative Gain)"></a>cg(Cumulative Gain)</h3><script type="math/tex; mode=display">
+\mathrm{CG}_{\mathrm{p}}=\sum_{i=1}^{p} r e l_{i}</script><ul>
+<li>CG是在这个查询输出结果里面所有的结果的等级对应的得分的总和。如一个输出结果页面有P个结果.</li>
+</ul>
+<h3 id="dcg-Discounted-Cumulative-Gain"><a href="#dcg-Discounted-Cumulative-Gain" class="headerlink" title="dcg(Discounted Cumulative Gain)"></a>dcg(Discounted Cumulative Gain)</h3><script type="math/tex; mode=display">
+\mathrm{DCG}_{\mathrm{p}}=\sum_{i=1}^{p} \frac{r e l_{i}}{\log _{2}(i+1)}</script><ul>
+<li>取对数是因为：根据大量的用户点击与其所点内容的位置信息，模拟出一条衰减的曲线。</li>
+</ul>
+<h3 id="ndcg-normalize-DCG"><a href="#ndcg-normalize-DCG" class="headerlink" title="ndcg(normalize DCG)"></a>ndcg(normalize DCG)</h3><script type="math/tex; mode=display">nDCG = \frac{DCG}{IDCG}</script><ul>
+<li>IDCG（Ideal DCG）就是理想的DCG。</li>
+<li>IDCG如何计算？首先要拿到搜索的结果，然后对这些结果进行排序，排到最好的状态后，算出这个排列下的DCG，就是iDCG。因此nDCG是一个0-1的值，nDCG越靠近1，说明策略效果越好，或者说只要nDCG&lt;1，策略就存在优化调整空间。因为nDCG是一个相对比值，那么不同的搜索结果之间就可以通过比较nDCG来决定哪个排序比较好。</li>
+</ul>
+<h2 id="MRR-Mean-Reciprocal-Rank"><a href="#MRR-Mean-Reciprocal-Rank" class="headerlink" title="MRR(Mean Reciprocal Rank)"></a>MRR(Mean Reciprocal Rank)</h2><script type="math/tex; mode=display">
+\operatorname{MRR}=\frac{1}{|Q|} \sum_{i=1}^{|Q|} \frac{1}{\operatorname{rank}_{i}}</script><ul>
+<li>其中|Q|是查询个数，$rank_i$是第i个查询，第一个相关的结果所在的排列位置</li>
+</ul>
+<h1 id="检测"><a href="#检测" class="headerlink" title="检测"></a>检测</h1><ul>
+<li>评价一个检测算法时，主要看两个指标<ul>
+<li>是否正确的预测了框内物体的类别</li>
+<li>预测的框和人工标注框的重合程度</li>
+</ul>
+</li>
+</ul>
+<h2 id="mAP"><a href="#mAP" class="headerlink" title="mAP"></a>mAP</h2><ul>
+<li>求取每个<strong>类别</strong>的ap的平均值<ul>
+<li>即，对每个类别进行预测，得到其预测值的排序，求ap</li>
+<li>求map</li>
+</ul>
+</li>
+</ul>
+<h2 id="IOU-Interest-Over-Union"><a href="#IOU-Interest-Over-Union" class="headerlink" title="IOU(Interest Over Union)"></a>IOU(Interest Over Union)</h2><h3 id="检测里的IOU"><a href="#检测里的IOU" class="headerlink" title="检测里的IOU"></a>检测里的IOU</h3><ul>
+<li>框的IOU<script type="math/tex; mode=display">IOU = \frac{ {DetectionResult}\cap{GroundTruth}} { {DetectionResult}\cup{GroundTruth} }</script><img src="https://pic3.zhimg.com/80/v2-99faeb1f9876f11a32f90263ff1cafba_1440w.jpg" alt="示意"></li>
+</ul>
+<h3 id="语义分割里的IOU"><a href="#语义分割里的IOU" class="headerlink" title="语义分割里的IOU"></a>语义分割里的IOU</h3><ul>
+<li>像素集合的IOU<script type="math/tex; mode=display">
+\begin{array}{c}
+I O U=\frac{p_{i i}}{\sum_{j=0}^{k} p_{i j}+\sum_{j=0}^{k} p_{j i}-p_{i i}} \\
+I o U=\frac{T P}{F N+F P+T P}
+\end{array}</script></li>
+<li>$p_{ij}$表示真实值为i，被预测为j的数量， K+1是类别个数（包含空类）。$p_{ii}$是真正的数量。$p_{ij}$、$p_{ji}$则分别表示假正和假负。</li>
+</ul>
+<h2 id="mIOU-mean-IOU"><a href="#mIOU-mean-IOU" class="headerlink" title="mIOU(mean IOU)"></a>mIOU(mean IOU)</h2><ul>
+<li><a href="https://blog.csdn.net/baidu_27643275/article/details/90445422">blog</a></li>
+<li>用于语义分割<script type="math/tex; mode=display">
+\begin{array}{c}
+M I O U=\frac{1}{k+1} \sum_{i=0}^{k} \frac{p_{i i}}{\sum_{j=0}^{k} p_{i j}+\sum_{j=0}^{k} p_{j i}-p_{i i}} \\
+M I o U=\frac{1}{k+1} \sum_{i=0}^{k} \frac{T P}{F N+F P+T P}
+\end{array}</script></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>CV</tag>
+        <tag>ML</tag>
+        <tag>Metrics</tag>
+        <tag>搜索</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ML-信息熵&amp;交叉熵&amp;条件熵&amp;相对熵(KL散度)&amp;互信息</title>
+    <url>/2020/10/29/ML-%E4%BF%A1%E6%81%AF%E7%86%B5&amp;%E4%BA%A4%E5%8F%89%E7%86%B5&amp;%E6%9D%A1%E4%BB%B6%E7%86%B5&amp;%E7%9B%B8%E5%AF%B9%E7%86%B5(KL%E6%95%A3%E5%BA%A6)&amp;%E4%BA%92%E4%BF%A1%E6%81%AF/</url>
+    <content><![CDATA[<ul>
+<li>设随机变量X，有n个事件x_i –&gt; x_n，概率分布为p(x)</li>
+</ul>
+<h2 id="信息"><a href="#信息" class="headerlink" title="信息"></a>信息</h2><ul>
+<li>某随机变量X取值为xi的信息为 $I(X=xi)=log_2( 1 / p(x_i) ) = - log_2p(x_i)$</li>
+<li>某事件xi的信息代表这个事件能提供的信息，一个发生概率越小的事件能够提供的信息量越大。</li>
+</ul>
+<h2 id="信息熵"><a href="#信息熵" class="headerlink" title="信息熵"></a>信息熵</h2><ul>
+<li>信息代表一个事件的不确定性，信息熵是整个随机变量X不确定性的度量：信息的期望。<script type="math/tex; mode=display">H(X) = \sum_0^n p(x_i)*I(x_i) = - \sum_0^n p(x_i)\log_2(p(x_i))</script></li>
+<li>信息熵只与变量X的分布有关，与其取值无关。例如二分类中，两取值的概率均为0.5时，其熵最大，也最难预测某时刻哪一类别会发生。</li>
+<li><a href="https://www.zhihu.com/question/41252833/answer/195901726">如何通俗的解释交叉熵与相对熵?</a></li>
+<li>对于一个系统而言，若获知其真实分布，则我们能够找到一个最优策略，以最小的代价来消除系统的不确定性，而这个最小的代价（猜题次数、编码长度等）就是信息熵。</li>
+</ul>
+<h2 id="条件熵"><a href="#条件熵" class="headerlink" title="条件熵"></a>条件熵</h2><ul>
+<li>给定条件X下，Y的分布（Y|X）的熵对X的数学期望：$H(Y|X)=\sum_x p(x)H(Y|X=x)$, 即给定条件分布下的信息熵对某个条件的数学期望</li>
+<li>在ML中，即选定某个特征X(X有n类)后，label(Y)的条件概率熵求期望：给定X特征的条件下Y的信息熵。</li>
+<li>条件熵越小，代表在这个特征下，label的信息熵越小，也就是说要解决问题的代价越小。</li>
+</ul>
+<h2 id="信息增益-ID3"><a href="#信息增益-ID3" class="headerlink" title="信息增益 - ID3"></a>信息增益 - ID3</h2><ul>
+<li>$IG(Y|X)=H(Y)-H(Y|X)$ 信息熵-条件熵</li>
+<li>在决策树中作为选择特征的指标，IG越大，这个特征的选择性越好，也可以理解为：待分类的集合的熵和选定某个特征的条件熵之差越大，这个特征对整个集合的影响越大。</li>
+<li>对于条件熵来说，条件熵越小，分类后的纯度越高，但是问题是：X的取值越多，每个取值下Y的纯度越高，H(Y|X)越小，但此时并不有利于Y的区分。信息增益也是如此。–&gt; 信息增益率。</li>
+</ul>
+<h2 id="信息增益率-信息增益比-—-C4-5"><a href="#信息增益率-信息增益比-—-C4-5" class="headerlink" title="信息增益率/信息增益比 — C4.5"></a>信息增益率/信息增益比 — C4.5</h2><ul>
+<li>信息增益 / 条件的信息熵</li>
+<li>偏好取值少的特征。C4.5：先选择高于平均水平信息增益的特征，再在其中选择最高信息增益率的特征。见Decision Tree</li>
+</ul>
+<h2 id="基尼不纯度-—-CART"><a href="#基尼不纯度-—-CART" class="headerlink" title="基尼不纯度 — CART"></a>基尼不纯度 — CART</h2><ul>
+<li>GINI：先对特征分区，对每个区中的label求gini系数，pk(1-pk)；然后对每个区的基尼系数求期望</li>
+<li>表示数据的不纯度。既有分类也有回归，既要确定特征，也要确定特征的分叉值。</li>
+<li>见<a href="https://chenzk1.github.io/2020/10/25/Decision%20Tree/">Decision Tree</a></li>
+</ul>
+<h2 id="交叉熵"><a href="#交叉熵" class="headerlink" title="交叉熵"></a>交叉熵</h2><ul>
+<li>前面提到：信息熵是最优策略下，消除系统不确定性的最小代价。这里的前提是：我们得到了系统的真实分布。</li>
+<li>实际中，一般难以获知系统真实分布，所以要以假设分布去近似。交叉熵：用来衡量在给定的真实分布下，使用非真实分布所指定的策略消除系统的不确定性所需要付出的努力的大小。$CEH(p,q)=\sum_{k=1}^np_k\log_2\frac{1}{q_k}$，注意这里log中是q，是基于非真实分布q的信息量对真实分布的期望。<br>当假设分布$q_k$与真实分布$p_k$相同时，交叉熵最低，等于信息熵，所以得到的策略为最优策略。</li>
+<li>在机器学习中的分类算法中，我们总是最小化交叉熵，因为交叉熵越低，就证明由算法所产生的策略最接近最优策略，也间接证明我们算法所算出的非真实分布越接近真实分布。<ul>
+<li>例如：在逻辑斯蒂回归或者神经网络中都有用到交叉熵作为评价指标，其中p即为真实分布的概率，而q为预测的分布，以此衡量两不同分布的相似性。</li>
+</ul>
+</li>
+<li>如何衡量不同策略的差异：相对熵</li>
+</ul>
+<h2 id="相对熵-K-L散度"><a href="#相对熵-K-L散度" class="headerlink" title="相对熵/K-L散度"></a>相对熵/K-L散度</h2><ul>
+<li>用来衡量两个概率分布之间的差异。两者相同相对熵为0</li>
+<li>使用非真实分布q的交叉熵，与使用真实分布p的的信息熵的差值：相对熵，又称K-L散度。</li>
+<li>KL(p, q) = 交叉熵(p, q) - 信息熵(p)<br>$KL(p,q)=CEH(p,q)-H(p)=\sum_{i=1}^np(x_i)\log\frac{p(x_i)}{q(x_i)}$</li>
+</ul>
+<h2 id="联合熵"><a href="#联合熵" class="headerlink" title="联合熵"></a>联合熵</h2><ul>
+<li>H(X,Y) 随机变量X,Y联合表示的信息熵</li>
+</ul>
+<h2 id="互信息"><a href="#互信息" class="headerlink" title="互信息"></a>互信息</h2><ul>
+<li>H（X；Y）俩变量交集，也记作I(X;Y)</li>
+<li>H（X；Y) = H(X,Y)-H(Y|X)-H(X|Y)</li>
+<li>I(X;Y)=KL(P(X,Y), P(X)P(Y))</li>
+<li>互信息越小，两变量独立性越强，P(X,Y)与P(X)P(Y)差异越小，P(X,Y)与P(X)P(Y)的相对熵越小</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>ML</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>ML-Naive Bayes及其sklearn实现</title>
     <url>/2020/10/25/Naive%20Bayes/</url>
     <content><![CDATA[<p>[TOC]</p>
@@ -434,37 +649,6 @@
       </categories>
       <tags>
         <tag>ML</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Python-面向对象</title>
-    <url>/2020/10/25/Python-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/</url>
-    <content><![CDATA[<h3 id="属性命名"><a href="#属性命名" class="headerlink" title="属性命名"></a>属性命名</h3><ul>
-<li>属性以双下划线开头，类内变量，实例无法访问。但可以通过某些方式访问，例如Student例中定义了__name变量，可以用_Student_name来实现访问，但不建议，因为不同的解释器的转化方式不一样。</li>
-<li>单下划线可以打开，但需要注意不能随意更改。</li>
-<li>双下划线结尾与开头，特殊变量，类内可以访问，实例不知。</li>
-</ul>
-<a id="more"></a>
-<h3 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h3><p>开闭原则：定义一个类Animal及其多个之类Dog/Cat/…，当定义一个函数或操作时：</p>
-<ul>
-<li>对扩展开放：允许新增Animal的子类；</li>
-<li>对修改封闭：不需要修改依赖Animal类型的run_twice()等函数，仍然可以传入Dog/Cat等类。<br>事实上，不需要继承也可以实现多态————鸭子类型。</li>
-</ul>
-<h3 id="若干方法"><a href="#若干方法" class="headerlink" title="若干方法"></a>若干方法</h3><ul>
-<li>isinstance(object,class) 判断是否属于某个类</li>
-<li>dir() 列举出一个对象的属性和方法</li>
-<li>getattr()、setattr()、hasattr()可以获得、添加、查询是否需要某个属性<ul>
-<li>__slots__ 限制可以添加的属性，__slots__ = (‘name’, ‘age’) # 用tuple定义允许绑定的属性名称</li>
-</ul>
-</li>
-<li>装饰器</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Learning</category>
-      </categories>
-      <tags>
-        <tag>Python</tag>
       </tags>
   </entry>
   <entry>
@@ -508,6 +692,37 @@
 <li>做法2：自己实现cmp类</li>
 </ul>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LargerNumKey</span>(<span class="params"><span class="built_in">str</span></span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__lt__</span>(<span class="params">x, y</span>):</span></span><br><span class="line">        <span class="keyword">return</span> x+y &gt; y+x</span><br><span class="line"></span><br><span class="line">largest_num = <span class="string">&#x27;&#x27;</span>.join(<span class="built_in">sorted</span>(<span class="built_in">map</span>(<span class="built_in">str</span>, nums), key=LargerNumKey))</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python-面向对象</title>
+    <url>/2020/10/25/Python-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/</url>
+    <content><![CDATA[<h3 id="属性命名"><a href="#属性命名" class="headerlink" title="属性命名"></a>属性命名</h3><ul>
+<li>属性以双下划线开头，类内变量，实例无法访问。但可以通过某些方式访问，例如Student例中定义了__name变量，可以用_Student_name来实现访问，但不建议，因为不同的解释器的转化方式不一样。</li>
+<li>单下划线可以打开，但需要注意不能随意更改。</li>
+<li>双下划线结尾与开头，特殊变量，类内可以访问，实例不知。</li>
+</ul>
+<a id="more"></a>
+<h3 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h3><p>开闭原则：定义一个类Animal及其多个之类Dog/Cat/…，当定义一个函数或操作时：</p>
+<ul>
+<li>对扩展开放：允许新增Animal的子类；</li>
+<li>对修改封闭：不需要修改依赖Animal类型的run_twice()等函数，仍然可以传入Dog/Cat等类。<br>事实上，不需要继承也可以实现多态————鸭子类型。</li>
+</ul>
+<h3 id="若干方法"><a href="#若干方法" class="headerlink" title="若干方法"></a>若干方法</h3><ul>
+<li>isinstance(object,class) 判断是否属于某个类</li>
+<li>dir() 列举出一个对象的属性和方法</li>
+<li>getattr()、setattr()、hasattr()可以获得、添加、查询是否需要某个属性<ul>
+<li>__slots__ 限制可以添加的属性，__slots__ = (‘name’, ‘age’) # 用tuple定义允许绑定的属性名称</li>
+</ul>
+</li>
+<li>装饰器</li>
+</ul>
+]]></content>
       <categories>
         <category>Learning</category>
       </categories>
@@ -632,20 +847,6 @@
       </tags>
   </entry>
   <entry>
-    <title>tools-vim&amp;tmux</title>
-    <url>/2020/10/25/tools/</url>
-    <content><![CDATA[<h1 id="Tools"><a href="#Tools" class="headerlink" title="Tools"></a>Tools</h1><p>Some useful tools.</p>
-<h2 id="Vim"><a href="#Vim" class="headerlink" title="Vim"></a>Vim</h2><p><a href="https://github.com/Chenzk1/vimrc">https://github.com/Chenzk1/vimrc</a></p>
-<h2 id="Tmux"><a href="#Tmux" class="headerlink" title="Tmux"></a>Tmux</h2><p><a href="https://github.com/gpakosz/.tmux">https://github.com/gpakosz/.tmux</a></p>
-]]></content>
-      <categories>
-        <category>Tools</category>
-      </categories>
-      <tags>
-        <tag>tools</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Kaggle-Kaggle相关</title>
     <url>/2020/10/25/kaggle%E7%9B%B8%E5%85%B3/</url>
     <content><![CDATA[<p>[TOC]</p>
@@ -740,6 +941,20 @@
       <tags>
         <tag>ML</tag>
         <tag>Kaggle</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>tools-vim&amp;tmux</title>
+    <url>/2020/10/25/tools/</url>
+    <content><![CDATA[<h1 id="Tools"><a href="#Tools" class="headerlink" title="Tools"></a>Tools</h1><p>Some useful tools.</p>
+<h2 id="Vim"><a href="#Vim" class="headerlink" title="Vim"></a>Vim</h2><p><a href="https://github.com/Chenzk1/vimrc">https://github.com/Chenzk1/vimrc</a></p>
+<h2 id="Tmux"><a href="#Tmux" class="headerlink" title="Tmux"></a>Tmux</h2><p><a href="https://github.com/gpakosz/.tmux">https://github.com/gpakosz/.tmux</a></p>
+]]></content>
+      <categories>
+        <category>Tools</category>
+      </categories>
+      <tags>
+        <tag>tools</tag>
       </tags>
   </entry>
   <entry>
@@ -946,7 +1161,7 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
 <p>[TOC]</p>
 <h2 id="1-简单介绍决策树算法"><a href="#1-简单介绍决策树算法" class="headerlink" title="1. 简单介绍决策树算法"></a>1. 简单介绍决策树算法</h2><ul>
 <li>决策树将算法组织成一颗树的形式。其实这就是将平时所说的<strong>if-then语句</strong>构建成了树的形式。决策树主要包括<strong>三个部分：内部节点、叶节点、边。内部节点是划分的特征，边代表划分的条件，叶节点表示类别。</strong></li>
-<li>构建决策树 就是一个递归的选择内部节点，计算划分条件的边，最后到达叶子节点的过程。 决策树在本质上是一组嵌套的if-else判定规则，从数学上看是分段常数函数，对应于用平行于坐标轴的平面对空间的划分。判定规则是人类处理很多问题时的常用方法，这些规则是我们通过经验总结出来的，而决策树的这些规则是通过训练样本自动学习得到的。下面是一棵简单的决策树以及它对空间的划分结果：<br><img src="https://mmbiz.qpic.cn/mmbiz_png/75DkJnThACkAo4IibbcQjEuyibRfEFSaemBGYWpM6AOLwCJHk4ByqIje7otdia0PUj9mWKQBK5btVmIFbSQ9bdSbA/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt=""></li>
+<li>构建决策树 就是一个递归的选择内部节点，计算划分条件的边，最后到达叶子节点的过程。 决策树在本质上是一组嵌套的if-else判定规则，从数学上看是分段常数函数，对应于用平行于坐标轴的平面对空间的划分。判定规则是人类处理很多问题时的常用方法，这些规则是我们通过经验总结出来的，而决策树的这些规则是通过训练样本自动学习得到的。</li>
 <li>训练时，通过最大化Gini或者其他指标来寻找最佳分裂。决策树可以输特征向量每个分量的重要性。</li>
 <li><strong>决策树是一种判别模型，既支持分类问题，也支持回归问题，是一种非线性模型（分段线性函数不是线性的）。它天然的支持多分类问题。</strong></li>
 </ul>
@@ -1965,6 +2180,65 @@ f(x)=w_{0}+\sum_{m=1}^{M} w_{m} \phi_{m}(x)</script><p>其中$w$是权重，$\ph
       </tags>
   </entry>
   <entry>
+    <title>学习资料-会议&amp;期刊</title>
+    <url>/2020/10/26/%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99-%E4%BC%9A%E8%AE%AE&amp;%E6%9C%9F%E5%88%8A/</url>
+    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
+
+<h2 id="推荐系统"><a href="#推荐系统" class="headerlink" title="推荐系统"></a>推荐系统</h2><ul>
+<li><a href="https://recsys.acm.org/">RecSys</a> -The ACM Conference Series on Recommender Systems.</li>
+</ul>
+<a id="more"></a>
+<h2 id="信息检索"><a href="#信息检索" class="headerlink" title="信息检索"></a>信息检索</h2><ul>
+<li><a href="http://sigir.org/">SIGIR</a>- The ACM International Conference on Research and Development in Information Retrieval</li>
+</ul>
+<h2 id="数据挖掘"><a href="#数据挖掘" class="headerlink" title="数据挖掘"></a>数据挖掘</h2><ul>
+<li><a href="http://www.kdd.org/">KDD</a> - The ACM SIGKDD Conference on Knowledge Discovery and Data Mining.</li>
+<li><a href="http://www.wsdm-conference.org/">WSDM</a> - The International Conference on Web Search and Data Mining.</li>
+<li><a href="http://cs.uvm.edu/~icdm/">ICDM</a> - The IEEE International Conference on Data Mining.</li>
+<li><a href="http://www.siam.org/meetings/sdm19/">SDM</a> -The SIAM International Conference on Data Mining.</li>
+<li><a href="https://ecmlpkdd2020.net/">ECML-PKDD</a> - The European Conference on Machine Learning and Principles and Practice of Knowledge Discovery in Databases</li>
+</ul>
+<h2 id="机器学习"><a href="#机器学习" class="headerlink" title="机器学习"></a>机器学习</h2><ul>
+<li><a href="https://icml.cc/">ICML</a> - The International Conference on Machine Learning.</li>
+<li><a href="https://nips.cc/">NIPS</a> - The Conference on Neural Information Processing Systems</li>
+</ul>
+<h2 id="AI"><a href="#AI" class="headerlink" title="AI"></a>AI</h2><ul>
+<li><a href="https://aaai.org/Conferences/AAAI-18/">AAAI</a> - The National Conference of the American Association for Artificial Intelligence.</li>
+<li><a href="http://www.ijcai.org/">IJCAI</a> - The International Joint Conference on Artificial Intelligence.</li>
+<li><a href="http://ecai2020.eu/">ECAI</a> -European Conference on Artificial Intelligence</li>
+<li><a href="http://www.auai.org/uai2020/">UAI</a> - The Conference on Uncertainty in Artificial Intelligence</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>ML</tag>
+        <tag>Resource</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ML-Feature Engineering</title>
+    <url>/2020/10/25/%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/</url>
+    <content><![CDATA[<h2 id="特征离散的作用"><a href="#特征离散的作用" class="headerlink" title="特征离散的作用"></a>特征离散的作用</h2><a id="more"></a>
+<ul>
+<li><strong>离散化后的特征对异常数据有很强的鲁棒性</strong><br>比如一个特征是年龄&gt;30是1，否则0。如果特征没有离散化，一个异常数据“年龄300岁”会给模型造成很大的干扰；离散化后年龄300岁也只对应于一个权重，如果训练数据中没有出现特征”年龄-300岁”，那么在LR模型中，其权重对应于0，所以，即使测试数据中出现特征”年龄-300岁”,也不会对预测结果产生影响。特征离散化的过程，比如特征A，如果当做连续特征使用，在LR模型中，A会对应一个权重w,如果离散化，那么A就拓展为特征A-1，A-2，A-3…,每个特征对应于一个权重，如果训练样本中没有出现特征A-4，那么训练的模型对于A-4就没有权重，如果测试样本中出现特征A-4,该特征A-4也不会起作用。相当于无效。但是，如果使用连续特征，在LR模型中，y = w*a,a是特征，w是a对应的权重,比如a代表年龄，那么a的取值范围是[0..100]，如果测试样本中,出现了一个测试用例，a的取值是300，显然a是异常值，但是w*a还是有值，而且值还非常大，所以，异常值会对最后结果产生非常大的影响。</li>
+<li><strong>特征离散化后，模型会更稳定</strong><br>比如如果对用户年龄离散化，20-30作为一个区间，不会因为一个用户年龄长了一岁就变成一个完全不同的人。当然处于区间相邻处的样本会刚好相反，所以怎么划分区间是门学问；按区间离散化，划分区间是非常关键的。</li>
+<li><strong>特征离散化以后，起到了简化了逻辑回归模型的作用，降低了模型过拟合的风险</strong><br>当使用连续特征时，一个特征对应于一个权重，那么，如果这个特征权重较大，模型就会很依赖于这个特征，这个特征的一个微小变化可能会导致最终结果产生很大的变化，这样子的模型很危险，当遇到新样本的时候很可能因为对这个特征过分敏感而得到错误的分类结果，也就是泛化能力差，容易过拟合。而使用离散特征的时候，一个特征变成了多个，权重也变为多个，那么之前连续特征对模型的影响力就被分散弱化了，从而降低了过拟合的风险。</li>
+<li><strong>引入非线性</strong><br>单变量离散化为N个后，每个变量有单独的权重，相当于为模型引入了非线性，能够提升模型表达能力，加大拟合；在LR模型中，特征A作为连续特征对应的权重是Wa。A是线性特征，因为y = Wa*A,y对于A的导数就是Wa,如果离散化后，A按区间离散化为A_1,A_2,A_3。那么y = w_1*A_1+w_2*A_2+w_3*A_3.那么y对于A的函数就相当于分段的线性函数，y对于A的导数也随A的取值变动，所以，相当于引入了非线性。</li>
+<li><strong>离散化后方便进行特征交叉</strong><br>离散化后变为了类别，方便特征交叉。进一步引入非线性，提升表达能力。</li>
+<li>离散特征的增加和减少都很容易，易于模型的快速迭代。(离散特征的增加和减少，模型也不需要调整，重新训练是必须的，相比贝叶斯推断方法或者树模型方法迭代快)</li>
+<li>稀疏向量内积乘法运算速度快，计算结果方便存储，容易扩展；</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>ML</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>ML-经验风险、期望风险、结构风险</title>
     <url>/2020/10/25/%E7%BB%8F%E9%AA%8C%20%E6%9C%9F%E6%9C%9B%20%E7%BB%93%E6%9E%84/</url>
     <content><![CDATA[<h3 id="经验风险"><a href="#经验风险" class="headerlink" title="经验风险"></a>经验风险</h3><ul>
@@ -1989,23 +2263,346 @@ f(x)=w_{0}+\sum_{m=1}^{M} w_{m} \phi_{m}(x)</script><p>其中$w$是权重，$\ph
       </tags>
   </entry>
   <entry>
-    <title>ML-Feature Engineering</title>
-    <url>/2020/10/25/%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/</url>
-    <content><![CDATA[<h2 id="特征离散的作用"><a href="#特征离散的作用" class="headerlink" title="特征离散的作用"></a>特征离散的作用</h2><a id="more"></a>
+    <title>CV-SIFT</title>
+    <url>/2020/10/27/CV-SIFT/</url>
+    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
+
+<p>[TOC]</p>
+<h2 id="SIFT-Scale-invariant-feature-transform-综述"><a href="#SIFT-Scale-invariant-feature-transform-综述" class="headerlink" title="SIFT(Scale-invariant feature transform)综述"></a>SIFT(Scale-invariant feature transform)综述</h2><ul>
+<li>尺度不变特征转换：SIFT是一种在<strong>多尺度空间上提取局部特征</strong>的方法。它在空间尺度中寻找极值点，并提取出其位置、尺度、旋转不变量，此算法由 David Lowe在1999年所发表，2004年完善总结。</li>
+</ul>
+<a id="more"></a>
+<h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>SIFT特征是图像的局部特征，其对旋转、尺度缩放、亮度变化保持不变性，对视角变化、仿射变换、噪声也保持一定程度的稳定性；</li>
+<li>独特性（Distinctiveness）好，信息量丰富，适用于在海量特征数据库中进行快速、准确的匹配；</li>
+<li>多量性，即使少数的几个物体也可以产生大量的SIFT特征向量；</li>
+<li>高速性，经优化的SIFT匹配算法甚至可以达到实时的要求；</li>
+<li>可扩展性，可以很方便的与其他形式的特征向量进行联合。</li>
+</ul>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>实时性不高</li>
+<li>有时特征点数量较少</li>
+<li>对边缘光滑的目标无法准确提取特征点</li>
+</ul>
+<h3 id="整体流程"><a href="#整体流程" class="headerlink" title="整体流程"></a>整体流程</h3><ol>
+<li>建立尺度空间，即DoG金字塔</li>
+<li>关键点检测及定位，获得每个关键点的：<strong>尺度、位置</strong></li>
+<li>特征点方向赋值，获得每个特征点的：<strong>方向</strong></li>
+<li>关键点特征描述</li>
+</ol>
+<p><img src="https://img2018.cnblogs.com/blog/1471528/201903/1471528-20190330204125547-535493662.png" alt="整体流程"></p>
+<h2 id="建立DoG金字塔"><a href="#建立DoG金字塔" class="headerlink" title="建立DoG金字塔"></a>建立DoG金字塔</h2><ul>
+<li>获取多尺度空间：Lindeberg等人已证明高斯卷积核是实现尺度变换的唯一变换核，并且是唯一的线性核</li>
+</ul>
+<h3 id="预备知识"><a href="#预备知识" class="headerlink" title="预备知识"></a>预备知识</h3><h4 id="二维高斯函数"><a href="#二维高斯函数" class="headerlink" title="二维高斯函数"></a>二维高斯函数</h4><ul>
+<li>以(m/2, n/2)为中心的二维高斯分布<script type="math/tex; mode=display">
+G(x, y)=\frac{1}{2 \pi \sigma^{2}} e^{-\frac{(x-m / 2)^{2}+(y-n / 2)^{2}}{2 \sigma^{2}}}</script></li>
+<li>生成的曲面等高线是从中心开始呈正态分布的同心圆，权重值从中心向周围越来越小。这样进行模糊处理比其它的均衡模糊滤波器更高地保留了边缘效果。</li>
+<li>实际应用中，在计算高斯函数的离散近似时，在大概3σ距离之外的像素都可以看作不起作用，因此图像处理程序只需要计算$<br>(6 \sigma+1) \times(6 \sigma+1)<br>$的矩阵</li>
+</ul>
+<h4 id="二维高斯函数的优化"><a href="#二维高斯函数的优化" class="headerlink" title="二维高斯函数的优化"></a>二维高斯函数的优化</h4><ol>
+<li>若高斯模板大小为m*n，当图像大小为M*N时，计算复杂度为O(m*n*M*N)</li>
+<li>$\sigma$越大，高斯模板分散性越强，处理边缘点时，丢失的图像信息越多，可能会造成黑边</li>
+</ol>
 <ul>
-<li><strong>离散化后的特征对异常数据有很强的鲁棒性</strong><br>比如一个特征是年龄&gt;30是1，否则0。如果特征没有离散化，一个异常数据“年龄300岁”会给模型造成很大的干扰；离散化后年龄300岁也只对应于一个权重，如果训练数据中没有出现特征”年龄-300岁”，那么在LR模型中，其权重对应于0，所以，即使测试数据中出现特征”年龄-300岁”,也不会对预测结果产生影响。特征离散化的过程，比如特征A，如果当做连续特征使用，在LR模型中，A会对应一个权重w,如果离散化，那么A就拓展为特征A-1，A-2，A-3…,每个特征对应于一个权重，如果训练样本中没有出现特征A-4，那么训练的模型对于A-4就没有权重，如果测试样本中出现特征A-4,该特征A-4也不会起作用。相当于无效。但是，如果使用连续特征，在LR模型中，y = w*a,a是特征，w是a对应的权重,比如a代表年龄，那么a的取值范围是[0..100]，如果测试样本中,出现了一个测试用例，a的取值是300，显然a是异常值，但是w*a还是有值，而且值还非常大，所以，异常值会对最后结果产生非常大的影响。</li>
-<li><strong>特征离散化后，模型会更稳定</strong><br>比如如果对用户年龄离散化，20-30作为一个区间，不会因为一个用户年龄长了一岁就变成一个完全不同的人。当然处于区间相邻处的样本会刚好相反，所以怎么划分区间是门学问；按区间离散化，划分区间是非常关键的。</li>
-<li><strong>特征离散化以后，起到了简化了逻辑回归模型的作用，降低了模型过拟合的风险</strong><br>当使用连续特征时，一个特征对应于一个权重，那么，如果这个特征权重较大，模型就会很依赖于这个特征，这个特征的一个微小变化可能会导致最终结果产生很大的变化，这样子的模型很危险，当遇到新样本的时候很可能因为对这个特征过分敏感而得到错误的分类结果，也就是泛化能力差，容易过拟合。而使用离散特征的时候，一个特征变成了多个，权重也变为多个，那么之前连续特征对模型的影响力就被分散弱化了，从而降低了过拟合的风险。</li>
-<li><strong>引入非线性</strong><br>单变量离散化为N个后，每个变量有单独的权重，相当于为模型引入了非线性，能够提升模型表达能力，加大拟合；在LR模型中，特征A作为连续特征对应的权重是Wa。A是线性特征，因为y = Wa*A,y对于A的导数就是Wa,如果离散化后，A按区间离散化为A_1,A_2,A_3。那么y = w_1*A_1+w_2*A_2+w_3*A_3.那么y对于A的函数就相当于分段的线性函数，y对于A的导数也随A的取值变动，所以，相当于引入了非线性。</li>
-<li><strong>离散化后方便进行特征交叉</strong><br>离散化后变为了类别，方便特征交叉。进一步引入非线性，提升表达能力。</li>
-<li>离散特征的增加和减少都很容易，易于模型的快速迭代。(离散特征的增加和减少，模型也不需要调整，重新训练是必须的，相比贝叶斯推断方法或者树模型方法迭代快)</li>
-<li>稀疏向量内积乘法运算速度快，计算结果方便存储，容易扩展；</li>
+<li>可以证明，二维高斯运算可以优化为：水平方向进行一维高斯矩阵变换加上竖直方向的一维高斯矩阵变换得到。时间复杂度为：$<br>O(n \times M \times N)+O(m \times M \times N)<br>$。<a href="https://blog.csdn.net/lwx309025167/article/details/82761474">证明</a><br><img src="https://img-blog.csdn.net/20180919111255142?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x3eDMwOTAyNTE2Nw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="证明"></li>
+</ul>
+<h4 id="高斯拉普拉斯算子-Laplacion-of-Gaussian-LoG"><a href="#高斯拉普拉斯算子-Laplacion-of-Gaussian-LoG" class="headerlink" title="高斯拉普拉斯算子(Laplacion of Gaussian, LoG)"></a>高斯拉普拉斯算子(Laplacion of Gaussian, LoG)</h4><ul>
+<li>作用：突出边缘，更清晰，对比度更强</li>
+<li>拉普拉斯：拉普拉斯算子是图像二阶空间导数的二维各向同性测度。<strong>拉普拉斯算子可以突出图像中强度发生快速变化的区域</strong>，因此常用在边缘检测任务当中。</li>
+<li>高斯：在进行Laplacian操作之前通常需要先用高斯平滑滤波器对图像进行平滑处理，以<strong>降低Laplacian操作对于噪声的敏感性</strong>。</li>
+<li>输入输出均为灰度图</li>
+<li>连续拉普拉斯：<script type="math/tex; mode=display">
+L(x, y)=\frac{\partial^{2} I}{\partial x^{2}}+\frac{\partial^{2} I}{\partial y^{2}}</script></li>
+<li>离散拉普拉斯，例如：</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>0</th>
+<th>-1</th>
+<th>0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-1</td>
+<td>4</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>0</td>
+<td>-1</td>
+<td>-1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>-1</th>
+<th>-1</th>
+<th>-1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-1</td>
+<td>8</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>-1</td>
+<td>-1</td>
+<td>-1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>表达：以0为中心，$\sigma$为标准差的LoG<script type="math/tex; mode=display">
+L o G(x, y)=-\frac{1}{\pi \sigma^{4}}\left[1-\frac{x^{2}+y^{2}}{2 \sigma^{2}}\right] e^{-\frac{x^{2}+y^{2}}{2 \sigma^{2}}}</script><img src="https://pic1.zhimg.com/80/v2-f824bd5eae07235ebf531fa0b546ba98_1440w.jpg" alt="LoG示意图"><blockquote>
+<p>推导过程：<img src="https://pic4.zhimg.com/80/v2-b220086b94625a8a00ce68eb2a4bd0e3_1440w.jpg" alt="推导过程"></p>
+</blockquote>
+</li>
+<li>示例：一维LoG滤波器对于边缘的响应：<img src="https://pic4.zhimg.com/80/v2-12ce9caee0278bf8855efdecfcba7fc7_1440w.jpg" alt="一维LoG滤波器对于边缘的响应"></li>
+</ul>
+<h4 id="高斯差分算子-Difference-of-Gaussian-DOG"><a href="#高斯差分算子-Difference-of-Gaussian-DOG" class="headerlink" title="高斯差分算子(Difference of Gaussian, DOG)"></a>高斯差分算子(Difference of Gaussian, DOG)</h4><ul>
+<li>可以近似LoG算子，减少运算量，由Lindeberg在1994证明</li>
+<li>DoG的运算如下，即DoG为两不同尺度的高斯算子平滑后的图像之差，具体证明见：<a href="https://blog.csdn.net/kieven2008/article/details/104309440">证明</a><script type="math/tex; mode=display">
+\begin{aligned}
+D(x, y, \sigma) &=(G(x, y, k \sigma)-G(x, y, \sigma)) * I(x, y) \\
+&=L(x, y, k \sigma)-L(x, y, \sigma)
+\end{aligned}</script></li>
+</ul>
+<h4 id="尺度空间理论"><a href="#尺度空间理论" class="headerlink" title="尺度空间理论"></a>尺度空间理论</h4><ul>
+<li>定义<ul>
+<li>单尺度 —-&gt; 多尺度</li>
+<li>尺度空间中各尺度图像的模糊程度逐渐变大，能够模拟人在距离目标由近到远时目标在视网膜上的形成过程。</li>
+</ul>
+</li>
+<li>要求：满足视觉不变性<ul>
+<li>亮度/灰度不变性，对比度不变性</li>
+<li>平移不变性、尺度不变性、欧几里得不变性、仿射不变性</li>
+</ul>
+</li>
+<li>方法：<ul>
+<li>Tony Lindeberg指出<strong>尺度规范化的LoG(Laplacion of Gaussian)算子具有真正的尺度不变性</strong>。Lowe使用高斯差分金字塔近似LoG算子，是尺度空间检测稳定的关键点。</li>
+</ul>
+</li>
+<li>表示：一个图像的尺度空间$L(x,y,\sigma)$，可以表示为一个变化尺度的高斯函数与原图像的卷积<script type="math/tex; mode=display">
+L(x, y, \sigma)=G(x, y, \sigma) * I(x, y)</script><script type="math/tex; mode=display">
+G(x, y, \sigma)=\frac{1}{2 \pi \sigma^{2}} e^{-\frac{(x-m / 2)^{2}+(y-n / 2)^{2}}{2 \sigma^{2}}}</script><ul>
+<li>m，n表示高斯模板中心，维度为$<br>(6 \sigma+1) \times(6 \sigma+1)<br>$，(x, y)代表图像的像素位置。$\sigma$是尺度空间因子，值越小表示图像被平滑的越少，相应的尺度也就越小。<strong>大尺度对应于图像的概貌特征，小尺度对应于图像的细节特征。</strong></li>
+</ul>
+</li>
+</ul>
+<h3 id="建立DoG金字塔-1"><a href="#建立DoG金字塔-1" class="headerlink" title="建立DoG金字塔"></a>建立DoG金字塔</h3><ul>
+<li>极值：图像域和尺度域上的极值<br><img src="https://img2018.cnblogs.com/blog/1471528/201903/1471528-20190330204227104-18141123.png" alt="步骤"></li>
+</ul>
+<h4 id="构建高斯金字塔"><a href="#构建高斯金字塔" class="headerlink" title="构建高斯金字塔"></a>构建高斯金字塔</h4><ol>
+<li>先将原图像扩大一倍之后作为高斯金字塔的第1组第1层，将第1组第1层图像经高斯卷积（其实就是高斯平滑或称高斯滤波）之后作为第1组金字塔的第2层。对于参数σ，在Sift算子中取的是固定值1.6。</li>
+<li>将σ乘以一个比例系数k，得到一个新的平滑因子σ=k*σ，用它来平滑第1组第2层图像，结果图像作为第3层。</li>
+<li>如此这般重复，最后得到L层图像，在同一组中，每一层图像的尺寸都是一样的，只是平滑系数不一样。它们对应的平滑系数分别为：0，σ，kσ，k^2σ,k^3σ……k^(L-2)σ。</li>
+<li>将第1组<strong>倒数第三层</strong>图像作比例因子为2的降采样，得到的图像作为第2组的第1层，然后对第2组的第1层图像做平滑因子为σ的高斯平滑，得到第2组的第2层，就像步骤2中一样，如此得到第2组的L层图像，同组内它们的尺寸是一样的，对应的平滑系数分别为：0，σ，kσ，k^2σ,k^3σ……k^(L-2)σ。但是在尺寸方面第2组是第1组图像的一半。</li>
+<li>反复执行，得到一共O组，每组L层，共计O*L个图像，这些图像一起就构成了高斯金字塔，结构如下：<br><img src="https://img-blog.csdn.net/20160917212318336" alt="高斯金字塔"></li>
+</ol>
+<h4 id="构建高斯差分-DOG-金字塔"><a href="#构建高斯差分-DOG-金字塔" class="headerlink" title="构建高斯差分(DOG)金字塔"></a>构建高斯差分(DOG)金字塔</h4><ul>
+<li>方法<br><img src="https://img-blog.csdn.net/20160917223500317" alt="高斯差分金字塔"></li>
+<li>经过归一化的高斯差分金字塔<br><img src="https://img-blog.csdn.net/20160917232151713" alt="一个示例"></li>
+</ul>
+<h4 id="具体构建过程中的参数计算"><a href="#具体构建过程中的参数计算" class="headerlink" title="具体构建过程中的参数计算"></a>具体构建过程中的参数计算</h4><ul>
+<li>极值点：每一个像素点要和它所有的相邻点比较，看其是否比它的图像域和尺度域的相邻点大或者小。要获取S个尺度的极值点—-&gt;需要S+2个DOG空间—&gt;S+3层高斯金字塔</li>
+<li>实际计算时S在3到5之间</li>
+<li>输入：组数o，层数S，$k=2^{\frac{1}{S}}$，以及计算每组每层的尺度参数$\sigma(o, s)=\sigma_{0} 2^{\circ+\frac{s}{S}} o \in[0, \ldots, O-1], s \in[0, \ldots, S+2]$<ul>
+<li>$\sigma_{0}$为初始尺度</li>
+</ul>
+</li>
+<li>相同组间不同层的尺度参数$\sigma$为k倍之差，不同组相同层之间尺度参数$\sigma$为2倍之差</li>
+</ul>
+<h2 id="关键点定位"><a href="#关键点定位" class="headerlink" title="关键点定位"></a>关键点定位</h2><h3 id="离散极值点检测"><a href="#离散极值点检测" class="headerlink" title="离散极值点检测"></a>离散极值点检测</h3><ul>
+<li>DoG金字塔中，每个点与周围8+前后两个尺度9*2=26个点比较，来确定极值点</li>
+</ul>
+<h3 id="关键点（连续极值点）定位"><a href="#关键点（连续极值点）定位" class="headerlink" title="关键点（连续极值点）定位"></a>关键点（连续极值点）定位</h3><ul>
+<li>动机<ul>
+<li>获得连续空间的极值点（位置、尺度、极值大小），并去除低对比度的关键点</li>
+<li>去除不稳定的边缘响应点（DoG算子会产生较强的边缘响应），增强匹配稳定性、提高降噪能力</li>
+</ul>
+</li>
+</ul>
+<h4 id="关键点定位-1"><a href="#关键点定位-1" class="headerlink" title="关键点定位"></a>关键点定位</h4><ul>
+<li>离散空间的极值点只是局部区域<br><img src="https://img2018.cnblogs.com/blog/1471528/201903/1471528-20190330205035199-488432412.jpg" alt="离散空间极值点与连续空间极值点的区别"></li>
+<li>为了获得连续空间的极值点，需要对离散空间DoG函数进行曲线插值/拟合。拟合的方法是利用DoG函数在尺度空间上的泰勒展开。</li>
+</ul>
+<ol>
+<li>在任意一个坐标为$X_0=(x_0,y_0,\sigma_0)$的极值点处做DoG函数的泰勒展开，舍掉2阶以后的项，结果如下：<script type="math/tex; mode=display">
+f\left(\left[\begin{array}{l}
+x \\
+y \\
+\sigma
+\end{array}\right]\right) \approx f\left(\left[\begin{array}{l}
+x_{0} \\
+y_{0} \\
+\sigma_{0}
+\end{array}\right]\right) \mid+\left[\begin{array}{lll}
+\frac{\partial f}{\partial x} & \frac{\partial f}{\partial y} & \frac{\partial f}{\partial \sigma}
+\end{array}\right]\left(\left[\begin{array}{l}
+x \\
+y \\
+\sigma
+\end{array}\right]-\left[\begin{array}{l}
+x_{0} \\
+y_{0} \\
+\sigma_{0}
+\end{array}\right]\right) + 
+\frac{1}{2}\left(\left[\begin{array}{llll}
+x & y & \sigma
+\end{array}\right]-\left[\begin{array}{lll}
+x_{0} & y_{0} & \sigma_{0}
+\end{array}\right]\right)\left[\begin{array}{lll}
+\frac{\partial^{2} f}{\partial x \partial x} & \frac{\partial^{2} f}{\partial x \partial y} & \frac{\partial^{2} f}{\partial x \partial \sigma} \\
+\frac{\partial^{2} f}{\partial x \partial y} & \frac{\partial^{2} f}{\partial y \partial y} & \frac{\partial^{2} f}{\partial y \partial \sigma} \\
+\frac{\partial^{2} f}{\partial x \partial \sigma} & \frac{\partial^{2} f}{\partial y \partial \sigma} & \frac{\partial^{2} f}{\partial \sigma \partial \sigma}
+\end{array}\right]\left(\left[\begin{array}{l}
+x \\
+y \\
+\sigma
+\end{array}\right]-\left[\begin{array}{l}
+x_{0} \\
+y_{0} \\
+\sigma_{0}
+\end{array}\right]\right)</script>其向量形式如下：<script type="math/tex; mode=display">
+D(X)=D+\frac{\partial D^{T}}{\partial X} X+\frac{1}{2} X^{T} \frac{\partial^{2} D}{\partial X^{2}} X</script></li>
+<li>求导并让方程==0，求得极值点相对$X_0=(x_0,y_0,\sigma_0)$的偏移量为$\hat{X}=-\frac{\partial^{2} D^{-1}}{\partial X^{2}} \frac{\partial D}{\partial X}$。</li>
+<li>当此偏移量在任一维度（x, y, $\sigma$）上大于0.5时，意味着此极值点已经去临近的点上了，因此改变该极值点位置。</li>
+<li>不断迭代1~3。终止条件：收敛/超出迭代次数（Lowe设定为5）/超出图像边界（此时应删除该点）。记录所有点的位置（原位置+偏移量）以及尺度$\sigma(o, s)$.</li>
+<li>为加强抗噪声的能力，删除$|D(x)|$过小的点（Lowe论文中使用0.03，Rob Hess等人实现时使用0.04)。</li>
+</ol>
+<h4 id="边缘效应消除"><a href="#边缘效应消除" class="headerlink" title="边缘效应消除"></a>边缘效应消除</h4><ul>
+<li>一个定义不好的DoG算子的极值在横跨边缘的地方有较大的主曲率，而在垂直边缘的方向有较小的主曲率。即<strong>两个主曲率的比值越大</strong>。<ul>
+<li>主曲率：曲面的每个方向都有法曲率，那么就有最大最小的法曲率，这个最大最小值就是主曲率，对应的曲线在这点的切线方向就是主曲率方向。这两个方向是垂直的。</li>
+</ul>
+</li>
+</ul>
+<ol>
+<li>获取特征点处的Hessian矩阵，主曲率通过一个2x2的Hessian矩阵H求出：<script type="math/tex; mode=display">
+H=\left[\begin{array}{ll}
+D_{x x} & D_{x y} \\
+D_{xy} & D_{yy}
+\end{array}\right]</script></li>
+<li>H的特征值$\alpha$和$\beta$代表了x方向和y方向的梯度。<ol>
+<li>先求出H的对角线元素之和以及H的行列式<script type="math/tex; mode=display">
+\begin{array}{l}
+\operatorname{Tr}(H)=D_{x x}+D_{x}=\alpha+\beta \\
+\operatorname{Det}(H)=D_{x x} D_{y}-\left(D_{x}\right)^{2}=\alpha \beta
+\end{array}</script></li>
+<li>设$\alpha$较大，令$\alpha=r \beta$，则$<br>\frac{T r(H)^{2}}{D e t(H)}=\frac{(\alpha+\beta)^{2}}{\alpha \beta}=\frac{(r \beta+\beta)^{2}}{r \beta^{2}}=\frac{(r+1)^{2}}{r}<br>$</li>
+<li>r值越大，说明两个特征值的比值越大，即在某一个方向的梯度值越大，而在另一个方向的梯度值越小，而边缘恰恰就是这种情况。所以为了剔除边缘响应点，需要让r小于一定的阈值，因此，为了检测主曲率是否在某域值r下，只需检测$\frac{\operatorname{Tr}(H)^{2}}{\operatorname{Det}(H)}&lt;\frac{(r+1)^{2}}{r}$，若此式子成立，保留关键点，反之剔除。<ol>
+<li>Lowe取r=10.</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><ul>
+<li>以上的关键点定位过程中用到了离散的导数，具体求导时应用了<a href="https://blog.csdn.net/qq_41679006/article/details/80975436">有限差分法</a>求导</li>
+<li>以上过程中需要用到三阶矩阵求逆，可逆矩阵A及其逆如下<script type="math/tex; mode=display">
+A=\left(\begin{array}{lll}
+a_{00} & a_{01} & a_{02} \\
+a_{10} & a_{11} & a_{12} \\
+a_{20} & a_{21} & a_{22}
+\end{array}\right)</script><script type="math/tex; mode=display">
+A^{-1}=\frac{1}{|A|}\left(\begin{array}{ccc}
+a_{11} a_{22}-a_{21} a_{12} & -\left(a_{01} a_{22}-a_{21} a_{02}\right) & a_{01} a_{12}-a_{02} a_{11} \\
+a_{12} a_{20}-a_{22} a_{10} & -\left(a_{02} a_{20}-a_{22} a_{00}\right) & a_{02} a_{10}-a_{00} a_{12} \\
+a_{10} a_{21}-a_{20} a_{11} & -\left(a_{00} a_{21}-a_{20} a_{01}\right) & a_{00} a_{11}-a_{01} a_{10}
+\end{array}\right)</script></li>
+</ul>
+<h2 id="关键点方向匹配"><a href="#关键点方向匹配" class="headerlink" title="关键点方向匹配"></a>关键点方向匹配</h2><ul>
+<li>为了使最后所得的描述符具有旋转不变性，需要利用图像的局部特征为给每一个关键点分配一个基准方向。使用图像梯度的方法求取局部结构的稳定方向。</li>
+</ul>
+<ol>
+<li>对于在DOG金字塔中检测出的关键点点，采集其所在高斯金字塔图像3σ邻域窗口内像素的梯度和方向分布特征。梯度的模值和方向如下：<script type="math/tex; mode=display">
+\begin{array}{l}
+m(x, y)=\sqrt{(L(x+1, y)-L(x-1, y))^{2}+(L(x, y+1)-L(x, y-1))^{2}} \\
+\left.\theta(x, y)=\tan ^{-1}((L(x, y+1)-L(x, y-1)) / L(x+1, y)-L(x-1, y))\right)
+\end{array}</script>L为关键点所在的尺度空间值，按Lowe的建议，梯度的模值m(x,y)按$1.5\sigma(o,s)$的尺度进行高斯加权，按照常用的$3\sigma$原则，取邻域窗口的半径为$3 \times 1.5 \sigma(o,s)$</li>
+<li>求得关键点及其邻域内像素的梯度和方向，并使用直方图进行统计。梯度直方图将0~360度的方向范围分为36个柱(bins)，其中每柱10度。<img src="https://img2018.cnblogs.com/blog/1471528/201903/1471528-20190330205657098-53794026.png" alt="如图"></li>
+<li>方向直方图的峰值则代表了该特征点处邻域梯度的方向，以直方图中最大值作为该关键点的主方向。为了增强匹配的鲁棒性，只保留峰值大于主方向峰值80％的方向作为该关键点的辅方向。因此，<strong>对于同一梯度值的多个峰值的关键点位置，在相同位置和尺度将会有多个关键点被创建但方向不同</strong>。仅有15％的关键点被赋予多个方向，但可以明显的提高关键点匹配的稳定性。实际编程实现中，就是把该关键点复制成多份关键点，并将方向值分别赋给这些复制后的关键点，并且，离散的梯度方向直方图要进行插值拟合处理，来求得更精确的方向角度值。<ol>
+<li>梯度直方图的平滑处理：为了避免梯度方向受噪声的影响，还可以对梯度直方图进行平滑以及进行抛物线插值处理。<a href="https://www.cnblogs.com/Alliswell-WP/p/SIFT.html">具体方法</a>。</li>
+</ol>
+</li>
+</ol>
+<h2 id="特征描述子计算"><a href="#特征描述子计算" class="headerlink" title="特征描述子计算"></a>特征描述子计算</h2><ul>
+<li>作用：<strong>表示关键点邻域高斯图像梯度统计结果</strong>。</li>
+<li>方法：通过对关键点周围图像区域分块，计算块内梯度直方图，生成具有独特性的向量，这个向量是该区域图像信息的一种抽象，具有唯一性&amp;独特性。<ul>
+<li>Lowe建议描述子使用在关键点尺度空间内4*4的窗口中计算的8个方向的梯度信息，共4*4*8=128维向量表征。</li>
+</ul>
+</li>
+</ul>
+<h3 id="确定计算描述子所需的图像区域"><a href="#确定计算描述子所需的图像区域" class="headerlink" title="确定计算描述子所需的图像区域"></a>确定计算描述子所需的图像区域</h3><ol>
+<li>将关键点附近的邻域划分为d*d(Lowe建议d=4)个子区域，每个子区域做为一个种子点，每个种子点有8个方向。</li>
+<li>每个子区域的大小，也使用$3\sigma$原则确定，即子区域边长为$3\sigma$。</li>
+<li>则所需图像区域边长为$3\sigma\times(d+1)$</li>
+<li>考虑到旋转因素(方便下一步将坐标轴旋转到关键点的方向)，用圆代替矩阵，实际计算所需的图像区域半径为：<br>$radius=\frac{3\sigma\times\sqrt{2}\times(d+1)}{2}$。计算结果四舍五入取整。<img src="https://img2018.cnblogs.com/blog/1471528/201903/1471528-20190330210025431-395170345.jpg" alt=""></li>
+</ol>
+<h3 id="坐标轴旋转至主方向"><a href="#坐标轴旋转至主方向" class="headerlink" title="坐标轴旋转至主方向"></a>坐标轴旋转至主方向</h3><ul>
+<li>坐标轴旋转<br><img src="https://img2018.cnblogs.com/blog/1471528/201903/1471528-20190330210107953-2078955000.png" alt="坐标轴旋转至主方向"></li>
+<li>旋转后邻域内采样点的新坐标：<script type="math/tex; mode=display">
+\left(\begin{array}{l}
+x^{\prime} \\
+y^{\prime}
+\end{array}\right)=\left(\begin{array}{ll}
+\cos \theta & -\sin \theta \\
+\sin \theta & \cos \theta
+\end{array}\right)\left(\begin{array}{l}
+x \\
+y
+\end{array}\right)(x, y \in[-\text {radius, radius}]</script></li>
+</ul>
+<h3 id="梯度直方图生成"><a href="#梯度直方图生成" class="headerlink" title="梯度直方图生成"></a>梯度直方图生成</h3><ul>
+<li>如下图绿色部分的坐标系中，旋转后采样点$(x^{\prime}, y^{\prime})$的新坐标为<script type="math/tex; mode=display">
+\left(\begin{array}{l}
+x^{n} \\
+y^{n}
+\end{array}\right)=\frac{1}{3 \sigma_{-} o c t}\left(\begin{array}{l}
+x^{\prime} \\
+y^{t}
+\end{array}\right)+\frac{d}{2}</script></li>
+<li>Lowe建议子区域的像素的梯度大小按$\sigma=0.5d$进行高斯加权，(a, b)为关键点在DoG图像中的位置坐标，则<script type="math/tex; mode=display">
+w=m(a+x, b+y)^{*} e^{-\frac{\left(x^{\prime}\right)^{2}+\left(y^{\prime}\right)^{2}}{2 \times(0.5 d)^{2}}}</script><img src="https://niecongchong.github.io/img/2019-08-06-24.jpg" alt=""></li>
+<li>与求主方向不同，此时每个种子区域的梯度直方图在0-360之间划分为8个方向区间，每个区间为45度，即每个种子点有8个方向的梯度强度信息。所以共4*4*8=128个梯度。</li>
+</ul>
+<h3 id="三线性插值"><a href="#三线性插值" class="headerlink" title="三线性插值"></a>三线性插值</h3><ul>
+<li>三线性：x, y, 方向<br><img src="https://img2018.cnblogs.com/blog/1471528/201903/1471528-20190330210313666-1453481217.png" alt=""></li>
+<li>如图中的红色点，落在第0行和第1行之间，对这两行都有贡献。对第0行第3列种子点的贡献因子为dr，对第1行第3列的贡献因子为1-dr，同理，对邻近两列的贡献因子为dc和1-dc，对邻近两个方向的贡献因子为do和1-do。k,m,n为0或1，则最终累加在每个方向上的梯度大小为：<script type="math/tex; mode=display">
+\text { weight }=w^{*} d r^{k} *(1-d r)^{1-k} * d c^{m *}(1-d c)^{1-m *} d o^{n *}(1-d o)^{1-n}</script></li>
+</ul>
+<h3 id="特征描述子以及归一化特征描述子"><a href="#特征描述子以及归一化特征描述子" class="headerlink" title="特征描述子以及归一化特征描述子"></a>特征描述子以及归一化特征描述子</h3><ul>
+<li>如上统计的4*4*8=128个梯度信息即为该关键点的特征向量。特征向量形成后，为了去除光照变化的影响，需要对它们进行归一化处理，对于图像灰度值整体漂移，图像各点的梯度是邻域像素相减得到，所以也能去除。</li>
+<li>得到的描述子向量为$H=\left(h_{1}, h_{2}, \ldots, h_{128}\right)$</li>
+<li>归一化后的描述子向量为$L=\left(l_{1}, l_{2}, \ldots, l_{128}\right)$</li>
+</ul>
+<h3 id="特征描述子门限化"><a href="#特征描述子门限化" class="headerlink" title="特征描述子门限化"></a>特征描述子门限化</h3><ul>
+<li>非线性光照，相机饱和度变化对造成某些方向的梯度值过大，而对方向的影响微弱。因此设置门限值(向量归一化后，一般取0.2)截断较大的梯度值。然后，再进行一次归一化处理，提高特征的鉴别性。</li>
+</ul>
+<h3 id="特征描述向量排序"><a href="#特征描述向量排序" class="headerlink" title="特征描述向量排序"></a>特征描述向量排序</h3><ul>
+<li>按特征点的尺度对特征描述向量进行排序。</li>
+</ul>
+<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><ul>
+<li><a href="https://www.cnblogs.com/Alliswell-WP/p/SIFT.html">https://www.cnblogs.com/Alliswell-WP/p/SIFT.html</a></li>
+<li><a href="https://blog.csdn.net/zddblog/article/details/7521424">https://blog.csdn.net/zddblog/article/details/7521424</a></li>
+<li><a href="https://blog.csdn.net/qq_41679006/article/details/80975436">https://blog.csdn.net/qq_41679006/article/details/80975436</a></li>
 </ul>
 ]]></content>
       <categories>
         <category>Learning</category>
       </categories>
       <tags>
+        <tag>CV</tag>
         <tag>ML</tag>
       </tags>
   </entry>
@@ -2557,462 +3154,6 @@ f(x)=w_{0}+\sum_{m=1}^{M} w_{m} \phi_{m}(x)</script><p>其中$w$是权重，$\ph
       </categories>
       <tags>
         <tag>Leetcode</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>学习资料-会议&amp;期刊</title>
-    <url>/2020/10/26/%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99-%E4%BC%9A%E8%AE%AE&amp;%E6%9C%9F%E5%88%8A/</url>
-    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
-
-<h2 id="推荐系统"><a href="#推荐系统" class="headerlink" title="推荐系统"></a>推荐系统</h2><ul>
-<li><a href="https://recsys.acm.org/">RecSys</a> -The ACM Conference Series on Recommender Systems.</li>
-</ul>
-<a id="more"></a>
-<h2 id="信息检索"><a href="#信息检索" class="headerlink" title="信息检索"></a>信息检索</h2><ul>
-<li><a href="http://sigir.org/">SIGIR</a>- The ACM International Conference on Research and Development in Information Retrieval</li>
-</ul>
-<h2 id="数据挖掘"><a href="#数据挖掘" class="headerlink" title="数据挖掘"></a>数据挖掘</h2><ul>
-<li><a href="http://www.kdd.org/">KDD</a> - The ACM SIGKDD Conference on Knowledge Discovery and Data Mining.</li>
-<li><a href="http://www.wsdm-conference.org/">WSDM</a> - The International Conference on Web Search and Data Mining.</li>
-<li><a href="http://cs.uvm.edu/~icdm/">ICDM</a> - The IEEE International Conference on Data Mining.</li>
-<li><a href="http://www.siam.org/meetings/sdm19/">SDM</a> -The SIAM International Conference on Data Mining.</li>
-<li><a href="https://ecmlpkdd2020.net/">ECML-PKDD</a> - The European Conference on Machine Learning and Principles and Practice of Knowledge Discovery in Databases</li>
-</ul>
-<h2 id="机器学习"><a href="#机器学习" class="headerlink" title="机器学习"></a>机器学习</h2><ul>
-<li><a href="https://icml.cc/">ICML</a> - The International Conference on Machine Learning.</li>
-<li><a href="https://nips.cc/">NIPS</a> - The Conference on Neural Information Processing Systems</li>
-</ul>
-<h2 id="AI"><a href="#AI" class="headerlink" title="AI"></a>AI</h2><ul>
-<li><a href="https://aaai.org/Conferences/AAAI-18/">AAAI</a> - The National Conference of the American Association for Artificial Intelligence.</li>
-<li><a href="http://www.ijcai.org/">IJCAI</a> - The International Joint Conference on Artificial Intelligence.</li>
-<li><a href="http://ecai2020.eu/">ECAI</a> -European Conference on Artificial Intelligence</li>
-<li><a href="http://www.auai.org/uai2020/">UAI</a> - The Conference on Uncertainty in Artificial Intelligence</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Learning</category>
-      </categories>
-      <tags>
-        <tag>ML</tag>
-        <tag>Resource</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CV-SIFT</title>
-    <url>/2020/10/27/CV-SIFT/</url>
-    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
-
-<p>[TOC]</p>
-<h2 id="SIFT-Scale-invariant-feature-transform-综述"><a href="#SIFT-Scale-invariant-feature-transform-综述" class="headerlink" title="SIFT(Scale-invariant feature transform)综述"></a>SIFT(Scale-invariant feature transform)综述</h2><ul>
-<li>尺度不变特征转换：SIFT是一种在<strong>多尺度空间上提取局部特征</strong>的方法。它在空间尺度中寻找极值点，并提取出其位置、尺度、旋转不变量，此算法由 David Lowe在1999年所发表，2004年完善总结。</li>
-</ul>
-<a id="more"></a>
-<h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
-<li>SIFT特征是图像的局部特征，其对旋转、尺度缩放、亮度变化保持不变性，对视角变化、仿射变换、噪声也保持一定程度的稳定性；</li>
-<li>独特性（Distinctiveness）好，信息量丰富，适用于在海量特征数据库中进行快速、准确的匹配；</li>
-<li>多量性，即使少数的几个物体也可以产生大量的SIFT特征向量；</li>
-<li>高速性，经优化的SIFT匹配算法甚至可以达到实时的要求；</li>
-<li>可扩展性，可以很方便的与其他形式的特征向量进行联合。</li>
-</ul>
-<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
-<li>实时性不高</li>
-<li>有时特征点数量较少</li>
-<li>对边缘光滑的目标无法准确提取特征点</li>
-</ul>
-<h3 id="整体流程"><a href="#整体流程" class="headerlink" title="整体流程"></a>整体流程</h3><ol>
-<li>建立尺度空间，即DoG金字塔</li>
-<li>关键点检测及定位，获得每个关键点的：<strong>尺度、位置</strong></li>
-<li>特征点方向赋值，获得每个特征点的：<strong>方向</strong></li>
-<li>关键点特征描述</li>
-</ol>
-<p><img src="https://img2018.cnblogs.com/blog/1471528/201903/1471528-20190330204125547-535493662.png" alt="整体流程"></p>
-<h2 id="建立DoG金字塔"><a href="#建立DoG金字塔" class="headerlink" title="建立DoG金字塔"></a>建立DoG金字塔</h2><ul>
-<li>获取多尺度空间：Lindeberg等人已证明高斯卷积核是实现尺度变换的唯一变换核，并且是唯一的线性核</li>
-</ul>
-<h3 id="预备知识"><a href="#预备知识" class="headerlink" title="预备知识"></a>预备知识</h3><h4 id="二维高斯函数"><a href="#二维高斯函数" class="headerlink" title="二维高斯函数"></a>二维高斯函数</h4><ul>
-<li>以(m/2, n/2)为中心的二维高斯分布<script type="math/tex; mode=display">
-G(x, y)=\frac{1}{2 \pi \sigma^{2}} e^{-\frac{(x-m / 2)^{2}+(y-n / 2)^{2}}{2 \sigma^{2}}}</script></li>
-<li>生成的曲面等高线是从中心开始呈正态分布的同心圆，权重值从中心向周围越来越小。这样进行模糊处理比其它的均衡模糊滤波器更高地保留了边缘效果。</li>
-<li>实际应用中，在计算高斯函数的离散近似时，在大概3σ距离之外的像素都可以看作不起作用，因此图像处理程序只需要计算$<br>(6 \sigma+1) \times(6 \sigma+1)<br>$的矩阵</li>
-</ul>
-<h4 id="二维高斯函数的优化"><a href="#二维高斯函数的优化" class="headerlink" title="二维高斯函数的优化"></a>二维高斯函数的优化</h4><ol>
-<li>若高斯模板大小为m*n，当图像大小为M*N时，计算复杂度为O(m*n*M*N)</li>
-<li>$\sigma$越大，高斯模板分散性越强，处理边缘点时，丢失的图像信息越多，可能会造成黑边</li>
-</ol>
-<ul>
-<li>可以证明，二维高斯运算可以优化为：水平方向进行一维高斯矩阵变换加上竖直方向的一维高斯矩阵变换得到。时间复杂度为：$<br>O(n \times M \times N)+O(m \times M \times N)<br>$。<a href="https://blog.csdn.net/lwx309025167/article/details/82761474">证明</a><br><img src="https://img-blog.csdn.net/20180919111255142?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x3eDMwOTAyNTE2Nw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="证明"></li>
-</ul>
-<h4 id="高斯拉普拉斯算子-Laplacion-of-Gaussian-LoG"><a href="#高斯拉普拉斯算子-Laplacion-of-Gaussian-LoG" class="headerlink" title="高斯拉普拉斯算子(Laplacion of Gaussian, LoG)"></a>高斯拉普拉斯算子(Laplacion of Gaussian, LoG)</h4><ul>
-<li>作用：突出边缘，更清晰，对比度更强</li>
-<li>拉普拉斯：拉普拉斯算子是图像二阶空间导数的二维各向同性测度。<strong>拉普拉斯算子可以突出图像中强度发生快速变化的区域</strong>，因此常用在边缘检测任务当中。</li>
-<li>高斯：在进行Laplacian操作之前通常需要先用高斯平滑滤波器对图像进行平滑处理，以<strong>降低Laplacian操作对于噪声的敏感性</strong>。</li>
-<li>输入输出均为灰度图</li>
-<li>连续拉普拉斯：<script type="math/tex; mode=display">
-L(x, y)=\frac{\partial^{2} I}{\partial x^{2}}+\frac{\partial^{2} I}{\partial y^{2}}</script></li>
-<li>离散拉普拉斯，例如：</li>
-</ul>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>0</th>
-<th>-1</th>
-<th>0</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>-1</td>
-<td>4</td>
-<td>-1</td>
-</tr>
-<tr>
-<td>0</td>
-<td>-1</td>
-<td>-1</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>-1</th>
-<th>-1</th>
-<th>-1</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>-1</td>
-<td>8</td>
-<td>-1</td>
-</tr>
-<tr>
-<td>-1</td>
-<td>-1</td>
-<td>-1</td>
-</tr>
-</tbody>
-</table>
-</div>
-<ul>
-<li>表达：以0为中心，$\sigma$为标准差的LoG<script type="math/tex; mode=display">
-L o G(x, y)=-\frac{1}{\pi \sigma^{4}}\left[1-\frac{x^{2}+y^{2}}{2 \sigma^{2}}\right] e^{-\frac{x^{2}+y^{2}}{2 \sigma^{2}}}</script><img src="https://pic1.zhimg.com/80/v2-f824bd5eae07235ebf531fa0b546ba98_1440w.jpg" alt="LoG示意图"><blockquote>
-<p>推导过程：<img src="https://pic4.zhimg.com/80/v2-b220086b94625a8a00ce68eb2a4bd0e3_1440w.jpg" alt="推导过程"></p>
-</blockquote>
-</li>
-<li>示例：一维LoG滤波器对于边缘的响应：<img src="https://pic4.zhimg.com/80/v2-12ce9caee0278bf8855efdecfcba7fc7_1440w.jpg" alt="一维LoG滤波器对于边缘的响应"></li>
-</ul>
-<h4 id="高斯差分算子-Difference-of-Gaussian-DOG"><a href="#高斯差分算子-Difference-of-Gaussian-DOG" class="headerlink" title="高斯差分算子(Difference of Gaussian, DOG)"></a>高斯差分算子(Difference of Gaussian, DOG)</h4><ul>
-<li>可以近似LoG算子，减少运算量，由Lindeberg在1994证明</li>
-<li>DoG的运算如下，即DoG为两不同尺度的高斯算子平滑后的图像之差，具体证明见：<a href="https://blog.csdn.net/kieven2008/article/details/104309440">证明</a><script type="math/tex; mode=display">
-\begin{aligned}
-D(x, y, \sigma) &=(G(x, y, k \sigma)-G(x, y, \sigma)) * I(x, y) \\
-&=L(x, y, k \sigma)-L(x, y, \sigma)
-\end{aligned}</script></li>
-</ul>
-<h4 id="尺度空间理论"><a href="#尺度空间理论" class="headerlink" title="尺度空间理论"></a>尺度空间理论</h4><ul>
-<li>定义<ul>
-<li>单尺度 —-&gt; 多尺度</li>
-<li>尺度空间中各尺度图像的模糊程度逐渐变大，能够模拟人在距离目标由近到远时目标在视网膜上的形成过程。</li>
-</ul>
-</li>
-<li>要求：满足视觉不变性<ul>
-<li>亮度/灰度不变性，对比度不变性</li>
-<li>平移不变性、尺度不变性、欧几里得不变性、仿射不变性</li>
-</ul>
-</li>
-<li>方法：<ul>
-<li>Tony Lindeberg指出<strong>尺度规范化的LoG(Laplacion of Gaussian)算子具有真正的尺度不变性</strong>。Lowe使用高斯差分金字塔近似LoG算子，是尺度空间检测稳定的关键点。</li>
-</ul>
-</li>
-<li>表示：一个图像的尺度空间$L(x,y,\sigma)$，可以表示为一个变化尺度的高斯函数与原图像的卷积<script type="math/tex; mode=display">
-L(x, y, \sigma)=G(x, y, \sigma) * I(x, y)</script><script type="math/tex; mode=display">
-G(x, y, \sigma)=\frac{1}{2 \pi \sigma^{2}} e^{-\frac{(x-m / 2)^{2}+(y-n / 2)^{2}}{2 \sigma^{2}}}</script><ul>
-<li>m，n表示高斯模板中心，维度为$<br>(6 \sigma+1) \times(6 \sigma+1)<br>$，(x, y)代表图像的像素位置。$\sigma$是尺度空间因子，值越小表示图像被平滑的越少，相应的尺度也就越小。<strong>大尺度对应于图像的概貌特征，小尺度对应于图像的细节特征。</strong></li>
-</ul>
-</li>
-</ul>
-<h3 id="建立DoG金字塔-1"><a href="#建立DoG金字塔-1" class="headerlink" title="建立DoG金字塔"></a>建立DoG金字塔</h3><ul>
-<li>极值：图像域和尺度域上的极值<br><img src="https://img2018.cnblogs.com/blog/1471528/201903/1471528-20190330204227104-18141123.png" alt="步骤"></li>
-</ul>
-<h4 id="构建高斯金字塔"><a href="#构建高斯金字塔" class="headerlink" title="构建高斯金字塔"></a>构建高斯金字塔</h4><ol>
-<li>先将原图像扩大一倍之后作为高斯金字塔的第1组第1层，将第1组第1层图像经高斯卷积（其实就是高斯平滑或称高斯滤波）之后作为第1组金字塔的第2层。对于参数σ，在Sift算子中取的是固定值1.6。</li>
-<li>将σ乘以一个比例系数k，得到一个新的平滑因子σ=k*σ，用它来平滑第1组第2层图像，结果图像作为第3层。</li>
-<li>如此这般重复，最后得到L层图像，在同一组中，每一层图像的尺寸都是一样的，只是平滑系数不一样。它们对应的平滑系数分别为：0，σ，kσ，k^2σ,k^3σ……k^(L-2)σ。</li>
-<li>将第1组<strong>倒数第三层</strong>图像作比例因子为2的降采样，得到的图像作为第2组的第1层，然后对第2组的第1层图像做平滑因子为σ的高斯平滑，得到第2组的第2层，就像步骤2中一样，如此得到第2组的L层图像，同组内它们的尺寸是一样的，对应的平滑系数分别为：0，σ，kσ，k^2σ,k^3σ……k^(L-2)σ。但是在尺寸方面第2组是第1组图像的一半。</li>
-<li>反复执行，得到一共O组，每组L层，共计O*L个图像，这些图像一起就构成了高斯金字塔，结构如下：<br><img src="https://img-blog.csdn.net/20160917212318336" alt="高斯金字塔"></li>
-</ol>
-<h4 id="构建高斯差分-DOG-金字塔"><a href="#构建高斯差分-DOG-金字塔" class="headerlink" title="构建高斯差分(DOG)金字塔"></a>构建高斯差分(DOG)金字塔</h4><ul>
-<li>方法<br><img src="https://img-blog.csdn.net/20160917223500317" alt="高斯差分金字塔"></li>
-<li>经过归一化的高斯差分金字塔<br><img src="https://img-blog.csdn.net/20160917232151713" alt="一个示例"></li>
-</ul>
-<h4 id="具体构建过程中的参数计算"><a href="#具体构建过程中的参数计算" class="headerlink" title="具体构建过程中的参数计算"></a>具体构建过程中的参数计算</h4><ul>
-<li>极值点：每一个像素点要和它所有的相邻点比较，看其是否比它的图像域和尺度域的相邻点大或者小。要获取S个尺度的极值点—-&gt;需要S+2个DOG空间—&gt;S+3层高斯金字塔</li>
-<li>实际计算时S在3到5之间</li>
-<li>输入：组数o，层数S，$k=2^{\frac{1}{S}}$，以及计算每组每层的尺度参数$\sigma(o, s)=\sigma_{0} 2^{\circ+\frac{s}{S}} o \in[0, \ldots, O-1], s \in[0, \ldots, S+2]$<ul>
-<li>$\sigma_{0}$为初始尺度</li>
-</ul>
-</li>
-<li>相同组间不同层的尺度参数$\sigma$为k倍之差，不同组相同层之间尺度参数$\sigma$为2倍之差</li>
-</ul>
-<h2 id="关键点定位"><a href="#关键点定位" class="headerlink" title="关键点定位"></a>关键点定位</h2><h3 id="离散极值点检测"><a href="#离散极值点检测" class="headerlink" title="离散极值点检测"></a>离散极值点检测</h3><ul>
-<li>DoG金字塔中，每个点与周围8+前后两个尺度9*2=26个点比较，来确定极值点</li>
-</ul>
-<h3 id="关键点（连续极值点）定位"><a href="#关键点（连续极值点）定位" class="headerlink" title="关键点（连续极值点）定位"></a>关键点（连续极值点）定位</h3><ul>
-<li>动机<ul>
-<li>获得连续空间的极值点（位置、尺度、极值大小），并去除低对比度的关键点</li>
-<li>去除不稳定的边缘响应点（DoG算子会产生较强的边缘响应），增强匹配稳定性、提高降噪能力</li>
-</ul>
-</li>
-</ul>
-<h4 id="关键点定位-1"><a href="#关键点定位-1" class="headerlink" title="关键点定位"></a>关键点定位</h4><ul>
-<li>离散空间的极值点只是局部区域<br><img src="https://img2018.cnblogs.com/blog/1471528/201903/1471528-20190330205035199-488432412.jpg" alt="离散空间极值点与连续空间极值点的区别"></li>
-<li>为了获得连续空间的极值点，需要对离散空间DoG函数进行曲线插值/拟合。拟合的方法是利用DoG函数在尺度空间上的泰勒展开。</li>
-</ul>
-<ol>
-<li>在任意一个坐标为$X_0=(x_0,y_0,\sigma_0)$的极值点处做DoG函数的泰勒展开，舍掉2阶以后的项，结果如下：<script type="math/tex; mode=display">
-f\left(\left[\begin{array}{l}
-x \\
-y \\
-\sigma
-\end{array}\right]\right) \approx f\left(\left[\begin{array}{l}
-x_{0} \\
-y_{0} \\
-\sigma_{0}
-\end{array}\right]\right) \mid+\left[\begin{array}{lll}
-\frac{\partial f}{\partial x} & \frac{\partial f}{\partial y} & \frac{\partial f}{\partial \sigma}
-\end{array}\right]\left(\left[\begin{array}{l}
-x \\
-y \\
-\sigma
-\end{array}\right]-\left[\begin{array}{l}
-x_{0} \\
-y_{0} \\
-\sigma_{0}
-\end{array}\right]\right) + 
-\frac{1}{2}\left(\left[\begin{array}{llll}
-x & y & \sigma
-\end{array}\right]-\left[\begin{array}{lll}
-x_{0} & y_{0} & \sigma_{0}
-\end{array}\right]\right)\left[\begin{array}{lll}
-\frac{\partial^{2} f}{\partial x \partial x} & \frac{\partial^{2} f}{\partial x \partial y} & \frac{\partial^{2} f}{\partial x \partial \sigma} \\
-\frac{\partial^{2} f}{\partial x \partial y} & \frac{\partial^{2} f}{\partial y \partial y} & \frac{\partial^{2} f}{\partial y \partial \sigma} \\
-\frac{\partial^{2} f}{\partial x \partial \sigma} & \frac{\partial^{2} f}{\partial y \partial \sigma} & \frac{\partial^{2} f}{\partial \sigma \partial \sigma}
-\end{array}\right]\left(\left[\begin{array}{l}
-x \\
-y \\
-\sigma
-\end{array}\right]-\left[\begin{array}{l}
-x_{0} \\
-y_{0} \\
-\sigma_{0}
-\end{array}\right]\right)</script>其向量形式如下：<script type="math/tex; mode=display">
-D(X)=D+\frac{\partial D^{T}}{\partial X} X+\frac{1}{2} X^{T} \frac{\partial^{2} D}{\partial X^{2}} X</script></li>
-<li>求导并让方程==0，求得极值点相对$X_0=(x_0,y_0,\sigma_0)$的偏移量为$\hat{X}=-\frac{\partial^{2} D^{-1}}{\partial X^{2}} \frac{\partial D}{\partial X}$。</li>
-<li>当此偏移量在任一维度（x, y, $\sigma$）上大于0.5时，意味着此极值点已经去临近的点上了，因此改变该极值点位置。</li>
-<li>不断迭代1~3。终止条件：收敛/超出迭代次数（Lowe设定为5）/超出图像边界（此时应删除该点）。记录所有点的位置（原位置+偏移量）以及尺度$\sigma(o, s)$.</li>
-<li>为加强抗噪声的能力，删除$|D(x)|$过小的点（Lowe论文中使用0.03，Rob Hess等人实现时使用0.04)。</li>
-</ol>
-<h4 id="边缘效应消除"><a href="#边缘效应消除" class="headerlink" title="边缘效应消除"></a>边缘效应消除</h4><ul>
-<li>一个定义不好的DoG算子的极值在横跨边缘的地方有较大的主曲率，而在垂直边缘的方向有较小的主曲率。即<strong>两个主曲率的比值越大</strong>。<ul>
-<li>主曲率：曲面的每个方向都有法曲率，那么就有最大最小的法曲率，这个最大最小值就是主曲率，对应的曲线在这点的切线方向就是主曲率方向。这两个方向是垂直的。</li>
-</ul>
-</li>
-</ul>
-<ol>
-<li>获取特征点处的Hessian矩阵，主曲率通过一个2x2的Hessian矩阵H求出：<script type="math/tex; mode=display">
-H=\left[\begin{array}{ll}
-D_{x x} & D_{x y} \\
-D_{xy} & D_{yy}
-\end{array}\right]</script></li>
-<li>H的特征值$\alpha$和$\beta$代表了x方向和y方向的梯度。<ol>
-<li>先求出H的对角线元素之和以及H的行列式<script type="math/tex; mode=display">
-\begin{array}{l}
-\operatorname{Tr}(H)=D_{x x}+D_{x}=\alpha+\beta \\
-\operatorname{Det}(H)=D_{x x} D_{y}-\left(D_{x}\right)^{2}=\alpha \beta
-\end{array}</script></li>
-<li>设$\alpha$较大，令$\alpha=r \beta$，则$<br>\frac{T r(H)^{2}}{D e t(H)}=\frac{(\alpha+\beta)^{2}}{\alpha \beta}=\frac{(r \beta+\beta)^{2}}{r \beta^{2}}=\frac{(r+1)^{2}}{r}<br>$</li>
-<li>r值越大，说明两个特征值的比值越大，即在某一个方向的梯度值越大，而在另一个方向的梯度值越小，而边缘恰恰就是这种情况。所以为了剔除边缘响应点，需要让r小于一定的阈值，因此，为了检测主曲率是否在某域值r下，只需检测$\frac{\operatorname{Tr}(H)^{2}}{\operatorname{Det}(H)}&lt;\frac{(r+1)^{2}}{r}$，若此式子成立，保留关键点，反之剔除。<ol>
-<li>Lowe取r=10.</li>
-</ol>
-</li>
-</ol>
-</li>
-</ol>
-<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><ul>
-<li>以上的关键点定位过程中用到了离散的导数，具体求导时应用了<a href="https://blog.csdn.net/qq_41679006/article/details/80975436">有限差分法</a>求导</li>
-<li>以上过程中需要用到三阶矩阵求逆，可逆矩阵A及其逆如下<script type="math/tex; mode=display">
-A=\left(\begin{array}{lll}
-a_{00} & a_{01} & a_{02} \\
-a_{10} & a_{11} & a_{12} \\
-a_{20} & a_{21} & a_{22}
-\end{array}\right)</script><script type="math/tex; mode=display">
-A^{-1}=\frac{1}{|A|}\left(\begin{array}{ccc}
-a_{11} a_{22}-a_{21} a_{12} & -\left(a_{01} a_{22}-a_{21} a_{02}\right) & a_{01} a_{12}-a_{02} a_{11} \\
-a_{12} a_{20}-a_{22} a_{10} & -\left(a_{02} a_{20}-a_{22} a_{00}\right) & a_{02} a_{10}-a_{00} a_{12} \\
-a_{10} a_{21}-a_{20} a_{11} & -\left(a_{00} a_{21}-a_{20} a_{01}\right) & a_{00} a_{11}-a_{01} a_{10}
-\end{array}\right)</script></li>
-</ul>
-<h2 id="关键点方向匹配"><a href="#关键点方向匹配" class="headerlink" title="关键点方向匹配"></a>关键点方向匹配</h2><ul>
-<li>为了使最后所得的描述符具有旋转不变性，需要利用图像的局部特征为给每一个关键点分配一个基准方向。使用图像梯度的方法求取局部结构的稳定方向。</li>
-</ul>
-<ol>
-<li>对于在DOG金字塔中检测出的关键点点，采集其所在高斯金字塔图像3σ邻域窗口内像素的梯度和方向分布特征。梯度的模值和方向如下：<script type="math/tex; mode=display">
-\begin{array}{l}
-m(x, y)=\sqrt{(L(x+1, y)-L(x-1, y))^{2}+(L(x, y+1)-L(x, y-1))^{2}} \\
-\left.\theta(x, y)=\tan ^{-1}((L(x, y+1)-L(x, y-1)) / L(x+1, y)-L(x-1, y))\right)
-\end{array}</script>L为关键点所在的尺度空间值，按Lowe的建议，梯度的模值m(x,y)按$1.5\sigma(o,s)$的尺度进行高斯加权，按照常用的$3\sigma$原则，取邻域窗口的半径为$3 \times 1.5 \sigma(o,s)$</li>
-<li>求得关键点及其邻域内像素的梯度和方向，并使用直方图进行统计。梯度直方图将0~360度的方向范围分为36个柱(bins)，其中每柱10度。<img src="https://img2018.cnblogs.com/blog/1471528/201903/1471528-20190330205657098-53794026.png" alt="如图"></li>
-<li>方向直方图的峰值则代表了该特征点处邻域梯度的方向，以直方图中最大值作为该关键点的主方向。为了增强匹配的鲁棒性，只保留峰值大于主方向峰值80％的方向作为该关键点的辅方向。因此，<strong>对于同一梯度值的多个峰值的关键点位置，在相同位置和尺度将会有多个关键点被创建但方向不同</strong>。仅有15％的关键点被赋予多个方向，但可以明显的提高关键点匹配的稳定性。实际编程实现中，就是把该关键点复制成多份关键点，并将方向值分别赋给这些复制后的关键点，并且，离散的梯度方向直方图要进行插值拟合处理，来求得更精确的方向角度值。<ol>
-<li>梯度直方图的平滑处理：为了避免梯度方向受噪声的影响，还可以对梯度直方图进行平滑以及进行抛物线插值处理。<a href="https://www.cnblogs.com/Alliswell-WP/p/SIFT.html">具体方法</a>。</li>
-</ol>
-</li>
-</ol>
-<h2 id="特征描述子计算"><a href="#特征描述子计算" class="headerlink" title="特征描述子计算"></a>特征描述子计算</h2><ul>
-<li>作用：<strong>表示关键点邻域高斯图像梯度统计结果</strong>。</li>
-<li>方法：通过对关键点周围图像区域分块，计算块内梯度直方图，生成具有独特性的向量，这个向量是该区域图像信息的一种抽象，具有唯一性&amp;独特性。<ul>
-<li>Lowe建议描述子使用在关键点尺度空间内4*4的窗口中计算的8个方向的梯度信息，共4*4*8=128维向量表征。</li>
-</ul>
-</li>
-</ul>
-<h3 id="确定计算描述子所需的图像区域"><a href="#确定计算描述子所需的图像区域" class="headerlink" title="确定计算描述子所需的图像区域"></a>确定计算描述子所需的图像区域</h3><ol>
-<li>将关键点附近的邻域划分为d*d(Lowe建议d=4)个子区域，每个子区域做为一个种子点，每个种子点有8个方向。</li>
-<li>每个子区域的大小，也使用$3\sigma$原则确定，即子区域边长为$3\sigma$。</li>
-<li>则所需图像区域边长为$3\sigma\times(d+1)$</li>
-<li>考虑到旋转因素(方便下一步将坐标轴旋转到关键点的方向)，用圆代替矩阵，实际计算所需的图像区域半径为：<br>$radius=\frac{3\sigma\times\sqrt{2}\times(d+1)}{2}$。计算结果四舍五入取整。<img src="https://img2018.cnblogs.com/blog/1471528/201903/1471528-20190330210025431-395170345.jpg" alt=""></li>
-</ol>
-<h3 id="坐标轴旋转至主方向"><a href="#坐标轴旋转至主方向" class="headerlink" title="坐标轴旋转至主方向"></a>坐标轴旋转至主方向</h3><ul>
-<li>坐标轴旋转<br><img src="https://img2018.cnblogs.com/blog/1471528/201903/1471528-20190330210107953-2078955000.png" alt="坐标轴旋转至主方向"></li>
-<li>旋转后邻域内采样点的新坐标：<script type="math/tex; mode=display">
-\left(\begin{array}{l}
-x^{\prime} \\
-y^{\prime}
-\end{array}\right)=\left(\begin{array}{ll}
-\cos \theta & -\sin \theta \\
-\sin \theta & \cos \theta
-\end{array}\right)\left(\begin{array}{l}
-x \\
-y
-\end{array}\right)(x, y \in[-\text {radius, radius}]</script></li>
-</ul>
-<h3 id="梯度直方图生成"><a href="#梯度直方图生成" class="headerlink" title="梯度直方图生成"></a>梯度直方图生成</h3><ul>
-<li>如下图绿色部分的坐标系中，旋转后采样点$(x^{\prime}, y^{\prime})$的新坐标为<script type="math/tex; mode=display">
-\left(\begin{array}{l}
-x^{n} \\
-y^{n}
-\end{array}\right)=\frac{1}{3 \sigma_{-} o c t}\left(\begin{array}{l}
-x^{\prime} \\
-y^{t}
-\end{array}\right)+\frac{d}{2}</script></li>
-<li>Lowe建议子区域的像素的梯度大小按$\sigma=0.5d$进行高斯加权，(a, b)为关键点在DoG图像中的位置坐标，则<script type="math/tex; mode=display">
-w=m(a+x, b+y)^{*} e^{-\frac{\left(x^{\prime}\right)^{2}+\left(y^{\prime}\right)^{2}}{2 \times(0.5 d)^{2}}}</script><img src="https://niecongchong.github.io/img/2019-08-06-24.jpg" alt=""></li>
-<li>与求主方向不同，此时每个种子区域的梯度直方图在0-360之间划分为8个方向区间，每个区间为45度，即每个种子点有8个方向的梯度强度信息。所以共4*4*8=128个梯度。</li>
-</ul>
-<h3 id="三线性插值"><a href="#三线性插值" class="headerlink" title="三线性插值"></a>三线性插值</h3><ul>
-<li>三线性：x, y, 方向<br><img src="https://img2018.cnblogs.com/blog/1471528/201903/1471528-20190330210313666-1453481217.png" alt=""></li>
-<li>如图中的红色点，落在第0行和第1行之间，对这两行都有贡献。对第0行第3列种子点的贡献因子为dr，对第1行第3列的贡献因子为1-dr，同理，对邻近两列的贡献因子为dc和1-dc，对邻近两个方向的贡献因子为do和1-do。k,m,n为0或1，则最终累加在每个方向上的梯度大小为：<script type="math/tex; mode=display">
-\text { weight }=w^{*} d r^{k} *(1-d r)^{1-k} * d c^{m *}(1-d c)^{1-m *} d o^{n *}(1-d o)^{1-n}</script></li>
-</ul>
-<h3 id="特征描述子以及归一化特征描述子"><a href="#特征描述子以及归一化特征描述子" class="headerlink" title="特征描述子以及归一化特征描述子"></a>特征描述子以及归一化特征描述子</h3><ul>
-<li>如上统计的4*4*8=128个梯度信息即为该关键点的特征向量。特征向量形成后，为了去除光照变化的影响，需要对它们进行归一化处理，对于图像灰度值整体漂移，图像各点的梯度是邻域像素相减得到，所以也能去除。</li>
-<li>得到的描述子向量为$H=\left(h_{1}, h_{2}, \ldots, h_{128}\right)$</li>
-<li>归一化后的描述子向量为$L=\left(l_{1}, l_{2}, \ldots, l_{128}\right)$</li>
-</ul>
-<h3 id="特征描述子门限化"><a href="#特征描述子门限化" class="headerlink" title="特征描述子门限化"></a>特征描述子门限化</h3><ul>
-<li>非线性光照，相机饱和度变化对造成某些方向的梯度值过大，而对方向的影响微弱。因此设置门限值(向量归一化后，一般取0.2)截断较大的梯度值。然后，再进行一次归一化处理，提高特征的鉴别性。</li>
-</ul>
-<h3 id="特征描述向量排序"><a href="#特征描述向量排序" class="headerlink" title="特征描述向量排序"></a>特征描述向量排序</h3><ul>
-<li>按特征点的尺度对特征描述向量进行排序。</li>
-</ul>
-<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><ul>
-<li><a href="https://www.cnblogs.com/Alliswell-WP/p/SIFT.html">https://www.cnblogs.com/Alliswell-WP/p/SIFT.html</a></li>
-<li><a href="https://blog.csdn.net/zddblog/article/details/7521424">https://blog.csdn.net/zddblog/article/details/7521424</a></li>
-<li><a href="https://blog.csdn.net/qq_41679006/article/details/80975436">https://blog.csdn.net/qq_41679006/article/details/80975436</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Learning</category>
-      </categories>
-      <tags>
-        <tag>CV</tag>
-        <tag>ML</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>ML-Metrics</title>
-    <url>/2020/10/26/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%88%86%E7%B1%BBmetrics/</url>
-    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
-
-<p>[TOC]</p>
-<h1 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h1><h2 id="ACC-Accuracy"><a href="#ACC-Accuracy" class="headerlink" title="ACC(Accuracy)"></a>ACC(Accuracy)</h2><ul>
-<li>Accuracy = 预测正确的样本数量 / 总样本数量 = (TP+TN) / (TP+FP+TN+FN)</li>
-</ul>
-<a id="more"></a>
-<h2 id="Precision查准"><a href="#Precision查准" class="headerlink" title="Precision查准"></a>Precision查准</h2><ul>
-<li>Precision = TP / (TP+FP)</li>
-</ul>
-<h2 id="Recall-TPR查全"><a href="#Recall-TPR查全" class="headerlink" title="Recall/TPR查全"></a>Recall/TPR查全</h2><ul>
-<li>Recall = TPR = TP / (TP+FN)</li>
-</ul>
-<h2 id="F1-amp-Fn"><a href="#F1-amp-Fn" class="headerlink" title="F1&amp;Fn"></a>F1&amp;Fn</h2><h3 id="F1"><a href="#F1" class="headerlink" title="F1"></a>F1</h3><ul>
-<li>precision和recall的调和平均</li>
-</ul>
-<h3 id="Fn"><a href="#Fn" class="headerlink" title="Fn"></a>Fn</h3><ul>
-<li>可用来解决分类不均衡问题/对precision和recall进行强调<ul>
-<li>如F1认为precision和recall同等重要，F2认为recall的重要程度是precision的2倍<script type="math/tex; mode=display">
-F_{\beta}=\left(1+\beta^{2}\right) \cdot \frac{\text { precision } \cdot \text { recall }}{\left(\beta^{2} \cdot \text { precision }\right)+\text { recall }}</script></li>
-</ul>
-</li>
-</ul>
-<script type="math/tex; mode=display">
-F_{\beta}=\frac{\left(1+\beta^{2}\right) \cdot \text { true positive }}{\left(1+\beta^{2}\right) \cdot \text { true positive }+\beta^{2} \cdot \text { false negative }+\text { false positive }}</script><h2 id="P-R曲线-Precision-Recall"><a href="#P-R曲线-Precision-Recall" class="headerlink" title="P-R曲线(Precision-Recall)"></a>P-R曲线(Precision-Recall)</h2><ul>
-<li>P为纵轴，R为横轴</li>
-<li>主要关心正例</li>
-<li>公式：<script type="math/tex; mode=display">
-\sum_{n}\left(R_{n}-R_{n-1}\right) P_{n}</script></li>
-</ul>
-<h2 id="FPR"><a href="#FPR" class="headerlink" title="FPR"></a>FPR</h2><ul>
-<li>FPR = FP/(FP+TN) 真实label为0的样本中，被预测为1的样本占的比例</li>
-</ul>
-<h2 id="ROC曲线-amp-AUC"><a href="#ROC曲线-amp-AUC" class="headerlink" title="ROC曲线&amp;AUC"></a>ROC曲线&amp;AUC</h2><ul>
-<li>衡量分类准确性，同时考虑了模型对正样本(TPR)和负样本(FPR)的分类能力，因此在样本非均衡的情况下也能做出合理的评价。侧重于<strong>排序</strong>。</li>
-</ul>
-<h3 id="ROC-Receiver-operating-characteristic-curve"><a href="#ROC-Receiver-operating-characteristic-curve" class="headerlink" title="ROC(Receiver operating characteristic curve)"></a>ROC(Receiver operating characteristic curve)</h3><ul>
-<li>横轴FPR，纵轴TPR</li>
-<li>ROC曲线在绘制时，需要先对所有样本的预测概率做排序，并不断取不同的阈值计算TPR和FPR，因此AUC在计算时会侧重于排序。</li>
-</ul>
-<h3 id="AUC-Area-under-Curve"><a href="#AUC-Area-under-Curve" class="headerlink" title="AUC(Area under Curve)"></a>AUC(Area under Curve)</h3><ul>
-<li>ROC曲线与x轴的面积</li>
-<li>一般认为：AUC最小值=0.5（其实存在AUC小于0.5的情况，例如每次都预测与真实值相反的情况，但是这种情况，只要把预测值取反就可以得到大于0.5的值，因此还是认为AUC最小值=0.5）</li>
-<li>AUC的物理意义为<strong>任取一对例和负例，正例得分大于负例得分的概率</strong>，AUC越大，表明方法效果越好。—&gt; 排序<script type="math/tex; mode=display">A U C=\frac{\sum p r e d_{p o s}>p r e d_{n e g}}{p o s i t i v e N u m * n e g a ti v e N u m}</script>分母是正负样本总的组合数，分子是正样本大于负样本的组合数<script type="math/tex; mode=display">
-A U C=\frac{\sum_{\text {ins}_{i} \in \text {positiveclass}} \operatorname{rank}_{\text {ins}_{i}}-\frac{M \times(M+1)}{2}}{M \times N}</script></li>
-</ul>
-<h1 id="区分度"><a href="#区分度" class="headerlink" title="区分度"></a>区分度</h1><h2 id="KS-Kolmogorov-Smirnov"><a href="#KS-Kolmogorov-Smirnov" class="headerlink" title="KS(Kolmogorov-Smirnov)"></a>KS(Kolmogorov-Smirnov)</h2><ul>
-<li>KS用于模型风险区分能力进行评估，指标衡量的是好坏样本累计分布之间的差值。好坏样本累计差异越大，KS指标越大，那么模型的风险区分能力越强。</li>
-<li>KS的计算步骤如下： <ul>
-<li>1)计算每个评分区间的好坏账户数。 </li>
-<li>2)计算每个评分区间的累计好账户数占总好账户数比率(good%)和累计坏账户数占总坏账户数比率(bad%)。 </li>
-<li>3)计算每个评分区间累计坏账户占比与累计好账户占比差的绝对值（累计good%-累计bad%），然后对这些绝对值取最大值即得此评分卡的K-S值。</li>
-</ul>
-</li>
-<li>低分段累计坏百分比应高于累计好百分比，之后会经历两者差距先扩大再缩小的变化<br><img src="https://img-blog.csdnimg.cn/2019013111150139.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NzY2NfbGVhcm5pbmc=,size_16,color_FFFFFF,t_70" alt="KS-曲线"></li>
-</ul>
-<h2 id="gini"><a href="#gini" class="headerlink" title="gini"></a>gini</h2><ul>
-<li>计算每个评分区间的好坏账户数。 </li>
-<li>计算每个评分区间的累计好账户数占总好账户数比率（累计good%）和累计坏账户数占总坏账户数比率(累计bad%)。 </li>
-<li>按照累计好账户占比和累计坏账户占比得出下图所示曲线ADC。 </li>
-<li>计算出图中阴影部分面积，阴影面积占直角三角形ABC面积的百分比，即为GINI系数。</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Learning</category>
-      </categories>
-      <tags>
-        <tag>ML</tag>
-        <tag>Metrics</tag>
       </tags>
   </entry>
 </search>

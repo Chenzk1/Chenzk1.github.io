@@ -217,7 +217,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-count">28</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -228,7 +228,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-count">12</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -243,6 +243,19 @@
   </div>
 
 
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://andrewsher.github.io/" title="https:&#x2F;&#x2F;andrewsher.github.io&#x2F;" rel="noopener" target="_blank">Andrewsher's blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://shorey.tech/" title="http:&#x2F;&#x2F;shorey.tech&#x2F;" rel="noopener" target="_blank">Shorey's blog</a>
+        </li>
+    </ul>
+  </div>
 
       </section>
         <div class="back-to-top animated">
@@ -267,6 +280,135 @@
       
 
       
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/29/ML-%E4%BF%A1%E6%81%AF%E7%86%B5&%E4%BA%A4%E5%8F%89%E7%86%B5&%E6%9D%A1%E4%BB%B6%E7%86%B5&%E7%9B%B8%E5%AF%B9%E7%86%B5(KL%E6%95%A3%E5%BA%A6)&%E4%BA%92%E4%BF%A1%E6%81%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Kayden">
+      <meta itemprop="description" content="陈仲锴的博客, Kayden's Blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kayden's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/10/29/ML-%E4%BF%A1%E6%81%AF%E7%86%B5&%E4%BA%A4%E5%8F%89%E7%86%B5&%E6%9D%A1%E4%BB%B6%E7%86%B5&%E7%9B%B8%E5%AF%B9%E7%86%B5(KL%E6%95%A3%E5%BA%A6)&%E4%BA%92%E4%BF%A1%E6%81%AF/" class="post-title-link" itemprop="url">ML-信息熵&交叉熵&条件熵&相对熵(KL散度)&互信息</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2020-10-29 11:13:21 / Modified: 11:22:07" itemprop="dateCreated datePublished" datetime="2020-10-29T11:13:21+08:00">2020-10-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <ul>
+<li>设随机变量X，有n个事件x_i –&gt; x_n，概率分布为p(x)</li>
+</ul>
+<h2 id="信息"><a href="#信息" class="headerlink" title="信息"></a>信息</h2><ul>
+<li>某随机变量X取值为xi的信息为 $I(X=xi)=log_2( 1 / p(x_i) ) = - log_2p(x_i)$</li>
+<li>某事件xi的信息代表这个事件能提供的信息，一个发生概率越小的事件能够提供的信息量越大。</li>
+</ul>
+<h2 id="信息熵"><a href="#信息熵" class="headerlink" title="信息熵"></a>信息熵</h2><ul>
+<li>信息代表一个事件的不确定性，信息熵是整个随机变量X不确定性的度量：信息的期望。<script type="math/tex; mode=display">H(X) = \sum_0^n p(x_i)*I(x_i) = - \sum_0^n p(x_i)\log_2(p(x_i))</script></li>
+<li>信息熵只与变量X的分布有关，与其取值无关。例如二分类中，两取值的概率均为0.5时，其熵最大，也最难预测某时刻哪一类别会发生。</li>
+<li><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/41252833/answer/195901726">如何通俗的解释交叉熵与相对熵?</a></li>
+<li>对于一个系统而言，若获知其真实分布，则我们能够找到一个最优策略，以最小的代价来消除系统的不确定性，而这个最小的代价（猜题次数、编码长度等）就是信息熵。</li>
+</ul>
+<h2 id="条件熵"><a href="#条件熵" class="headerlink" title="条件熵"></a>条件熵</h2><ul>
+<li>给定条件X下，Y的分布（Y|X）的熵对X的数学期望：$H(Y|X)=\sum_x p(x)H(Y|X=x)$, 即给定条件分布下的信息熵对某个条件的数学期望</li>
+<li>在ML中，即选定某个特征X(X有n类)后，label(Y)的条件概率熵求期望：给定X特征的条件下Y的信息熵。</li>
+<li>条件熵越小，代表在这个特征下，label的信息熵越小，也就是说要解决问题的代价越小。</li>
+</ul>
+<h2 id="信息增益-ID3"><a href="#信息增益-ID3" class="headerlink" title="信息增益 - ID3"></a>信息增益 - ID3</h2><ul>
+<li>$IG(Y|X)=H(Y)-H(Y|X)$ 信息熵-条件熵</li>
+<li>在决策树中作为选择特征的指标，IG越大，这个特征的选择性越好，也可以理解为：待分类的集合的熵和选定某个特征的条件熵之差越大，这个特征对整个集合的影响越大。</li>
+<li>对于条件熵来说，条件熵越小，分类后的纯度越高，但是问题是：X的取值越多，每个取值下Y的纯度越高，H(Y|X)越小，但此时并不有利于Y的区分。信息增益也是如此。–&gt; 信息增益率。</li>
+</ul>
+<h2 id="信息增益率-信息增益比-—-C4-5"><a href="#信息增益率-信息增益比-—-C4-5" class="headerlink" title="信息增益率/信息增益比 — C4.5"></a>信息增益率/信息增益比 — C4.5</h2><ul>
+<li>信息增益 / 条件的信息熵</li>
+<li>偏好取值少的特征。C4.5：先选择高于平均水平信息增益的特征，再在其中选择最高信息增益率的特征。见Decision Tree</li>
+</ul>
+<h2 id="基尼不纯度-—-CART"><a href="#基尼不纯度-—-CART" class="headerlink" title="基尼不纯度 — CART"></a>基尼不纯度 — CART</h2><ul>
+<li>GINI：先对特征分区，对每个区中的label求gini系数，pk(1-pk)；然后对每个区的基尼系数求期望</li>
+<li>表示数据的不纯度。既有分类也有回归，既要确定特征，也要确定特征的分叉值。</li>
+<li>见<a href="https://chenzk1.github.io/2020/10/25/Decision%20Tree/">Decision Tree</a></li>
+</ul>
+<h2 id="交叉熵"><a href="#交叉熵" class="headerlink" title="交叉熵"></a>交叉熵</h2><ul>
+<li>前面提到：信息熵是最优策略下，消除系统不确定性的最小代价。这里的前提是：我们得到了系统的真实分布。</li>
+<li>实际中，一般难以获知系统真实分布，所以要以假设分布去近似。交叉熵：用来衡量在给定的真实分布下，使用非真实分布所指定的策略消除系统的不确定性所需要付出的努力的大小。$CEH(p,q)=\sum_{k=1}^np_k\log_2\frac{1}{q_k}$，注意这里log中是q，是基于非真实分布q的信息量对真实分布的期望。<br>当假设分布$q_k$与真实分布$p_k$相同时，交叉熵最低，等于信息熵，所以得到的策略为最优策略。</li>
+<li>在机器学习中的分类算法中，我们总是最小化交叉熵，因为交叉熵越低，就证明由算法所产生的策略最接近最优策略，也间接证明我们算法所算出的非真实分布越接近真实分布。<ul>
+<li>例如：在逻辑斯蒂回归或者神经网络中都有用到交叉熵作为评价指标，其中p即为真实分布的概率，而q为预测的分布，以此衡量两不同分布的相似性。</li>
+</ul>
+</li>
+<li>如何衡量不同策略的差异：相对熵</li>
+</ul>
+<h2 id="相对熵-K-L散度"><a href="#相对熵-K-L散度" class="headerlink" title="相对熵/K-L散度"></a>相对熵/K-L散度</h2><ul>
+<li>用来衡量两个概率分布之间的差异。两者相同相对熵为0</li>
+<li>使用非真实分布q的交叉熵，与使用真实分布p的的信息熵的差值：相对熵，又称K-L散度。</li>
+<li>KL(p, q) = 交叉熵(p, q) - 信息熵(p)<br>$KL(p,q)=CEH(p,q)-H(p)=\sum_{i=1}^np(x_i)\log\frac{p(x_i)}{q(x_i)}$</li>
+</ul>
+<h2 id="联合熵"><a href="#联合熵" class="headerlink" title="联合熵"></a>联合熵</h2><ul>
+<li>H(X,Y) 随机变量X,Y联合表示的信息熵</li>
+</ul>
+<h2 id="互信息"><a href="#互信息" class="headerlink" title="互信息"></a>互信息</h2><ul>
+<li>H（X；Y）俩变量交集，也记作I(X;Y)</li>
+<li>H（X；Y) = H(X,Y)-H(Y|X)-H(X|Y)</li>
+<li>I(X;Y)=KL(P(X,Y), P(X)P(Y))</li>
+<li>互信息越小，两变量独立性越强，P(X,Y)与P(X)P(Y)差异越小，P(X,Y)与P(X)P(Y)的相对熵越小</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
     
 
 
@@ -460,7 +602,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/26/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%88%86%E7%B1%BBmetrics/">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/26/ML-metrics/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -474,7 +616,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/10/26/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%88%86%E7%B1%BBmetrics/" class="post-title-link" itemprop="url">ML-Metrics</a>
+            <a href="/2020/10/26/ML-metrics/" class="post-title-link" itemprop="url">ML-Metrics</a>
         </h2>
 
         <div class="post-meta-container">
@@ -492,7 +634,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2020-10-28 18:41:29" itemprop="dateModified" datetime="2020-10-28T18:41:29+08:00">2020-10-28</time>
+        <time title="Modified: 2020-10-29 12:16:15" itemprop="dateModified" datetime="2020-10-29T12:16:15+08:00">2020-10-29</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -522,7 +664,7 @@
 </ul>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/10/26/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%88%86%E7%B1%BBmetrics/#more" rel="contents">
+              <a class="btn" href="/2020/10/26/ML-metrics/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -1078,108 +1220,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2020/10/25/%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/25/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Kayden">
-      <meta itemprop="description" content="陈仲锴的博客, Kayden's Blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Kayden's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/10/25/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/" class="post-title-link" itemprop="url">机器学习面试题-Random Forest</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2020-10-25 10:54:33" itemprop="dateCreated datePublished" datetime="2020-10-25T10:54:33+08:00">2020-10-25</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2020-10-28 18:39:37" itemprop="dateModified" datetime="2020-10-28T18:39:37+08:00">2020-10-28</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>[TOC]</p>
-<h2 id="1-简单介绍随机森林"><a href="#1-简单介绍随机森林" class="headerlink" title="1. 简单介绍随机森林"></a>1. 简单介绍随机森林</h2><ul>
-<li><strong>多次随机取样，多次随机取属性，选取最优分割点，构建多个(CART)分类器，投票表决或简单平均</strong></li>
-<li><strong>算法流程：</strong><ul>
-<li>输入为样本集$D=\{(x，y_1)，(x_2，y_2) \dots (x_m，y_m)\}$，弱分类器迭代次数$T$。</li>
-<li>输出为最终的强分类器$f(x)$</li>
-<li>对于$t=1，2 \dots T$<ul>
-<li>对训练集进行第$t$次随机采样，共采集$m$次，得到包含$m$个样本的采样集Dt</li>
-<li>用采样集$D_t$训练第$t$个决策树模型$G_t(x)$，在训练决策树模型的节点的时候，在节点上所有的样本特征中选择一部分样本特征，在这些随机选择的部分样本特征中选择一个最优的特征来做决策树的左右子树划分</li>
-</ul>
-</li>
-<li>如果是分类算法预测，则$T$个弱学习器投出最多票数的类别或者类别之一为最终类别。如果是回归算法，$T$个弱学习器得到的回归结果进行算术平均得到的值为最终的模型输出。</li>
-</ul>
-</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/10/25/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
