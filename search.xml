@@ -3164,6 +3164,7 @@ w=m(a+x, b+y)^{*} e^{-\frac{\left(x^{\prime}\right)^{2}+\left(y^{\prime}\right)^
 <li>三者皆使用连续内存，且array和vector的底层由自建数组实现</li>
 <li>都可以用下标访问</li>
 </ul>
+<a id="more"></a>
 <h2 id="不同点"><a href="#不同点" class="headerlink" title="不同点"></a>不同点</h2><ol>
 <li>vector属于变长容器，即可以根据数据的插入删除重新构建容器容量；但array和数组属于定长容器。</li>
 <li>vector提供了可以动态插入和删除元素的机制，而array和数组则无法做到，或者说array和数组需要完成该功能则需要自己实现完成。</li>
