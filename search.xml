@@ -3168,7 +3168,7 @@ w=m(a+x, b+y)^{*} e^{-\frac{\left(x^{\prime}\right)^{2}+\left(y^{\prime}\right)^
 <h2 id="不同点"><a href="#不同点" class="headerlink" title="不同点"></a>不同点</h2><ol>
 <li>vector属于变长容器，即可以根据数据的插入删除重新构建容器容量；但array和数组属于定长容器。</li>
 <li>vector提供了可以动态插入和删除元素的机制，而array和数组则无法做到，或者说array和数组需要完成该功能则需要自己实现完成。</li>
-<li>由于vector的动态内存变化的机制，在插入和删除时，需要考虑迭代的是否失效的问题。</li>
+<li>由于vector的动态内存变化的机制，<strong>在插入和删除时，需要考虑迭代的是否失效的问题</strong>，vector容器增长时，不是在原有内存空间中添加，而是重新申请+分配内存。</li>
 <li>vector和array提供了更好的数据访问机制，即可以使用front和back以及at访问方式，使得访问更加安全。而数组只能通过下标访问，在程序的设计过程中，更容易引发访问错误。</li>
 <li>vector和array提供了更好的遍历机制，有正向迭代器和反向迭代器两种</li>
 <li>vector和array提供了size和判空的获取机制，而数组只能通过遍历或者通过额外的变量记录数组的size。</li>
@@ -3215,6 +3215,10 @@ w=m(a+x, b+y)^{*} e^{-\frac{\left(x^{\prime}\right)^{2}+\left(y^{\prime}\right)^
 <h3 id="初始化-1"><a href="#初始化-1" class="headerlink" title="初始化"></a>初始化</h3><ul>
 <li>构造函数<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="built_in">vector</span>():创建一个空<span class="built_in">vector</span></span><br><span class="line"><span class="built_in">vector</span>(<span class="keyword">int</span> nSize):创建一个<span class="built_in">vector</span>,元素个数为nSize</span><br><span class="line"><span class="built_in">vector</span>(<span class="keyword">int</span> nSize,<span class="keyword">const</span> t&amp; t):创建一个<span class="built_in">vector</span>，元素个数为nSize,且值均为t</span><br><span class="line"><span class="built_in">vector</span>(<span class="keyword">const</span> <span class="built_in">vector</span>&amp;):复制构造函数</span><br><span class="line"><span class="built_in">vector</span>(begin,end):复制[begin,end)区间内另一个数组的元素到<span class="built_in">vector</span>中</span><br></pre></td></tr></table></figure>
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; first;                                <span class="comment">// empty vector of ints</span></span><br><span class="line"><span class="function"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">second</span> <span class="params">(<span class="number">4</span>,<span class="number">100</span>)</span></span>;                       <span class="comment">// four ints with value 100</span></span><br><span class="line"><span class="function"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">third</span> <span class="params">(second.begin(),second.end())</span></span>;  <span class="comment">// iterating through second</span></span><br><span class="line"><span class="function"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">fourth</span> <span class="params">(third)</span></span>;                       <span class="comment">// a copy of third</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// the iterator constructor can also be used to construct from arrays:</span></span><br><span class="line"><span class="keyword">int</span> myints[] = &#123;<span class="number">16</span>,<span class="number">2</span>,<span class="number">77</span>,<span class="number">29</span>&#125;;</span><br><span class="line"><span class="function"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">fifth</span> <span class="params">(myints, myints + <span class="keyword">sizeof</span>(myints) / <span class="keyword">sizeof</span>(<span class="keyword">int</span>) )</span></span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>二维vector若要使用A[i].push_back(3)等方式初始化，则应事先定义好第一维的大小，例如<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">ans</span><span class="params">(<span class="number">5</span>)</span></span>;</span><br><span class="line">ans[<span class="number">3</span>].push_back(<span class="number">3</span>);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
 </li>
 </ul>
 <h3 id="增加"><a href="#增加" class="headerlink" title="增加"></a>增加</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">void push_back(const T&amp; x):向量尾部增加一个元素X</span><br><span class="line">iterator insert(iterator it,const T&amp; x):向量中迭代器指向元素前增加一个元素x</span><br><span class="line">iterator insert(iterator it,int n,const T&amp; x):向量中迭代器指向元素前增加n个相同的元素x</span><br><span class="line">iterator insert(iterator it,const_iterator first,const_iterator last):向量中迭代器指向元素前插入另一个相同类型向量的[first,last)间的数据</span><br></pre></td></tr></table></figure>
@@ -3294,6 +3298,54 @@ w=m(a+x, b+y)^{*} e^{-\frac{\left(x^{\prime}\right)^{2}+\left(y^{\prime}\right)^
       </categories>
       <tags>
         <tag>C++</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CV-目标检测综述</title>
+    <url>/2020/11/06/CV-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BB%BC%E8%BF%B0/</url>
+    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
+
+<h2 id="目标检测"><a href="#目标检测" class="headerlink" title="目标检测"></a>目标检测</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><ul>
+<li>图像识别+定位</li>
+<li>识别：分类问题，准确率</li>
+<li>定位：分类/回归问题，找到一个框/4个坐标，IOU</li>
+</ul>
+<h2 id="传统目标检测"><a href="#传统目标检测" class="headerlink" title="传统目标检测"></a>传统目标检测</h2><h3 id="用回归做定位问题"><a href="#用回归做定位问题" class="headerlink" title="用回归做定位问题"></a>用回归做定位问题</h3><ul>
+<li>训练一个cnn网络，在最后一个卷积层后分两个head，一个head做分类，另一个回归</li>
+<li>先fine tuning分类任务，再fine tuning回归</li>
+<li>缺点：回归问题，很难做</li>
+</ul>
+<h3 id="用分类做定位问题"><a href="#用分类做定位问题" class="headerlink" title="用分类做定位问题"></a>用分类做定位问题</h3><ul>
+<li>滑动窗口（选择不同位置不同大小的区域），对其定位，对每个框内的图像做分类</li>
+<li>缺点：窗口冗余、复杂度高、多物体多分类时复杂度更高</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>DL</tag>
+        <tag>CV</tag>
+        <tag>ML</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>书摘</title>
+    <url>/2020/11/06/%E4%B9%A6%E6%91%98%EF%BC%8820201106%E8%B5%B7%EF%BC%89/</url>
+    <content><![CDATA[<h2 id="我们内心的冲突——Karen-Horney"><a href="#我们内心的冲突——Karen-Horney" class="headerlink" title="我们内心的冲突——Karen Horney"></a>我们内心的冲突——Karen Horney</h2><blockquote>
+<p>只要我们活着，所有人都有能力改变自己，甚至是从根本上改变自己</p>
+</blockquote>
+<ul>
+<li>强调冲突可以被解决</li>
+<li><strong>有意识</strong>地体验冲突、面对冲突并寻求解决方法，能够帮助我们获得更多的内心自由和更大的力量</li>
+<li>面对童年的冲突，不恰当的培养方式会发展出三类人：亲近人、对抗人、回避人</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Others</category>
+      </categories>
+      <tags>
+        <tag>Psychology</tag>
       </tags>
   </entry>
 </search>

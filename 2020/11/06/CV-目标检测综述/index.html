@@ -23,22 +23,23 @@
     var CONFIG = {"hostname":"chenzk1.github.io","root":"/","scheme":"Gemini","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 
-  <meta name="description" content="推荐系统 RecSys -The ACM Conference Series on Recommender Systems.">
+  <meta name="description" content="目标检测定义 图像识别+定位 识别：分类问题，准确率 定位：分类&#x2F;回归问题，找到一个框&#x2F;4个坐标，IOU  传统目标检测用回归做定位问题 训练一个cnn网络，在最后一个卷积层后分两个head，一个head做分类，另一个回归 先fine tuning分类任务，再fine tuning回归 缺点：回归问题，很难做  用分类做定位问题 滑动窗口（选择不同位置不同大小的区域），对其定位，对每个框内的图">
 <meta property="og:type" content="article">
-<meta property="og:title" content="学习资料-会议&amp;期刊">
-<meta property="og:url" content="https://chenzk1.github.io/2020/10/26/%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99-%E4%BC%9A%E8%AE%AE&%E6%9C%9F%E5%88%8A/index.html">
+<meta property="og:title" content="CV-目标检测综述">
+<meta property="og:url" content="https://chenzk1.github.io/2020/11/06/CV-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BB%BC%E8%BF%B0/index.html">
 <meta property="og:site_name" content="Kayden&#39;s Blog">
-<meta property="og:description" content="推荐系统 RecSys -The ACM Conference Series on Recommender Systems.">
+<meta property="og:description" content="目标检测定义 图像识别+定位 识别：分类问题，准确率 定位：分类&#x2F;回归问题，找到一个框&#x2F;4个坐标，IOU  传统目标检测用回归做定位问题 训练一个cnn网络，在最后一个卷积层后分两个head，一个head做分类，另一个回归 先fine tuning分类任务，再fine tuning回归 缺点：回归问题，很难做  用分类做定位问题 滑动窗口（选择不同位置不同大小的区域），对其定位，对每个框内的图">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2020-10-26T12:49:24.882Z">
-<meta property="article:modified_time" content="2020-10-28T10:41:59.548Z">
+<meta property="article:published_time" content="2020-11-06T09:08:36.949Z">
+<meta property="article:modified_time" content="2020-11-06T09:08:42.881Z">
 <meta property="article:author" content="Kayden">
+<meta property="article:tag" content="DL">
+<meta property="article:tag" content="CV">
 <meta property="article:tag" content="ML">
-<meta property="article:tag" content="Resource">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://chenzk1.github.io/2020/10/26/%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99-%E4%BC%9A%E8%AE%AE&%E6%9C%9F%E5%88%8A/">
+<link rel="canonical" href="https://chenzk1.github.io/2020/11/06/CV-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BB%BC%E8%BF%B0/">
 
 
 <script class="page-configurations">
@@ -51,7 +52,7 @@
   };
 </script>
 
-  <title>学习资料-会议&期刊 | Kayden's Blog</title>
+  <title>CV-目标检测综述 | Kayden's Blog</title>
   
 
 
@@ -207,7 +208,7 @@
 
       <!--noindex-->
       <section class="post-toc-wrap sidebar-panel">
-          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F"><span class="nav-number">1.</span> <span class="nav-text">推荐系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E6%A3%80%E7%B4%A2"><span class="nav-number">2.</span> <span class="nav-text">信息检索</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98"><span class="nav-number">3.</span> <span class="nav-text">数据挖掘</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0"><span class="nav-number">4.</span> <span class="nav-text">机器学习</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AI"><span class="nav-number">5.</span> <span class="nav-text">AI</span></a></li></ol></div>
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B"><span class="nav-number">1.</span> <span class="nav-text">目标检测</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89"><span class="nav-number">1.1.</span> <span class="nav-text">定义</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%A0%E7%BB%9F%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B"><span class="nav-number">2.</span> <span class="nav-text">传统目标检测</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E5%9B%9E%E5%BD%92%E5%81%9A%E5%AE%9A%E4%BD%8D%E9%97%AE%E9%A2%98"><span class="nav-number">2.1.</span> <span class="nav-text">用回归做定位问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E5%88%86%E7%B1%BB%E5%81%9A%E5%AE%9A%E4%BD%8D%E9%97%AE%E9%A2%98"><span class="nav-number">2.2.</span> <span class="nav-text">用分类做定位问题</span></a></li></ol></li></ol></div>
       </section>
       <!--/noindex-->
 
@@ -293,7 +294,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/10/26/%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99-%E4%BC%9A%E8%AE%AE&%E6%9C%9F%E5%88%8A/">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2020/11/06/CV-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BB%BC%E8%BF%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -306,7 +307,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          学习资料-会议&期刊
+          CV-目标检测综述
         </h1>
 
         <div class="post-meta-container">
@@ -316,16 +317,10 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
+      
 
-      <time title="Created: 2020-10-26 20:49:24" itemprop="dateCreated datePublished" datetime="2020-10-26T20:49:24+08:00">2020-10-26</time>
+      <time title="Created: 2020-11-06 17:08:36 / Modified: 17:08:42" itemprop="dateCreated datePublished" datetime="2020-11-06T17:08:36+08:00">2020-11-06</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2020-10-28 18:41:59" itemprop="dateModified" datetime="2020-10-28T18:41:59+08:00">2020-10-28</time>
-      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -348,29 +343,19 @@
     <div class="post-body" itemprop="articleBody">
         <meta name="referrer" content="no-referrer"/>
 
-<h2 id="推荐系统"><a href="#推荐系统" class="headerlink" title="推荐系统"></a>推荐系统</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://recsys.acm.org/">RecSys</a> -The ACM Conference Series on Recommender Systems.</li>
+<h2 id="目标检测"><a href="#目标检测" class="headerlink" title="目标检测"></a>目标检测</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><ul>
+<li>图像识别+定位</li>
+<li>识别：分类问题，准确率</li>
+<li>定位：分类/回归问题，找到一个框/4个坐标，IOU</li>
 </ul>
-<a id="more"></a>
-<h2 id="信息检索"><a href="#信息检索" class="headerlink" title="信息检索"></a>信息检索</h2><ul>
-<li><a target="_blank" rel="noopener" href="http://sigir.org/">SIGIR</a>- The ACM International Conference on Research and Development in Information Retrieval</li>
+<h2 id="传统目标检测"><a href="#传统目标检测" class="headerlink" title="传统目标检测"></a>传统目标检测</h2><h3 id="用回归做定位问题"><a href="#用回归做定位问题" class="headerlink" title="用回归做定位问题"></a>用回归做定位问题</h3><ul>
+<li>训练一个cnn网络，在最后一个卷积层后分两个head，一个head做分类，另一个回归</li>
+<li>先fine tuning分类任务，再fine tuning回归</li>
+<li>缺点：回归问题，很难做</li>
 </ul>
-<h2 id="数据挖掘"><a href="#数据挖掘" class="headerlink" title="数据挖掘"></a>数据挖掘</h2><ul>
-<li><a target="_blank" rel="noopener" href="http://www.kdd.org/">KDD</a> - The ACM SIGKDD Conference on Knowledge Discovery and Data Mining.</li>
-<li><a target="_blank" rel="noopener" href="http://www.wsdm-conference.org/">WSDM</a> - The International Conference on Web Search and Data Mining.</li>
-<li><a target="_blank" rel="noopener" href="http://cs.uvm.edu/~icdm/">ICDM</a> - The IEEE International Conference on Data Mining.</li>
-<li><a target="_blank" rel="noopener" href="http://www.siam.org/meetings/sdm19/">SDM</a> -The SIAM International Conference on Data Mining.</li>
-<li><a target="_blank" rel="noopener" href="https://ecmlpkdd2020.net/">ECML-PKDD</a> - The European Conference on Machine Learning and Principles and Practice of Knowledge Discovery in Databases</li>
-</ul>
-<h2 id="机器学习"><a href="#机器学习" class="headerlink" title="机器学习"></a>机器学习</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://icml.cc/">ICML</a> - The International Conference on Machine Learning.</li>
-<li><a target="_blank" rel="noopener" href="https://nips.cc/">NIPS</a> - The Conference on Neural Information Processing Systems</li>
-</ul>
-<h2 id="AI"><a href="#AI" class="headerlink" title="AI"></a>AI</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://aaai.org/Conferences/AAAI-18/">AAAI</a> - The National Conference of the American Association for Artificial Intelligence.</li>
-<li><a target="_blank" rel="noopener" href="http://www.ijcai.org/">IJCAI</a> - The International Joint Conference on Artificial Intelligence.</li>
-<li><a target="_blank" rel="noopener" href="http://ecai2020.eu/">ECAI</a> -European Conference on Artificial Intelligence</li>
-<li><a target="_blank" rel="noopener" href="http://www.auai.org/uai2020/">UAI</a> - The Conference on Uncertainty in Artificial Intelligence</li>
+<h3 id="用分类做定位问题"><a href="#用分类做定位问题" class="headerlink" title="用分类做定位问题"></a>用分类做定位问题</h3><ul>
+<li>滑动窗口（选择不同位置不同大小的区域），对其定位，对每个框内的图像做分类</li>
+<li>缺点：窗口冗余、复杂度高、多物体多分类时复杂度更高</li>
 </ul>
 
     </div>
@@ -381,22 +366,20 @@
 
     <footer class="post-footer">
           <div class="post-tags">
+              <a href="/tags/DL/" rel="tag"># DL</a>
+              <a href="/tags/CV/" rel="tag"># CV</a>
               <a href="/tags/ML/" rel="tag"># ML</a>
-              <a href="/tags/Resource/" rel="tag"># Resource</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2020/10/26/ML-metrics/" rel="prev" title="ML-Metrics">
-                  <i class="fa fa-chevron-left"></i> ML-Metrics
+                <a href="/2020/11/06/%E4%B9%A6%E6%91%98%EF%BC%8820201106%E8%B5%B7%EF%BC%89/" rel="prev" title="书摘">
+                  <i class="fa fa-chevron-left"></i> 书摘
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2020/10/27/CV-SIFT/" rel="next" title="CV-SIFT">
-                  CV-SIFT <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
