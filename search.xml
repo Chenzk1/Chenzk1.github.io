@@ -3330,22 +3330,42 @@ w=m(a+x, b+y)^{*} e^{-\frac{\left(x^{\prime}\right)^{2}+\left(y^{\prime}\right)^
       </tags>
   </entry>
   <entry>
-    <title>书摘</title>
-    <url>/2020/11/06/%E4%B9%A6%E6%91%98%EF%BC%8820201106%E8%B5%B7%EF%BC%89/</url>
-    <content><![CDATA[<h2 id="我们内心的冲突——Karen-Horney"><a href="#我们内心的冲突——Karen-Horney" class="headerlink" title="我们内心的冲突——Karen Horney"></a>我们内心的冲突——Karen Horney</h2><blockquote>
-<p>只要我们活着，所有人都有能力改变自己，甚至是从根本上改变自己</p>
-</blockquote>
-<ul>
-<li>强调冲突可以被解决</li>
-<li><strong>有意识</strong>地体验冲突、面对冲突并寻求解决方法，能够帮助我们获得更多的内心自由和更大的力量</li>
-<li>面对童年的冲突，不恰当的培养方式会发展出三类人：亲近人、对抗人、回避人</li>
+    <title>自学CS路线、资源推荐</title>
+    <url>/2021/01/18/CS%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF/</url>
+    <content><![CDATA[<ul>
+<li><a href="https://conanhujinming.github.io/post/how_to_learn_cs/">转载自胡神的“自学CS路线、资源推荐”</a></li>
 </ul>
 ]]></content>
       <categories>
-        <category>Others</category>
+        <category>Learning</category>
       </categories>
       <tags>
-        <tag>Psychology</tag>
+        <tag>资源</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java学习资源</title>
+    <url>/2021/01/18/Java%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%BA%90/</url>
+    <content><![CDATA[<h2 id="书籍"><a href="#书籍" class="headerlink" title="书籍"></a>书籍</h2><ul>
+<li><a href="https://github.com/apachecn/thinking-in-java-zh">Java编程思想</a></li>
+<li><a href="https://github.com/Chenzk1/PrivateNotes/blob/master/books/Head%20First%20Java(%E7%AC%AC2%E7%89%88">Head First Java</a>.pdf)</li>
+<li><a href="https://github.com/Chenzk1/PrivateNotes/blob/master/books/Java%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%20%E5%8D%B71%20%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%20%E5%8E%9F%E4%B9%A6%E7%AC%AC9%E7%89%88%20%E5%AE%8C%E6%95%B4%E4%B8%AD%E6%96%87%E7%89%88%20.pdf">Java核心技术卷1</a></li>
+</ul>
+<h2 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h2><ul>
+<li><a href="https://www.liaoxuefeng.com/wiki/1252599548343744">廖雪峰的Java教程</a></li>
+</ul>
+<h2 id="博客"><a href="#博客" class="headerlink" title="博客"></a>博客</h2><ul>
+<li><a href="https://segmentfault.com/a/1190000014933213">Java学习的四个阶段</a></li>
+<li><a href="https://juejin.cn/post/6844903985170612238">可能是最适合你的 Java 学习路线和方法</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/115890802">2020年最新Java学习路线图</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>资源</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
 </search>
