@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/mylogo-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/mylogo-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/mylogo-16x16-next.png">
+  <link rel="mask-icon" href="/images/mylogo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.0/css/all.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"chenzk1.github.io","root":"/","scheme":"Gemini","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+
+  <meta name="description" content="[TOC] 1. 简单介绍随机森林 多次随机取样，多次随机取属性，选取最优分割点，构建多个(CART)分类器，投票表决或简单平均 算法流程： 输入为样本集$D&#x3D;{(x，y_1)，(x_2，y_2) \dots (x_m，y_m)}$，弱分类器迭代次数$T$。 输出为最终的强分类器$f(x)$ 对于$t&#x3D;1，2 \dots T$ 对训练集进行第$t$次随机采样，共采集$m$次，得到包含$m$个样本的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习面试题-Random Forest">
+<meta property="og:url" content="https://chenzk1.github.io/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/index.html">
+<meta property="og:site_name" content="Kayden&#39;s Blog">
+<meta property="og:description" content="[TOC] 1. 简单介绍随机森林 多次随机取样，多次随机取属性，选取最优分割点，构建多个(CART)分类器，投票表决或简单平均 算法流程： 输入为样本集$D&#x3D;{(x，y_1)，(x_2，y_2) \dots (x_m，y_m)}$，弱分类器迭代次数$T$。 输出为最终的强分类器$f(x)$ 对于$t&#x3D;1，2 \dots T$ 对训练集进行第$t$次随机采样，共采集$m$次，得到包含$m$个样本的">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-12-09T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-12-11T09:40:52.205Z">
+<meta property="article:author" content="Kayden">
+<meta property="article:tag" content="ML">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://chenzk1.github.io/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>机器学习面试题-Random Forest | Kayden's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Kayden's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Mamba forever.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97"><span class="nav-number">1.</span> <span class="nav-text">1. 简单介绍随机森林</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97%E7%9A%84%E9%9A%8F%E6%9C%BA%E6%80%A7%E4%BD%93%E7%8E%B0%E5%9C%A8%E5%93%AA%E9%87%8C%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">2. 随机森林的随机性体现在哪里？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E5%AE%B9%E6%98%93%E8%BF%87%E6%8B%9F%E5%90%88%EF%BC%9F"><span class="nav-number">3.</span> <span class="nav-text">3. 随机森林为什么不容易过拟合？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E7%94%A8%E5%85%A8%E6%A0%B7%E6%9C%AC%E8%AE%AD%E7%BB%83%EF%BC%9F"><span class="nav-number">4.</span> <span class="nav-text">4. 为什么不用全样本训练？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E9%9A%8F%E6%9C%BA%E7%89%B9%E5%BE%81%EF%BC%9F"><span class="nav-number">5.</span> <span class="nav-text">5. 为什么要随机特征？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-RF%E4%B8%8E-GBDT-%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="nav-number">6.</span> <span class="nav-text">6. RF与 GBDT 的区别？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-RF%E4%B8%BA%E4%BB%80%E4%B9%88%E6%AF%94Bagging%E6%95%88%E7%8E%87%E9%AB%98%EF%BC%9F"><span class="nav-number">7.</span> <span class="nav-text">7. RF为什么比Bagging效率高？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-%E4%BD%A0%E5%B7%B2%E7%BB%8F%E5%BB%BA%E4%BA%86%E4%B8%80%E4%B8%AA%E6%9C%8910000%E6%A3%B5%E6%A0%91%E7%9A%84%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97%E6%A8%A1%E5%9E%8B%E3%80%82%E5%9C%A8%E5%BE%97%E5%88%B00-001%E7%9A%84%E8%AE%AD%E7%BB%83%E8%AF%AF%E5%B7%AE%E5%90%8E%EF%BC%8C%E4%BD%A0%E9%9D%9E%E5%B8%B8%E9%AB%98%E5%85%B4%E3%80%82%E4%BD%86%E6%98%AF%EF%BC%8C%E9%AA%8C%E8%AF%81%E9%94%99%E8%AF%AF%E6%98%AF34-23%E3%80%82%E5%88%B0%E5%BA%95%E6%98%AF%E6%80%8E%E4%B9%88%E5%9B%9E%E4%BA%8B%EF%BC%9F%E4%BD%A0%E8%BF%98%E6%B2%A1%E6%9C%89%E8%AE%AD%E7%BB%83%E5%A5%BD%E4%BD%A0%E7%9A%84%E6%A8%A1%E5%9E%8B%E5%90%97%EF%BC%9F"><span class="nav-number">8.</span> <span class="nav-text">8. 你已经建了一个有10000棵树的随机森林模型。在得到0.001的训练误差后，你非常高兴。但是，验证错误是34.23。到底是怎么回事？你还没有训练好你的模型吗？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97%E5%AF%B9%E7%89%B9%E5%BE%81%E9%87%8D%E8%A6%81%E6%80%A7%E8%BF%9B%E8%A1%8C%E8%AF%84%E4%BC%B0%EF%BC%9F"><span class="nav-number">9.</span> <span class="nav-text">9. 如何使用随机森林对特征重要性进行评估？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97%E7%AE%97%E6%B3%95%E8%AE%AD%E7%BB%83%E6%97%B6%E4%B8%BB%E8%A6%81%E9%9C%80%E8%A6%81%E8%B0%83%E6%95%B4%E5%93%AA%E4%BA%9B%E5%8F%82%E6%95%B0%EF%BC%9F"><span class="nav-number">10.</span> <span class="nav-text">10. 随机森林算法训练时主要需要调整哪些参数？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#11-%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97%E7%9A%84%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-number">11.</span> <span class="nav-text">11. 随机森林的优缺点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#12-%E7%AE%80%E8%BF%B0%E4%B8%80%E4%B8%8BAdaboost%E5%8E%9F%E7%90%86"><span class="nav-number">12.</span> <span class="nav-text">12. 简述一下Adaboost原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#13-AdaBoost%E7%9A%84%E4%BC%98%E7%82%B9%E5%92%8C%E7%BC%BA%E7%82%B9"><span class="nav-number">13.</span> <span class="nav-text">13. AdaBoost的优点和缺点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#14-Adaboost%E5%AF%B9%E5%99%AA%E5%A3%B0%E6%95%8F%E6%84%9F%E5%90%97%EF%BC%9F"><span class="nav-number">14.</span> <span class="nav-text">14. Adaboost对噪声敏感吗？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#15-Adaboost%E5%92%8C%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97%E7%AE%97%E6%B3%95%E7%9A%84%E5%BC%82%E5%90%8C%E7%82%B9"><span class="nav-number">15.</span> <span class="nav-text">15. Adaboost和随机森林算法的异同点</span></a></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kayden</p>
+  <div class="site-description" itemprop="description">Kayden's Blog</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Chenzk1" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Chenzk1" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:chenzk666@gmail.com" title="E-Mail → mailto:chenzk666@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://andrewsher.github.io/" title="https:&#x2F;&#x2F;andrewsher.github.io&#x2F;" rel="noopener" target="_blank">Andrewsher's blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://shorey.tech/" title="http:&#x2F;&#x2F;shorey.tech&#x2F;" rel="noopener" target="_blank">Shorey's blog</a>
+        </li>
+    </ul>
+  </div>
+
+      </section>
+        <div class="back-to-top animated">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Kayden">
+      <meta itemprop="description" content="Kayden's Blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kayden's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          机器学习面试题-Random Forest
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-12-10 00:00:00" itemprop="dateCreated datePublished" datetime="2021-12-10T00:00:00+08:00">2021-12-10</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-12-11 17:40:52" itemprop="dateModified" datetime="2021-12-11T17:40:52+08:00">2021-12-11</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>[TOC]</p>
+<h2 id="1-简单介绍随机森林"><a href="#1-简单介绍随机森林" class="headerlink" title="1. 简单介绍随机森林"></a>1. 简单介绍随机森林</h2><ul>
+<li><strong>多次随机取样，多次随机取属性，选取最优分割点，构建多个(CART)分类器，投票表决或简单平均</strong></li>
+<li><strong>算法流程：</strong><ul>
+<li>输入为样本集$D={(x，y_1)，(x_2，y_2) \dots (x_m，y_m)}$，弱分类器迭代次数$T$。</li>
+<li>输出为最终的强分类器$f(x)$</li>
+<li>对于$t=1，2 \dots T$<ul>
+<li>对训练集进行第$t$次随机采样，共采集$m$次，得到包含$m$个样本的采样集Dt</li>
+<li>用采样集$D_t$训练第$t$个决策树模型$G_t(x)$，在训练决策树模型的节点的时候，在节点上所有的样本特征中选择一部分样本特征，在这些随机选择的部分样本特征中选择一个最优的特征来做决策树的左右子树划分</li>
+</ul>
+</li>
+<li>如果是分类算法预测，则$T$个弱学习器投出最多票数的类别或者类别之一为最终类别。如果是回归算法，$T$个弱学习器得到的回归结果进行算术平均得到的值为最终的模型输出。</li>
+</ul>
+</li>
+</ul>
+<a id="more"></a>
+<h2 id="2-随机森林的随机性体现在哪里？"><a href="#2-随机森林的随机性体现在哪里？" class="headerlink" title="2. 随机森林的随机性体现在哪里？"></a>2. 随机森林的随机性体现在哪里？</h2><p><strong>多次有放回的随机取样，多次随机取属性</strong></p>
+<h2 id="3-随机森林为什么不容易过拟合？"><a href="#3-随机森林为什么不容易过拟合？" class="headerlink" title="3. 随机森林为什么不容易过拟合？"></a>3. 随机森林为什么不容易过拟合？</h2><ul>
+<li><p>随机森林中的每一颗树都是过拟合的，拟合到非常小的细节上</p>
+</li>
+<li><p>随机森林通过引入随机性，使每一颗树拟合的细节不同</p>
+</li>
+<li><p>所有树组合在一起，过拟合的部分就会自动被消除掉。</p>
+</li>
+</ul>
+<p>因此随机森林出现过拟合的概率相对低。</p>
+<h2 id="4-为什么不用全样本训练？"><a href="#4-为什么不用全样本训练？" class="headerlink" title="4. 为什么不用全样本训练？"></a>4. 为什么不用全样本训练？</h2><p>全样本训练忽视了局部样本的规律（各个决策树趋于相同），对于模型的泛化能力是有害的，使随机森<br>林算法在样本层面失去了随机性。</p>
+<h2 id="5-为什么要随机特征？"><a href="#5-为什么要随机特征？" class="headerlink" title="5. 为什么要随机特征？"></a>5. 为什么要随机特征？</h2><p>随机特征保证基分类器的多样性（差异性），最终集成的泛化性能可通过个体学习器之间的差异度而进<br>一步提升，从而提高泛化能力和抗噪能力。</p>
+<h2 id="6-RF与-GBDT-的区别？"><a href="#6-RF与-GBDT-的区别？" class="headerlink" title="6. RF与 GBDT 的区别？"></a>6. RF与 GBDT 的区别？</h2><ul>
+<li>随机森林将多棵决策树的结果进行投票后得到最终的结果，对不同的树的训练结果也没有做进一步的优化提升，将其称为<strong>Bagging算法。</strong></li>
+<li>GBDT用到的是<strong>Boosting算法</strong>，在迭代的每一步构建弱学习器弥补原有模型的不足。GBDT中的Gradient Boost就是通过每次迭代的时候构建一个沿梯度下降最快的方向的学习器。并且通过设置不同的损失函数可以处理各类学习任务(多分类、回归等)。</li>
+</ul>
+<h2 id="7-RF为什么比Bagging效率高？"><a href="#7-RF为什么比Bagging效率高？" class="headerlink" title="7. RF为什么比Bagging效率高？"></a>7. RF为什么比Bagging效率高？</h2><p>Bagging无随机特征，使得训练决策树时效率更低</p>
+<h2 id="8-你已经建了一个有10000棵树的随机森林模型。在得到0-001的训练误差后，你非常高兴。但是，验证错误是34-23。到底是怎么回事？你还没有训练好你的模型吗？"><a href="#8-你已经建了一个有10000棵树的随机森林模型。在得到0-001的训练误差后，你非常高兴。但是，验证错误是34-23。到底是怎么回事？你还没有训练好你的模型吗？" class="headerlink" title="8. 你已经建了一个有10000棵树的随机森林模型。在得到0.001的训练误差后，你非常高兴。但是，验证错误是34.23。到底是怎么回事？你还没有训练好你的模型吗？"></a>8. 你已经建了一个有10000棵树的随机森林模型。在得到0.001的训练误差后，你非常高兴。但是，验证错误是34.23。到底是怎么回事？你还没有训练好你的模型吗？</h2><p>训练误差为0：<strong>模型过度拟合</strong></p>
+<p>验证错误为34.23：该分类器用于<strong>未看见的样本</strong>上时，找不到已有的模式</p>
+<p>因此，为了避免这些情况，要用交叉验证来调整树的数量。</p>
+<h2 id="9-如何使用随机森林对特征重要性进行评估？"><a href="#9-如何使用随机森林对特征重要性进行评估？" class="headerlink" title="9. 如何使用随机森林对特征重要性进行评估？"></a>9. 如何使用随机森林对特征重要性进行评估？</h2><p><strong>袋外数据(OOB)</strong>： 大约有1/3的训练实例没有参与第k棵树的生成，它们称为第$k$棵树的袋外数据样本。 </p>
+<p>在随机森林中某个特征$X$的重要性的计算方法如下：</p>
+<ul>
+<li>对于随机森林中的每一颗决策树，使用相应的OOB(袋外数据)来计算它的袋外数据误差，记为$errooB1$。</li>
+<li>随机地对袋外数据OOB所有样本的特征$X$加入噪声干扰(就可以随机的改变样本在特征X处的值)，再次计算它的袋外数据误差，记为$errooB2$。</li>
+<li>假设随机森林中有$N$棵树，那么对于特征$X$的重要性为$(errOOB2-errOOB1)/N)$，之所以可以用这个表达式来作为相应特征的重要性的度量值是因为：若给某个特征随机加入噪声之后，袋外的准确率大幅度降低，则说明这个特征对于样本的分类结果影响很大，也就是说它的重要程度比较高。</li>
+</ul>
+<h2 id="10-随机森林算法训练时主要需要调整哪些参数？"><a href="#10-随机森林算法训练时主要需要调整哪些参数？" class="headerlink" title="10. 随机森林算法训练时主要需要调整哪些参数？"></a><em>10. 随机森林算法训练时主要需要调整哪些参数？</em></h2><ul>
+<li><p><strong>n_estimators:</strong>随机森林建立子树的数量。<br>较多的子树一般可以让模型有更好的性能，但同时让你的代码变慢。需要选择最佳的随机森林子树数量</p>
+</li>
+<li><p><strong>max_features：</strong>随机森林允许单个决策树使用特征的最大数量。<br>增加max_features一般能提高模型的性能，因为在每个节点上，我们有更多的选择可以考虑。然而，这未必完全是对的，因为它降低了单个树的多样性，而这正是随机森林独特的优点。但是，可以肯定，你通过增加max_features会降低算法的速度。因此，你需要适当的平衡和选择最佳max_features。</p>
+</li>
+<li><p><strong>max_depth：</strong> 决策树最大深度</p>
+<p>默认决策树在建立子树的时候不会限制子树的深度</p>
+</li>
+<li><p><strong>max_leaf_nodes：</strong> 最大叶子节点数</p>
+<p>通过限制最大叶子节点数，可以防止过拟合，默认是”None”，即不限制最大的叶子节点数。如果加了限制，算法会建立在最大叶子节点数内最优的决策树。</p>
+</li>
+<li><p><strong>min_samples_split：</strong>内部节点再划分所需最小样本数<br>内部节点再划分所需最小样本数，如果某节点的样本数少于min_samples_split，则不会继续再尝试选择最优特征来进行划分。</p>
+</li>
+<li><p><strong>min_samples_leaf：</strong> 叶子节点最少样本</p>
+<p>这个值限制了叶子节点最少的样本数，如果某叶子节点数目小于样本数，则会和兄弟节点一起被剪枝。</p>
+</li>
+<li><p><strong>min_impurity_split：</strong> 节点划分最小不纯度<br>这个值限制了决策树的增长，如果某节点的不纯度（基于基尼系数，均方差）小于这个阈值，则该节点不再生成子节点。即为叶子节点。一般不推荐改动默认值1e-7。</p>
+</li>
+</ul>
+<h2 id="11-随机森林的优缺点"><a href="#11-随机森林的优缺点" class="headerlink" title="11. 随机森林的优缺点"></a>11. 随机森林的优缺点</h2><ul>
+<li>优点<ul>
+<li>训练可以高度并行化，对于大数据时代的大样本训练速度有优势。个人觉得这是的最主要的优点。</li>
+<li>由于可以随机选择决策树节点划分特征，这样在样本特征维度很高的时候，仍然能高效的训练模型。</li>
+<li>在训练后，可以给出各个特征对于输出的重要性</li>
+<li>由于采用了随机采样，训练出的模型的方差小，泛化能力强。</li>
+<li>相对于Boosting系列的Adaboost和GBDT， RF实现比较简单。</li>
+<li>对部分特征缺失不敏感。</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>在某些噪音比较大的样本集上，RF模型容易陷入过拟合。</li>
+<li>取值划分比较多的特征容易对RF的决策产生更大的影响，从而影响拟合的模型的效果。</li>
+</ul>
+</li>
+</ul>
+<h2 id="12-简述一下Adaboost原理"><a href="#12-简述一下Adaboost原理" class="headerlink" title="12. 简述一下Adaboost原理"></a>12. 简述一下Adaboost原理</h2><p>Adaboost算法利用同一种基分类器（弱分类器），<strong>基于分类器的错误率分配不同的权重参数，最后累加加权的预测结果</strong>作为输出。</p>
+<ul>
+<li>Adaboost算法流程：<ul>
+<li>样本赋予权重，得到第一个分类器。</li>
+<li>计算该分类器的错误率，根据错误率赋予分类器权重（注意这里是<strong>分类器的权重</strong>）。</li>
+<li>增加分错样本的权重，减小分对样本的权重（注意这里是<strong>样本的权重</strong>）。</li>
+<li>然后再用<strong>新的样本权重</strong>训练数据，得到新的分类器。</li>
+<li>多次迭代，直到分类器错误率为0或者整体弱分类器错误为0，或者到达迭代次数。</li>
+<li>将所有弱分类器的结果加权求和，得到一个较为准确的分类结果。错误率低的分类器获得更高的决定系数，从而在对数据进行预测时起关键作用。</li>
+</ul>
+</li>
+</ul>
+<h2 id="13-AdaBoost的优点和缺点"><a href="#13-AdaBoost的优点和缺点" class="headerlink" title="13. AdaBoost的优点和缺点"></a>13. AdaBoost的优点和缺点</h2><ul>
+<li>优点<ul>
+<li>Adaboost提供一种框架，在框架内可以使用各种方法构建子分类器。可以使用简单的弱分类器，不用对特征进行筛选，也不存在过拟合的现象。</li>
+<li>Adaboost算法不需要弱分类器的先验知识，最后得到的强分类器的分类精度依赖于所有弱分类器。无论是应用于人造数据还是真实数据，Adaboost都能显著的提高学习精度。</li>
+<li>Adaboost算法不需要预先知道弱分类器的错误率上限，且最后得到的强分类器的分类精度依赖于所有弱分类器的分类精度，可以深挖分类器的能力。</li>
+<li>Adaboost可以根据弱分类器的反馈，自适应地调整假定的错误率，执行的效率高。</li>
+<li>Adaboost对同一个训练样本集训练不同的弱分类器，按照一定的方法把这些弱分类器集合起来，构造一个分类能力很强的强分类器，即“三个臭皮匠赛过一个诸葛亮””。</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>在Adaboost训练过程中，Adaboost会使得难于分类样本的权值呈指数增长，训练将会过于偏向这类困难的样本，导致Adaboost算法易受噪声干扰。</li>
+<li>Adaboost依赖于弱分类器，而弱分类器的训练时间往往很长。</li>
+</ul>
+</li>
+</ul>
+<h2 id="14-Adaboost对噪声敏感吗？"><a href="#14-Adaboost对噪声敏感吗？" class="headerlink" title="14. Adaboost对噪声敏感吗？"></a>14. Adaboost对噪声敏感吗？</h2><p>在Adaboost训练过程中，Adaboost会使得难于分类样本的权值呈指数增长，训练将会过于偏向这类困难的样本，导致Adaboost算法易受噪声干扰。</p>
+<h2 id="15-Adaboost和随机森林算法的异同点"><a href="#15-Adaboost和随机森林算法的异同点" class="headerlink" title="15. Adaboost和随机森林算法的异同点"></a>15. Adaboost和随机森林算法的异同点</h2><p>随机森林和Adaboost算法都可以用来分类，它们都是优秀的基于决策树的组合算法。</p>
+<ul>
+<li>相同之处<ul>
+<li>二者都是Bootsrap自助法选取样本。</li>
+<li>二者都是要训练很多棵决策树。</li>
+</ul>
+</li>
+<li>不同之处<ul>
+<li>Adaboost是基于Bagging的算法，随机森林是基于Boosting的算法。</li>
+<li>Adaboost后面树的训练，其在变量抽样选取的时候，对于上一棵树分错的样本，抽中的概率会加大。</li>
+<li>随机森林在训练每一棵树的时候，随机挑选了部分特征作为拆分特征，而不是所有的特征都去作为拆分特征。</li>
+<li>在预测新数据时，Adaboost中所有的树加权投票来决定因变量的预测值，每棵树的权重和错误率有关；随机森林按照所有树中少数服从多数树的分类值来决定因变量的预测值（或者求取树预测的平均值）。</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ML/" rel="tag"># ML</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/" rel="prev" title="机器学习面试题-集成学习">
+                  <i class="fa fa-chevron-left"></i> 机器学习面试题-集成学习
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E8%B4%9D%E5%8F%B6%E6%96%AF/" rel="next" title="机器学习面试题-贝叶斯">
+                  机器学习面试题-贝叶斯 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Kayden</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+      <script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              const target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    const script = document.createElement('script');
+    script.src = '//cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js';
+    script.defer = true;
+    document.head.appendChild(script);
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.typesetClear();
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

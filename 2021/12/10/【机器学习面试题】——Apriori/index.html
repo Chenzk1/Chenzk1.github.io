@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/mylogo-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/mylogo-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/mylogo-16x16-next.png">
+  <link rel="mask-icon" href="/images/mylogo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.0/css/all.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"chenzk1.github.io","root":"/","scheme":"Gemini","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+
+  <meta name="description" content="[TOC] 协同过滤推荐有哪些类型 基于用户(user-based)的协同过滤 基于用户(user-based)的协同过滤主要考虑的是用户和用户之间的相似度，只要找出相似用户喜欢的物品，并预测目标用户对对应物品的评分，就可以找到评分最高的若干个物品推荐给用户。   基于项目(item-based)的协同过滤 基于项目(item-based)的协同过滤和基于用户的协同过滤类似，只不过这时我们转向">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习面试题-Apriori">
+<meta property="og:url" content="https://chenzk1.github.io/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94Apriori/index.html">
+<meta property="og:site_name" content="Kayden&#39;s Blog">
+<meta property="og:description" content="[TOC] 协同过滤推荐有哪些类型 基于用户(user-based)的协同过滤 基于用户(user-based)的协同过滤主要考虑的是用户和用户之间的相似度，只要找出相似用户喜欢的物品，并预测目标用户对对应物品的评分，就可以找到评分最高的若干个物品推荐给用户。   基于项目(item-based)的协同过滤 基于项目(item-based)的协同过滤和基于用户的协同过滤类似，只不过这时我们转向">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://images2015.cnblogs.com/blog/1042406/201701/1042406-20170117161036255-1753157633.png">
+<meta property="article:published_time" content="2021-12-09T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-12-11T09:40:52.209Z">
+<meta property="article:author" content="Kayden">
+<meta property="article:tag" content="ML">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://images2015.cnblogs.com/blog/1042406/201701/1042406-20170117161036255-1753157633.png">
+
+
+<link rel="canonical" href="https://chenzk1.github.io/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94Apriori/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>机器学习面试题-Apriori | Kayden's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Kayden's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Mamba forever.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%8F%E5%90%8C%E8%BF%87%E6%BB%A4%E6%8E%A8%E8%8D%90%E6%9C%89%E5%93%AA%E4%BA%9B%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.</span> <span class="nav-text">协同过滤推荐有哪些类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%8D%8F%E5%90%8C%E8%BF%87%E6%BB%A4"><span class="nav-number">2.</span> <span class="nav-text">基于模型的协同过滤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%91%E7%B9%81%E9%A1%B9%E9%9B%86%E7%9A%84%E8%AF%84%E4%BC%B0%E6%A0%87%E5%87%86"><span class="nav-number">3.</span> <span class="nav-text">频繁项集的评估标准</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8Aprior%E7%AE%97%E6%B3%95%E6%89%BE%E5%87%BA%E9%A2%91%E7%B9%81k%E9%A1%B9%E9%9B%86"><span class="nav-number">4.</span> <span class="nav-text">使用Aprior算法找出频繁k项集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8Aprior%E7%AE%97%E6%B3%95%E6%89%BE%E5%87%BA%E5%BC%BA%E5%85%B3%E8%81%94%E8%A7%84%E5%88%99"><span class="nav-number">5.</span> <span class="nav-text">使用Aprior算法找出强关联规则</span></a></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kayden</p>
+  <div class="site-description" itemprop="description">Kayden's Blog</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Chenzk1" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Chenzk1" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:chenzk666@gmail.com" title="E-Mail → mailto:chenzk666@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://andrewsher.github.io/" title="https:&#x2F;&#x2F;andrewsher.github.io&#x2F;" rel="noopener" target="_blank">Andrewsher's blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://shorey.tech/" title="http:&#x2F;&#x2F;shorey.tech&#x2F;" rel="noopener" target="_blank">Shorey's blog</a>
+        </li>
+    </ul>
+  </div>
+
+      </section>
+        <div class="back-to-top animated">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94Apriori/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Kayden">
+      <meta itemprop="description" content="Kayden's Blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kayden's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          机器学习面试题-Apriori
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-12-10 00:00:00" itemprop="dateCreated datePublished" datetime="2021-12-10T00:00:00+08:00">2021-12-10</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-12-11 17:40:52" itemprop="dateModified" datetime="2021-12-11T17:40:52+08:00">2021-12-11</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <meta name="referrer" content="no-referrer"/>
+
+<p>[TOC]</p>
+<h2 id="协同过滤推荐有哪些类型"><a href="#协同过滤推荐有哪些类型" class="headerlink" title="协同过滤推荐有哪些类型"></a>协同过滤推荐有哪些类型</h2><ul>
+<li><p>基于用户(user-based)的协同过滤</p>
+<p>基于用户(user-based)的协同过滤主要考虑的是用户和用户之间的相似度，只要找出相似用户喜欢的物品，并预测目标用户对对应物品的评分，就可以找到评分最高的若干个物品推荐给用户。 </p>
+</li>
+<li><p>基于项目(item-based)的协同过滤</p>
+<p>基于项目(item-based)的协同过滤和基于用户的协同过滤类似，只不过这时我们转向找到物品和物品之间的相似度，只有找到了目标用户对某些物品的评分，那么我们就可以对相似度高的类似物品进行预测，将评分最高的若干个相似物品推荐给用户 </p>
+</li>
+<li><p>基于模型(model based)的协同过滤 </p>
+<p>用机器学习的思想来建模解决，主流的方法可以分为：用关联算法，聚类算法，分类算法，回归算法，矩阵分解，神经网络,图模型以及隐语义模型来解决。</p>
+</li>
+</ul>
+<a id="more"></a>
+<h2 id="基于模型的协同过滤"><a href="#基于模型的协同过滤" class="headerlink" title="基于模型的协同过滤"></a>基于模型的协同过滤</h2><ul>
+<li><p>用关联算法做协同过滤</p>
+<p>做频繁集挖掘，找到满足支持度阈值的关联物品的频繁N项集或者序列。将频繁项集或序列里的其他物品按一定的评分准则推荐给用户，这个评分准则可以包括<strong>支持度</strong>，<strong>置信度</strong>和<strong>提升度</strong>等。 常用的关联推荐算法有<strong>Apriori</strong>，<strong>FP Tree</strong>和<strong>PrefixSpan</strong> </p>
+</li>
+<li><p>用聚类算法做协同过滤</p>
+<ul>
+<li><p>基于用户聚类，则可以将用户按照一定距离度量方式分成不同的目标人群，将<strong>同样目标人群评分高的物品推荐给目标用户</strong>。</p>
+</li>
+<li><p>基于物品聚类，则是<strong>将用户评分高物品的相似同类物品推荐给用户</strong>。常用的聚类推荐算法有<strong>K-Means</strong>, <strong>BIRCH</strong>, <strong>DBSCAN</strong>和<strong>谱聚类</strong></p>
+</li>
+</ul>
+</li>
+<li><p>用分类算法做协同过滤</p>
+<p>设置一份评分阈值，评分高于阈值的就是推荐，评分低于阈值就是不推荐，我们<strong>将问题变成了一个二分类问题</strong>。虽然分类问题的算法多如牛毛，但是目前使用最广泛的是逻辑回归。因为<strong>逻辑回归的解释性比较强</strong>，每个物品是否推荐我们都有一个明确的概率放在这，同时可以对数据的特征做工程化，得到调优的目的。常见的分类推荐算法有逻辑回归和朴素贝叶斯，两者的特点是解释性很强。</p>
+</li>
+<li><p>用回归算法做协同过滤</p>
+<p>评分可以是一个连续的值而不是离散的值，<strong>通过回归模型</strong>我们可以得到目标用户对某商品的<strong>预测打分</strong>。常用的回归推荐算法有Ridge回归，回归树和支持向量回归。</p>
+</li>
+<li><p>用矩阵分解做协同过滤</p>
+<p>用矩阵分解做协同过滤是目前使用也很广泛的一种方法。由于传统的奇异值分解SVD要求矩阵不能有缺失数据，必须是稠密的，而我们的用户物品评分矩阵是一个很典型的稀疏矩阵，直接使用传统的SVD到协同过滤是比较复杂的。 </p>
+</li>
+<li><p>用神经网络做协同过滤</p>
+<p>用神经网络乃至深度学习做协同过滤应该是以后的一个趋势。目前比较主流的用两层神经网络来做推荐算法的是限制玻尔兹曼机(RBM) </p>
+</li>
+<li><p>用隐语义模型做协同过滤</p>
+<p>隐语义模型主要是基于NLP的，涉及到<strong>对用户行为的语义分析来做评分推荐</strong>，主要方法有隐性语义分析LSA和隐含狄利克雷分布LDA，</p>
+</li>
+<li><p>用图模型做协同过滤</p>
+<p>用图模型做协同过滤，则将用户之间的相似度放到了一个图模型里面去考虑，常用的算法是SimRank系列算法和马尔科夫模型算法。</p>
+<h2 id="频繁项集的评估标准"><a href="#频繁项集的评估标准" class="headerlink" title="频繁项集的评估标准"></a>频繁项集的评估标准</h2></li>
+<li><p>支持度: </p>
+<ul>
+<li>支持度就是几个关联的数据在数据集中出现的次数占总数据集的比重。或者说几个数据关联出现的概率。 <script type="math/tex; mode=display">
+\text {Support} (X, Y)=P(X Y)=\frac{\text { number }(X Y)}{\text { num (AllSamples) }}</script></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>置信度:</p>
+<ul>
+<li>一个数据出现后，另一个数据出现的概率，或者说数据的条件概率。 <script type="math/tex; mode=display">
+\text {Confidence }(X \Leftarrow Y)=P(X | Y)=\frac{P(X Y)}{ P(Y)}</script></li>
+</ul>
+</li>
+<li><p>提升度 ：</p>
+<ul>
+<li>提升度表示含有Y的条件下，同时含有X的概率，与X总体发生的概率之比 <script type="math/tex; mode=display">
+\text {Lift }(X \Leftarrow Y)=\frac{P(X | Y)}{ P(X)} = \frac{\text { Confidence }(X \Leftarrow Y) }{ P(X)}</script></li>
+</ul>
+</li>
+<li><p>注意：</p>
+<ul>
+<li>支持度高的数据不一定构成频繁项集，但是支持度太低的数据肯定不构成频繁项集。 </li>
+<li>提升度体先了$X$和$Y$之间的关联关系, 提升度大于1则$X\Leftarrow Y$是有效的强关联规则， 提升度小于等于1则$X\Leftarrow Y$是无效的强关联规则 。一个特殊的情况，如果$X$和$Y$独立,则$\operatorname{Lift}(X \Leftarrow Y)=1$，因此$P(X | Y)=P(X)$</li>
+</ul>
+</li>
+</ul>
+<h2 id="使用Aprior算法找出频繁k项集"><a href="#使用Aprior算法找出频繁k项集" class="headerlink" title="使用Aprior算法找出频繁k项集"></a>使用Aprior算法找出频繁k项集</h2><p>输入：数据集合$D$，支持度阈值$\alpha$</p>
+<p>输出：最大的频繁$k$项集</p>
+<ul>
+<li><p>扫描整个数据集，得到所有出现过的数据，作为候选频繁1项集。$k=1$，频繁0项集为空集。</p>
+</li>
+<li><p>挖掘频繁$k$项集</p>
+<ul>
+<li>扫描数据计算候选频繁$k$项集的支持度</li>
+<li>去除候选频繁$k$项集中支持度低于阈值的数据集,得到频繁$k$项集。如果得到的频繁$k$项集为空，则直接返回频繁$k-1$项集的集合作为算法结果，算法结束。如果得到的频繁$k$项集只有一项，则直接返回频繁$k$项集的集合作为算法结果，算法结束。</li>
+<li>基于频繁$k$项集，连接生成候选频繁$k+1$项集。</li>
+</ul>
+</li>
+<li><p>令$k=k+1$，转入步骤挖掘频繁$k$项集。</p>
+</li>
+</ul>
+<p>从算法的步骤可以看出，Aprior算法每轮迭代都要扫描数据集，因此在数据集很大，数据种类很多的时候，算法效率很低。</p>
+<p>具体实现:</p>
+<p><img src="https://images2015.cnblogs.com/blog/1042406/201701/1042406-20170117161036255-1753157633.png" alt=""></p>
+<h2 id="使用Aprior算法找出强关联规则"><a href="#使用Aprior算法找出强关联规则" class="headerlink" title="使用Aprior算法找出强关联规则"></a>使用Aprior算法找出强关联规则</h2><ul>
+<li><p>强关联规则:</p>
+<ul>
+<li>如果规则$R$:$\Rightarrow $满足 :</li>
+</ul>
+<script type="math/tex; mode=display">
+\tag{1} { support }(X \Rightarrow Y) \geq \min {sup}</script><script type="math/tex; mode=display">
+\tag{2} confidence (X \Rightarrow Y) \geq \min conf</script><p>称关联规则$X\Rightarrow Y$为强关联规则,否则称关联规则$X\Rightarrow Y$为弱关联规则。在挖掘关联规则时,产生的关联规则要经过$\min sup$和$\min conf$的衡量筛选出来的强关联规则才能用商家的决策 </p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ML/" rel="tag"># ML</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94RNN+LSTM/" rel="prev" title="机器学习面试题-RNN&LSTM">
+                  <i class="fa fa-chevron-left"></i> 机器学习面试题-RNN&LSTM
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/12/10/tools/" rel="next" title="tools-vim&tmux">
+                  tools-vim&tmux <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Kayden</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+      <script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              const target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    const script = document.createElement('script');
+    script.src = '//cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js';
+    script.defer = true;
+    document.head.appendChild(script);
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.typesetClear();
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/mylogo-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/mylogo-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/mylogo-16x16-next.png">
+  <link rel="mask-icon" href="/images/mylogo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.0/css/all.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"chenzk1.github.io","root":"/","scheme":"Gemini","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+
+  <meta name="description" content="[TOC] 1. 什么是集成学习算法？ 集成学习算法是一种优化手段或者策略，不算是一种机器学习算法。 集成方法是由多个较弱的模型集成模型组，一般的弱分类器可以是决策树，SVM，KNN等构成。其中的模型可以单独进行训练，并且它们的预测能以某种方式结合起来去做出一个总体预测。 该算法主要的问题是要找出哪些较弱的模型可以结合起来，以及如何结合的方法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习面试题-集成学习">
+<meta property="og:url" content="https://chenzk1.github.io/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="Kayden&#39;s Blog">
+<meta property="og:description" content="[TOC] 1. 什么是集成学习算法？ 集成学习算法是一种优化手段或者策略，不算是一种机器学习算法。 集成方法是由多个较弱的模型集成模型组，一般的弱分类器可以是决策树，SVM，KNN等构成。其中的模型可以单独进行训练，并且它们的预测能以某种方式结合起来去做出一个总体预测。 该算法主要的问题是要找出哪些较弱的模型可以结合起来，以及如何结合的方法。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-12-09T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-12-11T09:40:52.208Z">
+<meta property="article:author" content="Kayden">
+<meta property="article:tag" content="ML">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://chenzk1.github.io/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>机器学习面试题-集成学习 | Kayden's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Kayden's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Mamba forever.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">1. 什么是集成学习算法？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0%E4%B8%BB%E8%A6%81%E6%9C%89%E5%93%AA%E5%87%A0%E7%A7%8D%E6%A1%86%E6%9E%B6%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">2. 集成学习主要有哪几种框架？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D%E4%B8%80%E4%B8%8Bbagging%EF%BC%8C%E5%B8%B8%E7%94%A8bagging%E7%AE%97%E6%B3%95%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="nav-number">3.</span> <span class="nav-text">3. 简单介绍一下bagging，常用bagging算法有哪些？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D%E4%B8%80%E4%B8%8Bboosting%EF%BC%8C%E5%B8%B8%E7%94%A8boosting%E7%AE%97%E6%B3%95%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="nav-number">4.</span> <span class="nav-text">4. 简单介绍一下boosting，常用boosting算法有哪些？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-boosting%E6%80%9D%E6%83%B3%E7%9A%84%E6%95%B0%E5%AD%A6%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">5.</span> <span class="nav-text">5. boosting思想的数学表达式是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D%E4%B8%80%E4%B8%8Bstacking%EF%BC%8C%E5%B8%B8%E7%94%A8stacking%E7%AE%97%E6%B3%95%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="nav-number">6.</span> <span class="nav-text">6. 简单介绍一下stacking，常用stacking算法有哪些？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-%E4%BD%A0%E6%84%8F%E8%AF%86%E5%88%B0%E4%BD%A0%E7%9A%84%E6%A8%A1%E5%9E%8B%E5%8F%97%E5%88%B0%E4%BD%8E%E5%81%8F%E5%B7%AE%E5%92%8C%E9%AB%98%E6%96%B9%E5%B7%AE%E9%97%AE%E9%A2%98%E7%9A%84%E5%9B%B0%E6%89%B0%EF%BC%8C%E5%BA%94%E8%AF%A5%E4%BD%BF%E7%94%A8%E5%93%AA%E7%A7%8D%E7%AE%97%E6%B3%95%E6%9D%A5%E8%A7%A3%E5%86%B3%E9%97%AE%E9%A2%98%E5%91%A2%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">7.</span> <span class="nav-text">7. 你意识到你的模型受到低偏差和高方差问题的困扰，应该使用哪种算法来解决问题呢？为什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-%E5%B8%B8%E7%94%A8%E7%9A%84%E5%9F%BA%E5%88%86%E7%B1%BB%E5%99%A8%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">8.</span> <span class="nav-text">8. 常用的基分类器是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-%E5%8F%AF%E5%90%A6%E5%B0%86%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97%E4%B8%AD%E7%9A%84%E5%9F%BA%E5%88%86%E7%B1%BB%E5%99%A8%EF%BC%8C%E7%94%B1%E5%86%B3%E7%AD%96%E6%A0%91%E6%9B%BF%E6%8D%A2%E4%B8%BA%E7%BA%BF%E6%80%A7%E5%88%86%E7%B1%BB%E5%99%A8%E6%88%96K-%E8%BF%91%E9%82%BB%EF%BC%9F%E8%AF%B7%E8%A7%A3%E9%87%8A%E4%B8%BA%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">9.</span> <span class="nav-text">9. 可否将随机森林中的基分类器，由决策树替换为线性分类器或K-近邻？请解释为什么？</span></a></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kayden</p>
+  <div class="site-description" itemprop="description">Kayden's Blog</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Chenzk1" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Chenzk1" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:chenzk666@gmail.com" title="E-Mail → mailto:chenzk666@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://andrewsher.github.io/" title="https:&#x2F;&#x2F;andrewsher.github.io&#x2F;" rel="noopener" target="_blank">Andrewsher's blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://shorey.tech/" title="http:&#x2F;&#x2F;shorey.tech&#x2F;" rel="noopener" target="_blank">Shorey's blog</a>
+        </li>
+    </ul>
+  </div>
+
+      </section>
+        <div class="back-to-top animated">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Kayden">
+      <meta itemprop="description" content="Kayden's Blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kayden's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          机器学习面试题-集成学习
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-12-10 00:00:00" itemprop="dateCreated datePublished" datetime="2021-12-10T00:00:00+08:00">2021-12-10</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-12-11 17:40:52" itemprop="dateModified" datetime="2021-12-11T17:40:52+08:00">2021-12-11</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>[TOC]</p>
+<h2 id="1-什么是集成学习算法？"><a href="#1-什么是集成学习算法？" class="headerlink" title="1. 什么是集成学习算法？"></a>1. 什么是集成学习算法？</h2><ul>
+<li><strong>集成学习算法是一种优化手段或者策略</strong>，不算是一种机器学习算法。</li>
+<li>集成方法是由多个较弱的模型集成模型组，一般的弱分类器可以是决策树，SVM，KNN等构成。其中的模型可以单独进行训练，并且它们的预测能以某种方式结合起来去做出一个总体预测。</li>
+<li>该算法主要的问题是要找出哪些较弱的模型可以结合起来，以及如何结合的方法。</li>
+</ul>
+<a id="more"></a>
+<h2 id="2-集成学习主要有哪几种框架？"><a href="#2-集成学习主要有哪几种框架？" class="headerlink" title="2. 集成学习主要有哪几种框架？"></a>2. 集成学习主要有哪几种框架？</h2><p>集成学习从集成思想的架构分为Bagging，Boosting，Stacking三种。</p>
+<h2 id="3-简单介绍一下bagging，常用bagging算法有哪些？"><a href="#3-简单介绍一下bagging，常用bagging算法有哪些？" class="headerlink" title="3. 简单介绍一下bagging，常用bagging算法有哪些？"></a>3. 简单介绍一下bagging，常用bagging算法有哪些？</h2><ul>
+<li>Bagging<ul>
+<li><strong>多次采样，训练多个分类器，集体投票，旨在减小方差</strong>，</li>
+</ul>
+</li>
+<li><p>基于数据<strong>随机重抽样</strong>的分类器构建方法。从训练集中进行子抽样组成每个基模型所需要的子训练集，对所有基模型预测的结果进行综合产生最终的预测结果。</p>
+</li>
+<li><p>算法流程：</p>
+<ul>
+<li>输入为样本集$D={(x_1，y_1)，(x_2，y_2) \dots (x_m，y_m)}$，弱学习器算法，弱分类器迭代次数$T$。</li>
+<li>输出为最终的强分类器$f(x)$</li>
+</ul>
+</li>
+<li><p>对于$t=1，2 \dots T$</p>
+<ul>
+<li>对训练集进行第t次随机采样，共采集$T$次，得到包含$T$个样本的采样集$D_t$</li>
+<li>用采样集$D_t$训练第$t$个弱学习器$G_t(x)$</li>
+</ul>
+</li>
+<li><p>如果是分类算法预测，则$T$个弱学习器投出最多票数的类别或者类别之一为最终类别。如果是回归算法，$T$个弱学习器得到的回归结果进行算术平均得到的值为最终的模型输出。<br>常用bagging算法：随机森林算法</p>
+</li>
+</ul>
+<h2 id="4-简单介绍一下boosting，常用boosting算法有哪些？"><a href="#4-简单介绍一下boosting，常用boosting算法有哪些？" class="headerlink" title="4. 简单介绍一下boosting，常用boosting算法有哪些？"></a>4. 简单介绍一下boosting，常用boosting算法有哪些？</h2><ul>
+<li>Boosting<ul>
+<li><strong>基分类器层层叠加，聚焦分错的样本，旨在减小方差</strong></li>
+</ul>
+</li>
+<li>涉及到两个部分，加法模型和前向分步算法。<ul>
+<li>加法模型就是说强分类器由一系列弱分类器线性相加而成。</li>
+<li>前向分步就是说在训练过程中，下一轮迭代产生的分类器是在上一轮的基础上训练得来的。</li>
+</ul>
+</li>
+<li><p>算法流程：</p>
+<ul>
+<li><p>给定初始训练数据，由此训练出第一个基学习器；</p>
+</li>
+<li><p>根据基学习器的表现对样本进行调整，在之前学习器做错的样本上投入更多关注；</p>
+</li>
+<li>用调整后的样本，训练下一个基学习器；</li>
+<li>重复上述过程T次，将T个学习器加权结合。</li>
+</ul>
+</li>
+<li><p>常用boosting算法：</p>
+<ul>
+<li>Adaboost<ul>
+<li>样本权重：思想是将关注点放在被错误分类的样本上，减小上一轮被正确分类的样本权值，提高那些被错误分类的样本权值。——会因为错误分类样本的权重不断提高而使得模型对噪声敏感。</li>
+<li>弱分类器权重：采用加权多数表决的方法，加大分类误差率小的弱分类器的权重，减小分类误差率大的弱分类器的权重。</li>
+</ul>
+</li>
+<li>GBDT</li>
+<li>XGBoost</li>
+</ul>
+</li>
+</ul>
+<h2 id="5-boosting思想的数学表达式是什么？"><a href="#5-boosting思想的数学表达式是什么？" class="headerlink" title="5. boosting思想的数学表达式是什么？"></a>5. boosting思想的数学表达式是什么？</h2><script type="math/tex; mode=display">
+f(x)=w_{0}+\sum_{m=1}^{M} w_{m} \phi_{m}(x)</script><p>其中$w$是权重，$\phi$是弱分类器的集合，可以看出最终就是基函数的线性组合。</p>
+<h2 id="6-简单介绍一下stacking，常用stacking算法有哪些？"><a href="#6-简单介绍一下stacking，常用stacking算法有哪些？" class="headerlink" title="6. 简单介绍一下stacking，常用stacking算法有哪些？"></a>6. 简单介绍一下stacking，常用stacking算法有哪些？</h2><ul>
+<li>Stacking<ul>
+<li><strong>多次采样，训练多个分类器，将输出作为最后的输入特征</strong></li>
+</ul>
+</li>
+<li><p>将训练好的所有基模型对训练集进行预测，第个$i$基模型对第$i$个训练样本的预测值将作为新的训练集中第$i$个样本的第$i$个特征值，最后基于新的训练集进行训练。同理，预测的过程也要先经过所有基模型的预测形成新的测试集，最后再对测试集进行预测。</p>
+</li>
+<li><p>stacking常见的使用方式：</p>
+<ul>
+<li>由k-NN、随机森林和朴素贝叶斯基础分类器组成，它的预测结果由作为元分类器的Loqistic 回归组合。</li>
+</ul>
+</li>
+</ul>
+<h2 id="7-你意识到你的模型受到低偏差和高方差问题的困扰，应该使用哪种算法来解决问题呢？为什么？"><a href="#7-你意识到你的模型受到低偏差和高方差问题的困扰，应该使用哪种算法来解决问题呢？为什么？" class="headerlink" title="7. 你意识到你的模型受到低偏差和高方差问题的困扰，应该使用哪种算法来解决问题呢？为什么？"></a>7. 你意识到你的模型受到低偏差和高方差问题的困扰，应该使用哪种算法来解决问题呢？为什么？</h2><p>低偏差意味着模型的预测值接近实际值。换句话说，该模型有足够的灵活性，以模仿训练数据的分布。貌似很好，但是别忘了，一个灵活的模型没有泛化能力。这意味着，当这个模型用在对一个未曾见过的数据集进行测试的时候，它会令人很失望。<br>在这种情况下，我们可以使用bagging算法（如随机森林），以解决高方差问题。bagging算法把数据集分成重复随机取样形成的子集。然后，这些样本利用单个学习算法生成一组模型。接着，利用投票（分类）或平均（回归）把模型预测结合在一起。另外，为了应对大方差，我们可以：</p>
+<ul>
+<li>使用正则化技术，惩罚更高的模型系数，从而降低了模型的复杂性。</li>
+<li>使用可变重要性图表中的前n个特征。</li>
+<li>可以用于当一个算法在数据集中的所有变量里很难寻找到有意义信号的时候。</li>
+</ul>
+<h2 id="8-常用的基分类器是什么？"><a href="#8-常用的基分类器是什么？" class="headerlink" title="8. 常用的基分类器是什么？"></a>8. 常用的基分类器是什么？</h2><p>最常用的基分类器是决策树,原因:</p>
+<ul>
+<li>决策树是低偏差高方差的，适合作为基分类器</li>
+<li>决策树可以较为方便地将样本的权重整合到训练过程中，而不需要使用过采样的方法来调整样本权重。</li>
+<li>决策树的表达能力和泛化能力，可以通过调节树的层数来做折中。</li>
+<li>数据样本的扰动对于决策树的影响较大，因此不同子样本集合生成的决策树基分类器随机性较大，这样的“不稳定学习器”更适合作为基分类器。此外，在决策树节点分裂的时候，随机地选择一个特征子集，从中找出最优分裂属性，<strong>很好地引入了随机性。</strong></li>
+</ul>
+<h2 id="9-可否将随机森林中的基分类器，由决策树替换为线性分类器或K-近邻？请解释为什么？"><a href="#9-可否将随机森林中的基分类器，由决策树替换为线性分类器或K-近邻？请解释为什么？" class="headerlink" title="9. 可否将随机森林中的基分类器，由决策树替换为线性分类器或K-近邻？请解释为什么？"></a>9. 可否将随机森林中的基分类器，由决策树替换为线性分类器或K-近邻？请解释为什么？</h2><p>不能：</p>
+<ul>
+<li>Bagging的主要好处是集成后的分类器的方差，比基分类器的方差小。</li>
+<li><p>随机森林属于Bagging类的集成学习，对样本分布较为敏感的分类器更适用于Bagging。</p>
+</li>
+<li><p>线性分类器或者K-近邻都是较为稳定的分类器，本身方差就不大。</p>
+</li>
+<li>线性分类器或者K-近邻可能会由于Bagging的采样，导致在训练中更难收敛，增大偏差。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ML/" rel="tag"># ML</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/12/10/%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99-%E4%BC%9A%E8%AE%AE&%E6%9C%9F%E5%88%8A/" rel="prev" title="学习资料-会议&期刊">
+                  <i class="fa fa-chevron-left"></i> 学习资料-会议&期刊
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/" rel="next" title="机器学习面试题-Random Forest">
+                  机器学习面试题-Random Forest <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Kayden</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+      <script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              const target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    const script = document.createElement('script');
+    script.src = '//cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js';
+    script.defer = true;
+    document.head.appendChild(script);
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.typesetClear();
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

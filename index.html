@@ -352,7 +352,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/11/%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99-%E4%BC%9A%E8%AE%AE&%E6%9C%9F%E5%88%8A/">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/10/C++-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -366,7 +366,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/12/11/%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99-%E4%BC%9A%E8%AE%AE&%E6%9C%9F%E5%88%8A/" class="post-title-link" itemprop="url">学习资料-会议&期刊</a>
+            <a href="/2021/12/10/C++-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="post-title-link" itemprop="url">C++-内存管理</a>
         </h2>
 
         <div class="post-meta-container">
@@ -377,8 +377,375 @@
       </span>
       <span class="post-meta-item-text">Posted on</span>
 
-      <time title="Created: 2021-12-11 16:15:49" itemprop="dateCreated datePublished" datetime="2021-12-11T16:15:49+08:00">2021-12-11</time>
+      <time title="Created: 2021-12-10 00:00:00" itemprop="dateCreated datePublished" datetime="2021-12-10T00:00:00+08:00">2021-12-10</time>
     </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-12-11 17:40:52" itemprop="dateModified" datetime="2021-12-11T17:40:52+08:00">2021-12-11</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="C-的内存分配方式"><a href="#C-的内存分配方式" class="headerlink" title="C++的内存分配方式"></a>C++的内存分配方式</h2><ul>
+<li>全局/静态变量区</li>
+<li>常量存储区</li>
+<li>栈：在局部变量和函数参数在栈上创建，函数执行结束时这些存储单元自动被释放。栈内存分配运算内置于处理器的指令集中，效率很高，但是栈的内存容量有限。</li>
+<li>堆：由new分配的内存块，需要手动通过delete来释放。如果没有delete，那么在程序结束后，操作系统会自动回收。</li>
+<li>自由存储区：由malloc等分配的内存块，和堆是十分相似，不过它是用free来结束自己的生命的。</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/12/10/C++-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/10/C++-%E8%87%AA%E5%BB%BA%E6%95%B0%E7%BB%84%E5%8F%8ASTL%E4%B8%AD%E7%9A%84array&vector/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Kayden">
+      <meta itemprop="description" content="Kayden's Blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kayden's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/12/10/C++-%E8%87%AA%E5%BB%BA%E6%95%B0%E7%BB%84%E5%8F%8ASTL%E4%B8%AD%E7%9A%84array&vector/" class="post-title-link" itemprop="url">C++-自建数组及STL中的array&vector</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-12-10 00:00:00" itemprop="dateCreated datePublished" datetime="2021-12-10T00:00:00+08:00">2021-12-10</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-12-11 17:40:52" itemprop="dateModified" datetime="2021-12-11T17:40:52+08:00">2021-12-11</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="相同点"><a href="#相同点" class="headerlink" title="相同点"></a>相同点</h2><ul>
+<li>三者皆使用连续内存，且array和vector的底层由自建数组实现</li>
+<li>都可以用下标访问</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/12/10/C++-%E8%87%AA%E5%BB%BA%E6%95%B0%E7%BB%84%E5%8F%8ASTL%E4%B8%AD%E7%9A%84array&vector/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/10/CNN/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Kayden">
+      <meta itemprop="description" content="Kayden's Blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kayden's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/12/10/CNN/" class="post-title-link" itemprop="url">CV-CNN</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-12-10 00:00:00" itemprop="dateCreated datePublished" datetime="2021-12-10T00:00:00+08:00">2021-12-10</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-12-11 17:40:52" itemprop="dateModified" datetime="2021-12-11T17:40:52+08:00">2021-12-11</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>[TOC]</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/27642620">原贴</a></p>
+<h1 id="卷积神经网络"><a href="#卷积神经网络" class="headerlink" title="卷积神经网络"></a>卷积神经网络</h1><ul>
+<li>卷积神经网络大致就是covolutional layer, pooling layer, ReLu layer, fully-connected layer的组合，例如下图所示的结构。<br><img src="https://pic4.zhimg.com/80/v2-cf87890eb8f2358f23a1ac78eb764257_hd.png" alt="ex-1"></li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/12/10/CNN/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/10/CS%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Kayden">
+      <meta itemprop="description" content="Kayden's Blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kayden's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/12/10/CS%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF/" class="post-title-link" itemprop="url">自学CS路线、资源推荐</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-12-10 00:00:00" itemprop="dateCreated datePublished" datetime="2021-12-10T00:00:00+08:00">2021-12-10</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-12-11 17:40:52" itemprop="dateModified" datetime="2021-12-11T17:40:52+08:00">2021-12-11</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <ul>
+<li><a target="_blank" rel="noopener" href="https://conanhujinming.github.io/post/how_to_learn_cs/">转载自胡神的“自学CS路线、资源推荐”</a></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/10/CV-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BB%BC%E8%BF%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Kayden">
+      <meta itemprop="description" content="Kayden's Blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kayden's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/12/10/CV-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BB%BC%E8%BF%B0/" class="post-title-link" itemprop="url">CV-目标检测综述</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-12-10 00:00:00" itemprop="dateCreated datePublished" datetime="2021-12-10T00:00:00+08:00">2021-12-10</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-12-11 17:40:52" itemprop="dateModified" datetime="2021-12-11T17:40:52+08:00">2021-12-11</time>
+      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -401,17 +768,21 @@
     <div class="post-body" itemprop="articleBody">
           <meta name="referrer" content="no-referrer"/>
 
-<h2 id="推荐系统"><a href="#推荐系统" class="headerlink" title="推荐系统"></a>推荐系统</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://recsys.acm.org/">RecSys</a> -The ACM Conference Series on Recommender Systems.</li>
+<h2 id="目标检测"><a href="#目标检测" class="headerlink" title="目标检测"></a>目标检测</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><ul>
+<li>图像识别+定位</li>
+<li>识别：分类问题，准确率</li>
+<li>定位：分类/回归问题，找到一个框/4个坐标，IOU</li>
 </ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/12/11/%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99-%E4%BC%9A%E8%AE%AE&%E6%9C%9F%E5%88%8A/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+<h2 id="传统目标检测"><a href="#传统目标检测" class="headerlink" title="传统目标检测"></a>传统目标检测</h2><h3 id="用回归做定位问题"><a href="#用回归做定位问题" class="headerlink" title="用回归做定位问题"></a>用回归做定位问题</h3><ul>
+<li>训练一个cnn网络，在最后一个卷积层后分两个head，一个head做分类，另一个回归</li>
+<li>先fine tuning分类任务，再fine tuning回归</li>
+<li>缺点：回归问题，很难做</li>
+</ul>
+<h3 id="用分类做定位问题"><a href="#用分类做定位问题" class="headerlink" title="用分类做定位问题"></a>用分类做定位问题</h3><ul>
+<li>滑动窗口（选择不同位置不同大小的区域），对其定位，对每个框内的图像做分类</li>
+<li>缺点：窗口冗余、复杂度高、多物体多分类时复杂度更高</li>
+</ul>
+
       
     </div>
 
@@ -437,7 +808,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/11/%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/10/DBSCAN/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -451,7 +822,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/12/11/%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/" class="post-title-link" itemprop="url">ML-Feature Engineering</a>
+            <a href="/2021/12/10/DBSCAN/" class="post-title-link" itemprop="url">ML-DBSCAN以及sklearn实现DBSCAN</a>
         </h2>
 
         <div class="post-meta-container">
@@ -462,445 +833,15 @@
       </span>
       <span class="post-meta-item-text">Posted on</span>
 
-      <time title="Created: 2021-12-11 16:15:49" itemprop="dateCreated datePublished" datetime="2021-12-11T16:15:49+08:00">2021-12-11</time>
+      <time title="Created: 2021-12-10 00:00:00" itemprop="dateCreated datePublished" datetime="2021-12-10T00:00:00+08:00">2021-12-10</time>
     </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
         </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="特征离散的作用"><a href="#特征离散的作用" class="headerlink" title="特征离散的作用"></a>特征离散的作用</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/12/11/%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/11/%E7%BB%8F%E9%AA%8C%20%E6%9C%9F%E6%9C%9B%20%E7%BB%93%E6%9E%84/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Kayden">
-      <meta itemprop="description" content="Kayden's Blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Kayden's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/12/11/%E7%BB%8F%E9%AA%8C%20%E6%9C%9F%E6%9C%9B%20%E7%BB%93%E6%9E%84/" class="post-title-link" itemprop="url">ML-经验风险、期望风险、结构风险</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-12-11 17:40:52" itemprop="dateModified" datetime="2021-12-11T17:40:52+08:00">2021-12-11</time>
       </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-12-11 16:15:49" itemprop="dateCreated datePublished" datetime="2021-12-11T16:15:49+08:00">2021-12-11</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h3 id="经验风险"><a href="#经验风险" class="headerlink" title="经验风险"></a>经验风险</h3><ul>
-<li>对训练样本误差的衡量，例如最典型的是每个样本损失函数的平均，Σ(loss(Yi, f(Xi))) / m</li>
-<li>基于经验风险最小化的模型泛化能力差，只代表了局部最优 —&gt; 过拟合</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/12/11/%E7%BB%8F%E9%AA%8C%20%E6%9C%9F%E6%9C%9B%20%E7%BB%93%E6%9E%84/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/11/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E8%B4%9D%E5%8F%B6%E6%96%AF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Kayden">
-      <meta itemprop="description" content="Kayden's Blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Kayden's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/12/11/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E8%B4%9D%E5%8F%B6%E6%96%AF/" class="post-title-link" itemprop="url">机器学习面试题-贝叶斯</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-12-11 16:15:49" itemprop="dateCreated datePublished" datetime="2021-12-11T16:15:49+08:00">2021-12-11</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>[TOC]</p>
-<h2 id="1-简述朴素贝叶斯算法原理和工作流程"><a href="#1-简述朴素贝叶斯算法原理和工作流程" class="headerlink" title="1.简述朴素贝叶斯算法原理和工作流程"></a>1.简述朴素贝叶斯算法原理和工作流程</h2><p><strong>工作原理</strong>：</p>
-<ul>
-<li>假设现在有样本$x=(x_1, x_2, x_3, \dots x_n)$待分类项</li>
-<li>假设样本有$m$个特征$(a_1,a_2,a_3,\dots a_m)$(特征独立)</li>
-<li>再假设现在有分类目标$Y={ y_1，y_2，y_3，\dots ,y_n}$</li>
-<li>那么就$\max ({ P }({ y }_1 | { x }), { P }({ y }_2 | {x}), {P}({y}_3 | {x}) ,{P}({y_n} | {x}))$是最终的分类类别。</li>
-<li>而$ P(y_i | x)=\frac{P(x | y_i) * P(y_i)}{ P(x)} $，因为$x$对于每个分类目标来说都一样，所以就是求$\max({P}({x}|{y_i})*{P}({y_i}))$</li>
-<li>$P(x | y_i) * P(y_i)=P(y_i) * \prod(P(a_j| y_i))$，而具体的$P(a_j|y_i)$和$P(y_i)$都是能从训练样本中统计出来</li>
-<li>${P}({a_j} | {y_i})$表示该类别下该特征$a_j$出现的概率$P(y_i)$表示全部类别中这个这个类别出现的概率,这样就能找到应该属于的类别了</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/12/11/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E8%B4%9D%E5%8F%B6%E6%96%AF/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/11/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Kayden">
-      <meta itemprop="description" content="Kayden's Blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Kayden's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/12/11/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/" class="post-title-link" itemprop="url">机器学习面试题-Random Forest</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-12-11 16:15:49" itemprop="dateCreated datePublished" datetime="2021-12-11T16:15:49+08:00">2021-12-11</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>[TOC]</p>
-<h2 id="1-简单介绍随机森林"><a href="#1-简单介绍随机森林" class="headerlink" title="1. 简单介绍随机森林"></a>1. 简单介绍随机森林</h2><ul>
-<li><strong>多次随机取样，多次随机取属性，选取最优分割点，构建多个(CART)分类器，投票表决或简单平均</strong></li>
-<li><strong>算法流程：</strong><ul>
-<li>输入为样本集$D={(x，y_1)，(x_2，y_2) \dots (x_m，y_m)}$，弱分类器迭代次数$T$。</li>
-<li>输出为最终的强分类器$f(x)$</li>
-<li>对于$t=1，2 \dots T$<ul>
-<li>对训练集进行第$t$次随机采样，共采集$m$次，得到包含$m$个样本的采样集Dt</li>
-<li>用采样集$D_t$训练第$t$个决策树模型$G_t(x)$，在训练决策树模型的节点的时候，在节点上所有的样本特征中选择一部分样本特征，在这些随机选择的部分样本特征中选择一个最优的特征来做决策树的左右子树划分</li>
-</ul>
-</li>
-<li>如果是分类算法预测，则$T$个弱学习器投出最多票数的类别或者类别之一为最终类别。如果是回归算法，$T$个弱学习器得到的回归结果进行算术平均得到的值为最终的模型输出。</li>
-</ul>
-</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/12/11/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/11/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Kayden">
-      <meta itemprop="description" content="Kayden's Blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Kayden's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/12/11/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/" class="post-title-link" itemprop="url">机器学习面试题-集成学习</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-12-11 16:15:49" itemprop="dateCreated datePublished" datetime="2021-12-11T16:15:49+08:00">2021-12-11</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>[TOC]</p>
-<h2 id="1-什么是集成学习算法？"><a href="#1-什么是集成学习算法？" class="headerlink" title="1. 什么是集成学习算法？"></a>1. 什么是集成学习算法？</h2><ul>
-<li><strong>集成学习算法是一种优化手段或者策略</strong>，不算是一种机器学习算法。</li>
-<li>集成方法是由多个较弱的模型集成模型组，一般的弱分类器可以是决策树，SVM，KNN等构成。其中的模型可以单独进行训练，并且它们的预测能以某种方式结合起来去做出一个总体预测。</li>
-<li>该算法主要的问题是要找出哪些较弱的模型可以结合起来，以及如何结合的方法。</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/12/11/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/11/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E5%86%B3%E7%AD%96%E6%A0%91/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Kayden">
-      <meta itemprop="description" content="Kayden's Blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Kayden's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/12/11/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E5%86%B3%E7%AD%96%E6%A0%91/" class="post-title-link" itemprop="url">机器学习面试题-决策树</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-12-11 16:15:49" itemprop="dateCreated datePublished" datetime="2021-12-11T16:15:49+08:00">2021-12-11</time>
-    </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -923,16 +864,10 @@
     <div class="post-body" itemprop="articleBody">
           <meta name="referrer" content="no-referrer"/>
 
-<p>[TOC]</p>
-<h2 id="1-简单介绍决策树算法"><a href="#1-简单介绍决策树算法" class="headerlink" title="1. 简单介绍决策树算法"></a>1. 简单介绍决策树算法</h2><ul>
-<li>决策树将算法组织成一颗树的形式。其实这就是将平时所说的<strong>if-then语句</strong>构建成了树的形式。决策树主要包括<strong>三个部分：内部节点、叶节点、边。内部节点是划分的特征，边代表划分的条件，叶节点表示类别。</strong></li>
-<li>构建决策树 就是一个递归的选择内部节点，计算划分条件的边，最后到达叶子节点的过程。 决策树在本质上是一组嵌套的if-else判定规则，从数学上看是分段常数函数，对应于用平行于坐标轴的平面对空间的划分。判定规则是人类处理很多问题时的常用方法，这些规则是我们通过经验总结出来的，而决策树的这些规则是通过训练样本自动学习得到的。</li>
-<li>训练时，通过最大化Gini或者其他指标来寻找最佳分裂。决策树可以输特征向量每个分量的重要性。</li>
-<li><strong>决策树是一种判别模型，既支持分类问题，也支持回归问题，是一种非线性模型（分段线性函数不是线性的）。它天然的支持多分类问题。</strong></li>
-</ul>
+<p>[TOC]<br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/pinard/p/6208966.html">原文1</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/pinard/p/6217852.html">原文2</a><br>DBSCAN(Density-Based Spatial Clustering of Applications with Noise，具有噪声的基于密度的聚类方法)是一种很典型的<strong>密度聚类算法</strong>，和K-Means，BIRCH这些一般只适用于凸样本集的聚类相比，DBSCAN<strong>既可以适用于凸样本集，也可以适用于非凸样本集</strong>。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2021/12/11/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E5%86%B3%E7%AD%96%E6%A0%91/#more" rel="contents">
+              <a class="btn" href="/2021/12/10/DBSCAN/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -963,7 +898,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/11/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D/">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/10/GBDT%20&%20XGBoost/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -977,7 +912,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/12/11/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D/" class="post-title-link" itemprop="url">机器学习面试题-梯度下降</a>
+            <a href="/2021/12/10/GBDT%20&%20XGBoost/" class="post-title-link" itemprop="url">ML-GBDT & XGBoost</a>
         </h2>
 
         <div class="post-meta-container">
@@ -988,8 +923,15 @@
       </span>
       <span class="post-meta-item-text">Posted on</span>
 
-      <time title="Created: 2021-12-11 16:15:49" itemprop="dateCreated datePublished" datetime="2021-12-11T16:15:49+08:00">2021-12-11</time>
+      <time title="Created: 2021-12-10 00:00:00" itemprop="dateCreated datePublished" datetime="2021-12-10T00:00:00+08:00">2021-12-10</time>
     </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-12-11 17:40:52" itemprop="dateModified" datetime="2021-12-11T17:40:52+08:00">2021-12-11</time>
+      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -1011,17 +953,10 @@
     
     <div class="post-body" itemprop="articleBody">
           <p>[TOC]</p>
-<h2 id="1-机器学习中为什么需要梯度下降"><a href="#1-机器学习中为什么需要梯度下降" class="headerlink" title="1. 机器学习中为什么需要梯度下降"></a>1. 机器学习中为什么需要梯度下降</h2><ul>
-<li>梯度下降的作用：<ul>
-<li>梯度下降是迭代法的一种，可以用于<strong>求解最小二乘问题</strong>。</li>
-<li>在求解损失函数的最小值时，可以通过梯度下降法来一步步的迭代求解，<strong>得到最小化的损失函数和模型参数值。</strong></li>
-<li>如果我们需要求解损失函数的最大值，可通过梯度上升法来迭代。<strong>梯度下降法和梯度上升法可相互转换</strong>。</li>
-</ul>
-</li>
-</ul>
+<p><a target="_blank" rel="noopener" href="https://xgboost.readthedocs.io/en/latest/tutorials/model.html">Doc</a><br><a target="_blank" rel="noopener" href="https://homes.cs.washington.edu/~tqchen/pdf/BoostedTree.pdf">Slides</a></p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2021/12/11/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D/#more" rel="contents">
+              <a class="btn" href="/2021/12/10/GBDT%20&%20XGBoost/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -1052,7 +987,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/11/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92+%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/10/GBDT/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -1066,7 +1001,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/12/11/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92+%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/" class="post-title-link" itemprop="url">线性回归&逻辑回归</a>
+            <a href="/2021/12/10/GBDT/" class="post-title-link" itemprop="url">ML-GBDT</a>
         </h2>
 
         <div class="post-meta-container">
@@ -1077,8 +1012,15 @@
       </span>
       <span class="post-meta-item-text">Posted on</span>
 
-      <time title="Created: 2021-12-11 16:15:49" itemprop="dateCreated datePublished" datetime="2021-12-11T16:15:49+08:00">2021-12-11</time>
+      <time title="Created: 2021-12-10 00:00:00" itemprop="dateCreated datePublished" datetime="2021-12-10T00:00:00+08:00">2021-12-10</time>
     </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-12-11 17:40:52" itemprop="dateModified" datetime="2021-12-11T17:40:52+08:00">2021-12-11</time>
+      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -1100,20 +1042,109 @@
     
     <div class="post-body" itemprop="articleBody">
           <p>[TOC]</p>
-<h1 id="线性回归"><a href="#线性回归" class="headerlink" title="线性回归"></a>线性回归</h1><h2 id="1-简单介绍一下线性回归。"><a href="#1-简单介绍一下线性回归。" class="headerlink" title="1. 简单介绍一下线性回归。"></a>1. 简单介绍一下线性回归。</h2><ul>
-<li>线性：两个变量之间的关系<strong>是</strong>一次函数关系的——图象<strong>是直线</strong>，叫做线性。</li>
-<li>非线性：两个变量之间的关系<strong>不是</strong>一次函数关系的——图象<strong>不是直线</strong>，叫做非线性。</li>
-<li>回归：人们在测量事物的时候因为客观条件所限，求得的都是测量值，而不是事物真实的值，为了能够得到真实值，无限次的进行测量，最后通过这些测量数据计算<strong>回归到真实值</strong>，这就是回归的由来。</li>
-<li>线性回归就是利用的样本$D=(\mathrm{x}_i, \mathrm{y}_i)<br>$，$ \mathrm{i}=1,2,3 \ldots \mathrm{N}, \mathrm{x}_i$是特征数据，可能是一个，也可能是多个，通过有监督的学习，学习到由$x$到$y$的映射$h$，利用该映射关系对未知的数据进行预估，因为$y$为连续值，所以是回归问题。</li>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><ul>
+<li>GBDT与传统的Boosting区别较大，它的每一次计算都是为了减少上一次的残差，而为了消除残差，我们可以在残差减小的梯度方向上建立模型,所以说，在GradientBoost中，每个新的模型的建立是为了使得之前的模型的残差往梯度下降的方法，与传统的Boosting中关注正确错误的样本加权有着很大的区别。</li>
+<li>在GradientBoosting算法中，关键就是利用损失函数的负梯度方向在当前模型的值作为残差的近似值，进而拟合一棵CART回归树。</li>
+<li>GBDT的会累加所有树的结果，而这种累加是无法通过分类完成的，因此<strong>GBDT的树都是CART回归树</strong>，而不是分类树（尽管GBDT调整后也可以用于分类但不代表GBDT的树为分类树）。</li>
 </ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/12/11/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92+%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><ul>
+<li>GBDT的性能在RF的基础上又有一步提升，因此其优点也很明显，1、它能灵活的处理各种类型的数据；2、在相对较少的调参时间下，预测的准确度较高。</li>
+<li>当然由于它是Boosting，因此基学习器之前存在串行关系，难以并行训练数据。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/10/Java%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%BA%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Kayden">
+      <meta itemprop="description" content="Kayden's Blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kayden's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/12/10/Java%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%BA%90/" class="post-title-link" itemprop="url">Java学习资源</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-12-10 00:00:00" itemprop="dateCreated datePublished" datetime="2021-12-10T00:00:00+08:00">2021-12-10</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-12-11 17:40:52" itemprop="dateModified" datetime="2021-12-11T17:40:52+08:00">2021-12-11</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="书籍"><a href="#书籍" class="headerlink" title="书籍"></a>书籍</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/apachecn/thinking-in-java-zh">Java编程思想</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/Chenzk1/PrivateNotes/blob/master/books/Head%20First%20Java%28%E7%AC%AC2%E7%89%88%29.pdf">Head First Java</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/Chenzk1/PrivateNotes/blob/master/books/Java%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%20%E5%8D%B71%20%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%20%E5%8E%9F%E4%B9%A6%E7%AC%AC9%E7%89%88%20%E5%AE%8C%E6%95%B4%E4%B8%AD%E6%96%87%E7%89%88%20.pdf">Java核心技术卷1</a></li>
+</ul>
+<h2 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.liaoxuefeng.com/wiki/1252599548343744">廖雪峰的Java教程</a></li>
+</ul>
+<h2 id="博客"><a href="#博客" class="headerlink" title="博客"></a>博客</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000014933213">Java学习的四个阶段</a></li>
+<li><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903985170612238">可能是最适合你的 Java 学习路线和方法</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/115890802">2020年最新Java学习路线图</a></li>
+</ul>
+
       
     </div>
 

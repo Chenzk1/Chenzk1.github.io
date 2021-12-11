@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/mylogo-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/mylogo-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/mylogo-16x16-next.png">
+  <link rel="mask-icon" href="/images/mylogo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.0/css/all.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"chenzk1.github.io","root":"/","scheme":"Gemini","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+
+  <meta name="description" content="[TOC] 1. 机器学习中为什么需要梯度下降 梯度下降的作用： 梯度下降是迭代法的一种，可以用于求解最小二乘问题。 在求解损失函数的最小值时，可以通过梯度下降法来一步步的迭代求解，得到最小化的损失函数和模型参数值。 如果我们需要求解损失函数的最大值，可通过梯度上升法来迭代。梯度下降法和梯度上升法可相互转换。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习面试题-梯度下降">
+<meta property="og:url" content="https://chenzk1.github.io/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D/index.html">
+<meta property="og:site_name" content="Kayden&#39;s Blog">
+<meta property="og:description" content="[TOC] 1. 机器学习中为什么需要梯度下降 梯度下降的作用： 梯度下降是迭代法的一种，可以用于求解最小二乘问题。 在求解损失函数的最小值时，可以通过梯度下降法来一步步的迭代求解，得到最小化的损失函数和模型参数值。 如果我们需要求解损失函数的最大值，可通过梯度上升法来迭代。梯度下降法和梯度上升法可相互转换。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-12-09T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-12-11T09:40:52.204Z">
+<meta property="article:author" content="Kayden">
+<meta property="article:tag" content="DL">
+<meta property="article:tag" content="ML">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://chenzk1.github.io/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>机器学习面试题-梯度下降 | Kayden's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Kayden's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Mamba forever.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B8%AD%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D"><span class="nav-number">1.</span> <span class="nav-text">1. 机器学习中为什么需要梯度下降</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95%E7%BC%BA%E7%82%B9"><span class="nav-number">2.</span> <span class="nav-text">2. 梯度下降法缺点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95%E7%9B%B4%E8%A7%82%E7%90%86%E8%A7%A3"><span class="nav-number">3.</span> <span class="nav-text">3. 梯度下降法直观理解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3%E5%BD%92%E7%BA%B3"><span class="nav-number">4.</span> <span class="nav-text">4. 梯度下降核心思想归纳</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E5%A6%82%E4%BD%95%E5%AF%B9%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95%E8%BF%9B%E8%A1%8C%E8%B0%83%E4%BC%98"><span class="nav-number">5.</span> <span class="nav-text">5. 如何对梯度下降法进行调优</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E9%9A%8F%E6%9C%BA%E6%A2%AF%E5%BA%A6%E5%92%8C%E6%89%B9%E9%87%8F%E6%A2%AF%E5%BA%A6%E5%8C%BA%E5%88%AB"><span class="nav-number">6.</span> <span class="nav-text">6. 随机梯度和批量梯度区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-%E5%90%84%E7%A7%8D%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95%E6%80%A7%E8%83%BD%E6%AF%94%E8%BE%83"><span class="nav-number">7.</span> <span class="nav-text">7.  各种梯度下降法性能比较</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-%E6%8E%A8%E5%AF%BC%E5%A4%9A%E5%85%83%E5%87%BD%E6%95%B0%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95%E7%9A%84%E8%BF%AD%E4%BB%A3%E5%85%AC%E5%BC%8F%E3%80%82"><span class="nav-number">8.</span> <span class="nav-text">8. 推导多元函数梯度下降法的迭代公式。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95%E5%A6%82%E4%BD%95%E5%88%A4%E6%96%AD%E6%98%AF%E5%90%A6%E6%94%B6%E6%95%9B%EF%BC%9F"><span class="nav-number">9.</span> <span class="nav-text">9.  梯度下降法如何判断是否收敛？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%9C%A8%E8%BF%AD%E4%BB%A3%E5%85%AC%E5%BC%8F%E4%B8%AD%E4%BD%BF%E7%94%A8%E6%AD%A5%E9%95%BF%E7%B3%BB%E6%95%B0%EF%BC%9F"><span class="nav-number">10.</span> <span class="nav-text">10. 梯度下降法为什么要在迭代公式中使用步长系数？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#11-%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95%E5%92%8C%E7%89%9B%E9%A1%BF%E6%B3%95%E8%83%BD%E4%BF%9D%E8%AF%81%E6%89%BE%E5%88%B0%E5%87%BD%E6%95%B0%E7%9A%84%E6%9E%81%E5%B0%8F%E5%80%BC%E7%82%B9%E5%90%97%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">11.</span> <span class="nav-text">11. 梯度下降法和牛顿法能保证找到函数的极小值点吗，为什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#12-%E8%A7%A3%E9%87%8A%E4%B8%80%E5%85%83%E5%87%BD%E6%95%B0%E6%9E%81%E5%80%BC%E5%88%A4%E5%88%AB%E6%B3%95%E5%88%99%E3%80%82"><span class="nav-number">12.</span> <span class="nav-text">12. 解释一元函数极值判别法则。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#13-%E8%A7%A3%E9%87%8A%E5%A4%9A%E5%85%83%E5%87%BD%E6%95%B0%E6%9E%81%E5%80%BC%E5%88%A4%E5%88%AB%E6%B3%95%E5%88%99%E3%80%82"><span class="nav-number">13.</span> <span class="nav-text">13. 解释多元函数极值判别法则。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#14-%E4%BB%80%E4%B9%88%E6%98%AF%E9%9E%8D%E7%82%B9%EF%BC%9F"><span class="nav-number">14.</span> <span class="nav-text">14. 什么是鞍点？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#15-%E8%A7%A3%E9%87%8A%E4%BB%80%E4%B9%88%E6%98%AF%E5%B1%80%E9%83%A8%E6%9E%81%E5%B0%8F%E5%80%BC%EF%BC%8C%E4%BB%80%E4%B9%88%E6%98%AF%E5%85%A8%E5%B1%80%E6%9E%81%E5%B0%8F%E5%80%BC%E3%80%82"><span class="nav-number">15.</span> <span class="nav-text">15. 解释什么是局部极小值，什么是全局极小值。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#16-%E6%8E%A8%E5%AF%BC%E5%A4%9A%E5%85%83%E5%87%BD%E6%95%B0%E7%89%9B%E9%A1%BF%E6%B3%95%E7%9A%84%E8%BF%AD%E4%BB%A3%E5%85%AC%E5%BC%8F%E3%80%82"><span class="nav-number">16.</span> <span class="nav-text">16. 推导多元函数牛顿法的迭代公式。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%9A"><span class="nav-number">17.</span> <span class="nav-text">参考资料：</span></a></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kayden</p>
+  <div class="site-description" itemprop="description">Kayden's Blog</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Chenzk1" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Chenzk1" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:chenzk666@gmail.com" title="E-Mail → mailto:chenzk666@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://andrewsher.github.io/" title="https:&#x2F;&#x2F;andrewsher.github.io&#x2F;" rel="noopener" target="_blank">Andrewsher's blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://shorey.tech/" title="http:&#x2F;&#x2F;shorey.tech&#x2F;" rel="noopener" target="_blank">Shorey's blog</a>
+        </li>
+    </ul>
+  </div>
+
+      </section>
+        <div class="back-to-top animated">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Kayden">
+      <meta itemprop="description" content="Kayden's Blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kayden's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          机器学习面试题-梯度下降
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-12-10 00:00:00" itemprop="dateCreated datePublished" datetime="2021-12-10T00:00:00+08:00">2021-12-10</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-12-11 17:40:52" itemprop="dateModified" datetime="2021-12-11T17:40:52+08:00">2021-12-11</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>[TOC]</p>
+<h2 id="1-机器学习中为什么需要梯度下降"><a href="#1-机器学习中为什么需要梯度下降" class="headerlink" title="1. 机器学习中为什么需要梯度下降"></a>1. 机器学习中为什么需要梯度下降</h2><ul>
+<li>梯度下降的作用：<ul>
+<li>梯度下降是迭代法的一种，可以用于<strong>求解最小二乘问题</strong>。</li>
+<li>在求解损失函数的最小值时，可以通过梯度下降法来一步步的迭代求解，<strong>得到最小化的损失函数和模型参数值。</strong></li>
+<li>如果我们需要求解损失函数的最大值，可通过梯度上升法来迭代。<strong>梯度下降法和梯度上升法可相互转换</strong>。</li>
+</ul>
+</li>
+</ul>
+<a id="more"></a>
+<h2 id="2-梯度下降法缺点"><a href="#2-梯度下降法缺点" class="headerlink" title="2. 梯度下降法缺点"></a>2. 梯度下降法缺点</h2><p><strong>缺点</strong>：</p>
+<ul>
+<li>靠近极小值时收敛速度减慢。</li>
+<li>直线搜索时可能会产生一些问题。</li>
+<li>可能会“之字形”地下降。</li>
+</ul>
+<p><strong>注意</strong>：</p>
+<ul>
+<li>梯度是一个向量，即<strong>有方向有大小</strong>。 </li>
+<li>梯度的方向是<strong>最大方向导数的方向</strong>。 </li>
+<li>梯度的值是<strong>最大方向导数的值</strong>。</li>
+</ul>
+<h2 id="3-梯度下降法直观理解"><a href="#3-梯度下降法直观理解" class="headerlink" title="3. 梯度下降法直观理解"></a>3. 梯度下降法直观理解</h2><p>​    形象化举例，由上图所示，假如最开始，我们在一座大山上的某处位置，因为到处都是陌生的，不知道下山的路，所以只能摸索着根据直觉，走一步算一步，在此过程中，每走到一个位置的时候，都会求解当前位置的梯度，沿着梯度的负方向，也就是当前最陡峭的位置向下走一步，然后继续求解当前位置梯度，向这一步所在位置沿着最陡峭最易下山的位置走一步。不断循环求梯度，就这样一步步地走下去，一直走到我们觉得已经到了山脚。当然这样走下去，有可能我们不能走到山脚，而是到了某一个局部的山势低处。<br>​    由此，从上面的解释可以看出，梯度下降不一定能够找到全局的最优解，有可能是一个局部的最优解。当然，如果损失函数是凸函数，梯度下降法得到的解就一定是全局最优解。</p>
+<h2 id="4-梯度下降核心思想归纳"><a href="#4-梯度下降核心思想归纳" class="headerlink" title="4. 梯度下降核心思想归纳"></a>4. 梯度下降核心思想归纳</h2><ul>
+<li>确定优化模型的假设函数及损失函数。</li>
+<li>初始化参数，随机选取取值范围内的任意数；</li>
+</ul>
+<ul>
+<li>迭代操作：<ul>
+<li>计算当前梯度</li>
+<li>修改新的变量</li>
+<li>计算朝最陡的下坡方向走一步</li>
+<li>判断是否需要终止，如否，<strong>梯度更新</strong></li>
+</ul>
+</li>
+<li>得到全局最优解或者接近全局最优解。</li>
+</ul>
+<h2 id="5-如何对梯度下降法进行调优"><a href="#5-如何对梯度下降法进行调优" class="headerlink" title="5. 如何对梯度下降法进行调优"></a>5. 如何对梯度下降法进行调优</h2><p>实际使用梯度下降法时，各项参数指标不能一步就达到理想状态，对梯度下降法调优主要体现在以下几个方面：</p>
+<p>(1)<strong>算法迭代步长$\alpha$选择。</strong><br>    在算法参数初始化时，有时根据经验将步长初始化为1。实际取值取决于数据样本。可以从大到小，多取一些值，分别运行算法看迭代效果，如果损失函数在变小，则取值有效。如果取值无效，说明要增大步长。但步长太大，有时会导致迭代速度过快，错过最优解。步长太小，迭代速度慢，算法运行时间长。</p>
+<p>(2)<strong>参数的初始值选择。</strong><br>    初始值不同，获得的最小值也有可能不同，梯度下降有可能得到的是局部最小值。如果损失函数是凸函数，则一定是最优解。由于有局部最优解的风险，需要多次用不同初始值运行算法，关键损失函数的最小值，选择损失函数最小化的初值。</p>
+<p>(3)<strong>标准化处理。</strong><br>    由于样本不同，特征取值范围也不同，导致迭代速度慢。为了减少特征取值的影响，可对特征数据标准化，使新期望为0，新方差为1，可节省算法运行时间。</p>
+<h2 id="6-随机梯度和批量梯度区别"><a href="#6-随机梯度和批量梯度区别" class="headerlink" title="6. 随机梯度和批量梯度区别"></a>6. 随机梯度和批量梯度区别</h2><p>​    随机梯度下降(SDG)和批量梯度下降(BDG)是两种主要梯度下降法，其目的是增加某些限制来加速运算求解。<br>下面通过介绍两种梯度下降法的求解思路，对其进行比较。<br>假设函数为：</p>
+<script type="math/tex; mode=display">
+h_\theta (x_0,x_1,...,x_3) = \theta_0 x_0 + \theta_1 x_1 + ... + \theta_n x_n</script><p>损失函数为：</p>
+<script type="math/tex; mode=display">
+J(\theta_0, \theta_1, ... , \theta_n) = 
+            \frac{1}{2m} \sum^{m}_{j=0}(h_\theta (x^{j}_0
+    ,x^{j}_1,...,x^{j}_n)-y^j)^2</script><p>其中，$m$为样本个数，$j$为参数个数。</p>
+<p>1、 <strong>批量梯度下降的求解思路如下：</strong><br>a) 得到每个$\theta$对应的梯度：</p>
+<script type="math/tex; mode=display">
+\frac{\partial}{\partial \theta_i}J({\theta}_0,{\theta}_1,...,{\theta}_n)=\frac{1}{m}\sum^{m}_{j=0}(h_\theta (x^{j}_0
+    ,x^{j}_1,...,x^{j}_n)-y^j)x^{j}_i</script><p>b) 由于是求最小化风险函数，所以按每个参数 $\theta$ 的梯度负方向更新 $ \theta_i $ ：</p>
+<script type="math/tex; mode=display">
+\theta_i=\theta_i - \frac{1}{m} \sum^{m}_{j=0}(h_\theta (x^{j}_0
+    ,x^{j}_1,...,x^{j}_n)-y^j)x^{j}_i</script><p>c) 从上式可以注意到，它得到的虽然是一个全局最优解，但每迭代一步，都要用到训练集所有的数据，如果样本数据很大，这种方法迭代速度就很慢。<br>相比而言，随机梯度下降可避免这种问题。</p>
+<p>2、<strong>随机梯度下降的求解思路如下：</strong><br>a) 相比批量梯度下降对应所有的训练样本，随机梯度下降法中损失函数对应的是训练集中每个样本的粒度。<br>损失函数可以写成如下这种形式，</p>
+<script type="math/tex; mode=display">
+J(\theta_0, \theta_1, ... , \theta_n) = 
+            \frac{1}{m} \sum^{m}_{j=0}(y^j - h_\theta (x^{j}_0
+            ,x^{j}_1,...,x^{j}_n))^2 = 
+            \frac{1}{m} \sum^{m}_{j=0} cost(\theta,(x^j,y^j))</script><p>b)对每个参数 $ \theta$ 按梯度方向更新 $ \theta$：</p>
+<script type="math/tex; mode=display">
+\theta_i = \theta_i + (y^j - h_\theta (x^{j}_0, x^{j}_1, ... ,x^{j}_n))</script><p>c) 随机梯度下降是通过每个样本来迭代更新一次。<br>随机梯度下降伴随的一个问题是噪音较批量梯度下降要多，使得随机梯度下降并不是每次迭代都向着整体最优化方向。</p>
+<p><strong>小结：</strong><br>随机梯度下降法、批量梯度下降法相对来说都比较极端，简单对比如下：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">方法</th>
+<th style="text-align:left">特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">批量梯度下降</td>
+<td style="text-align:left">a)采用所有数据来梯度下降。<br/>b)批量梯度下降法在样本量很大的时候，训练速度慢。</td>
+</tr>
+<tr>
+<td style="text-align:center">随机梯度下降</td>
+<td style="text-align:left">a)随机梯度下降用一个样本来梯度下降。<br/>b)训练速度很快。<br />c)随机梯度下降法仅仅用一个样本决定梯度方向，导致解有可能不是全局最优。<br />d)收敛速度来说，随机梯度下降法一次迭代一个样本，导致迭代方向变化很大，不能很快的收敛到局部最优解。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>下面介绍能结合两种方法优点的小批量梯度下降法。</p>
+<p>3、 <strong>小批量(Mini-Batch)梯度下降的求解思路如下</strong><br>对于总数为$m$个样本的数据，根据样本的数据，选取其中的$n(1&lt; n&lt; m)$个子样本来迭代。其参数$\theta$按梯度方向更新$\theta_i$公式如下：</p>
+<script type="math/tex; mode=display">
+\theta_i = \theta_i - \alpha \sum^{t+n-1}_{j=t}
+        ( h_\theta (x^{j}_{0}, x^{j}_{1}, ... , x^{j}_{n} ) - y^j ) x^{j}_{i}</script><h2 id="7-各种梯度下降法性能比较"><a href="#7-各种梯度下降法性能比较" class="headerlink" title="7.  各种梯度下降法性能比较"></a>7.  各种梯度下降法性能比较</h2><p>​    下表简单对比随机梯度下降(SGD)、批量梯度下降(BGD)、小批量梯度下降(Mini-batch GD)、和Online GD的区别：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center">BGD</th>
+<th style="text-align:center">SGD</th>
+<th style="text-align:center">Mini-batch GD</th>
+<th style="text-align:center">Online GD</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">训练集</td>
+<td style="text-align:center">固定</td>
+<td style="text-align:center">固定</td>
+<td style="text-align:center">固定</td>
+<td style="text-align:center">实时更新</td>
+</tr>
+<tr>
+<td style="text-align:center">单次迭代样本数</td>
+<td style="text-align:center">整个训练集</td>
+<td style="text-align:center">单个样本</td>
+<td style="text-align:center">训练集的子集</td>
+<td style="text-align:center">根据具体算法定</td>
+</tr>
+<tr>
+<td style="text-align:center">算法复杂度</td>
+<td style="text-align:center">高</td>
+<td style="text-align:center">低</td>
+<td style="text-align:center">一般</td>
+<td style="text-align:center">低</td>
+</tr>
+<tr>
+<td style="text-align:center">时效性</td>
+<td style="text-align:center">低</td>
+<td style="text-align:center">一般</td>
+<td style="text-align:center">一般</td>
+<td style="text-align:center">高</td>
+</tr>
+<tr>
+<td style="text-align:center">收敛性</td>
+<td style="text-align:center">稳定</td>
+<td style="text-align:center">不稳定</td>
+<td style="text-align:center">较稳定</td>
+<td style="text-align:center">不稳定</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>​    Online GD于Mini-batch GD/SGD的区别在于，所有训练数据只用一次，然后丢弃。这样做的优点在于可预测最终模型的变化趋势。</p>
+<p>​    Online GD在互联网领域用的较多，比如搜索广告的点击率(CTR)预估模型，网民的点击行为会随着时间改变。用普通的BGD算法(每天更新一次)一方面耗时较长(需要对所有历史数据重新训练)；另一方面，无法及时反馈用户的点击行为迁移。而Online GD算法可以实时的依据网民的点击行为进行迁移。</p>
+<h2 id="8-推导多元函数梯度下降法的迭代公式。"><a href="#8-推导多元函数梯度下降法的迭代公式。" class="headerlink" title="8. 推导多元函数梯度下降法的迭代公式。"></a>8. 推导多元函数梯度下降法的迭代公式。</h2><p>根据多元函数泰勒公式，如果忽略一次以上的项，函数在$\mathbf{x}$点处可以展开为</p>
+<script type="math/tex; mode=display">
+f(\mathbf{x}+\Delta \mathbf{x})=f(\mathbf{x})+(\nabla f(\mathbf{x}))^{\mathrm{T}} \Delta \mathbf{x}+o(\|\mathbf{\Delta} \mathbf{x}\|)</script><p>对上式变形，函数的增量与自变量增量、函数梯度的关系为</p>
+<script type="math/tex; mode=display">
+f(\mathbf{x}+\Delta \mathbf{x})-f(\mathbf{x})=(\nabla f(\mathbf{x}))^{\mathrm{T}} \Delta \mathbf{x}+o(\|\Delta \mathbf{x}\|)</script><p>如果令$\Delta \mathbf{x}=-\nabla f(\mathbf{x})$则有</p>
+<script type="math/tex; mode=display">
+f(\mathbf{x}+\Delta \mathbf{x})-f(\mathbf{x}) \approx-(\nabla f(\mathbf{x}))^{\mathrm{T}} \nabla f(\mathbf{x}) \leq 0</script><p>即函数值减小。即有</p>
+<script type="math/tex; mode=display">
+f(\mathbf{x}+\Delta \mathbf{x}) \leq f(\mathbf{x})</script><p>梯度下降法每次的迭代增量为</p>
+<script type="math/tex; mode=display">
+\Delta \mathbf{x}=-\alpha \nabla f(\mathbf{x})</script><p>其中$\alpha$为人工设定的接近于的正数，称为步长或学习率。其作用是保证$\mathbf{x}+\Delta \mathbf{x}$在$\mathbf{x}$的<br>邻域内，从而可以忽略泰勒公式中的$o(|\Delta \mathbf{x}|)$项。</p>
+<p>使用该增量则有</p>
+<script type="math/tex; mode=display">
+(\nabla f(\mathbf{x}))^{\mathrm{T}} \Delta \mathbf{x}=-\alpha(\nabla f(\mathbf{x}))^{\mathrm{T}}(\nabla f(\mathbf{x})) \leq 0</script><p>函数值下降。从初始点$\mathbf{x}_{0}$开始，反复使用如下<strong>迭代公式</strong></p>
+<script type="math/tex; mode=display">
+\mathbf{x}_{k+1}=\mathbf{x}_{k}-\alpha \nabla f\left(\mathbf{x}_{k}\right)</script><p>只要没有到达梯度为0的点，函数值会沿序列$\mathbf{x}<em>{k}$递减，最终收敛到梯度为0 的点。从$\mathbf{x}</em>{0}$<br>出发，用<strong>迭代公式</strong>进行迭代，会形成一个函数值递减的序列$\left{\mathbf{x}_{i}\right}$</p>
+<script type="math/tex; mode=display">
+f\left(\mathbf{x}_{0}\right) \geq f\left(\mathbf{x}_{1}\right) \geq f\left(\mathbf{x}_{2}\right) \geq \ldots \geq f\left(\mathbf{x}_{k}\right)</script><h2 id="9-梯度下降法如何判断是否收敛？"><a href="#9-梯度下降法如何判断是否收敛？" class="headerlink" title="9.  梯度下降法如何判断是否收敛？"></a>9.  梯度下降法如何判断是否收敛？</h2><p>迭代终止的条件是函数的梯度值为0(实际实现时是接近于0 即可)，此时认为已经达<br>到极值点。可以通过判定梯度的二范数是否充分接近于0 而实现。</p>
+<h2 id="10-梯度下降法为什么要在迭代公式中使用步长系数？"><a href="#10-梯度下降法为什么要在迭代公式中使用步长系数？" class="headerlink" title="10. 梯度下降法为什么要在迭代公式中使用步长系数？"></a>10. 梯度下降法为什么要在迭代公式中使用步长系数？</h2><p>其作用是保证$\mathbf{x}+\Delta \mathbf{x}$在$\mathbf{x}$的邻域内，即控制增量的步长，从而可以忽略泰勒公式中的<br>$o(|\Delta \mathbf{x}|)$项。否则不能保证每次迭代时函数值下降。</p>
+<h2 id="11-梯度下降法和牛顿法能保证找到函数的极小值点吗，为什么？"><a href="#11-梯度下降法和牛顿法能保证找到函数的极小值点吗，为什么？" class="headerlink" title="11. 梯度下降法和牛顿法能保证找到函数的极小值点吗，为什么？"></a>11. 梯度下降法和牛顿法能保证找到函数的极小值点吗，为什么？</h2><p>不能，可能收敛到鞍点，不是极值点。</p>
+<h2 id="12-解释一元函数极值判别法则。"><a href="#12-解释一元函数极值判别法则。" class="headerlink" title="12. 解释一元函数极值判别法则。"></a>12. 解释一元函数极值判别法则。</h2><p>假设$x_0$为函数的驻点，可分为以下三种情况。<br>case1：在该点处的二阶导数大于0，则为函数的极小值点；<br>case2：在该点处的二阶导数小于0，则为极大值点；<br>case3：在该点处的二阶导数等于0，则情况不定，可能是极值点，也可能不是极值点。</p>
+<h2 id="13-解释多元函数极值判别法则。"><a href="#13-解释多元函数极值判别法则。" class="headerlink" title="13. 解释多元函数极值判别法则。"></a>13. 解释多元函数极值判别法则。</h2><p>假设多元函数在点M的梯度为0 ，即M 是函数的驻点。其Hessian 矩阵有如下几种情<br>况。<br>case1：Hessian 矩阵正定，函数在该点有极小值。<br>case2：Hessian 矩阵负定，函数在该点有极大值。<br>case3：Hessian 矩阵不定，则不是极值点，称为鞍点。<br>Hessian 矩阵正定类似于一元函数的二阶导数大于0，负定则类似于一元函数的二阶导<br>数小于0。</p>
+<h2 id="14-什么是鞍点？"><a href="#14-什么是鞍点？" class="headerlink" title="14. 什么是鞍点？"></a>14. 什么是鞍点？</h2><p><strong>Hessian 矩阵不定的点称为鞍点</strong>，它不是函数的极值点。</p>
+<h2 id="15-解释什么是局部极小值，什么是全局极小值。"><a href="#15-解释什么是局部极小值，什么是全局极小值。" class="headerlink" title="15. 解释什么是局部极小值，什么是全局极小值。"></a>15. 解释什么是局部极小值，什么是全局极小值。</h2><ul>
+<li>全局极小值<ul>
+<li>假设$\mathbf{x}^{*}$是一个可行解，如果对可行域内所有点$\mathbf{x}$都有$f\left(\mathbf{x}^{*}\right) \leq f(\mathbf{x})$，则<br>称$\mathbf{x}^{*}$为全局极小值。</li>
+</ul>
+</li>
+<li>局部极小值<ul>
+<li>对于可行解$\mathbf{x}^{*}$，如果存在其$\delta$邻域，使得该邻域内的所有点即所有满足<br>$\left|\mathbf{x}-\mathbf{x}^{*}\right| \leq \delta$的点$\mathbf{x}$，都有$f\left(x^{*}\right) \leq f(x)$，则称$\mathbf{x}^{*}$为局部极小值。</li>
+</ul>
+</li>
+</ul>
+<h2 id="16-推导多元函数牛顿法的迭代公式。"><a href="#16-推导多元函数牛顿法的迭代公式。" class="headerlink" title="16. 推导多元函数牛顿法的迭代公式。"></a>16. 推导多元函数牛顿法的迭代公式。</h2><p>根据费马定理，函数在点$\mathbf{x}$ 处取得极值的必要条件是梯度为0</p>
+<script type="math/tex; mode=display">
+\nabla f(\mathbf{x})=\mathbf{0}</script><p>对于一般的函数，直接求解此方程组存在困难。对目标函数在$\mathbf{x}_{0}$ 处作二阶泰勒展开</p>
+<script type="math/tex; mode=display">
+f(\mathbf{x})=f\left(\mathbf{x}_{0}\right)+\nabla f\left(\mathbf{x}_{0}\right)^{\mathrm{T}}\left(\mathbf{x}-\mathbf{x}_{0}\right)+\frac{1}{2}\left(\mathbf{x}-\mathbf{x}_{0}\right)^{\mathrm{T}} \nabla^{2} f\left(\mathbf{x}_{0}\right)\left(\mathbf{x}-\mathbf{x}_{0}\right)+o\left(\left\|\mathbf{k}-\mathbf{x}_{0}\right\|^{2}\right)</script><p>忽略二次以上的项，将目标函数近似成二次函数，等式两边同时对$\mathbf{x}$求梯度，可得</p>
+<script type="math/tex; mode=display">
+\nabla f(\mathbf{x}) \approx \nabla f\left(\mathbf{x}_{0}\right)+\nabla^{2} f\left(\mathbf{x}_{0}\right)\left(\mathbf{x}-\mathbf{x}_{0}\right)</script><p>其中 $\nabla^{2} f\left(\mathbf{x}<em>{0}\right)$为在$\mathbf{x}</em>{0}$ 处的Hessian 矩阵。令函数的梯度为0 ，有 </p>
+<script type="math/tex; mode=display">
+\nabla f\left(\mathbf{x}_{0}\right)+\nabla^{2} f\left(\mathbf{x}_{0}\right)\left(\mathbf{x}-\mathbf{x}_{0}\right)=\mathbf{0}</script><p>解这个线性方程组可以得到</p>
+<script type="math/tex; mode=display">
+\tag{1}\mathbf{x}=\mathbf{x}_{0}-\left(\nabla^{2} f\left(\mathbf{x}_{0}\right)\right)^{-1} \nabla f\left(\mathbf{x}_{0}\right)</script><p>如果将梯度向量简写为$\mathbf{g}$ ，Hessian 矩阵简记为$\mathbf{H}$ ，式(1)可以简写为</p>
+<script type="math/tex; mode=display">
+\tag{2}\mathbf{x}=\mathbf{x}_{0}-\mathbf{H}^{-1} \mathbf{g}</script><p>在泰勒公式中忽略了高阶项将函数做了近似，因此这个解不一定是目标函数的驻点，需要反复用式(2) 进行迭代。从初始点$\mathbf{x}_{0}$处开始，计算函数在当前点处的Hessian 矩阵和梯度向量，然后用下面的公式进行迭代</p>
+<script type="math/tex; mode=display">
+\tag{3} \mathbf{x}_{k+1}=\mathbf{x}_{k}-\alpha \mathbf{H}_{k}^{-1} \mathbf{g}_{k}</script><p>直至收敛到驻点处。迭代终止的条件是梯度的模接近于0 ，或达到指定的迭代次数。其中$\alpha$是人工设置的学习率。需要学习率的原因与梯度下降法相同，是为了保证能够忽略泰勒公式中的高阶无穷小项。</p>
+<h2 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h2><p>深度学习500问： <a target="_blank" rel="noopener" href="https://github.com/scutan90/DeepLearning-500-questions">https://github.com/scutan90/DeepLearning-500-questions</a> </p>
+<p>机器学习与深度学习习题集答案-1：<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/4kWUE8ml_o6iF0F1TREyiA">https://mp.weixin.qq.com/s/4kWUE8ml_o6iF0F1TREyiA</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/DL/" rel="tag"># DL</a>
+              <a href="/tags/ML/" rel="tag"># ML</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92+%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/" rel="prev" title="线性回归&逻辑回归">
+                  <i class="fa fa-chevron-left"></i> 线性回归&逻辑回归
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E5%86%B3%E7%AD%96%E6%A0%91/" rel="next" title="机器学习面试题-决策树">
+                  机器学习面试题-决策树 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Kayden</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+      <script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              const target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    const script = document.createElement('script');
+    script.src = '//cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js';
+    script.defer = true;
+    document.head.appendChild(script);
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.typesetClear();
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
