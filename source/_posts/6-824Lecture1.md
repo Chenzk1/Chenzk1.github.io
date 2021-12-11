@@ -12,6 +12,7 @@ categories:
 - [video](https://www.youtube.com/watch?v=WtZ7pcRSkOA)
 - [note](https://mp.weixin.qq.com/s/I0PBo_O8sl18O5cgMvQPYA)
 - [the reason why google gives up MapReduce](https://www.the-paper-trail.org/post/2014-06-25-the-elephant-was-a-trojan-horse-on-the-death-of-map-reduce-at-google/)
+
 # Backgorund
 - big data
 - lots of kv data stuctures, like inverted index
