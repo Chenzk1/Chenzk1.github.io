@@ -217,12 +217,12 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">36</span>
+          <span class="site-state-item-count">35</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">2</span>
         <span class="site-state-item-name">categories</span>
       </div>
       <div class="site-state-item site-state-tags">
@@ -288,7 +288,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/11/empty/">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/11/6-824Lecture1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -302,7 +302,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/12/11/empty/" class="post-title-link" itemprop="url">test</a>
+            <a href="/2021/12/11/6-824Lecture1/" class="post-title-link" itemprop="url">6.824-Lecture1 MapReduce</a>
         </h2>
 
         <div class="post-meta-container">
@@ -313,74 +313,7 @@
       </span>
       <span class="post-meta-item-text">Posted on</span>
 
-      <time title="Created: 2021-12-11 19:00:26" itemprop="dateCreated datePublished" datetime="2021-12-11T19:00:26+08:00">2021-12-11</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <ul>
-<li>this is a thmplate.</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/11/6.824Lecture1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Kayden">
-      <meta itemprop="description" content="Kayden's Blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Kayden's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/12/11/6.824Lecture1/" class="post-title-link" itemprop="url">6.824-Lecture1 MapReduce</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-12-11 18:57:30" itemprop="dateCreated datePublished" datetime="2021-12-11T18:57:30+08:00">2021-12-11</time>
+      <time title="Created: 2021-12-11 19:08:24" itemprop="dateCreated datePublished" datetime="2021-12-11T19:08:24+08:00">2021-12-11</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -388,7 +321,7 @@
       </span>
       <span class="post-meta-item-text">In</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/learning/" itemprop="url" rel="index"><span itemprop="name">learning</span></a>
+          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
         </span>
     </span>
 
@@ -402,7 +335,38 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          
+          <h1 id="Refs"><a href="#Refs" class="headerlink" title="Refs"></a>Refs</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://static.googleusercontent.com/media/research.google.com/zh-CN//archive/mapreduce-osdi04.pdf">paper</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=WtZ7pcRSkOA">video</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/I0PBo_O8sl18O5cgMvQPYA">note</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.the-paper-trail.org/post/2014-06-25-the-elephant-was-a-trojan-horse-on-the-death-of-map-reduce-at-google/">the reason why google gives up MapReduce</a><h1 id="Backgorund"><a href="#Backgorund" class="headerlink" title="Backgorund"></a>Backgorund</h1></li>
+<li>big data</li>
+<li>lots of kv data stuctures, like inverted index</li>
+</ul>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><h2 id="Abstract-view"><a href="#Abstract-view" class="headerlink" title="Abstract view"></a>Abstract view</h2><p><img src="https://mmbiz.qpic.cn/mmbiz_png/hBL5R2neMA1ynq0HZhJ5kup6vibWOUCRs4ZIhdia6NzgB6g5Hem4Zy9pHqPEzHUwLgB96M2kmQ7elmTQtnqkE3AA/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="workflow"></p>
+<ul>
+<li><em>split</em> files from GFS to disks</li>
+<li>master分配worker执行map任务，生成k,v值，存入disk，map回传disk地址给master</li>
+<li>master传递地址给reduce worker，reduce worker使用RPC读disk数据</li>
+<li><em>sort by key</em>, 并将所有values聚合</li>
+<li>reduce</li>
+<li>master返回reduce结果给GFS</li>
+</ul>
+<h2 id="Fault-tolerance"><a href="#Fault-tolerance" class="headerlink" title="Fault tolerance"></a>Fault tolerance</h2><ul>
+<li>fail -&gt; rerun: worker rerun不会产生其他问题</li>
+<li>worker fault: Master 周期性的 ping 每个 Worker，如果指定时间内没回应就是挂了。将这个 Worker 标记为失效，分配给这个失效 Worker 的任务将被重新分配给其他 Worker；</li>
+<li>master fault: 中止整个 MapReduce 运算，重新执行。</li>
+</ul>
+<h1 id="Performance"><a href="#Performance" class="headerlink" title="Performance"></a>Performance</h1><ul>
+<li>bandwidth: 尽量保持worker和其执行的文件在同一台机器上，会相近的机器</li>
+<li>slow workers: 吊起执行快的作为backup worker，取最先执行完的worker</li>
+</ul>
+<h1 id="Cons"><a href="#Cons" class="headerlink" title="Cons"></a>Cons</h1><ul>
+<li>实时性</li>
+<li>复杂需求时需要大量相互依赖的mr逻辑 -》难开发，难调试</li>
+</ul>
+<p><em>作为一种范式，而非产品？</em></p>
+
       
     </div>
 
@@ -1126,6 +1090,99 @@
 <h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><ul>
 <li>GBDT的性能在RF的基础上又有一步提升，因此其优点也很明显，1、它能灵活的处理各种类型的数据；2、在相对较少的调参时间下，预测的准确度较高。</li>
 <li>当然由于它是Boosting，因此基学习器之前存在串行关系，难以并行训练数据。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/10/Java%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%BA%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Kayden">
+      <meta itemprop="description" content="Kayden's Blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kayden's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/12/10/Java%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%BA%90/" class="post-title-link" itemprop="url">Java学习资源</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-12-10 00:00:00" itemprop="dateCreated datePublished" datetime="2021-12-10T00:00:00+08:00">2021-12-10</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-12-11 17:40:52" itemprop="dateModified" datetime="2021-12-11T17:40:52+08:00">2021-12-11</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="书籍"><a href="#书籍" class="headerlink" title="书籍"></a>书籍</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/apachecn/thinking-in-java-zh">Java编程思想</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/Chenzk1/PrivateNotes/blob/master/books/Head%20First%20Java%28%E7%AC%AC2%E7%89%88%29.pdf">Head First Java</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/Chenzk1/PrivateNotes/blob/master/books/Java%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%20%E5%8D%B71%20%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%20%E5%8E%9F%E4%B9%A6%E7%AC%AC9%E7%89%88%20%E5%AE%8C%E6%95%B4%E4%B8%AD%E6%96%87%E7%89%88%20.pdf">Java核心技术卷1</a></li>
+</ul>
+<h2 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.liaoxuefeng.com/wiki/1252599548343744">廖雪峰的Java教程</a></li>
+</ul>
+<h2 id="博客"><a href="#博客" class="headerlink" title="博客"></a>博客</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000014933213">Java学习的四个阶段</a></li>
+<li><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903985170612238">可能是最适合你的 Java 学习路线和方法</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/115890802">2020年最新Java学习路线图</a></li>
 </ul>
 
       

@@ -3462,19 +3462,42 @@ w=m(a+x, b+y)^{*} e^{-\frac{\left(x^{\prime}\right)^{2}+\left(y^{\prime}\right)^
       </tags>
   </entry>
   <entry>
-    <title>test</title>
-    <url>/2021/12/11/empty/</url>
-    <content><![CDATA[<ul>
-<li>this is a thmplate.</li>
-</ul>
-]]></content>
-  </entry>
-  <entry>
     <title>6.824-Lecture1 MapReduce</title>
-    <url>/2021/12/11/6.824Lecture1/</url>
-    <content><![CDATA[]]></content>
+    <url>/2021/12/11/6-824Lecture1/</url>
+    <content><![CDATA[<h1 id="Refs"><a href="#Refs" class="headerlink" title="Refs"></a>Refs</h1><ul>
+<li><a href="https://static.googleusercontent.com/media/research.google.com/zh-CN//archive/mapreduce-osdi04.pdf">paper</a></li>
+<li><a href="https://www.youtube.com/watch?v=WtZ7pcRSkOA">video</a></li>
+<li><a href="https://mp.weixin.qq.com/s/I0PBo_O8sl18O5cgMvQPYA">note</a></li>
+<li><a href="https://www.the-paper-trail.org/post/2014-06-25-the-elephant-was-a-trojan-horse-on-the-death-of-map-reduce-at-google/">the reason why google gives up MapReduce</a><h1 id="Backgorund"><a href="#Backgorund" class="headerlink" title="Backgorund"></a>Backgorund</h1></li>
+<li>big data</li>
+<li>lots of kv data stuctures, like inverted index</li>
+</ul>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><h2 id="Abstract-view"><a href="#Abstract-view" class="headerlink" title="Abstract view"></a>Abstract view</h2><p><img src="https://mmbiz.qpic.cn/mmbiz_png/hBL5R2neMA1ynq0HZhJ5kup6vibWOUCRs4ZIhdia6NzgB6g5Hem4Zy9pHqPEzHUwLgB96M2kmQ7elmTQtnqkE3AA/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="workflow"></p>
+<ul>
+<li><em>split</em> files from GFS to disks</li>
+<li>master分配worker执行map任务，生成k,v值，存入disk，map回传disk地址给master</li>
+<li>master传递地址给reduce worker，reduce worker使用RPC读disk数据</li>
+<li><em>sort by key</em>, 并将所有values聚合</li>
+<li>reduce</li>
+<li>master返回reduce结果给GFS</li>
+</ul>
+<h2 id="Fault-tolerance"><a href="#Fault-tolerance" class="headerlink" title="Fault tolerance"></a>Fault tolerance</h2><ul>
+<li>fail -&gt; rerun: worker rerun不会产生其他问题</li>
+<li>worker fault: Master 周期性的 ping 每个 Worker，如果指定时间内没回应就是挂了。将这个 Worker 标记为失效，分配给这个失效 Worker 的任务将被重新分配给其他 Worker；</li>
+<li>master fault: 中止整个 MapReduce 运算，重新执行。</li>
+</ul>
+<h1 id="Performance"><a href="#Performance" class="headerlink" title="Performance"></a>Performance</h1><ul>
+<li>bandwidth: 尽量保持worker和其执行的文件在同一台机器上，会相近的机器</li>
+<li>slow workers: 吊起执行快的作为backup worker，取最先执行完的worker</li>
+</ul>
+<h1 id="Cons"><a href="#Cons" class="headerlink" title="Cons"></a>Cons</h1><ul>
+<li>实时性</li>
+<li>复杂需求时需要大量相互依赖的mr逻辑 -》难开发，难调试</li>
+</ul>
+<p><em>作为一种范式，而非产品？</em></p>
+]]></content>
       <categories>
-        <category>learning</category>
+        <category>Learning</category>
       </categories>
       <tags>
         <tag>6.824</tag>
