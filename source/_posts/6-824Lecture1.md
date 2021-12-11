@@ -19,12 +19,12 @@ categories:
 # Method
 ## Abstract view
 
-![workflow](https://mmbiz.qpic.cn/mmbiz_png/hBL5R2neMA1ynq0HZhJ5kup6vibWOUCRs4ZIhdia6NzgB6g5Hem4Zy9pHqPEzHUwLgB96M2kmQ7elmTQtnqkE3AA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+![workflow](workflow.png)
  
-- *split* files from GFS to disks
+- **split** files from GFS to disks
 - master分配worker执行map任务，生成k,v值，存入disk，map回传disk地址给master
 - master传递地址给reduce worker，reduce worker使用RPC读disk数据
-- *sort by key*, 并将所有values聚合
+- **sort by key**, 并将所有values聚合
 - reduce
 - master返回reduce结果给GFS
 
@@ -42,4 +42,4 @@ categories:
 - 复杂需求时需要大量相互依赖的mr逻辑 -》难开发，难调试
 
 
-*作为一种范式，而非产品？*
+**作为一种范式，而非产品？**
