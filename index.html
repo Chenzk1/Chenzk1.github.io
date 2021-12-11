@@ -343,12 +343,12 @@
 <li>big data</li>
 <li>lots of kv data stuctures, like inverted index</li>
 </ul>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><h2 id="Abstract-view"><a href="#Abstract-view" class="headerlink" title="Abstract view"></a>Abstract view</h2><p><img src="https://mmbiz.qpic.cn/mmbiz_png/hBL5R2neMA1ynq0HZhJ5kup6vibWOUCRs4ZIhdia6NzgB6g5Hem4Zy9pHqPEzHUwLgB96M2kmQ7elmTQtnqkE3AA/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="workflow"></p>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><h2 id="Abstract-view"><a href="#Abstract-view" class="headerlink" title="Abstract view"></a>Abstract view</h2><p><img src="workflow.png" alt="workflow"></p>
 <ul>
-<li><em>split</em> files from GFS to disks</li>
+<li><strong>split</strong> files from GFS to disks</li>
 <li>master分配worker执行map任务，生成k,v值，存入disk，map回传disk地址给master</li>
 <li>master传递地址给reduce worker，reduce worker使用RPC读disk数据</li>
-<li><em>sort by key</em>, 并将所有values聚合</li>
+<li><strong>sort by key</strong>, 并将所有values聚合</li>
 <li>reduce</li>
 <li>master返回reduce结果给GFS</li>
 </ul>
@@ -365,7 +365,7 @@
 <li>实时性</li>
 <li>复杂需求时需要大量相互依赖的mr逻辑 -》难开发，难调试</li>
 </ul>
-<p><em>作为一种范式，而非产品？</em></p>
+<p><strong>作为一种范式，而非产品？</strong></p>
 
       
     </div>
