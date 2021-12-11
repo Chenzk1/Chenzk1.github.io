@@ -3466,4 +3466,15 @@ w=m(a+x, b+y)^{*} e^{-\frac{\left(x^{\prime}\right)^{2}+\left(y^{\prime}\right)^
     <url>/2021/12/11/empty/</url>
     <content><![CDATA[]]></content>
   </entry>
+  <entry>
+    <title>6.824-Lecture1 MapReduce</title>
+    <url>/2021/12/11/6.824Lecture1/</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>learning</category>
+      </categories>
+      <tags>
+        <tag>6.824</tag>
+      </tags>
+  </entry>
 </search>
