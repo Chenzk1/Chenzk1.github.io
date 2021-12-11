@@ -3464,7 +3464,10 @@ w=m(a+x, b+y)^{*} e^{-\frac{\left(x^{\prime}\right)^{2}+\left(y^{\prime}\right)^
   <entry>
     <title>test</title>
     <url>/2021/12/11/empty/</url>
-    <content><![CDATA[]]></content>
+    <content><![CDATA[<ul>
+<li>this is a thmplate.</li>
+</ul>
+]]></content>
   </entry>
   <entry>
     <title>6.824-Lecture1 MapReduce</title>
