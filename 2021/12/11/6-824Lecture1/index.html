@@ -23,12 +23,12 @@
     var CONFIG = {"hostname":"chenzk1.github.io","root":"/","scheme":"Gemini","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 
-  <meta name="description" content="Refs paper video note the reason why google gives up MapReduce  Backgorund big data lots of kv data stuctures, like inverted index  MethodAbstract view  split files from GFS to disks master分配worker执行m">
+  <meta name="description" content="Backgorund big data lots of kv data stuctures, like inverted index  MethodAbstract view">
 <meta property="og:type" content="article">
 <meta property="og:title" content="6.824-Lecture1 MapReduce">
 <meta property="og:url" content="https://chenzk1.github.io/2021/12/11/6-824Lecture1/index.html">
 <meta property="og:site_name" content="Kayden&#39;s Blog">
-<meta property="og:description" content="Refs paper video note the reason why google gives up MapReduce  Backgorund big data lots of kv data stuctures, like inverted index  MethodAbstract view  split files from GFS to disks master分配worker执行m">
+<meta property="og:description" content="Backgorund big data lots of kv data stuctures, like inverted index  MethodAbstract view">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://chenzk1.github.io/2021/12/11/6-824Lecture1/workflow.png">
 <meta property="article:published_time" content="2021-12-11T11:08:24.000Z">
@@ -208,7 +208,7 @@
 
       <!--noindex-->
       <section class="post-toc-wrap sidebar-panel">
-          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Refs"><span class="nav-number">1.</span> <span class="nav-text">Refs</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Backgorund"><span class="nav-number">2.</span> <span class="nav-text">Backgorund</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Method"><span class="nav-number">3.</span> <span class="nav-text">Method</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Abstract-view"><span class="nav-number">3.1.</span> <span class="nav-text">Abstract view</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Fault-tolerance"><span class="nav-number">3.2.</span> <span class="nav-text">Fault tolerance</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Performance"><span class="nav-number">4.</span> <span class="nav-text">Performance</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Cons"><span class="nav-number">5.</span> <span class="nav-text">Cons</span></a></li></ol></div>
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Backgorund"><span class="nav-number">1.</span> <span class="nav-text">Backgorund</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Method"><span class="nav-number">2.</span> <span class="nav-text">Method</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Abstract-view"><span class="nav-number">2.1.</span> <span class="nav-text">Abstract view</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Fault-tolerance"><span class="nav-number">2.2.</span> <span class="nav-text">Fault tolerance</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Performance"><span class="nav-number">3.</span> <span class="nav-text">Performance</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Cons"><span class="nav-number">4.</span> <span class="nav-text">Cons</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Refs"><span class="nav-number">5.</span> <span class="nav-text">Refs</span></a></li></ol></div>
       </section>
       <!--/noindex-->
 
@@ -340,17 +340,12 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="Refs"><a href="#Refs" class="headerlink" title="Refs"></a>Refs</h1><ul>
-<li><a target="_blank" rel="noopener" href="https://static.googleusercontent.com/media/research.google.com/zh-CN//archive/mapreduce-osdi04.pdf">paper</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=WtZ7pcRSkOA">video</a></li>
-<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/I0PBo_O8sl18O5cgMvQPYA">note</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.the-paper-trail.org/post/2014-06-25-the-elephant-was-a-trojan-horse-on-the-death-of-map-reduce-at-google/">the reason why google gives up MapReduce</a></li>
-</ul>
-<h1 id="Backgorund"><a href="#Backgorund" class="headerlink" title="Backgorund"></a>Backgorund</h1><ul>
+        <h1 id="Backgorund"><a href="#Backgorund" class="headerlink" title="Backgorund"></a>Backgorund</h1><ul>
 <li>big data</li>
 <li>lots of kv data stuctures, like inverted index</li>
 </ul>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><h2 id="Abstract-view"><a href="#Abstract-view" class="headerlink" title="Abstract view"></a>Abstract view</h2><p><img src="workflow.png" alt="workflow"></p>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><h2 id="Abstract-view"><a href="#Abstract-view" class="headerlink" title="Abstract view"></a>Abstract view</h2><img src="/2021/12/11/6-824Lecture1/workflow.png" class="" title="workflow">
+<a id="more"></a> 
 <ul>
 <li><strong>split</strong> files from GFS to disks</li>
 <li>master分配worker执行map任务，生成k,v值，存入disk，map回传disk地址给master</li>
@@ -371,6 +366,12 @@
 <h1 id="Cons"><a href="#Cons" class="headerlink" title="Cons"></a>Cons</h1><ul>
 <li>实时性</li>
 <li>复杂需求时需要大量相互依赖的mr逻辑 -》难开发，难调试</li>
+</ul>
+<h1 id="Refs"><a href="#Refs" class="headerlink" title="Refs"></a>Refs</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://static.googleusercontent.com/media/research.google.com/zh-CN//archive/mapreduce-osdi04.pdf">paper</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=WtZ7pcRSkOA">video</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/I0PBo_O8sl18O5cgMvQPYA">note</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.the-paper-trail.org/post/2014-06-25-the-elephant-was-a-trojan-horse-on-the-death-of-map-reduce-at-google/">the reason why google gives up MapReduce</a></li>
 </ul>
 <p><strong>作为一种范式，而非产品？</strong></p>
 

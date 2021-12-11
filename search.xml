@@ -3464,17 +3464,12 @@ w=m(a+x, b+y)^{*} e^{-\frac{\left(x^{\prime}\right)^{2}+\left(y^{\prime}\right)^
   <entry>
     <title>6.824-Lecture1 MapReduce</title>
     <url>/2021/12/11/6-824Lecture1/</url>
-    <content><![CDATA[<h1 id="Refs"><a href="#Refs" class="headerlink" title="Refs"></a>Refs</h1><ul>
-<li><a href="https://static.googleusercontent.com/media/research.google.com/zh-CN//archive/mapreduce-osdi04.pdf">paper</a></li>
-<li><a href="https://www.youtube.com/watch?v=WtZ7pcRSkOA">video</a></li>
-<li><a href="https://mp.weixin.qq.com/s/I0PBo_O8sl18O5cgMvQPYA">note</a></li>
-<li><a href="https://www.the-paper-trail.org/post/2014-06-25-the-elephant-was-a-trojan-horse-on-the-death-of-map-reduce-at-google/">the reason why google gives up MapReduce</a></li>
-</ul>
-<h1 id="Backgorund"><a href="#Backgorund" class="headerlink" title="Backgorund"></a>Backgorund</h1><ul>
+    <content><![CDATA[<h1 id="Backgorund"><a href="#Backgorund" class="headerlink" title="Backgorund"></a>Backgorund</h1><ul>
 <li>big data</li>
 <li>lots of kv data stuctures, like inverted index</li>
 </ul>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><h2 id="Abstract-view"><a href="#Abstract-view" class="headerlink" title="Abstract view"></a>Abstract view</h2><p><img src="workflow.png" alt="workflow"></p>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><h2 id="Abstract-view"><a href="#Abstract-view" class="headerlink" title="Abstract view"></a>Abstract view</h2><img src="/2021/12/11/6-824Lecture1/workflow.png" class="" title="workflow">
+<a id="more"></a> 
 <ul>
 <li><strong>split</strong> files from GFS to disks</li>
 <li>master分配worker执行map任务，生成k,v值，存入disk，map回传disk地址给master</li>
@@ -3495,6 +3490,12 @@ w=m(a+x, b+y)^{*} e^{-\frac{\left(x^{\prime}\right)^{2}+\left(y^{\prime}\right)^
 <h1 id="Cons"><a href="#Cons" class="headerlink" title="Cons"></a>Cons</h1><ul>
 <li>实时性</li>
 <li>复杂需求时需要大量相互依赖的mr逻辑 -》难开发，难调试</li>
+</ul>
+<h1 id="Refs"><a href="#Refs" class="headerlink" title="Refs"></a>Refs</h1><ul>
+<li><a href="https://static.googleusercontent.com/media/research.google.com/zh-CN//archive/mapreduce-osdi04.pdf">paper</a></li>
+<li><a href="https://www.youtube.com/watch?v=WtZ7pcRSkOA">video</a></li>
+<li><a href="https://mp.weixin.qq.com/s/I0PBo_O8sl18O5cgMvQPYA">note</a></li>
+<li><a href="https://www.the-paper-trail.org/post/2014-06-25-the-elephant-was-a-trojan-horse-on-the-death-of-map-reduce-at-google/">the reason why google gives up MapReduce</a></li>
 </ul>
 <p><strong>作为一种范式，而非产品？</strong></p>
 ]]></content>
