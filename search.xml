@@ -3585,7 +3585,7 @@ w=m(a+x, b+y)^{*} e^{-\frac{\left(x^{\prime}\right)^{2}+\left(y^{\prime}\right)^
       </tags>
   </entry>
   <entry>
-    <title>CS224WLecture1-GraphIntro&amp;GraphRepresentations</title>
+    <title>CS224WLecture1-Graph Intro &amp; Graph Representations</title>
     <url>/2021/12/12/CS224WLec1/</url>
     <content><![CDATA[<h1 id="Intro"><a href="#Intro" class="headerlink" title="Intro"></a>Intro</h1><ul>
 <li>title: Machine Learning with Graphs</li>
@@ -3646,5 +3646,11 @@ w=m(a+x, b+y)^{*} e^{-\frac{\left(x^{\prime}\right)^{2}+\left(y^{\prime}\right)^
       <tags>
         <tag>cs224w</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>CS224WLec2-Traditional Methods for ML on Graphs</title>
+    <url>/2021/12/12/CS224WLec2/</url>
+    <content><![CDATA[<a id="more"></a>
+]]></content>
   </entry>
 </search>
