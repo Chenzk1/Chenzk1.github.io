@@ -23,23 +23,21 @@
     var CONFIG = {"hostname":"chenzk1.github.io","root":"/","scheme":"Gemini","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 
-  <meta name="description" content="BackgroundWhy Threads? I&#x2F;O concurrency multi core parallelism convenience for, like routine">
-<meta property="og:type" content="article">
-<meta property="og:title" content="6.824Lecture2 RPC&amp;Threads">
-<meta property="og:url" content="https://chenzk1.github.io/2021/12/11/6-824Lecture2/index.html">
+  <meta name="description" content="Kayden&#39;s Blog">
+<meta property="og:type" content="website">
+<meta property="og:title" content="categories">
+<meta property="og:url" content="https://chenzk1.github.io/categories/index.html">
 <meta property="og:site_name" content="Kayden&#39;s Blog">
-<meta property="og:description" content="BackgroundWhy Threads? I&#x2F;O concurrency multi core parallelism convenience for, like routine">
+<meta property="og:description" content="Kayden&#39;s Blog">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://pic1.zhimg.com/45366c44f775abfd0ac3b43bccc1abc3_r.jpg?source=1940ef5c">
-<meta property="article:published_time" content="2021-12-11T14:25:55.000Z">
-<meta property="article:modified_time" content="2021-12-11T14:25:55.000Z">
+<meta property="article:published_time" content="2021-12-12T04:59:18.000Z">
+<meta property="article:modified_time" content="2021-12-12T05:00:03.070Z">
 <meta property="article:author" content="Kayden">
-<meta property="article:tag" content="6.824">
+<meta property="article:tag" content="blog, code, Machine Learning">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://pic1.zhimg.com/45366c44f775abfd0ac3b43bccc1abc3_r.jpg?source=1940ef5c">
 
 
-<link rel="canonical" href="https://chenzk1.github.io/2021/12/11/6-824Lecture2/">
+<link rel="canonical" href="https://chenzk1.github.io/categories/">
 
 
 <script class="page-configurations">
@@ -47,12 +45,13 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : true,
+    isPost : false,
     lang   : 'en'
   };
 </script>
 
-  <title>6.824Lecture2 RPC&Threads | Kayden's Blog</title>
+  <title>categories | Kayden's Blog
+</title>
   
 
 
@@ -201,7 +200,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+    <div class="sidebar-inner sidebar-overview-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           Table of Contents
@@ -213,7 +212,6 @@
 
       <!--noindex-->
       <section class="post-toc-wrap sidebar-panel">
-          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Background"><span class="nav-number">1.</span> <span class="nav-text">Background</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Why-Threads"><span class="nav-number">1.1.</span> <span class="nav-text">Why Threads?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Threads-Changes"><span class="nav-number">1.2.</span> <span class="nav-text">Threads Changes</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Go-Methods"><span class="nav-number">2.</span> <span class="nav-text">Go Methods</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Channel"><span class="nav-number">2.1.</span> <span class="nav-text">Channel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sync-Mutex"><span class="nav-number">2.2.</span> <span class="nav-text">sync.Mutex</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sync-Cond"><span class="nav-number">2.3.</span> <span class="nav-text">sync.Cond</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RPC"><span class="nav-number">3.</span> <span class="nav-text">RPC</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#workflow"><span class="nav-number">3.1.</span> <span class="nav-text">workflow</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RPC-Semantics-under-failures"><span class="nav-number">3.2.</span> <span class="nav-text">RPC Semantics under failures</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Refs"><span class="nav-number">4.</span> <span class="nav-text">Refs</span></a></li></ol></div>
       </section>
       <!--/noindex-->
 
@@ -288,160 +286,53 @@
 </noscript>
 
 
-    <div class="main-inner post posts-expand">
+    <div class="main-inner page posts-expand">
+      
+  
+  
+
       
 
-      
-
-  
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/11/6-824Lecture2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Kayden">
-      <meta itemprop="description" content="Kayden's Blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Kayden's Blog">
-    </span>
+    
+    
+    
+    <div class="post-block" lang="en">
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          6.824Lecture2 RPC&Threads
-        </h1>
 
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
+<h1 class="post-title" itemprop="name headline">categories
+</h1>
 
-      <time title="Created: 2021-12-11 22:25:55" itemprop="dateCreated datePublished" datetime="2021-12-11T22:25:55+08:00">2021-12-11</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
-        </span>
-    </span>
-
+<div class="post-meta-container">
   
+
 </div>
 
-        </div>
-      </header>
+</header>
 
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-        <h1 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h1><h2 id="Why-Threads"><a href="#Why-Threads" class="headerlink" title="Why Threads?"></a>Why Threads?</h2><ul>
-<li>I/O concurrency</li>
-<li>multi core parallelism</li>
-<li>convenience for, like routine</li>
-</ul>
-<a id="more"></a>
-<h2 id="Threads-Changes"><a href="#Threads-Changes" class="headerlink" title="Threads Changes"></a>Threads Changes</h2><ul>
-<li>race conditions<ul>
-<li>avoid share memory</li>
-<li>use locks: 并行变串行</li>
-</ul>
-</li>
-<li>coordinations<ul>
-<li>channels or condition variables</li>
-</ul>
-</li>
-<li>dead lock</li>
-</ul>
-<h1 id="Go-Methods"><a href="#Go-Methods" class="headerlink" title="Go Methods"></a>Go Methods</h1><h2 id="Channel"><a href="#Channel" class="headerlink" title="Channel"></a>Channel</h2><ul>
-<li>用来在并发中同步变量</li>
-<li>pipeline with datatype, need be created, like: ch = make(chan int)</li>
-<li>receivers &amp; sender.默认情况下，发送和接收操作在另一端准备好之前都会阻塞。这使得 Go 程可以在没有显式的锁或竞态变量的情况下进行同步<ul>
-<li>sender: 通过close关闭信道表示没有要发送的值. <strong>向一个已经关闭的信道发送数据会引发程序panic</strong></li>
-<li>receiver: v, ok := &lt;-ch, ok=false when channel is empty and is closed</li>
-</ul>
-</li>
-</ul>
-<h2 id="sync-Mutex"><a href="#sync-Mutex" class="headerlink" title="sync.Mutex"></a>sync.Mutex</h2><ul>
-<li>互斥锁，代码段前后调用Lock() &amp; Unlock()实现某段代码的互斥执行，用defer保证互斥锁一定被解锁。<ul>
-<li>defer func()：func会在包含defer语句的函数返回时再执行</li>
-</ul>
-</li>
-</ul>
-<h2 id="sync-Cond"><a href="#sync-Cond" class="headerlink" title="sync.Cond"></a>sync.Cond</h2><ul>
-<li>Wait()/Broadcast()/Singal()</li>
-</ul>
-<h1 id="RPC"><a href="#RPC" class="headerlink" title="RPC"></a>RPC</h1><p><em>remote procedure call</em></p>
-<ul>
-<li>goal: rpc ≈ pc</li>
-<li>pros: stub完成数据转换和解析、打开/关闭连接等细节</li>
-</ul>
-<h2 id="workflow"><a href="#workflow" class="headerlink" title="workflow"></a>workflow</h2><p><img src="https://pic1.zhimg.com/45366c44f775abfd0ac3b43bccc1abc3_r.jpg?source=1940ef5c" alt="workflow"></p>
-<ol>
-<li>客户端调用 client stub，并将调用参数 push 到栈（stack）中，这个调用是在本地的</li>
-<li>client stub 将这些参数包装，并通过系统调用发送到服务端机器。打包的过程叫 marshalling（常见方式：XML、JSON、二进制编码）。</li>
-<li>客户端操作系统将消息传给传输层，传输层发送信息至服务端；</li>
-<li>服务端的传输层将消息传递给 server stub</li>
-<li>server stub 解析信息。该过程叫 unmarshalling。</li>
-<li>server stub 调用程序，并通过类似的方式返回给客户端。</li>
-<li>客户端拿到数据解析后，将执行结果返回给调用者。</li>
-</ol>
-<h2 id="RPC-Semantics-under-failures"><a href="#RPC-Semantics-under-failures" class="headerlink" title="RPC Semantics under failures"></a>RPC Semantics under failures</h2><p><strong>server不知道client的具体情况，导致failure时难以处理</strong></p>
-<ul>
-<li>at-least-once: client不断重试直到ack成功。适用于幂等操作<ul>
-<li>幂等操作：幂等操作的特点是其任意多次执行所产生的影响均与一次执行的影响相同</li>
-</ul>
-</li>
-<li>at-most-once: <strong>最常见的</strong>，只执行0/1次。通过过滤重复项来实现。</li>
-<li>exactly-once: hard</li>
-</ul>
-<p>go rpc: at-most-once, 由client手动决定是否重试 </p>
-<h1 id="Refs"><a href="#Refs" class="headerlink" title="Refs"></a>Refs</h1><ul>
-<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzIwODA2NjIxOA==&amp;mid=2247484193&amp;idx=1&amp;sn=693e0ff4bfcc6e02dea10ed9d639b41b&amp;chksm=970980e4a07e09f2647de63ed0bf3be98d9032a3797033af3872c692d2373f98627a63f30e22&amp;scene=178&amp;cur_album_id=1751707148520112128#rd">note</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1e5411E7RM?p=2&amp;spm_id_from=pageDriver">video</a></li>
-</ul>
-
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/6-824/" rel="tag"># 6.824</a>
-          </div>
+      
+      
+      
+      <div class="post-body">
+          <div class="category-all-page">
+  <div class="category-all-title">
+    2 categories in total
+  </div>
+  <div class="category-all">
+    <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Learning/">Learning</a><span class="category-list-count">35</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Tools/">Tools</a><span class="category-list-count">1</span></li></ul>
+  </div>
+</div>
 
         
+      </div>
+      
+      
+      
+    </div>
+    
 
-          <div class="post-nav">
-            <div class="post-nav-item">
-                <a href="/2021/12/11/6-824Lecture1/" rel="prev" title="6.824-Lecture1 MapReduce">
-                  <i class="fa fa-chevron-left"></i> 6.824-Lecture1 MapReduce
-                </a>
-            </div>
-            <div class="post-nav-item">
-            </div>
-          </div>
-    </footer>
-  </article>
-</div>
-
-
-
-
+    
+    
+    
 
 
       
