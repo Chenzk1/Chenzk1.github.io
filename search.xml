@@ -215,10 +215,12 @@
       </tags>
   </entry>
   <entry>
-    <title>自学CS路线、资源推荐</title>
+    <title>CS学习路线、资源推荐</title>
     <url>/2021/12/10/CS%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF/</url>
     <content><![CDATA[<ul>
 <li><a href="https://conanhujinming.github.io/post/how_to_learn_cs/">转载自胡神的“自学CS路线、资源推荐”</a></li>
+<li><a href="https://conanhujinming.github.io/comments-for-awesome-courses/">名校公开课程评价网
+</a></li>
 </ul>
 ]]></content>
       <categories>
@@ -3499,6 +3501,40 @@ w=m(a+x, b+y)^{*} e^{-\frac{\left(x^{\prime}\right)^{2}+\left(y^{\prime}\right)^
 </ul>
 <p><strong>作为一种范式，而非产品？</strong></p>
 ]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>6.824</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>6.824Lecture2 RPC&amp;Threads</title>
+    <url>/2021/12/11/6-824Lecture2/</url>
+    <content><![CDATA[<h1 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h1><h2 id="Why-Threads"><a href="#Why-Threads" class="headerlink" title="Why Threads?"></a>Why Threads?</h2><ul>
+<li>I/O concurrency</li>
+<li>multi core parallelism</li>
+<li>convenience for, like routine</li>
+</ul>
+<h2 id="Threads-Changes"><a href="#Threads-Changes" class="headerlink" title="Threads Changes"></a>Threads Changes</h2><ul>
+<li>race conditions<ul>
+<li>avoid share memory</li>
+<li>use locks: 并行变串行</li>
+</ul>
+</li>
+<li>coordinations<ul>
+<li>channels or condition variables</li>
+</ul>
+</li>
+<li>dead lock</li>
+</ul>
+<h1 id="Go-Methods"><a href="#Go-Methods" class="headerlink" title="Go Methods"></a>Go Methods</h1><h2 id="sync-Mutex"><a href="#sync-Mutex" class="headerlink" title="sync.Mutex"></a>sync.Mutex</h2><ul>
+<li>互斥锁，代码段前后调用Lock() &amp; Unlock()实现某段代码的互斥执行，用defer保证互斥锁一定被解锁。<ul>
+<li>defer func()：func会在包含defer语句的函数返回时再执行</li>
+</ul>
+</li>
+</ul>
+<h2 id="condition-variable"><a href="#condition-variable" class="headerlink" title="condition variable"></a>condition variable</h2>]]></content>
       <categories>
         <category>Learning</category>
       </categories>
