@@ -3645,12 +3645,75 @@ w=m(a+x, b+y)^{*} e^{-\frac{\left(x^{\prime}\right)^{2}+\left(y^{\prime}\right)^
       </categories>
       <tags>
         <tag>cs224w</tag>
+        <tag>graph</tag>
       </tags>
   </entry>
   <entry>
     <title>CS224WLec2-Traditional Methods for ML on Graphs</title>
     <url>/2021/12/12/CS224WLec2/</url>
-    <content><![CDATA[<a id="more"></a>
-]]></content>
+    <content><![CDATA[<h1 id="Pipeline"><a href="#Pipeline" class="headerlink" title="Pipeline"></a>Pipeline</h1><p>design features for nodes/link/graphs —&gt; obtain features for all data —&gt; train an ML model —&gt; apply the model<br><a id="more"></a></p>
+<h1 id="Feature-design"><a href="#Feature-design" class="headerlink" title="Feature design"></a>Feature design</h1><ul>
+<li><em>focus on undirected graphs</em></li>
+</ul>
+<h2 id="Node-Features"><a href="#Node-Features" class="headerlink" title="Node Features"></a>Node Features</h2><h3 id="centrality中心性"><a href="#centrality中心性" class="headerlink" title="centrality中心性"></a>centrality中心性</h3><ul>
+<li><strong>Degree counts #(edges) that a node touches</strong></li>
+<li>degree只考虑neibors数量，不考虑neibor的不同重要性</li>
+</ul>
+<ol>
+<li>Eigenvector centrality</li>
+</ol>
+<ul>
+<li>定义：节点的重要性由邻居节点的重要性决定。节点v的centrality是邻居centrality的加总，N(v)为v的neibors集合<script type="math/tex; mode=display">
+c_{v}=\frac{1}{\lambda} \sum_{u \in N(v)} c_{u}</script></li>
+</ul>
+<p>可以将其写为矩阵形式，得到<br>$<br>\lambda c=A c<br>$ ，A为邻接矩阵，$ \lambda{max} $总为正且唯一，因此可以将其对应的$ c_{max} $作为eigenvector</p>
+<ol>
+<li>betweenness centrality</li>
+</ol>
+<ul>
+<li>如果一个节点处在很多节点对的最短路径上，那么这个节点是重要的<script type="math/tex; mode=display">
+c_{v}=\sum_{s \neq v \neq t} \frac{\#(\text { shortest paths betwen } s \text { and } t \text { that contain } v)}{\#(\text { shortest paths between } s \text { and } t)}</script></li>
+</ul>
+<ol>
+<li>closeness centrality</li>
+</ol>
+<ul>
+<li>一个节点距其他节点之间距离最短，那么认为这个节点是重要的<script type="math/tex; mode=display">
+c_{v}=\frac{1}{\sum_{u \neq v} \text { shortest path length between } u \text { and } v}</script></li>
+</ul>
+<h3 id="clustering-coefficient"><a href="#clustering-coefficient" class="headerlink" title="clustering coefficient"></a>clustering coefficient</h3><ul>
+<li><strong>Clustering coefficient counts #(triangles) that a node touches.</strong></li>
+<li>节点的neighbors的连接情况<script type="math/tex; mode=display">
+e_{v}=\frac{\#(\text { edges among neighboring nodes })}{\left(\begin{array}{c}
+k_{v} \\
+2
+\end{array}\right)} \in[0,1]</script></li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/2021052810445748.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1BvbGFyaXNSaXNpbmdXYXI=,size_16,color_FFFFFF,t_70" alt=""><br><img src="https://img-blog.csdnimg.cn/20210528105114750.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1BvbGFyaXNSaXNpbmdXYXI=,size_16,color_FFFFFF,t_70" alt=""></p>
+<h3 id="Graphlets"><a href="#Graphlets" class="headerlink" title="Graphlets"></a>Graphlets</h3><ul>
+<li>Rooted connected induced non-isomorphic subgraphs, 有根连通异构子图</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20210528121841575.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1BvbGFyaXNSaXNpbmdXYXI=,size_16,color_FFFFFF,t_70" alt=""></p>
+<ul>
+<li>图中标的数字代表根节点可选的位置。例如对于$ G_0 $，两个节点是等价的（对称的），所以只有一种graphlet；对于$ G_1 $，根节点有在中间和在边上两种选择，上下两个边上的点是等价的，所以只有两种graphlet。其他的类似。节点数为2-5情况下一共能产生如图所示73种graphlet。<strong>这73个graphlet的核心概念就是不同的形状，不同的位置。</strong></li>
+<li>Graphlet Degree Vector (GDV): A count vector of graphslets rooted at a given node</li>
+<li><strong>GDV counts #(graphlets) that a node touches</strong><br><img src="https://img-blog.csdnimg.cn/20210528123912356.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1BvbGFyaXNSaXNpbmdXYXI=,size_16,color_FFFFFF,t_70" alt=""></li>
+<li>以v作为节点的有根连通异构子图共4个，分别为a b c d为节点的子图。a有两种情况；b一种情况；c不存在是因为graphlet是induced subgraph，c可以induce为b；d有两种情况。所以得到的GDV为[2, 1, 0, 2]</li>
+<li>考虑2-5个节点的graphlets，我们得到一个长度为73个坐标coordinate（就前图所示一共73种graphlet）的向量GDV，描述该点的局部拓扑结构topology of node’s neighborhood，可以捕获距离为4 hops的互联性interconnectivities</li>
+<li>相比节点度数或clustering coefficient，GDV能够描述两个节点之间更详细的节点局部拓扑结构相似性local topological similarity。</li>
+</ul>
+<h3 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h3><ul>
+<li>节点的重要性importance-based: node degree/centrality</li>
+<li>节点邻域的拓扑结构structure-based: node degree/clustering cofficient/graphlet count vector</li>
+</ul>
+<h2 id="Link-features"><a href="#Link-features" class="headerlink" title="Link features"></a>Link features</h2>]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>ML</tag>
+        <tag>cs224w</tag>
+        <tag>graph</tag>
+      </tags>
   </entry>
 </search>
