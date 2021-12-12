@@ -3586,11 +3586,11 @@ w=m(a+x, b+y)^{*} e^{-\frac{\left(x^{\prime}\right)^{2}+\left(y^{\prime}\right)^
   </entry>
   <entry>
     <title>CS224WLecture1-GraphIntro&amp;GraphRepresentations</title>
-    <url>/2021/12/12/CS224W/</url>
+    <url>/2021/12/12/CS224WLec1/</url>
     <content><![CDATA[<h1 id="Intro"><a href="#Intro" class="headerlink" title="Intro"></a>Intro</h1><ul>
 <li>title: Machine Learning with Graphs</li>
 <li>year: Fall 2021</li>
-<li><a href="http://web.stanford.edu/class/cs224w/">CS224W page</a></li>
+<li><a href="http://web.stanford.edu/class/cs224w/">CS224W page</a><a id="more"></a></li>
 <li>professor：<a href="https://profiles.stanford.edu/jure-leskovec">Jure Leskovec</a></li>
 <li>videos: <a href="https://www.bilibili.com/video/BV1RZ4y1c7Co/?spm_id_from=333.788.recommend_more_video.0">bilibili</a></li>
 <li>labs: <a href="https://docs.google.com/document/d/e/2PACX-1vRMprg-Uz9oEnjXOJpRPJ5oyEXRnJAz9qVeEB04sucx2o2RtQ-HRfom6IWS5ONhfoly0TOmJM7BxIzJ/pub">lab*5</a></li>
@@ -3617,6 +3617,27 @@ w=m(a+x, b+y)^{*} e^{-\frac{\left(x^{\prime}\right)^{2}+\left(y^{\prime}\right)^
 <li>…</li>
 </ul>
 </li>
+</ul>
+<h1 id="Representation"><a href="#Representation" class="headerlink" title="Representation"></a>Representation</h1><p>G=(V, E, R, T)</p>
+<ul>
+<li>node: V</li>
+<li>edge: E</li>
+<li>relation type: R</li>
+<li>node type: T</li>
+</ul>
+<h2 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h2><ul>
+<li>directed &amp; undirected</li>
+<li>node degree<ul>
+<li>avg degree: <script type="math/tex">\bar{k}=\langle k\rangle=\frac{1}{N} \sum_{i=1}^{N} k_{i}=\frac{2 E}{N}</script></li>
+<li>in-degree &amp; out-degree</li>
+</ul>
+</li>
+<li>bipartite graph二部图: 包含两种不同的node，node只和另外一部的node连接。可以通过投影的方式转化为folded/projected bipartite graphs</li>
+</ul>
+<h2 id="表示"><a href="#表示" class="headerlink" title="表示"></a>表示</h2><ul>
+<li>Adjacency Matrix：无向图时为对称矩阵。<strong>graph大多数时为高度稀疏矩阵（degree远小于节点数），邻接矩阵会造成内存浪费</strong></li>
+<li>Adjacency List: 对每一个节点存储其neighbors</li>
+<li>图的附加属性：weight/ranking/type/sign/…</li>
 </ul>
 ]]></content>
       <categories>
