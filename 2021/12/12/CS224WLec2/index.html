@@ -396,7 +396,7 @@ k_{v} \\
 </ul>
 <p><img src="https://img-blog.csdnimg.cn/20210528121841575.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1BvbGFyaXNSaXNpbmdXYXI=,size_16,color_FFFFFF,t_70" alt=""></p>
 <ul>
-<li>图中标的数字代表根节点可选的位置。例如对于$ G_0 $，两个节点是等价的（对称的），所以只有一种graphlet；对于$ G_1 $，根节点有在中间和在边上两种选择，上下两个边上的点是等价的，所以只有两种graphlet。其他的类似。节点数为2-5情况下一共能产生如图所示73种graphlet。<strong>这73个graphlet的核心概念就是不同的形状，不同的位置。</strong></li>
+<li>图中标的数字代表根节点可选的位置。例如对于$ G_0 $，两个节点是等价的（对称的），所以只有一种graphlet；对于$ G_1 $，根节点有在中间和在边上两种选择，上下两个边上的点是等价的，所以只有两种graphlet。其他的类似。节点数为2-5情况下一共能产生如图所示73种graphlet。<strong>这73个graphlet的核心概念就是不同的形状，不同的位置。图里的数字表示graphlets的数量</strong></li>
 <li>Graphlet Degree Vector (GDV): A count vector of graphslets rooted at a given node</li>
 <li><strong>GDV counts #(graphlets) that a node touches</strong><br><img src="https://img-blog.csdnimg.cn/20210528123912356.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1BvbGFyaXNSaXNpbmdXYXI=,size_16,color_FFFFFF,t_70" alt=""></li>
 <li>以v作为节点的有根连通异构子图共4个，分别为a b c d为节点的子图。a有两种情况；b一种情况；c不存在是因为graphlet是induced subgraph，c可以induce为b；d有两种情况。所以得到的GDV为[2, 1, 0, 2]</li>
