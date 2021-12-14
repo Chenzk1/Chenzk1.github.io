@@ -3668,12 +3668,7 @@ w=m(a+x, b+y)^{*} e^{-\frac{\left(x^{\prime}\right)^{2}+\left(y^{\prime}\right)^
 <li>定义：节点的重要性由邻居节点的重要性决定。节点v的centrality是邻居centrality的加总，N(v)为v的neibors集合<script type="math/tex; mode=display">
 c_{v}=\frac{1}{\lambda} \sum_{u \in N(v)} c_{u}</script></li>
 </ul>
-<p>可以将其写为矩阵形式，得到</p>
-<script type="math/tex; mode=display">
-\lambda c=A c
-$$ ，A为邻接矩阵，
-$$ \lambda{max}</script><p>总为正且唯一，因此可以将其对应的</p>
-<script type="math/tex; mode=display">c_{max}</script><p>作为eigenvector</p>
+<p>可以将其写为矩阵形式，得到 $ \lambda c=A c $ ，A为邻接矩阵，$ \lambda{max} $ 总为正且唯一，因此可以将其对应的$ c_{max} $作为eigenvector</p>
 <ol>
 <li>betweenness centrality</li>
 </ol>
