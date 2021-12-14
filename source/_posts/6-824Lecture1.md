@@ -1,7 +1,6 @@
 ---
-title: 6.824-Lecture1 MapReduce
+title: 6.824Lecture1-MapReduce
 date: 2021-12-11 19:08:24
-updated: 2021-12-11 19:08:24
 tags: 6.824
 categories: 
     - Learning
