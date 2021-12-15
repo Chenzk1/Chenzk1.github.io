@@ -3759,12 +3759,12 @@ k_{v} \\
 </li>
 <li>具体的：<ul>
 <li>先确定graphlet的node个数k</li>
-<li>求k个node的graphlets list $ \mathcal{G}<em>{k} = \left(g</em>{1}, g<em>{2}, \ldots, g</em>{n_{k}}\right) $</li>
-<li>求graphlets list中每个Graphlet在图中出现了几次，并构成vector: $ \left(\boldsymbol{f}<em>{G}\right)</em>{i}=#\left(g<em>{i} \subseteq G\right)$ for $i=1,2, \ldots, n</em>{k} $</li>
+<li>求k个node的graphlets list<script type="math/tex; mode=display">\mathcal{G}_{k} = \left(g_{1}, g_{2}, \ldots, g_{n_{k}}\right)</script></li>
+<li>求graphlets list中每个Graphlet在图中出现了几次，并构成vector<script type="math/tex; mode=display">\left(\boldsymbol{f}_{G}\right)_{i}=\#\left(g_{i} \subseteq G\right)$ for $i=1,2, \ldots, n_{k}</script></li>
 </ul>
 </li>
 </ul>
-
+<img src="/2021/12/12/CS224WLec2/grahlet_vectors.png" class="" title="graphlet_vector">
 <ul>
 <li>problem1: graph不一样，kernel的值会skewd<ul>
 <li>solution: normalize<script type="math/tex; mode=display">

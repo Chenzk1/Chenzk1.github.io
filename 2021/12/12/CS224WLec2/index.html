@@ -35,8 +35,9 @@
 <meta property="og:image" content="https://chenzk1.github.io/2021/12/12/CS224WLec2/induced_subgraph.png">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20210528121841575.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1BvbGFyaXNSaXNpbmdXYXI=,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20210528123912356.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1BvbGFyaXNSaXNpbmdXYXI=,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://chenzk1.github.io/2021/12/12/CS224WLec2/grahlet_vectors.png">
 <meta property="article:published_time" content="2021-12-12T09:46:27.000Z">
-<meta property="article:modified_time" content="2021-12-15T02:28:24.835Z">
+<meta property="article:modified_time" content="2021-12-15T02:32:49.498Z">
 <meta property="article:author" content="Kayden">
 <meta property="article:tag" content="ML">
 <meta property="article:tag" content="cs224w">
@@ -338,7 +339,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-12-15 10:28:24" itemprop="dateModified" datetime="2021-12-15T10:28:24+08:00">2021-12-15</time>
+        <time title="Modified: 2021-12-15 10:32:49" itemprop="dateModified" datetime="2021-12-15T10:32:49+08:00">2021-12-15</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -466,12 +467,12 @@ k_{v} \\
 </li>
 <li>具体的：<ul>
 <li>先确定graphlet的node个数k</li>
-<li>求k个node的graphlets list $ \mathcal{G}<em>{k} = \left(g</em>{1}, g<em>{2}, \ldots, g</em>{n_{k}}\right) $</li>
-<li>求graphlets list中每个Graphlet在图中出现了几次，并构成vector: $ \left(\boldsymbol{f}<em>{G}\right)</em>{i}=#\left(g<em>{i} \subseteq G\right)$ for $i=1,2, \ldots, n</em>{k} $</li>
+<li>求k个node的graphlets list<script type="math/tex; mode=display">\mathcal{G}_{k} = \left(g_{1}, g_{2}, \ldots, g_{n_{k}}\right)</script></li>
+<li>求graphlets list中每个Graphlet在图中出现了几次，并构成vector<script type="math/tex; mode=display">\left(\boldsymbol{f}_{G}\right)_{i}=\#\left(g_{i} \subseteq G\right)$ for $i=1,2, \ldots, n_{k}</script></li>
 </ul>
 </li>
 </ul>
-
+<img src="/2021/12/12/CS224WLec2/grahlet_vectors.png" class="" title="graphlet_vector">
 <ul>
 <li>problem1: graph不一样，kernel的值会skewd<ul>
 <li>solution: normalize<script type="math/tex; mode=display">
