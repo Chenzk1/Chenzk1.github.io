@@ -222,7 +222,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">38</span>
+          <span class="site-state-item-count">39</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -235,7 +235,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-count">20</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -287,6 +287,104 @@
       
 
       
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E8%B4%9D%E5%8F%B6%E6%96%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Kayden">
+      <meta itemprop="description" content="Kayden's Blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kayden's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E8%B4%9D%E5%8F%B6%E6%96%AF/" class="post-title-link" itemprop="url">机器学习面试题-贝叶斯</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-12-10 00:00:00" itemprop="dateCreated datePublished" datetime="2021-12-10T00:00:00+08:00">2021-12-10</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-12-11 17:40:52" itemprop="dateModified" datetime="2021-12-11T17:40:52+08:00">2021-12-11</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>[TOC]</p>
+<h2 id="1-简述朴素贝叶斯算法原理和工作流程"><a href="#1-简述朴素贝叶斯算法原理和工作流程" class="headerlink" title="1.简述朴素贝叶斯算法原理和工作流程"></a>1.简述朴素贝叶斯算法原理和工作流程</h2><p><strong>工作原理</strong>：</p>
+<ul>
+<li>假设现在有样本$x=(x_1, x_2, x_3, \dots x_n)$待分类项</li>
+<li>假设样本有$m$个特征$(a_1,a_2,a_3,\dots a_m)$(特征独立)</li>
+<li>再假设现在有分类目标$Y={ y_1，y_2，y_3，\dots ,y_n}$</li>
+<li>那么就$\max ({ P }({ y }_1 | { x }), { P }({ y }_2 | {x}), {P}({y}_3 | {x}) ,{P}({y_n} | {x}))$是最终的分类类别。</li>
+<li>而$ P(y_i | x)=\frac{P(x | y_i) * P(y_i)}{ P(x)} $，因为$x$对于每个分类目标来说都一样，所以就是求$\max({P}({x}|{y_i})*{P}({y_i}))$</li>
+<li>$P(x | y_i) * P(y_i)=P(y_i) * \prod(P(a_j| y_i))$，而具体的$P(a_j|y_i)$和$P(y_i)$都是能从训练样本中统计出来</li>
+<li>${P}({a_j} | {y_i})$表示该类别下该特征$a_j$出现的概率$P(y_i)$表示全部类别中这个这个类别出现的概率,这样就能找到应该属于的类别了</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E8%B4%9D%E5%8F%B6%E6%96%AF/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
     
 
 
