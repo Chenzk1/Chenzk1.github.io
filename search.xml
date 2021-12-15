@@ -3729,9 +3729,9 @@ k_{v} \\
 </ul>
 <h3 id="Local-neighborhood-overlap"><a href="#Local-neighborhood-overlap" class="headerlink" title="Local neighborhood overlap"></a>Local neighborhood overlap</h3><ul>
 <li>某两个节点其邻域的overlap -》<strong>两节点邻域没有交集其overlap为0</strong></li>
-<li>1.common neighbors: <strong>求交集</strong>, $ \left|N\left(v<em>{1}\right) \cap N\left(v</em>{2}\right)\right| $</li>
-<li>2.Jaccard’s coefficient: <strong>IoU</strong> $ \frac{\left|N\left(v<em>{1}\right) \cap N\left(v</em>{2}\right)\right|}{\left|N\left(v<em>{1}\right) \cup N\left(v</em>{2}\right)\right|} $</li>
-<li>3.Adamic-Adar index: <strong>两节点交集的点的1/log(degree)之和</strong> $ \sum<em>{u \in N\left(v</em>{1}\right) \cap N\left(v<em>{2}\right)} \frac{1}{\log \left(k</em>{u}\right)} $</li>
+<li>1.common neighbors: <strong>求交集</strong>, <script type="math/tex">\left|N\left(v_{1}\right) \cap N\left(v_{2}\right)\right|</script></li>
+<li>2.Jaccard’s coefficient: <strong>IoU</strong> <script type="math/tex">\frac{\left|N\left(v_{1}\right) \cap N\left(v_{2}\right)\right|}{\left|N\left(v_{1}\right) \cup N\left(v_{2}\right)\right|}</script></li>
+<li>3.Adamic-Adar index: <strong>两节点交集的点的1/log(degree)之和</strong> <script type="math/tex">\sum_{u \in N\left(v_{1}\right) \cap N\left(v_{2}\right)} \frac{1}{\log \left(k_{u}\right)}</script></li>
 </ul>
 <h3 id="Global-neighborhood-overlap"><a href="#Global-neighborhood-overlap" class="headerlink" title="Global neighborhood overlap"></a>Global neighborhood overlap</h3><ul>
 <li><strong>使用整张图的结构来表示两节点的关系</strong></li>
@@ -3773,7 +3773,7 @@ k_{v} \\
 </li>
 <li>problem2: 对size n的graph求size k的graphlet需要$n^{k}$</li>
 <li>problem3: 图的degree上界是d，则需要$O\left(n d^{k-1}\right)$</li>
-<li>problem4: 最糟糕的情况是判断一个图是不是另一个图的子图是<a href="https://hujichn.github.io/2016/07/14/%E4%BB%80%E4%B9%88%E6%98%AFP%E3%80%81NP%E3%80%81NPC%E3%80%81NP-Hard%E9%97%AE%E9%A2%98/">np-hard问题</a>（不确定性问题）</li>
+<li>problem4: 最糟糕的情况是判断一个图是不是另一个图的子图是<a href="https://chenzk1.github.io/2021/12/12/P&amp;NP&amp;NP-hard/">np-hard问题</a>（不确定性多项式问题，）</li>
 </ul>
 <h3 id="Weisfeiler-Lehman-Kernel"><a href="#Weisfeiler-Lehman-Kernel" class="headerlink" title="Weisfeiler-Lehman Kernel"></a>Weisfeiler-Lehman Kernel</h3>]]></content>
       <categories>
@@ -3787,7 +3787,7 @@ k_{v} \\
   </entry>
   <entry>
     <title>P、NP、NP-hard问题</title>
-    <url>/2021/12/12/P&amp;NP*NP-hard/</url>
+    <url>/2021/12/15/P&amp;NP&amp;NP-hard/</url>
     <content><![CDATA[<h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><ul>
 <li>P Problem: <strong>任意性</strong>，对于<strong>任意的</strong>输入规模n，问题都可以在n的多项式时间内得到解决；</li>
 <li>NP(Non-deterministic Polynomial) Problem: <strong>存在性</strong>，<strong>可以</strong>在多项式的时间里验证一个解的问题；</li>

@@ -37,7 +37,7 @@
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20210528123912356.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1BvbGFyaXNSaXNpbmdXYXI=,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https://chenzk1.github.io/2021/12/12/CS224WLec2/grahlet_vectors.png">
 <meta property="article:published_time" content="2021-12-12T09:46:27.000Z">
-<meta property="article:modified_time" content="2021-12-15T02:53:20.945Z">
+<meta property="article:modified_time" content="2021-12-15T03:19:03.416Z">
 <meta property="article:author" content="Kayden">
 <meta property="article:tag" content="ML">
 <meta property="article:tag" content="cs224w">
@@ -339,7 +339,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-12-15 10:53:20" itemprop="dateModified" datetime="2021-12-15T10:53:20+08:00">2021-12-15</time>
+        <time title="Modified: 2021-12-15 11:19:03" itemprop="dateModified" datetime="2021-12-15T11:19:03+08:00">2021-12-15</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -437,9 +437,9 @@ k_{v} \\
 </ul>
 <h3 id="Local-neighborhood-overlap"><a href="#Local-neighborhood-overlap" class="headerlink" title="Local neighborhood overlap"></a>Local neighborhood overlap</h3><ul>
 <li>某两个节点其邻域的overlap -》<strong>两节点邻域没有交集其overlap为0</strong></li>
-<li>1.common neighbors: <strong>求交集</strong>, $ \left|N\left(v<em>{1}\right) \cap N\left(v</em>{2}\right)\right| $</li>
-<li>2.Jaccard’s coefficient: <strong>IoU</strong> $ \frac{\left|N\left(v<em>{1}\right) \cap N\left(v</em>{2}\right)\right|}{\left|N\left(v<em>{1}\right) \cup N\left(v</em>{2}\right)\right|} $</li>
-<li>3.Adamic-Adar index: <strong>两节点交集的点的1/log(degree)之和</strong> $ \sum<em>{u \in N\left(v</em>{1}\right) \cap N\left(v<em>{2}\right)} \frac{1}{\log \left(k</em>{u}\right)} $</li>
+<li>1.common neighbors: <strong>求交集</strong>, <script type="math/tex">\left|N\left(v_{1}\right) \cap N\left(v_{2}\right)\right|</script></li>
+<li>2.Jaccard’s coefficient: <strong>IoU</strong> <script type="math/tex">\frac{\left|N\left(v_{1}\right) \cap N\left(v_{2}\right)\right|}{\left|N\left(v_{1}\right) \cup N\left(v_{2}\right)\right|}</script></li>
+<li>3.Adamic-Adar index: <strong>两节点交集的点的1/log(degree)之和</strong> <script type="math/tex">\sum_{u \in N\left(v_{1}\right) \cap N\left(v_{2}\right)} \frac{1}{\log \left(k_{u}\right)}</script></li>
 </ul>
 <h3 id="Global-neighborhood-overlap"><a href="#Global-neighborhood-overlap" class="headerlink" title="Global neighborhood overlap"></a>Global neighborhood overlap</h3><ul>
 <li><strong>使用整张图的结构来表示两节点的关系</strong></li>
@@ -481,7 +481,7 @@ k_{v} \\
 </li>
 <li>problem2: 对size n的graph求size k的graphlet需要$n^{k}$</li>
 <li>problem3: 图的degree上界是d，则需要$O\left(n d^{k-1}\right)$</li>
-<li>problem4: 最糟糕的情况是判断一个图是不是另一个图的子图是<a target="_blank" rel="noopener" href="https://hujichn.github.io/2016/07/14/%E4%BB%80%E4%B9%88%E6%98%AFP%E3%80%81NP%E3%80%81NPC%E3%80%81NP-Hard%E9%97%AE%E9%A2%98/">np-hard问题</a>（不确定性问题）</li>
+<li>problem4: 最糟糕的情况是判断一个图是不是另一个图的子图是<a href="https://chenzk1.github.io/2021/12/12/P&amp;NP&amp;NP-hard/">np-hard问题</a>（不确定性多项式问题，）</li>
 </ul>
 <h3 id="Weisfeiler-Lehman-Kernel"><a href="#Weisfeiler-Lehman-Kernel" class="headerlink" title="Weisfeiler-Lehman Kernel"></a>Weisfeiler-Lehman Kernel</h3>
     </div>
@@ -501,11 +501,14 @@ k_{v} \\
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2021/12/12/P&NP*NP-hard/" rel="prev" title="P、NP、NP-hard问题">
-                  <i class="fa fa-chevron-left"></i> P、NP、NP-hard问题
+                <a href="/2021/12/12/CS224WLec1/" rel="prev" title="CS224WLecture1-Graph Intro & Graph Representations">
+                  <i class="fa fa-chevron-left"></i> CS224WLecture1-Graph Intro & Graph Representations
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/2021/12/15/P&NP&NP-hard/" rel="next" title="P、NP、NP-hard问题">
+                  P、NP、NP-hard问题 <i class="fa fa-chevron-right"></i>
+                </a>
             </div>
           </div>
     </footer>
