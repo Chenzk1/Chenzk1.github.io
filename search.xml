@@ -188,83 +188,6 @@
       </tags>
   </entry>
   <entry>
-    <title>C++-自建数组及STL中的array&amp;vector</title>
-    <url>/2021/12/10/C++-%E8%87%AA%E5%BB%BA%E6%95%B0%E7%BB%84%E5%8F%8ASTL%E4%B8%AD%E7%9A%84array&amp;vector/</url>
-    <content><![CDATA[<h2 id="相同点"><a href="#相同点" class="headerlink" title="相同点"></a>相同点</h2><ul>
-<li>三者皆使用连续内存，且array和vector的底层由自建数组实现</li>
-<li>都可以用下标访问</li>
-</ul>
-<a id="more"></a>
-<h2 id="不同点"><a href="#不同点" class="headerlink" title="不同点"></a>不同点</h2><ol>
-<li>vector属于变长容器，即可以根据数据的插入删除重新构建容器容量；但array和数组属于定长容器。</li>
-<li>vector提供了可以动态插入和删除元素的机制，而array和数组则无法做到，或者说array和数组需要完成该功能则需要自己实现完成。</li>
-<li>由于vector的动态内存变化的机制，<strong>在插入和删除时，需要考虑迭代的是否失效的问题</strong>，vector容器增长时，不是在原有内存空间中添加，而是重新申请+分配内存。</li>
-<li>vector和array提供了更好的数据访问机制，即可以使用front和back以及at访问方式，使得访问更加安全。而数组只能通过下标访问，在程序的设计过程中，更容易引发访问错误。</li>
-<li>vector和array提供了更好的遍历机制，有正向迭代器和反向迭代器两种</li>
-<li>vector和array提供了size和判空的获取机制，而数组只能通过遍历或者通过额外的变量记录数组的size。</li>
-<li>vector和array提供了两个容器对象的内容交换，即swap的机制，而数组对于交换只能通过遍历的方式，逐个元素交换的方式使用</li>
-<li>array提供了初始化所有成员的方法fill</li>
-</ol>
-<h2 id="自建数组"><a href="#自建数组" class="headerlink" title="自建数组"></a>自建数组</h2><h3 id="静态数组-amp-动态数组"><a href="#静态数组-amp-动态数组" class="headerlink" title="静态数组&amp;动态数组"></a>静态数组&amp;动态数组</h3><h4 id="静态数组"><a href="#静态数组" class="headerlink" title="静态数组"></a>静态数组</h4><ul>
-<li><strong>在栈中</strong></li>
-<li>在编译期间在栈中分配好内存的数组，在运行期间不能改变存储空间，运行后由<strong>系统自动释放</strong>。</li>
-<li>必须用常量指定数组大小</li>
-<li>数组名为第一个数组元素</li>
-</ul>
-<h4 id="动态数组"><a href="#动态数组" class="headerlink" title="动态数组"></a>动态数组</h4><ul>
-<li>程序运行时才分配内存的数组</li>
-<li><strong>在堆中</strong></li>
-<li>数组名为指向第一个数组元素的指针</li>
-</ul>
-<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><ul>
-<li>int a[3]; 局部作用域中，只做了声明，未初始化，其值未定</li>
-<li>int a[3]; 静态数组以及直接声明在某个namespace中（函数外部），默认初始化为全0</li>
-<li>int a[3] = {}; 初始化为0</li>
-<li>int a[3] = {1}; 初始化为{1, 0, 0}</li>
-<li>int a[] = {1,2,3,4}; 声明大小为4的数组，并初始化为{1,2,3,4}</li>
-<li>int a[] {1,2,3,4}; <strong>通用初始化</strong>方法，声明和初始化程序之间不用等号</li>
-<li>int* a = new int[10]; //new 分配了一个大小为10的未初始化的int数组，并返回指向该数组第一个元素的指针，此指针初始化了指针a<ul>
-<li>a = {4, -3, 5, -2, -1, 2, 6, -2, 3}; // 错误，注意这种用大括号的数组赋值只能用在声明时，此处已经不是声明，所以出错。</li>
-<li>int *a = new int[10] ();  // 默认初始化，每个元素初始化为0,括号内不能写其他值，只能初始化为0</li>
-<li>int* a = new int[n];// t</li>
-<li>string* Dynamic_Arr4 = new string[size]{“aa”, “bb”,”cc”, “dd”, string(2, ‘e’) };      //显式的初始化</li>
-<li>delete [ ] Dynamic_Arr4；//动态数组的释放</li>
-</ul>
-</li>
-<li>维度为变量时，不能在声明时同时初始化，即int a[b]={1};是不合法的。 </li>
-<li>多维数组为1维数组的特殊形式，定义多维数组时，如果不对它进行初始化，必须标明每个维度的大小；如果进行了显式的初始化，可以不标明最高维度的大小，（也就是第一个维度，当第一个维度不标明大小，则不需进行初始化）</li>
-</ul>
-<h2 id="array"><a href="#array" class="headerlink" title="array"></a>array</h2><ul>
-<li><a href="https://www.cplusplus.com/reference/array/array/">ref</a></li>
-<li>大小固定</li>
-</ul>
-<h2 id="vector"><a href="#vector" class="headerlink" title="vector"></a>vector</h2><ul>
-<li><a href="https://www.cplusplus.com/reference/vector/vector/">ref</a></li>
-<li>动态数组</li>
-</ul>
-<h3 id="初始化-1"><a href="#初始化-1" class="headerlink" title="初始化"></a>初始化</h3><ul>
-<li>构造函数<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="built_in">vector</span>():创建一个空<span class="built_in">vector</span></span><br><span class="line"><span class="built_in">vector</span>(<span class="keyword">int</span> nSize):创建一个<span class="built_in">vector</span>,元素个数为nSize</span><br><span class="line"><span class="built_in">vector</span>(<span class="keyword">int</span> nSize,<span class="keyword">const</span> t&amp; t):创建一个<span class="built_in">vector</span>，元素个数为nSize,且值均为t</span><br><span class="line"><span class="built_in">vector</span>(<span class="keyword">const</span> <span class="built_in">vector</span>&amp;):复制构造函数</span><br><span class="line"><span class="built_in">vector</span>(begin,end):复制[begin,end)区间内另一个数组的元素到<span class="built_in">vector</span>中</span><br></pre></td></tr></table></figure>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; first;                                <span class="comment">// empty vector of ints</span></span><br><span class="line"><span class="function"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">second</span> <span class="params">(<span class="number">4</span>,<span class="number">100</span>)</span></span>;                       <span class="comment">// four ints with value 100</span></span><br><span class="line"><span class="function"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">third</span> <span class="params">(second.begin(),second.end())</span></span>;  <span class="comment">// iterating through second</span></span><br><span class="line"><span class="function"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">fourth</span> <span class="params">(third)</span></span>;                       <span class="comment">// a copy of third</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// the iterator constructor can also be used to construct from arrays:</span></span><br><span class="line"><span class="keyword">int</span> myints[] = &#123;<span class="number">16</span>,<span class="number">2</span>,<span class="number">77</span>,<span class="number">29</span>&#125;;</span><br><span class="line"><span class="function"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">fifth</span> <span class="params">(myints, myints + <span class="keyword">sizeof</span>(myints) / <span class="keyword">sizeof</span>(<span class="keyword">int</span>) )</span></span>;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>二维vector若要使用A[i].push_back(3)等方式初始化，则应事先定义好第一维的大小，例如<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">ans</span><span class="params">(<span class="number">5</span>)</span></span>;</span><br><span class="line">ans[<span class="number">3</span>].push_back(<span class="number">3</span>);</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="增加"><a href="#增加" class="headerlink" title="增加"></a>增加</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">void push_back(const T&amp; x):向量尾部增加一个元素X</span><br><span class="line">iterator insert(iterator it,const T&amp; x):向量中迭代器指向元素前增加一个元素x</span><br><span class="line">iterator insert(iterator it,int n,const T&amp; x):向量中迭代器指向元素前增加n个相同的元素x</span><br><span class="line">iterator insert(iterator it,const_iterator first,const_iterator last):向量中迭代器指向元素前插入另一个相同类型向量的[first,last)间的数据</span><br></pre></td></tr></table></figure>
-<h3 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">iterator erase(iterator it):删除向量中迭代器指向元素</span><br><span class="line">iterator erase(iterator first,iterator last):删除向量中[first,last)中元素</span><br><span class="line">void pop_back():删除向量中最后一个元素</span><br><span class="line">void clear():清空向量中所有元素</span><br></pre></td></tr></table></figure>
-<h3 id="遍历"><a href="#遍历" class="headerlink" title="遍历"></a>遍历</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">reference at(int pos):返回pos位置元素的引用</span><br><span class="line">reference front():返回首元素的引用</span><br><span class="line">reference back():返回尾元素的引用</span><br><span class="line">iterator begin():返回向量头指针，指向第一个元素</span><br><span class="line">iterator end():返回向量尾指针，指向向量最后一个元素的下一个位置</span><br><span class="line">reverse_iterator rbegin():反向迭代器，指向最后一个元素</span><br><span class="line">reverse_iterator rend():反向迭代器，指向第一个元素之前的位置</span><br></pre></td></tr></table></figure>
-<h3 id="判断"><a href="#判断" class="headerlink" title="判断"></a>判断</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">bool empty() const:判断向量是否为空，若为空，则向量中无元素</span><br></pre></td></tr></table></figure>
-<h3 id="大小"><a href="#大小" class="headerlink" title="大小"></a>大小</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">int size() const:返回向量中元素的个数</span><br><span class="line">int capacity() const:返回当前向量所能容纳的最大元素值</span><br><span class="line">int max_size() const:返回最大可允许的vector元素数量值</span><br></pre></td></tr></table></figure>
-<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">void swap(vector&amp;):交换两个同类型向量的数据</span><br><span class="line">void assign(int n,const T&amp; x):设置向量中第n个元素的值为x</span><br><span class="line">void assign(const_iterator first,const_iterator last):向量中[first,last)中元素设置成当前向量元素</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>Learning</category>
-      </categories>
-      <tags>
-        <tag>C++</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>CV-CNN</title>
     <url>/2021/12/10/CNN/</url>
     <content><![CDATA[<p>[TOC]</p>
@@ -399,6 +322,83 @@
       <tags>
         <tag>cs224w</tag>
         <tag>graph</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++-自建数组及STL中的array&amp;vector</title>
+    <url>/2021/12/10/C++-%E8%87%AA%E5%BB%BA%E6%95%B0%E7%BB%84%E5%8F%8ASTL%E4%B8%AD%E7%9A%84array&amp;vector/</url>
+    <content><![CDATA[<h2 id="相同点"><a href="#相同点" class="headerlink" title="相同点"></a>相同点</h2><ul>
+<li>三者皆使用连续内存，且array和vector的底层由自建数组实现</li>
+<li>都可以用下标访问</li>
+</ul>
+<a id="more"></a>
+<h2 id="不同点"><a href="#不同点" class="headerlink" title="不同点"></a>不同点</h2><ol>
+<li>vector属于变长容器，即可以根据数据的插入删除重新构建容器容量；但array和数组属于定长容器。</li>
+<li>vector提供了可以动态插入和删除元素的机制，而array和数组则无法做到，或者说array和数组需要完成该功能则需要自己实现完成。</li>
+<li>由于vector的动态内存变化的机制，<strong>在插入和删除时，需要考虑迭代的是否失效的问题</strong>，vector容器增长时，不是在原有内存空间中添加，而是重新申请+分配内存。</li>
+<li>vector和array提供了更好的数据访问机制，即可以使用front和back以及at访问方式，使得访问更加安全。而数组只能通过下标访问，在程序的设计过程中，更容易引发访问错误。</li>
+<li>vector和array提供了更好的遍历机制，有正向迭代器和反向迭代器两种</li>
+<li>vector和array提供了size和判空的获取机制，而数组只能通过遍历或者通过额外的变量记录数组的size。</li>
+<li>vector和array提供了两个容器对象的内容交换，即swap的机制，而数组对于交换只能通过遍历的方式，逐个元素交换的方式使用</li>
+<li>array提供了初始化所有成员的方法fill</li>
+</ol>
+<h2 id="自建数组"><a href="#自建数组" class="headerlink" title="自建数组"></a>自建数组</h2><h3 id="静态数组-amp-动态数组"><a href="#静态数组-amp-动态数组" class="headerlink" title="静态数组&amp;动态数组"></a>静态数组&amp;动态数组</h3><h4 id="静态数组"><a href="#静态数组" class="headerlink" title="静态数组"></a>静态数组</h4><ul>
+<li><strong>在栈中</strong></li>
+<li>在编译期间在栈中分配好内存的数组，在运行期间不能改变存储空间，运行后由<strong>系统自动释放</strong>。</li>
+<li>必须用常量指定数组大小</li>
+<li>数组名为第一个数组元素</li>
+</ul>
+<h4 id="动态数组"><a href="#动态数组" class="headerlink" title="动态数组"></a>动态数组</h4><ul>
+<li>程序运行时才分配内存的数组</li>
+<li><strong>在堆中</strong></li>
+<li>数组名为指向第一个数组元素的指针</li>
+</ul>
+<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><ul>
+<li>int a[3]; 局部作用域中，只做了声明，未初始化，其值未定</li>
+<li>int a[3]; 静态数组以及直接声明在某个namespace中（函数外部），默认初始化为全0</li>
+<li>int a[3] = {}; 初始化为0</li>
+<li>int a[3] = {1}; 初始化为{1, 0, 0}</li>
+<li>int a[] = {1,2,3,4}; 声明大小为4的数组，并初始化为{1,2,3,4}</li>
+<li>int a[] {1,2,3,4}; <strong>通用初始化</strong>方法，声明和初始化程序之间不用等号</li>
+<li>int* a = new int[10]; //new 分配了一个大小为10的未初始化的int数组，并返回指向该数组第一个元素的指针，此指针初始化了指针a<ul>
+<li>a = {4, -3, 5, -2, -1, 2, 6, -2, 3}; // 错误，注意这种用大括号的数组赋值只能用在声明时，此处已经不是声明，所以出错。</li>
+<li>int *a = new int[10] ();  // 默认初始化，每个元素初始化为0,括号内不能写其他值，只能初始化为0</li>
+<li>int* a = new int[n];// t</li>
+<li>string* Dynamic_Arr4 = new string[size]{“aa”, “bb”,”cc”, “dd”, string(2, ‘e’) };      //显式的初始化</li>
+<li>delete [ ] Dynamic_Arr4；//动态数组的释放</li>
+</ul>
+</li>
+<li>维度为变量时，不能在声明时同时初始化，即int a[b]={1};是不合法的。 </li>
+<li>多维数组为1维数组的特殊形式，定义多维数组时，如果不对它进行初始化，必须标明每个维度的大小；如果进行了显式的初始化，可以不标明最高维度的大小，（也就是第一个维度，当第一个维度不标明大小，则不需进行初始化）</li>
+</ul>
+<h2 id="array"><a href="#array" class="headerlink" title="array"></a>array</h2><ul>
+<li><a href="https://www.cplusplus.com/reference/array/array/">ref</a></li>
+<li>大小固定</li>
+</ul>
+<h2 id="vector"><a href="#vector" class="headerlink" title="vector"></a>vector</h2><ul>
+<li><a href="https://www.cplusplus.com/reference/vector/vector/">ref</a></li>
+<li>动态数组</li>
+</ul>
+<h3 id="初始化-1"><a href="#初始化-1" class="headerlink" title="初始化"></a>初始化</h3><ul>
+<li>构造函数<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="built_in">vector</span>():创建一个空<span class="built_in">vector</span></span><br><span class="line"><span class="built_in">vector</span>(<span class="keyword">int</span> nSize):创建一个<span class="built_in">vector</span>,元素个数为nSize</span><br><span class="line"><span class="built_in">vector</span>(<span class="keyword">int</span> nSize,<span class="keyword">const</span> t&amp; t):创建一个<span class="built_in">vector</span>，元素个数为nSize,且值均为t</span><br><span class="line"><span class="built_in">vector</span>(<span class="keyword">const</span> <span class="built_in">vector</span>&amp;):复制构造函数</span><br><span class="line"><span class="built_in">vector</span>(begin,end):复制[begin,end)区间内另一个数组的元素到<span class="built_in">vector</span>中</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; first;                                <span class="comment">// empty vector of ints</span></span><br><span class="line"><span class="function"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">second</span> <span class="params">(<span class="number">4</span>,<span class="number">100</span>)</span></span>;                       <span class="comment">// four ints with value 100</span></span><br><span class="line"><span class="function"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">third</span> <span class="params">(second.begin(),second.end())</span></span>;  <span class="comment">// iterating through second</span></span><br><span class="line"><span class="function"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">fourth</span> <span class="params">(third)</span></span>;                       <span class="comment">// a copy of third</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// the iterator constructor can also be used to construct from arrays:</span></span><br><span class="line"><span class="keyword">int</span> myints[] = &#123;<span class="number">16</span>,<span class="number">2</span>,<span class="number">77</span>,<span class="number">29</span>&#125;;</span><br><span class="line"><span class="function"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">fifth</span> <span class="params">(myints, myints + <span class="keyword">sizeof</span>(myints) / <span class="keyword">sizeof</span>(<span class="keyword">int</span>) )</span></span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>二维vector若要使用A[i].push_back(3)等方式初始化，则应事先定义好第一维的大小，例如<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">ans</span><span class="params">(<span class="number">5</span>)</span></span>;</span><br><span class="line">ans[<span class="number">3</span>].push_back(<span class="number">3</span>);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="增加"><a href="#增加" class="headerlink" title="增加"></a>增加</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">void push_back(const T&amp; x):向量尾部增加一个元素X</span><br><span class="line">iterator insert(iterator it,const T&amp; x):向量中迭代器指向元素前增加一个元素x</span><br><span class="line">iterator insert(iterator it,int n,const T&amp; x):向量中迭代器指向元素前增加n个相同的元素x</span><br><span class="line">iterator insert(iterator it,const_iterator first,const_iterator last):向量中迭代器指向元素前插入另一个相同类型向量的[first,last)间的数据</span><br></pre></td></tr></table></figure>
+<h3 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">iterator erase(iterator it):删除向量中迭代器指向元素</span><br><span class="line">iterator erase(iterator first,iterator last):删除向量中[first,last)中元素</span><br><span class="line">void pop_back():删除向量中最后一个元素</span><br><span class="line">void clear():清空向量中所有元素</span><br></pre></td></tr></table></figure>
+<h3 id="遍历"><a href="#遍历" class="headerlink" title="遍历"></a>遍历</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">reference at(int pos):返回pos位置元素的引用</span><br><span class="line">reference front():返回首元素的引用</span><br><span class="line">reference back():返回尾元素的引用</span><br><span class="line">iterator begin():返回向量头指针，指向第一个元素</span><br><span class="line">iterator end():返回向量尾指针，指向向量最后一个元素的下一个位置</span><br><span class="line">reverse_iterator rbegin():反向迭代器，指向最后一个元素</span><br><span class="line">reverse_iterator rend():反向迭代器，指向第一个元素之前的位置</span><br></pre></td></tr></table></figure>
+<h3 id="判断"><a href="#判断" class="headerlink" title="判断"></a>判断</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">bool empty() const:判断向量是否为空，若为空，则向量中无元素</span><br></pre></td></tr></table></figure>
+<h3 id="大小"><a href="#大小" class="headerlink" title="大小"></a>大小</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">int size() const:返回向量中元素的个数</span><br><span class="line">int capacity() const:返回当前向量所能容纳的最大元素值</span><br><span class="line">int max_size() const:返回最大可允许的vector元素数量值</span><br></pre></td></tr></table></figure>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">void swap(vector&amp;):交换两个同类型向量的数据</span><br><span class="line">void assign(int n,const T&amp; x):设置向量中第n个元素的值为x</span><br><span class="line">void assign(const_iterator first,const_iterator last):向量中[first,last)中元素设置成当前向量元素</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -582,81 +582,6 @@ k_{v} \\
       </tags>
   </entry>
   <entry>
-    <title>ML-GBDT &amp; XGBoost</title>
-    <url>/2021/12/10/GBDT%20&amp;%20XGBoost/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<p><a href="https://xgboost.readthedocs.io/en/latest/tutorials/model.html">Doc</a><br><a href="https://homes.cs.washington.edu/~tqchen/pdf/BoostedTree.pdf">Slides</a></p>
-<a id="more"></a>
-<h1 id="为何要推导出目标函数而不是直接增加树"><a href="#为何要推导出目标函数而不是直接增加树" class="headerlink" title="为何要推导出目标函数而不是直接增加树"></a>为何要推导出目标函数而不是直接增加树</h1><p><img src="http://i.imgur.com/quPhp1K.png" alt="Objective function"></p>
-<ul>
-<li>理论上：搞清楚learning的目的，以及其收敛性。</li>
-<li>工程上：<ul>
-<li>gi和hi是对loss function的一次、二次导</li>
-<li>目标函数以及整个学习过程只依赖于gi和hi</li>
-<li>可以根据实际问题，自定义loss function</li>
-</ul>
-</li>
-</ul>
-<h1 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h1><p><img src="http://i.imgur.com/L7PhJwO.png" alt="Summary"></p>
-<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><h2 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h2><script type="math/tex; mode=display">\text{obj} = \sum_{i=1}^n l(y_i, \hat{y}_i^{(t)}) + \sum_{i=1}^t\Omega(f_i)</script><p>l为loss，\ \Omega \ 为正则项</p>
-<ul>
-<li>loss：采用加法策略，第t颗树时：<script type="math/tex; mode=display">\hat{y}_i^{(0)} = 0</script><script type="math/tex; mode=display">\hat{y}_i^{(1)} = f_1(x_i) = \hat{y}_i^{(0)} + f_1(x_i)</script><script type="math/tex; mode=display">\hat{y}_i^{(2)} = f_1(x_i) + f_2(x_i)= \hat{y}_i^{(1)} + f_2(x_i)</script><script type="math/tex; mode=display">\dots</script><script type="math/tex; mode=display">\hat{y}_i^{(t)} = \sum_{k=1}^t f_k(x_i)= \hat{y}_i^{(t-1)} + f_t(x_i)</script>在添加第t颗树时，需要优化的目标函数为：<script type="math/tex; mode=display">\sum_{i=1}^n [g_i f_t(x_i) + \frac{1}{2} h_i f_t^2(x_i)] + \Omega(f_t)</script>其中h和f：<script type="math/tex; mode=display">g_i = \partial_{\hat{y}_i^{(t-1)}} l(y_i, \hat{y}_i^{(t-1)})</script><script type="math/tex; mode=display">h_i = \partial_{\hat{y}_i^{(t-1)}}^2 l(y_i, \hat{y}_i^{(t-1)})</script>note: 是对谁的导</li>
-<li>正则项：复杂度：<script type="math/tex; mode=display">\Omega(f) = \gamma T + \frac{1}{2}\lambda \sum_{j=1}^T w_j^2</script>其中w是叶子上的score vector，T是叶子数量</li>
-</ul>
-<h2 id="DART-Booster"><a href="#DART-Booster" class="headerlink" title="DART Booster"></a>DART Booster</h2><p>为了解决过拟合，会随机drop trees:</p>
-<ul>
-<li>训练速度可能慢于gbtree</li>
-<li>由于随机性，早停可能不稳定</li>
-</ul>
-<h1 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h1><h2 id="Monotonic-Constraints单调性限制"><a href="#Monotonic-Constraints单调性限制" class="headerlink" title="Monotonic Constraints单调性限制"></a>Monotonic Constraints单调性限制</h2><ul>
-<li><p>一个可选特性:<br>会限制模型的结果按照某个特征 单调的进行增减</p>
-<p>也就是说可以降低模型对数据的敏感度，如果明确已知某个特征与预测结果呈单调关系时，那在生成模型的时候就会跟特征数据的单调性有关。</p>
-</li>
-</ul>
-<h2 id="Feature-Interaction-Constraints单调性限制"><a href="#Feature-Interaction-Constraints单调性限制" class="headerlink" title="Feature Interaction Constraints单调性限制"></a>Feature Interaction Constraints单调性限制</h2><ul>
-<li><p>一个可选特性：<br>不用时，在tree生成的时候，一棵树上的节点会无限制地选用多个特征</p>
-<p>设置此特性时，可以规定，哪些特征可以有interaction（一般独立变量之间可以interaction，非独立变量的话可能会引入噪声）</p>
-</li>
-<li>好处：<ul>
-<li>预测时更小的噪声</li>
-<li>对模型更好地控制</li>
-</ul>
-</li>
-</ul>
-<h2 id="Instance-Weight-File"><a href="#Instance-Weight-File" class="headerlink" title="Instance Weight File"></a>Instance Weight File</h2><ul>
-<li>规定了模型训练时data中每一条instance的权重</li>
-<li>有些instance质量较差，或与前一示例相比变化不大，所以可以调节其所占权重</li>
-</ul>
-<h1 id="调参"><a href="#调参" class="headerlink" title="调参"></a>调参</h1><h2 id="Overfitting"><a href="#Overfitting" class="headerlink" title="Overfitting"></a>Overfitting</h2><p>与overfitting有关的参数：</p>
-<ul>
-<li>直接控制模型复杂度：max_depth, min_child_weight and gamma.</li>
-<li>增加模型随机性以使得模型对噪声有更强的鲁棒性：<ul>
-<li>subsample and colsample_bytree. </li>
-<li>Reduce stepsize eta. Remember to increase num_round when you do so.</li>
-</ul>
-</li>
-</ul>
-<h2 id="Imbalanced-Dataset"><a href="#Imbalanced-Dataset" class="headerlink" title="Imbalanced Dataset"></a>Imbalanced Dataset</h2><ul>
-<li>只关注测量指标的大小<ul>
-<li>平衡数据集 via scale_pos_weight</li>
-<li>使用AUC作为metric</li>
-</ul>
-</li>
-<li>关注预测正确的概率<ul>
-<li>此时不能re-balance数据集</li>
-<li>Set parameter max_delta_step to a finite number (say 1) to help convergence</li>
-</ul>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Learning</category>
-      </categories>
-      <tags>
-        <tag>ML</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>ML-DBSCAN以及sklearn实现DBSCAN</title>
     <url>/2021/12/10/DBSCAN/</url>
     <content><![CDATA[<meta name="referrer" content="no-referrer"/>
@@ -744,6 +669,81 @@ k_{v} \\
       <tags>
         <tag>ML</tag>
         <tag>Clustering</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ML-GBDT &amp; XGBoost</title>
+    <url>/2021/12/10/GBDT%20&amp;%20XGBoost/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<p><a href="https://xgboost.readthedocs.io/en/latest/tutorials/model.html">Doc</a><br><a href="https://homes.cs.washington.edu/~tqchen/pdf/BoostedTree.pdf">Slides</a></p>
+<a id="more"></a>
+<h1 id="为何要推导出目标函数而不是直接增加树"><a href="#为何要推导出目标函数而不是直接增加树" class="headerlink" title="为何要推导出目标函数而不是直接增加树"></a>为何要推导出目标函数而不是直接增加树</h1><p><img src="http://i.imgur.com/quPhp1K.png" alt="Objective function"></p>
+<ul>
+<li>理论上：搞清楚learning的目的，以及其收敛性。</li>
+<li>工程上：<ul>
+<li>gi和hi是对loss function的一次、二次导</li>
+<li>目标函数以及整个学习过程只依赖于gi和hi</li>
+<li>可以根据实际问题，自定义loss function</li>
+</ul>
+</li>
+</ul>
+<h1 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h1><p><img src="http://i.imgur.com/L7PhJwO.png" alt="Summary"></p>
+<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><h2 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h2><script type="math/tex; mode=display">\text{obj} = \sum_{i=1}^n l(y_i, \hat{y}_i^{(t)}) + \sum_{i=1}^t\Omega(f_i)</script><p>l为loss，\ \Omega \ 为正则项</p>
+<ul>
+<li>loss：采用加法策略，第t颗树时：<script type="math/tex; mode=display">\hat{y}_i^{(0)} = 0</script><script type="math/tex; mode=display">\hat{y}_i^{(1)} = f_1(x_i) = \hat{y}_i^{(0)} + f_1(x_i)</script><script type="math/tex; mode=display">\hat{y}_i^{(2)} = f_1(x_i) + f_2(x_i)= \hat{y}_i^{(1)} + f_2(x_i)</script><script type="math/tex; mode=display">\dots</script><script type="math/tex; mode=display">\hat{y}_i^{(t)} = \sum_{k=1}^t f_k(x_i)= \hat{y}_i^{(t-1)} + f_t(x_i)</script>在添加第t颗树时，需要优化的目标函数为：<script type="math/tex; mode=display">\sum_{i=1}^n [g_i f_t(x_i) + \frac{1}{2} h_i f_t^2(x_i)] + \Omega(f_t)</script>其中h和f：<script type="math/tex; mode=display">g_i = \partial_{\hat{y}_i^{(t-1)}} l(y_i, \hat{y}_i^{(t-1)})</script><script type="math/tex; mode=display">h_i = \partial_{\hat{y}_i^{(t-1)}}^2 l(y_i, \hat{y}_i^{(t-1)})</script>note: 是对谁的导</li>
+<li>正则项：复杂度：<script type="math/tex; mode=display">\Omega(f) = \gamma T + \frac{1}{2}\lambda \sum_{j=1}^T w_j^2</script>其中w是叶子上的score vector，T是叶子数量</li>
+</ul>
+<h2 id="DART-Booster"><a href="#DART-Booster" class="headerlink" title="DART Booster"></a>DART Booster</h2><p>为了解决过拟合，会随机drop trees:</p>
+<ul>
+<li>训练速度可能慢于gbtree</li>
+<li>由于随机性，早停可能不稳定</li>
+</ul>
+<h1 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h1><h2 id="Monotonic-Constraints单调性限制"><a href="#Monotonic-Constraints单调性限制" class="headerlink" title="Monotonic Constraints单调性限制"></a>Monotonic Constraints单调性限制</h2><ul>
+<li><p>一个可选特性:<br>会限制模型的结果按照某个特征 单调的进行增减</p>
+<p>也就是说可以降低模型对数据的敏感度，如果明确已知某个特征与预测结果呈单调关系时，那在生成模型的时候就会跟特征数据的单调性有关。</p>
+</li>
+</ul>
+<h2 id="Feature-Interaction-Constraints单调性限制"><a href="#Feature-Interaction-Constraints单调性限制" class="headerlink" title="Feature Interaction Constraints单调性限制"></a>Feature Interaction Constraints单调性限制</h2><ul>
+<li><p>一个可选特性：<br>不用时，在tree生成的时候，一棵树上的节点会无限制地选用多个特征</p>
+<p>设置此特性时，可以规定，哪些特征可以有interaction（一般独立变量之间可以interaction，非独立变量的话可能会引入噪声）</p>
+</li>
+<li>好处：<ul>
+<li>预测时更小的噪声</li>
+<li>对模型更好地控制</li>
+</ul>
+</li>
+</ul>
+<h2 id="Instance-Weight-File"><a href="#Instance-Weight-File" class="headerlink" title="Instance Weight File"></a>Instance Weight File</h2><ul>
+<li>规定了模型训练时data中每一条instance的权重</li>
+<li>有些instance质量较差，或与前一示例相比变化不大，所以可以调节其所占权重</li>
+</ul>
+<h1 id="调参"><a href="#调参" class="headerlink" title="调参"></a>调参</h1><h2 id="Overfitting"><a href="#Overfitting" class="headerlink" title="Overfitting"></a>Overfitting</h2><p>与overfitting有关的参数：</p>
+<ul>
+<li>直接控制模型复杂度：max_depth, min_child_weight and gamma.</li>
+<li>增加模型随机性以使得模型对噪声有更强的鲁棒性：<ul>
+<li>subsample and colsample_bytree. </li>
+<li>Reduce stepsize eta. Remember to increase num_round when you do so.</li>
+</ul>
+</li>
+</ul>
+<h2 id="Imbalanced-Dataset"><a href="#Imbalanced-Dataset" class="headerlink" title="Imbalanced Dataset"></a>Imbalanced Dataset</h2><ul>
+<li>只关注测量指标的大小<ul>
+<li>平衡数据集 via scale_pos_weight</li>
+<li>使用AUC作为metric</li>
+</ul>
+</li>
+<li>关注预测正确的概率<ul>
+<li>此时不能re-balance数据集</li>
+<li>Set parameter max_delta_step to a finite number (say 1) to help convergence</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>ML</tag>
       </tags>
   </entry>
   <entry>
