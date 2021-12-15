@@ -3729,21 +3729,20 @@ k_{v} \\
 </ul>
 <h3 id="Local-neighborhood-overlap"><a href="#Local-neighborhood-overlap" class="headerlink" title="Local neighborhood overlap"></a>Local neighborhood overlap</h3><ul>
 <li>某两个节点其邻域的overlap -》<strong>两节点邻域没有交集其overlap为0</strong></li>
-<li>1.common neighbors: <strong>求交集</strong> $\left|N\left(v<em>{1}\right) \cap N\left(v</em>{2}\right)\right|$</li>
-<li>2.Jaccard’s coefficient: <strong>IoU</strong> $\frac{\left|N\left(v<em>{1}\right) \cap N\left(v</em>{2}\right)\right|}{\left|N\left(v<em>{1}\right) \cup N\left(v</em>{2}\right)\right|}$</li>
-<li>3.Adamic-Adar index: <strong>两节点交集的点的1/log(degree)之和</strong> $\sum<em>{u \in N\left(v</em>{1}\right) \cap N\left(v<em>{2}\right)} \frac{1}{\log \left(k</em>{u}\right)}$</li>
+<li>1.common neighbors: <strong>求交集</strong>, $ \left|N\left(v<em>{1}\right) \cap N\left(v</em>{2}\right)\right| $</li>
+<li>2.Jaccard’s coefficient: <strong>IoU</strong> $ \frac{\left|N\left(v<em>{1}\right) \cap N\left(v</em>{2}\right)\right|}{\left|N\left(v<em>{1}\right) \cup N\left(v</em>{2}\right)\right|} $</li>
+<li>3.Adamic-Adar index: <strong>两节点交集的点的1/log(degree)之和</strong> $ \sum<em>{u \in N\left(v</em>{1}\right) \cap N\left(v<em>{2}\right)} \frac{1}{\log \left(k</em>{u}\right)} $</li>
 </ul>
 <h3 id="Global-neighborhood-overlap"><a href="#Global-neighborhood-overlap" class="headerlink" title="Global neighborhood overlap"></a>Global neighborhood overlap</h3><ul>
 <li><strong>使用整张图的结构来表示两节点的关系</strong></li>
 <li>Katz index: 计算两个节点间距离为i时有多少条通路，并穷举i，求通路数之和</li>
 <li>邻接矩阵A的k次幂可以表示距离为k时通路的数量：$A_{u v}^{l}$即距离为l的通路数量</li>
 <li>Katz index: <script type="math/tex">S_{v_{1} v_{2}}=\sum_{l=1}^{\infty} \beta^{l} A_{v_{1} v_{2}}^{l}</script></li>
-<li>闭环形式：<script type="math/tex; mode=display">
-$$\boldsymbol{S}=\sum_{i=1}^{\infty} \beta^{i} \boldsymbol{A}^{i}=\underbrace{(\boldsymbol{I}-\beta \boldsymbol{A})^{-1}}_{=\sum_{i=0}^{\infty} \beta^{i} A^{i}}-\boldsymbol{I}</script><h2 id="Graph-features"><a href="#Graph-features" class="headerlink" title="Graph features"></a>Graph features</h2></li>
+<li>闭环形式：<script type="math/tex; mode=display">\boldsymbol{S}=\sum_{i=1}^{\infty} \beta^{i} \boldsymbol{A}^{i}=\underbrace{(\boldsymbol{I}-\beta \boldsymbol{A})^{-1}}_{=\sum_{i=0}^{\infty} \beta^{i} A^{i}}-\boldsymbol{I}</script><h2 id="Graph-features"><a href="#Graph-features" class="headerlink" title="Graph features"></a>Graph features</h2></li>
 </ul>
 <p><strong>focus on the Graph kernels</strong></p>
 <ul>
-<li>图G和G’，其kernel为K(G, G’)，且可以写成：$K\left(G, G^{\prime}\right)=\boldsymbol{f}<em>{G}{ }^{\mathrm{T}} \boldsymbol{f}</em>{G^{\prime}}$，其中G的特征向量为$\boldsymbol{f}_{G}$，称这种形式的特征表达为Kernel features</li>
+<li>图G和G’，其kernel为K(G, G’)，且可以写成：$ K\left(G, G^{\prime}\right)=\boldsymbol{f}<em>{G}{ }^{\mathrm{T}} \boldsymbol{f}</em>{G^{\prime}} $，其中G的特征向量为$ \boldsymbol{f}_{G} $，称这种形式的特征表达为Kernel features</li>
 <li>需要满足：<ul>
 <li>kernel K(G, G’)能够表达G和G‘的相似性</li>
 <li>kernel matrix $\boldsymbol{K}=\left(K\left(G, G^{\prime}\right)\right)_{G, G^{\prime}}$</li>
@@ -3760,8 +3759,8 @@ $$\boldsymbol{S}=\sum_{i=1}^{\infty} \beta^{i} \boldsymbol{A}^{i}=\underbrace{(\
 </li>
 <li>具体的：<ul>
 <li>先确定graphlet的node个数k</li>
-<li>求k个node的graphlets list $\mathcal{G}<em>{k} = \left(g</em>{1}, g<em>{2}, \ldots, g</em>{n_{k}}\right)$</li>
-<li>求graphlets list中每个Graphlet在图中出现了几次，并构成vector: $\left(\boldsymbol{f}<em>{G}\right)</em>{i}=#\left(g<em>{i} \subseteq G\right)$ for $i=1,2, \ldots, n</em>{k}$</li>
+<li>求k个node的graphlets list $ \mathcal{G}<em>{k} = \left(g</em>{1}, g<em>{2}, \ldots, g</em>{n_{k}}\right) $</li>
+<li>求graphlets list中每个Graphlet在图中出现了几次，并构成vector: $ \left(\boldsymbol{f}<em>{G}\right)</em>{i}=#\left(g<em>{i} \subseteq G\right)$ for $i=1,2, \ldots, n</em>{k} $</li>
 </ul>
 </li>
 </ul>
