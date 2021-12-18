@@ -338,6 +338,7 @@
       <tags>
         <tag>DL</tag>
         <tag>CV</tag>
+        <tag>CNN</tag>
       </tags>
   </entry>
   <entry>
@@ -420,7 +421,7 @@
         <category>Learning</category>
       </categories>
       <tags>
-        <tag>资源</tag>
+        <tag>Resource</tag>
       </tags>
   </entry>
   <entry>
@@ -586,6 +587,7 @@ k_{v} \\
       </categories>
       <tags>
         <tag>ML</tag>
+        <tag>GDBT</tag>
       </tags>
   </entry>
   <entry>
@@ -676,6 +678,7 @@ k_{v} \\
       <tags>
         <tag>ML</tag>
         <tag>Clustering</tag>
+        <tag>DBSCAN</tag>
       </tags>
   </entry>
   <entry>
@@ -705,6 +708,7 @@ k_{v} \\
         <tag>DL</tag>
         <tag>CV</tag>
         <tag>ML</tag>
+        <tag>目标检测</tag>
       </tags>
   </entry>
   <entry>
@@ -780,6 +784,8 @@ k_{v} \\
       </categories>
       <tags>
         <tag>ML</tag>
+        <tag>GBDT</tag>
+        <tag>XGBoost</tag>
       </tags>
   </entry>
   <entry>
@@ -803,8 +809,8 @@ k_{v} \\
         <category>Learning</category>
       </categories>
       <tags>
-        <tag>资源</tag>
         <tag>Java</tag>
+        <tag>Resource</tag>
       </tags>
   </entry>
   <entry>
@@ -867,6 +873,7 @@ k_{v} \\
       </categories>
       <tags>
         <tag>ML</tag>
+        <tag>LightGBM</tag>
       </tags>
   </entry>
   <entry>
@@ -950,6 +957,7 @@ k_{v} \\
       </categories>
       <tags>
         <tag>ML</tag>
+        <tag>DecisionTree</tag>
       </tags>
   </entry>
   <entry>
@@ -1166,6 +1174,7 @@ M I o U=\frac{1}{k+1} \sum_{i=0}^{k} \frac{T P}{F N+F P+T P}
       </categories>
       <tags>
         <tag>ML</tag>
+        <tag>信息论</tag>
       </tags>
   </entry>
   <entry>
@@ -1200,6 +1209,7 @@ M I o U=\frac{1}{k+1} \sum_{i=0}^{k} \frac{T P}{F N+F P+T P}
       </categories>
       <tags>
         <tag>ML</tag>
+        <tag>NaiveBayes</tag>
       </tags>
   </entry>
   <entry>
@@ -1415,6 +1425,7 @@ M I o U=\frac{1}{k+1} \sum_{i=0}^{k} \frac{T P}{F N+F P+T P}
       </categories>
       <tags>
         <tag>ML</tag>
+        <tag>XGBoost</tag>
       </tags>
   </entry>
   <entry>
@@ -1504,7 +1515,7 @@ M I o U=\frac{1}{k+1} \sum_{i=0}^{k} \frac{T P}{F N+F P+T P}
 </ul>
 ]]></content>
       <categories>
-        <category>Learning</category>
+        <category>Tools</category>
       </categories>
       <tags>
         <tag>git</tag>
@@ -1618,7 +1629,7 @@ M I o U=\frac{1}{k+1} \sum_{i=0}^{k} \frac{T P}{F N+F P+T P}
         <category>Tools</category>
       </categories>
       <tags>
-        <tag>tools</tag>
+        <tag>Tools</tag>
       </tags>
   </entry>
   <entry>
@@ -1727,9 +1738,11 @@ M I o U=\frac{1}{k+1} \sum_{i=0}^{k} \frac{T P}{F N+F P+T P}
 ]]></content>
       <categories>
         <category>Learning</category>
+        <category>面试</category>
       </categories>
       <tags>
         <tag>ML</tag>
+        <tag>Apriori</tag>
       </tags>
   </entry>
   <entry>
@@ -1811,10 +1824,13 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
 ]]></content>
       <categories>
         <category>Learning</category>
+        <category>面试</category>
       </categories>
       <tags>
         <tag>DL</tag>
         <tag>NLP</tag>
+        <tag>RNN</tag>
+        <tag>LSTM</tag>
       </tags>
   </entry>
   <entry>
@@ -1992,16 +2008,17 @@ Gain(D,a) =\underbrace{max}_{t\in T_a}Gain(D,a,t) = \underbrace{max}_{t\in T_a}\
 ]]></content>
       <categories>
         <category>Learning</category>
+        <category>面试</category>
       </categories>
       <tags>
         <tag>ML</tag>
+        <tag>DecisionTree</tag>
       </tags>
   </entry>
   <entry>
     <title>线性回归&amp;逻辑回归</title>
     <url>/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92+%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<h1 id="线性回归"><a href="#线性回归" class="headerlink" title="线性回归"></a>线性回归</h1><h2 id="1-简单介绍一下线性回归。"><a href="#1-简单介绍一下线性回归。" class="headerlink" title="1. 简单介绍一下线性回归。"></a>1. 简单介绍一下线性回归。</h2><ul>
+    <content><![CDATA[<h1 id="线性回归"><a href="#线性回归" class="headerlink" title="线性回归"></a>线性回归</h1><h2 id="1-简单介绍一下线性回归。"><a href="#1-简单介绍一下线性回归。" class="headerlink" title="1. 简单介绍一下线性回归。"></a>1. 简单介绍一下线性回归。</h2><ul>
 <li>线性：两个变量之间的关系<strong>是</strong>一次函数关系的——图象<strong>是直线</strong>，叫做线性。</li>
 <li>非线性：两个变量之间的关系<strong>不是</strong>一次函数关系的——图象<strong>不是直线</strong>，叫做非线性。</li>
 <li>回归：人们在测量事物的时候因为客观条件所限，求得的都是测量值，而不是事物真实的值，为了能够得到真实值，无限次的进行测量，最后通过这些测量数据计算<strong>回归到真实值</strong>，这就是回归的由来。</li>
@@ -2215,16 +2232,17 @@ J(\theta) = -lnL(\theta) = -\sum\limits_{i=1}^{m}(y^{(i)}log(h_{\theta}(x^{(i)})
 ]]></content>
       <categories>
         <category>Learning</category>
+        <category>面试</category>
       </categories>
       <tags>
         <tag>ML</tag>
+        <tag>LR</tag>
       </tags>
   </entry>
   <entry>
     <title>机器学习面试题-梯度下降</title>
     <url>/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<h2 id="1-机器学习中为什么需要梯度下降"><a href="#1-机器学习中为什么需要梯度下降" class="headerlink" title="1. 机器学习中为什么需要梯度下降"></a>1. 机器学习中为什么需要梯度下降</h2><ul>
+    <content><![CDATA[<h2 id="1-机器学习中为什么需要梯度下降"><a href="#1-机器学习中为什么需要梯度下降" class="headerlink" title="1. 机器学习中为什么需要梯度下降"></a>1. 机器学习中为什么需要梯度下降</h2><ul>
 <li>梯度下降的作用：<ul>
 <li>梯度下降是迭代法的一种，可以用于<strong>求解最小二乘问题</strong>。</li>
 <li>在求解损失函数的最小值时，可以通过梯度下降法来一步步的迭代求解，<strong>得到最小化的损失函数和模型参数值。</strong></li>
@@ -2417,10 +2435,12 @@ f(\mathbf{x})=f\left(\mathbf{x}_{0}\right)+\nabla f\left(\mathbf{x}_{0}\right)^{
 ]]></content>
       <categories>
         <category>Learning</category>
+        <category>面试</category>
       </categories>
       <tags>
         <tag>DL</tag>
         <tag>ML</tag>
+        <tag>GradientDescent</tag>
       </tags>
   </entry>
   <entry>
@@ -2550,9 +2570,11 @@ f(\mathbf{x})=f\left(\mathbf{x}_{0}\right)+\nabla f\left(\mathbf{x}_{0}\right)^{
 ]]></content>
       <categories>
         <category>Learning</category>
+        <category>面试</category>
       </categories>
       <tags>
         <tag>ML</tag>
+        <tag>RandomForest</tag>
       </tags>
   </entry>
   <entry>
@@ -2728,6 +2750,7 @@ p(y | \mathbf{x})=\frac{p(\mathbf{x} | y) p(y)}{p(\mathbf{x})}</script><p> 分�
 ]]></content>
       <categories>
         <category>Learning</category>
+        <category>面试</category>
       </categories>
       <tags>
         <tag>ML</tag>
@@ -2839,9 +2862,11 @@ f(x)=w_{0}+\sum_{m=1}^{M} w_{m} \phi_{m}(x)</script><p>其中$w$是权重，$\ph
 ]]></content>
       <categories>
         <category>Learning</category>
+        <category>面试</category>
       </categories>
       <tags>
         <tag>ML</tag>
+        <tag>集成学习</tag>
       </tags>
   </entry>
   <entry>
@@ -2925,6 +2950,7 @@ f(x)=w_{0}+\sum_{m=1}^{M} w_{m} \phi_{m}(x)</script><p>其中$w$是权重，$\ph
       </categories>
       <tags>
         <tag>ML</tag>
+        <tag>FeatureEngineering</tag>
       </tags>
   </entry>
   <entry>
@@ -3269,6 +3295,7 @@ w=m(a+x, b+y)^{*} e^{-\frac{\left(x^{\prime}\right)^{2}+\left(y^{\prime}\right)^
       <tags>
         <tag>CV</tag>
         <tag>ML</tag>
+        <tag>SIFT</tag>
       </tags>
   </entry>
   <entry>
@@ -3444,9 +3471,14 @@ w=m(a+x, b+y)^{*} e^{-\frac{\left(x^{\prime}\right)^{2}+\left(y^{\prime}\right)^
 ]]></content>
       <categories>
         <category>Learning</category>
+        <category>面试</category>
       </categories>
       <tags>
         <tag>ML</tag>
+        <tag>GBDT</tag>
+        <tag>XGBoost</tag>
+        <tag>LightGBM</tag>
+        <tag>RandomForset</tag>
       </tags>
   </entry>
   <entry>
@@ -3816,6 +3848,7 @@ w=m(a+x, b+y)^{*} e^{-\frac{\left(x^{\prime}\right)^{2}+\left(y^{\prime}\right)^
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">splitArray</span>(<span class="params">self, nums: List[<span class="built_in">int</span>], m: <span class="built_in">int</span></span>) -&gt; int:</span></span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">helper</span>(<span class="params">mid</span>):</span></span><br><span class="line">            res = tmp = <span class="number">0</span></span><br><span class="line">            <span class="keyword">for</span> num <span class="keyword">in</span> nums:</span><br><span class="line">                <span class="keyword">if</span> tmp + num &lt;= mid:</span><br><span class="line">                    tmp += num</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    res += <span class="number">1</span></span><br><span class="line">                    tmp = num</span><br><span class="line">            <span class="keyword">return</span> res + <span class="number">1</span></span><br><span class="line"></span><br><span class="line">        lo, hi = <span class="built_in">max</span>(nums), <span class="built_in">sum</span>(nums)</span><br><span class="line">        <span class="keyword">while</span> lo &lt; hi:</span><br><span class="line">            mid = (lo + hi) // <span class="number">2</span></span><br><span class="line">            <span class="keyword">if</span> helper(mid) &gt; m:</span><br><span class="line">                lo = mid + <span class="number">1</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                hi = mid</span><br><span class="line">        <span class="keyword">return</span> lo</span><br></pre></td></tr></table></figure>]]></content>
       <categories>
         <category>Learning</category>
+        <category>查找表</category>
       </categories>
       <tags>
         <tag>Leetcode</tag>

@@ -31,9 +31,10 @@
 <meta property="og:description" content="[TOC] 1. 简单介绍决策树算法 决策树将算法组织成一颗树的形式。其实这就是将平时所说的if-then语句构建成了树的形式。决策树主要包括三个部分：内部节点、叶节点、边。内部节点是划分的特征，边代表划分的条件，叶节点表示类别。 构建决策树 就是一个递归的选择内部节点，计算划分条件的边，最后到达叶子节点的过程。 决策树在本质上是一组嵌套的if-else判定规则，从数学上看是分段常数函数，对应">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-12-09T16:00:00.000Z">
-<meta property="article:modified_time" content="2021-12-11T09:40:52.210Z">
+<meta property="article:modified_time" content="2021-12-18T13:52:30.518Z">
 <meta property="article:author" content="Kayden">
 <meta property="article:tag" content="ML">
+<meta property="article:tag" content="DecisionTree">
 <meta name="twitter:card" content="summary">
 
 
@@ -232,13 +233,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">45</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -330,7 +331,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-12-11 17:40:52" itemprop="dateModified" datetime="2021-12-11T17:40:52+08:00">2021-12-11</time>
+        <time title="Modified: 2021-12-18 21:52:30" itemprop="dateModified" datetime="2021-12-18T21:52:30+08:00">2021-12-18</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -339,6 +340,10 @@
       <span class="post-meta-item-text">In</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
           <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/%E9%9D%A2%E8%AF%95/" itemprop="url" rel="index"><span itemprop="name">面试</span></a>
         </span>
     </span>
 
@@ -531,6 +536,7 @@ Gain(D,a) =\underbrace{max}_{t\in T_a}Gain(D,a,t) = \underbrace{max}_{t\in T_a}\
     <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/ML/" rel="tag"># ML</a>
+              <a href="/tags/DecisionTree/" rel="tag"># DecisionTree</a>
           </div>
 
         
