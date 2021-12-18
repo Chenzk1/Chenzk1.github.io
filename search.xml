@@ -193,83 +193,6 @@
       </tags>
   </entry>
   <entry>
-    <title>C++-自建数组及STL中的array&amp;vector</title>
-    <url>/2021/12/10/C++-%E8%87%AA%E5%BB%BA%E6%95%B0%E7%BB%84%E5%8F%8ASTL%E4%B8%AD%E7%9A%84array&amp;vector/</url>
-    <content><![CDATA[<h2 id="相同点"><a href="#相同点" class="headerlink" title="相同点"></a>相同点</h2><ul>
-<li>三者皆使用连续内存，且array和vector的底层由自建数组实现</li>
-<li>都可以用下标访问</li>
-</ul>
-<a id="more"></a>
-<h2 id="不同点"><a href="#不同点" class="headerlink" title="不同点"></a>不同点</h2><ol>
-<li>vector属于变长容器，即可以根据数据的插入删除重新构建容器容量；但array和数组属于定长容器。</li>
-<li>vector提供了可以动态插入和删除元素的机制，而array和数组则无法做到，或者说array和数组需要完成该功能则需要自己实现完成。</li>
-<li>由于vector的动态内存变化的机制，<strong>在插入和删除时，需要考虑迭代的是否失效的问题</strong>，vector容器增长时，不是在原有内存空间中添加，而是重新申请+分配内存。</li>
-<li>vector和array提供了更好的数据访问机制，即可以使用front和back以及at访问方式，使得访问更加安全。而数组只能通过下标访问，在程序的设计过程中，更容易引发访问错误。</li>
-<li>vector和array提供了更好的遍历机制，有正向迭代器和反向迭代器两种</li>
-<li>vector和array提供了size和判空的获取机制，而数组只能通过遍历或者通过额外的变量记录数组的size。</li>
-<li>vector和array提供了两个容器对象的内容交换，即swap的机制，而数组对于交换只能通过遍历的方式，逐个元素交换的方式使用</li>
-<li>array提供了初始化所有成员的方法fill</li>
-</ol>
-<h2 id="自建数组"><a href="#自建数组" class="headerlink" title="自建数组"></a>自建数组</h2><h3 id="静态数组-amp-动态数组"><a href="#静态数组-amp-动态数组" class="headerlink" title="静态数组&amp;动态数组"></a>静态数组&amp;动态数组</h3><h4 id="静态数组"><a href="#静态数组" class="headerlink" title="静态数组"></a>静态数组</h4><ul>
-<li><strong>在栈中</strong></li>
-<li>在编译期间在栈中分配好内存的数组，在运行期间不能改变存储空间，运行后由<strong>系统自动释放</strong>。</li>
-<li>必须用常量指定数组大小</li>
-<li>数组名为第一个数组元素</li>
-</ul>
-<h4 id="动态数组"><a href="#动态数组" class="headerlink" title="动态数组"></a>动态数组</h4><ul>
-<li>程序运行时才分配内存的数组</li>
-<li><strong>在堆中</strong></li>
-<li>数组名为指向第一个数组元素的指针</li>
-</ul>
-<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><ul>
-<li>int a[3]; 局部作用域中，只做了声明，未初始化，其值未定</li>
-<li>int a[3]; 静态数组以及直接声明在某个namespace中（函数外部），默认初始化为全0</li>
-<li>int a[3] = {}; 初始化为0</li>
-<li>int a[3] = {1}; 初始化为{1, 0, 0}</li>
-<li>int a[] = {1,2,3,4}; 声明大小为4的数组，并初始化为{1,2,3,4}</li>
-<li>int a[] {1,2,3,4}; <strong>通用初始化</strong>方法，声明和初始化程序之间不用等号</li>
-<li>int* a = new int[10]; //new 分配了一个大小为10的未初始化的int数组，并返回指向该数组第一个元素的指针，此指针初始化了指针a<ul>
-<li>a = {4, -3, 5, -2, -1, 2, 6, -2, 3}; // 错误，注意这种用大括号的数组赋值只能用在声明时，此处已经不是声明，所以出错。</li>
-<li>int *a = new int[10] ();  // 默认初始化，每个元素初始化为0,括号内不能写其他值，只能初始化为0</li>
-<li>int* a = new int[n];// t</li>
-<li>string* Dynamic_Arr4 = new string[size]{“aa”, “bb”,”cc”, “dd”, string(2, ‘e’) };      //显式的初始化</li>
-<li>delete [ ] Dynamic_Arr4；//动态数组的释放</li>
-</ul>
-</li>
-<li>维度为变量时，不能在声明时同时初始化，即int a[b]={1};是不合法的。 </li>
-<li>多维数组为1维数组的特殊形式，定义多维数组时，如果不对它进行初始化，必须标明每个维度的大小；如果进行了显式的初始化，可以不标明最高维度的大小，（也就是第一个维度，当第一个维度不标明大小，则不需进行初始化）</li>
-</ul>
-<h2 id="array"><a href="#array" class="headerlink" title="array"></a>array</h2><ul>
-<li><a href="https://www.cplusplus.com/reference/array/array/">ref</a></li>
-<li>大小固定</li>
-</ul>
-<h2 id="vector"><a href="#vector" class="headerlink" title="vector"></a>vector</h2><ul>
-<li><a href="https://www.cplusplus.com/reference/vector/vector/">ref</a></li>
-<li>动态数组</li>
-</ul>
-<h3 id="初始化-1"><a href="#初始化-1" class="headerlink" title="初始化"></a>初始化</h3><ul>
-<li>构造函数<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="built_in">vector</span>():创建一个空<span class="built_in">vector</span></span><br><span class="line"><span class="built_in">vector</span>(<span class="keyword">int</span> nSize):创建一个<span class="built_in">vector</span>,元素个数为nSize</span><br><span class="line"><span class="built_in">vector</span>(<span class="keyword">int</span> nSize,<span class="keyword">const</span> t&amp; t):创建一个<span class="built_in">vector</span>，元素个数为nSize,且值均为t</span><br><span class="line"><span class="built_in">vector</span>(<span class="keyword">const</span> <span class="built_in">vector</span>&amp;):复制构造函数</span><br><span class="line"><span class="built_in">vector</span>(begin,end):复制[begin,end)区间内另一个数组的元素到<span class="built_in">vector</span>中</span><br></pre></td></tr></table></figure>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; first;                                <span class="comment">// empty vector of ints</span></span><br><span class="line"><span class="function"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">second</span> <span class="params">(<span class="number">4</span>,<span class="number">100</span>)</span></span>;                       <span class="comment">// four ints with value 100</span></span><br><span class="line"><span class="function"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">third</span> <span class="params">(second.begin(),second.end())</span></span>;  <span class="comment">// iterating through second</span></span><br><span class="line"><span class="function"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">fourth</span> <span class="params">(third)</span></span>;                       <span class="comment">// a copy of third</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// the iterator constructor can also be used to construct from arrays:</span></span><br><span class="line"><span class="keyword">int</span> myints[] = &#123;<span class="number">16</span>,<span class="number">2</span>,<span class="number">77</span>,<span class="number">29</span>&#125;;</span><br><span class="line"><span class="function"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">fifth</span> <span class="params">(myints, myints + <span class="keyword">sizeof</span>(myints) / <span class="keyword">sizeof</span>(<span class="keyword">int</span>) )</span></span>;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>二维vector若要使用A[i].push_back(3)等方式初始化，则应事先定义好第一维的大小，例如<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">ans</span><span class="params">(<span class="number">5</span>)</span></span>;</span><br><span class="line">ans[<span class="number">3</span>].push_back(<span class="number">3</span>);</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="增加"><a href="#增加" class="headerlink" title="增加"></a>增加</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">void push_back(const T&amp; x):向量尾部增加一个元素X</span><br><span class="line">iterator insert(iterator it,const T&amp; x):向量中迭代器指向元素前增加一个元素x</span><br><span class="line">iterator insert(iterator it,int n,const T&amp; x):向量中迭代器指向元素前增加n个相同的元素x</span><br><span class="line">iterator insert(iterator it,const_iterator first,const_iterator last):向量中迭代器指向元素前插入另一个相同类型向量的[first,last)间的数据</span><br></pre></td></tr></table></figure>
-<h3 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">iterator erase(iterator it):删除向量中迭代器指向元素</span><br><span class="line">iterator erase(iterator first,iterator last):删除向量中[first,last)中元素</span><br><span class="line">void pop_back():删除向量中最后一个元素</span><br><span class="line">void clear():清空向量中所有元素</span><br></pre></td></tr></table></figure>
-<h3 id="遍历"><a href="#遍历" class="headerlink" title="遍历"></a>遍历</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">reference at(int pos):返回pos位置元素的引用</span><br><span class="line">reference front():返回首元素的引用</span><br><span class="line">reference back():返回尾元素的引用</span><br><span class="line">iterator begin():返回向量头指针，指向第一个元素</span><br><span class="line">iterator end():返回向量尾指针，指向向量最后一个元素的下一个位置</span><br><span class="line">reverse_iterator rbegin():反向迭代器，指向最后一个元素</span><br><span class="line">reverse_iterator rend():反向迭代器，指向第一个元素之前的位置</span><br></pre></td></tr></table></figure>
-<h3 id="判断"><a href="#判断" class="headerlink" title="判断"></a>判断</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">bool empty() const:判断向量是否为空，若为空，则向量中无元素</span><br></pre></td></tr></table></figure>
-<h3 id="大小"><a href="#大小" class="headerlink" title="大小"></a>大小</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">int size() const:返回向量中元素的个数</span><br><span class="line">int capacity() const:返回当前向量所能容纳的最大元素值</span><br><span class="line">int max_size() const:返回最大可允许的vector元素数量值</span><br></pre></td></tr></table></figure>
-<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">void swap(vector&amp;):交换两个同类型向量的数据</span><br><span class="line">void assign(int n,const T&amp; x):设置向量中第n个元素的值为x</span><br><span class="line">void assign(const_iterator first,const_iterator last):向量中[first,last)中元素设置成当前向量元素</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>Learning</category>
-      </categories>
-      <tags>
-        <tag>C++</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>CV-CNN</title>
     <url>/2021/12/10/CNN/</url>
     <content><![CDATA[<p>[TOC]</p>
@@ -409,19 +332,80 @@
       </tags>
   </entry>
   <entry>
-    <title>CS学习路线、资源推荐</title>
-    <url>/2021/12/10/CS%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF/</url>
-    <content><![CDATA[<ul>
-<li><a href="https://conanhujinming.github.io/post/how_to_learn_cs/">转载自胡神的“自学CS路线、资源推荐”</a></li>
-<li><a href="https://conanhujinming.github.io/comments-for-awesome-courses/">名校公开课程评价网
-</a></li>
+    <title>C++-自建数组及STL中的array&amp;vector</title>
+    <url>/2021/12/10/C++-%E8%87%AA%E5%BB%BA%E6%95%B0%E7%BB%84%E5%8F%8ASTL%E4%B8%AD%E7%9A%84array&amp;vector/</url>
+    <content><![CDATA[<h2 id="相同点"><a href="#相同点" class="headerlink" title="相同点"></a>相同点</h2><ul>
+<li>三者皆使用连续内存，且array和vector的底层由自建数组实现</li>
+<li>都可以用下标访问</li>
 </ul>
-]]></content>
+<a id="more"></a>
+<h2 id="不同点"><a href="#不同点" class="headerlink" title="不同点"></a>不同点</h2><ol>
+<li>vector属于变长容器，即可以根据数据的插入删除重新构建容器容量；但array和数组属于定长容器。</li>
+<li>vector提供了可以动态插入和删除元素的机制，而array和数组则无法做到，或者说array和数组需要完成该功能则需要自己实现完成。</li>
+<li>由于vector的动态内存变化的机制，<strong>在插入和删除时，需要考虑迭代的是否失效的问题</strong>，vector容器增长时，不是在原有内存空间中添加，而是重新申请+分配内存。</li>
+<li>vector和array提供了更好的数据访问机制，即可以使用front和back以及at访问方式，使得访问更加安全。而数组只能通过下标访问，在程序的设计过程中，更容易引发访问错误。</li>
+<li>vector和array提供了更好的遍历机制，有正向迭代器和反向迭代器两种</li>
+<li>vector和array提供了size和判空的获取机制，而数组只能通过遍历或者通过额外的变量记录数组的size。</li>
+<li>vector和array提供了两个容器对象的内容交换，即swap的机制，而数组对于交换只能通过遍历的方式，逐个元素交换的方式使用</li>
+<li>array提供了初始化所有成员的方法fill</li>
+</ol>
+<h2 id="自建数组"><a href="#自建数组" class="headerlink" title="自建数组"></a>自建数组</h2><h3 id="静态数组-amp-动态数组"><a href="#静态数组-amp-动态数组" class="headerlink" title="静态数组&amp;动态数组"></a>静态数组&amp;动态数组</h3><h4 id="静态数组"><a href="#静态数组" class="headerlink" title="静态数组"></a>静态数组</h4><ul>
+<li><strong>在栈中</strong></li>
+<li>在编译期间在栈中分配好内存的数组，在运行期间不能改变存储空间，运行后由<strong>系统自动释放</strong>。</li>
+<li>必须用常量指定数组大小</li>
+<li>数组名为第一个数组元素</li>
+</ul>
+<h4 id="动态数组"><a href="#动态数组" class="headerlink" title="动态数组"></a>动态数组</h4><ul>
+<li>程序运行时才分配内存的数组</li>
+<li><strong>在堆中</strong></li>
+<li>数组名为指向第一个数组元素的指针</li>
+</ul>
+<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><ul>
+<li>int a[3]; 局部作用域中，只做了声明，未初始化，其值未定</li>
+<li>int a[3]; 静态数组以及直接声明在某个namespace中（函数外部），默认初始化为全0</li>
+<li>int a[3] = {}; 初始化为0</li>
+<li>int a[3] = {1}; 初始化为{1, 0, 0}</li>
+<li>int a[] = {1,2,3,4}; 声明大小为4的数组，并初始化为{1,2,3,4}</li>
+<li>int a[] {1,2,3,4}; <strong>通用初始化</strong>方法，声明和初始化程序之间不用等号</li>
+<li>int* a = new int[10]; //new 分配了一个大小为10的未初始化的int数组，并返回指向该数组第一个元素的指针，此指针初始化了指针a<ul>
+<li>a = {4, -3, 5, -2, -1, 2, 6, -2, 3}; // 错误，注意这种用大括号的数组赋值只能用在声明时，此处已经不是声明，所以出错。</li>
+<li>int *a = new int[10] ();  // 默认初始化，每个元素初始化为0,括号内不能写其他值，只能初始化为0</li>
+<li>int* a = new int[n];// t</li>
+<li>string* Dynamic_Arr4 = new string[size]{“aa”, “bb”,”cc”, “dd”, string(2, ‘e’) };      //显式的初始化</li>
+<li>delete [ ] Dynamic_Arr4；//动态数组的释放</li>
+</ul>
+</li>
+<li>维度为变量时，不能在声明时同时初始化，即int a[b]={1};是不合法的。 </li>
+<li>多维数组为1维数组的特殊形式，定义多维数组时，如果不对它进行初始化，必须标明每个维度的大小；如果进行了显式的初始化，可以不标明最高维度的大小，（也就是第一个维度，当第一个维度不标明大小，则不需进行初始化）</li>
+</ul>
+<h2 id="array"><a href="#array" class="headerlink" title="array"></a>array</h2><ul>
+<li><a href="https://www.cplusplus.com/reference/array/array/">ref</a></li>
+<li>大小固定</li>
+</ul>
+<h2 id="vector"><a href="#vector" class="headerlink" title="vector"></a>vector</h2><ul>
+<li><a href="https://www.cplusplus.com/reference/vector/vector/">ref</a></li>
+<li>动态数组</li>
+</ul>
+<h3 id="初始化-1"><a href="#初始化-1" class="headerlink" title="初始化"></a>初始化</h3><ul>
+<li>构造函数<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="built_in">vector</span>():创建一个空<span class="built_in">vector</span></span><br><span class="line"><span class="built_in">vector</span>(<span class="keyword">int</span> nSize):创建一个<span class="built_in">vector</span>,元素个数为nSize</span><br><span class="line"><span class="built_in">vector</span>(<span class="keyword">int</span> nSize,<span class="keyword">const</span> t&amp; t):创建一个<span class="built_in">vector</span>，元素个数为nSize,且值均为t</span><br><span class="line"><span class="built_in">vector</span>(<span class="keyword">const</span> <span class="built_in">vector</span>&amp;):复制构造函数</span><br><span class="line"><span class="built_in">vector</span>(begin,end):复制[begin,end)区间内另一个数组的元素到<span class="built_in">vector</span>中</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; first;                                <span class="comment">// empty vector of ints</span></span><br><span class="line"><span class="function"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">second</span> <span class="params">(<span class="number">4</span>,<span class="number">100</span>)</span></span>;                       <span class="comment">// four ints with value 100</span></span><br><span class="line"><span class="function"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">third</span> <span class="params">(second.begin(),second.end())</span></span>;  <span class="comment">// iterating through second</span></span><br><span class="line"><span class="function"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">fourth</span> <span class="params">(third)</span></span>;                       <span class="comment">// a copy of third</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// the iterator constructor can also be used to construct from arrays:</span></span><br><span class="line"><span class="keyword">int</span> myints[] = &#123;<span class="number">16</span>,<span class="number">2</span>,<span class="number">77</span>,<span class="number">29</span>&#125;;</span><br><span class="line"><span class="function"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">fifth</span> <span class="params">(myints, myints + <span class="keyword">sizeof</span>(myints) / <span class="keyword">sizeof</span>(<span class="keyword">int</span>) )</span></span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>二维vector若要使用A[i].push_back(3)等方式初始化，则应事先定义好第一维的大小，例如<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">ans</span><span class="params">(<span class="number">5</span>)</span></span>;</span><br><span class="line">ans[<span class="number">3</span>].push_back(<span class="number">3</span>);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="增加"><a href="#增加" class="headerlink" title="增加"></a>增加</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">void push_back(const T&amp; x):向量尾部增加一个元素X</span><br><span class="line">iterator insert(iterator it,const T&amp; x):向量中迭代器指向元素前增加一个元素x</span><br><span class="line">iterator insert(iterator it,int n,const T&amp; x):向量中迭代器指向元素前增加n个相同的元素x</span><br><span class="line">iterator insert(iterator it,const_iterator first,const_iterator last):向量中迭代器指向元素前插入另一个相同类型向量的[first,last)间的数据</span><br></pre></td></tr></table></figure>
+<h3 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">iterator erase(iterator it):删除向量中迭代器指向元素</span><br><span class="line">iterator erase(iterator first,iterator last):删除向量中[first,last)中元素</span><br><span class="line">void pop_back():删除向量中最后一个元素</span><br><span class="line">void clear():清空向量中所有元素</span><br></pre></td></tr></table></figure>
+<h3 id="遍历"><a href="#遍历" class="headerlink" title="遍历"></a>遍历</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">reference at(int pos):返回pos位置元素的引用</span><br><span class="line">reference front():返回首元素的引用</span><br><span class="line">reference back():返回尾元素的引用</span><br><span class="line">iterator begin():返回向量头指针，指向第一个元素</span><br><span class="line">iterator end():返回向量尾指针，指向向量最后一个元素的下一个位置</span><br><span class="line">reverse_iterator rbegin():反向迭代器，指向最后一个元素</span><br><span class="line">reverse_iterator rend():反向迭代器，指向第一个元素之前的位置</span><br></pre></td></tr></table></figure>
+<h3 id="判断"><a href="#判断" class="headerlink" title="判断"></a>判断</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">bool empty() const:判断向量是否为空，若为空，则向量中无元素</span><br></pre></td></tr></table></figure>
+<h3 id="大小"><a href="#大小" class="headerlink" title="大小"></a>大小</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">int size() const:返回向量中元素的个数</span><br><span class="line">int capacity() const:返回当前向量所能容纳的最大元素值</span><br><span class="line">int max_size() const:返回最大可允许的vector元素数量值</span><br></pre></td></tr></table></figure>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">void swap(vector&amp;):交换两个同类型向量的数据</span><br><span class="line">void assign(int n,const T&amp; x):设置向量中第n个元素的值为x</span><br><span class="line">void assign(const_iterator first,const_iterator last):向量中[first,last)中元素设置成当前向量元素</span><br></pre></td></tr></table></figure>]]></content>
       <categories>
         <category>Learning</category>
       </categories>
       <tags>
-        <tag>Resource</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -569,25 +553,161 @@ k_{v} \\
       </tags>
   </entry>
   <entry>
-    <title>ML-GBDT</title>
-    <url>/2021/12/10/GBDT/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><ul>
-<li>GBDT与传统的Boosting区别较大，它的每一次计算都是为了减少上一次的残差，而为了消除残差，我们可以在残差减小的梯度方向上建立模型,所以说，在GradientBoost中，每个新的模型的建立是为了使得之前的模型的残差往梯度下降的方法，与传统的Boosting中关注正确错误的样本加权有着很大的区别。</li>
-<li>在GradientBoosting算法中，关键就是利用损失函数的负梯度方向在当前模型的值作为残差的近似值，进而拟合一棵CART回归树。</li>
-<li>GBDT的会累加所有树的结果，而这种累加是无法通过分类完成的，因此<strong>GBDT的树都是CART回归树</strong>，而不是分类树（尽管GBDT调整后也可以用于分类但不代表GBDT的树为分类树）。</li>
+    <title>CS224WLec3-Node Embeddings</title>
+    <url>/2021/12/15/CS224WLec3/</url>
+    <content><![CDATA[<h1 id="Basic"><a href="#Basic" class="headerlink" title="Basic"></a>Basic</h1><ul>
+<li>goal: 为node生成一个embedding</li>
+<li>两个要素：<strong>encoder/相似度计量方法（encode前后都需要）</strong></li>
+<li>framework: encoder 生成embedding —&gt; 相似度计量方法决定embedding学习的好坏</li>
+<li><strong>unsupervised/self-supervised way</strong> based on random walks</li>
+<li>task independent</li>
 </ul>
-<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><ul>
-<li>GBDT的性能在RF的基础上又有一步提升，因此其优点也很明显，1、它能灵活的处理各种类型的数据；2、在相对较少的调参时间下，预测的准确度较高。</li>
-<li>当然由于它是Boosting，因此基学习器之前存在串行关系，难以并行训练数据。</li>
+<a id="more"></a>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><ul>
+<li>类似于word2vec: 目标是求node u的embedding <script type="math/tex">\mathbf{z}_{u}</script>,而模型的预测目标是：<script type="math/tex">P\left(v \mid \mathbf{z}_{u}\right)</script>，即node v出现在以node u开始的walk上的概率。</li>
+<li>如何获得“句子”：random walk</li>
+</ul>
+<h2 id="Deep-Walk"><a href="#Deep-Walk" class="headerlink" title="Deep Walk"></a>Deep Walk</h2><h3 id="Random-Walk"><a href="#Random-Walk" class="headerlink" title="Random Walk"></a>Random Walk</h3><ul>
+<li>出发点：如果一个random walk中包括从u到v的路径，那u和v是相似的/有相似的高维的多跳信息</li>
+<li><script type="math/tex; mode=display">N_{\mathrm{R}}(u)$$为策略R下，从u出发的walk中，出现的所有nodes
+$$ \max _{f} \sum_{u \in V} \log \mathrm{P}\left(N_{\mathrm{R}}(u) \mid \mathbf{z}_{u}\right)</script>—》<script type="math/tex; mode=display">\mathcal{L}=\sum_{u \in V} \sum_{v \in N_{R}(u)}-\log \left(P\left(v \mid \mathbf{z}_{u}\right)\right)</script></li>
+<li>利用softmax求p \<script type="math/tex; mode=display">P\left(v \mid \mathbf{z}_{u}\right)=\frac{\exp \left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{v}\right)}{\sum_{n \in V} \exp \left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{n}\right)}</script></li>
+<li>problem: softmax分母 以及 最外层都需要|V|次遍历 —》<script type="math/tex">\mathrm{O}\left(|\mathrm{V}|^{2}\right)</script>的复杂度 —》<strong>优化</strong></li>
+</ul>
+<h3 id="Negative-Sampling"><a href="#Negative-Sampling" class="headerlink" title="Negative Sampling"></a>Negative Sampling</h3><ul>
+<li>使用所有样本做normalization —&gt; 只采样k个负样本做normalization<script type="math/tex; mode=display">P\left(v \mid \mathbf{z}_{u}\right)=\frac{\exp \left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{v}\right)}{\sum_{n \in V } \exp \left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{n}\right)} \approx \log \left(\sigma\left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{v}\right)\right)-\sum_{i=1}^{k} \log \left(\sigma\left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{n_{i}}\right)\right), n_{i} \sim P_{V}</script></li>
+<li>k的选择：<ul>
+<li>k越大，模型越鲁棒</li>
+<li>k越大，对负样本考虑的越多</li>
+<li>5~20间较常见</li>
+</ul>
+</li>
+<li>负样本的选择：可以选择graph内任意样本，但更准确的方法是选择不在walk中的样本</li>
+</ul>
+<h2 id="Node2vec-better-random-walk-strategy"><a href="#Node2vec-better-random-walk-strategy" class="headerlink" title="Node2vec: better  random walk strategy"></a>Node2vec: better  random walk strategy</h2><ul>
+<li>简单的random walk会限制walk中的node相似度与graph中node相似度的一致性</li>
+</ul>
+<h3 id="Biased-2nd-order-random-Walks"><a href="#Biased-2nd-order-random-Walks" class="headerlink" title="Biased 2nd-order random Walks"></a>Biased 2nd-order random Walks</h3><ul>
+<li>trade off between local and global views of the network: BFS &amp; DFS</li>
+<li>当前在w, 上一步在s的walk，有三种行走方向<ul>
+<li>退后：回退到s</li>
+<li>保持：走到和s距离一致的一个节点</li>
+<li>前进：走到距离s更远的节点<img src="/2021/12/15/CS224WLec3/node2vec1.png" class="" title="node2vec1"></li>
+</ul>
+</li>
+<li>实现：两个<strong>超参</strong>p/q，以及“1”来以非归一化的方法表示上述三种情况的概率<img src="/2021/12/15/CS224WLec3/node2vec2.png" class="" title="node2vec2"></li>
+<li>流程<ul>
+<li>Compute random walk probabilities</li>
+<li>Simulate 𝑟 random walks of length 𝑙 starting from each node 𝑢</li>
+<li>Optimize the node2vec objective using Stochastic Gradient Descent</li>
+</ul>
+</li>
+<li>Linear-time complexity</li>
+<li>All 3 steps are individually parallelizable</li>
+</ul>
+<h2 id="Embedding-entire-graphs"><a href="#Embedding-entire-graphs" class="headerlink" title="Embedding entire graphs"></a>Embedding entire graphs</h2><ul>
+<li>approach1: add all node embeddings</li>
+<li>approach2: introduce a “virtual node” or “super node” to represent the graph and learning embedding for this graph</li>
+<li>approach3: anonymous walks embeddings</li>
+</ul>
+<h3 id="Anonymous-walk-embeddings"><a href="#Anonymous-walk-embeddings" class="headerlink" title="Anonymous walk embeddings"></a>Anonymous walk embeddings</h3><ul>
+<li>Anonymous walk: random walk —&gt; 将node表示为距离start node的去重index。因此，确定了walk length的时候，就确定了anonymous walk中index的个数。</li>
+<li>方法1：长度为l的annoy walk共有n种情况 —&gt; 做m次random walks —&gt; 统计每种情况的count，并形成一个vector</li>
+<li>方法2：用Anonymous walks的概率分布，学习图的embedding<ul>
+<li>Learn to predict walks that co-occur in 𝚫-size window (e.g., predict 𝑤3 given 𝑤1, 𝑤2 if Δ = 2)</li>
+<li>objective:<script type="math/tex; mode=display">\max _{z_{G}} \sum_{t=\Delta+1}^{T} \log P\left(w_{t} \mid w_{t-\Delta}, \ldots, w_{t-1}, \mathbf{z}_{G}\right)</script></li>
+</ul>
+</li>
+</ul>
+<img src="/2021/12/15/CS224WLec3/annoywalks1.png" class="" title="annoywalks1">
+<img src="/2021/12/15/CS224WLec3/annoywalks2.png" class="" title="annoywalks2">
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a href="http://web.stanford.edu/class/cs224w/slides/03-nodeemb.pdf">ppt</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Learning</category>
+        <category>cs224w</category>
+      </categories>
+      <tags>
+        <tag>cs224w</tag>
+        <tag>graph</tag>
+        <tag>DeepWalk</tag>
+        <tag>node2vec</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CS学习路线、资源推荐</title>
+    <url>/2021/12/10/CS%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF/</url>
+    <content><![CDATA[<ul>
+<li><a href="https://conanhujinming.github.io/post/how_to_learn_cs/">转载自胡神的“自学CS路线、资源推荐”</a></li>
+<li><a href="https://conanhujinming.github.io/comments-for-awesome-courses/">名校公开课程评价网
+</a></li>
 </ul>
 ]]></content>
       <categories>
         <category>Learning</category>
       </categories>
       <tags>
+        <tag>Resource</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CS224WLec4-PageRank</title>
+    <url>/2021/12/18/CS224WLec4/</url>
+    <content><![CDATA[<h1 id="PageRank"><a href="#PageRank" class="headerlink" title="PageRank"></a>PageRank</h1><ul>
+<li>一个node的重要性由指向它的节点的重要性决定，node j的重要性为：<script type="math/tex; mode=display">r_{j}=\sum_{i \rightarrow j} \frac{r_{i}}{d_{i}}</script><script type="math/tex; mode=display">d_{i} \ldots$$ out-degree of node $$i</script></li>
+<li>矩阵形式：<ul>
+<li>列随机邻接矩阵M。j有<script type="math/tex">d_{j}</script>个出链，如果j -&gt; i，则<script type="math/tex">M_{ij}=1/d_{j}</script>，因此每一列上的值要么为0，要么为<script type="math/tex">1/d_{j}</script>，且加和为1，称为列随机矩阵</li>
+<li>rank vector r: <script type="math/tex">r_{j}</script>为node j的重要性score，且<script type="math/tex">\sum_{i} r_{i}=1</script></li>
+<li><script type="math/tex; mode=display">n*1 = n*n * n*1$$: $$ \boldsymbol{r}=\boldsymbol{M} \cdot \boldsymbol{r} $$, $$\quad r_{j}=\sum_{i \rightarrow j} \frac{r_{i}}{d_{i}}</script></li>
+</ul>
+</li>
+<li>PageRank VS RandomWalk: 当random walk到达静态分布状态时满足<script type="math/tex">\boldsymbol{r}=\boldsymbol{M} \cdot \boldsymbol{r}</script>，即<strong>PageRank得到的重要性向量v是random walk的静态分布</strong></li>
+<li>PangRank VS Eigenvector: <strong>PageRank得到的重要性向量v是当特征值为1时得到的主特征向量</strong></li>
+</ul>
+<a id="more"></a>
+<h2 id="Solve-the-equation"><a href="#Solve-the-equation" class="headerlink" title="Solve the equation"></a>Solve the equation</h2><!--  -->
+]]></content>
+      <categories>
+        <category>Learning</category>
+        <category>cs224w</category>
+      </categories>
+      <tags>
+        <tag>cs224w</tag>
+        <tag>graph</tag>
         <tag>ML</tag>
-        <tag>GDBT</tag>
+        <tag>PageRank</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CV-目标检测综述</title>
+    <url>/2021/12/10/CV-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BB%BC%E8%BF%B0/</url>
+    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
+
+<h2 id="目标检测"><a href="#目标检测" class="headerlink" title="目标检测"></a>目标检测</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><ul>
+<li>图像识别+定位</li>
+<li>识别：分类问题，准确率</li>
+<li>定位：分类/回归问题，找到一个框/4个坐标，IOU</li>
+</ul>
+<h2 id="传统目标检测"><a href="#传统目标检测" class="headerlink" title="传统目标检测"></a>传统目标检测</h2><h3 id="用回归做定位问题"><a href="#用回归做定位问题" class="headerlink" title="用回归做定位问题"></a>用回归做定位问题</h3><ul>
+<li>训练一个cnn网络，在最后一个卷积层后分两个head，一个head做分类，另一个回归</li>
+<li>先fine tuning分类任务，再fine tuning回归</li>
+<li>缺点：回归问题，很难做</li>
+</ul>
+<h3 id="用分类做定位问题"><a href="#用分类做定位问题" class="headerlink" title="用分类做定位问题"></a>用分类做定位问题</h3><ul>
+<li>滑动窗口（选择不同位置不同大小的区域），对其定位，对每个框内的图像做分类</li>
+<li>缺点：窗口冗余、复杂度高、多物体多分类时复杂度更高</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>DL</tag>
+        <tag>CV</tag>
+        <tag>ML</tag>
+        <tag>目标检测</tag>
       </tags>
   </entry>
   <entry>
@@ -682,36 +802,6 @@ k_{v} \\
       </tags>
   </entry>
   <entry>
-    <title>CV-目标检测综述</title>
-    <url>/2021/12/10/CV-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BB%BC%E8%BF%B0/</url>
-    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
-
-<h2 id="目标检测"><a href="#目标检测" class="headerlink" title="目标检测"></a>目标检测</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><ul>
-<li>图像识别+定位</li>
-<li>识别：分类问题，准确率</li>
-<li>定位：分类/回归问题，找到一个框/4个坐标，IOU</li>
-</ul>
-<h2 id="传统目标检测"><a href="#传统目标检测" class="headerlink" title="传统目标检测"></a>传统目标检测</h2><h3 id="用回归做定位问题"><a href="#用回归做定位问题" class="headerlink" title="用回归做定位问题"></a>用回归做定位问题</h3><ul>
-<li>训练一个cnn网络，在最后一个卷积层后分两个head，一个head做分类，另一个回归</li>
-<li>先fine tuning分类任务，再fine tuning回归</li>
-<li>缺点：回归问题，很难做</li>
-</ul>
-<h3 id="用分类做定位问题"><a href="#用分类做定位问题" class="headerlink" title="用分类做定位问题"></a>用分类做定位问题</h3><ul>
-<li>滑动窗口（选择不同位置不同大小的区域），对其定位，对每个框内的图像做分类</li>
-<li>缺点：窗口冗余、复杂度高、多物体多分类时复杂度更高</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Learning</category>
-      </categories>
-      <tags>
-        <tag>DL</tag>
-        <tag>CV</tag>
-        <tag>ML</tag>
-        <tag>目标检测</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>ML-GBDT &amp; XGBoost</title>
     <url>/2021/12/10/GBDT%20&amp;%20XGBoost/</url>
     <content><![CDATA[<p>[TOC]</p>
@@ -789,6 +879,28 @@ k_{v} \\
       </tags>
   </entry>
   <entry>
+    <title>ML-GBDT</title>
+    <url>/2021/12/10/GBDT/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><ul>
+<li>GBDT与传统的Boosting区别较大，它的每一次计算都是为了减少上一次的残差，而为了消除残差，我们可以在残差减小的梯度方向上建立模型,所以说，在GradientBoost中，每个新的模型的建立是为了使得之前的模型的残差往梯度下降的方法，与传统的Boosting中关注正确错误的样本加权有着很大的区别。</li>
+<li>在GradientBoosting算法中，关键就是利用损失函数的负梯度方向在当前模型的值作为残差的近似值，进而拟合一棵CART回归树。</li>
+<li>GBDT的会累加所有树的结果，而这种累加是无法通过分类完成的，因此<strong>GBDT的树都是CART回归树</strong>，而不是分类树（尽管GBDT调整后也可以用于分类但不代表GBDT的树为分类树）。</li>
+</ul>
+<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><ul>
+<li>GBDT的性能在RF的基础上又有一步提升，因此其优点也很明显，1、它能灵活的处理各种类型的数据；2、在相对较少的调参时间下，预测的准确度较高。</li>
+<li>当然由于它是Boosting，因此基学习器之前存在串行关系，难以并行训练数据。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>ML</tag>
+        <tag>GDBT</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Java学习资源</title>
     <url>/2021/12/10/Java%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%BA%90/</url>
     <content><![CDATA[<h2 id="书籍"><a href="#书籍" class="headerlink" title="书籍"></a>书籍</h2><ul>
@@ -809,8 +921,8 @@ k_{v} \\
         <category>Learning</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>Resource</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -874,90 +986,6 @@ k_{v} \\
       <tags>
         <tag>ML</tag>
         <tag>LightGBM</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>ML-Decision Tree</title>
-    <url>/2021/12/10/ML-Decision%20Tree/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<ol>
-<li>决策树</li>
-</ol>
-<p><strong>问题：如何挑选用于分裂节点的特征—&gt;ID3 C4.5 …(一个标准：使分裂出来的节点尽可能纯，即一个分支尽可能属于同类)</strong></p>
-<a id="more"></a>
-<ol>
-<li><p>ID3<br><strong>信息增益</strong></p>
-<p> 信息增益 = 信息熵 - 条件熵</p>
-<ul>
-<li>信息增益：针对每个 <strong>属性</strong></li>
-<li>信息熵：整个样本空间的不确定度。其中Pk一定是label取值的概率。</li>
-<li><p>条件熵：给定某个属性，求其信息熵</p>
-<p>—&gt; 问题：某属性所包括的类别越多，信息增益越大。极限：每个类别仅有1个实例（label数量为1），log p = log1 = 0， 所以最终条件熵=0。或：属性类别越多，条件熵越小，其纯度越高。</p>
-<p>—&gt; 信息增益准则其实是对可取值数目较多的属性有所偏好！</p>
-<p>—&gt; 泛化能力不强</p>
-</li>
-</ul>
-</li>
-<li><p>C4.5 <strong>信息增益率+信息增益</strong></p>
-<p> 属性a的信息增益率 = 属性a的信息增益 / a的某个固有统计量IV(a)</p>
-<p> <img src="https://pic4.zhimg.com/80/v2-812104c0291d20935e910919a9fa5c27_hd.png" alt="IV(a)公式"></p>
-<p> V为a的取值数目。<br> （实际上是属性a的信息熵）</p>
-<ul>
-<li>直接使用信息增益率：偏好取值数目小的属性。</li>
-<li>先选择高于平均水平信息增益的属性，再选择最高信息增益率的属性。</li>
-</ul>
-</li>
-<li><p>CART <strong>基尼系数+MAE/MSE</strong></p>
-<p>与ID3、C4.5的不同：形成二叉树，因此 —&gt; 既要确定要分割的属性，也要确定要分割的值</p>
-<ul>
-<li><p>回归树：MAE/MSE</p>
-<ul>
-<li>example(MSE)：<blockquote>
-<ol>
-<li>考虑数据集 D 上的所有特征 j，遍历每一个特征下所有可能的取值或者切分点 s，将数据集 D 划分成两部分 D1 和 D2</li>
-<li>分别计算上述两个子集的平方误差和，选择最小的平方误差对应的特征与分割点，生成两个子节点。</li>
-<li>对上述两个子节点递归调用步骤1 2,直到满足停止条件。</li>
-</ol>
-</blockquote>
-</li>
-</ul>
-</li>
-<li><p>分类树：(Gini不纯度)</p>
-<p><img src="https://img-blog.csdn.net/20150109184544578?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvQW5kcm9pZGx1c2hhbmdkZXJlbg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="某属性A的基尼不纯度"><br>基尼不纯度越小，纯度越高</p>
-</li>
-</ul>
-<blockquote>
-<ol>
-<li>对每个特征 A，对它的所有可能取值 a，将数据集分为 A＝a，和 A!＝a 两个子集，计算集合 D 的基尼指数：<br>Gini(A) = D1/D <em> Gini(D1) + D2/D </em> Gini(D2)</li>
-<li>遍历所有的特征 A，计算其所有可能取值 a 的基尼指数，选择 D 的基尼指数最小值对应的特征及切分点作为最优的划分，将数据分为两个子集。</li>
-<li>对上述两个子节点递归调用步骤1 2, 直到满足停止条件。</li>
-<li>生成 CART 决策树。</li>
-</ol>
-</blockquote>
-<pre><code>停止条件有：
-1. 节点中的样本个数小于预定阈值;
-2. 样本集的Gini系数小于预定阈值（此时样本基本属于同一类）;
-3. 没有更多特征。
-</code></pre><ul>
-<li>剪枝</li>
-<li>例子：<a href="https://www.jianshu.com/p/b90a9ce05b28">example</a></li>
-</ul>
-</li>
-<li><p>控制决策树过拟合的方法</p>
-<ul>
-<li>剪枝</li>
-<li>控制终止条件，避免树形结构过细</li>
-<li>构建随机森林</li>
-</ul>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>Learning</category>
-      </categories>
-      <tags>
-        <tag>ML</tag>
-        <tag>DecisionTree</tag>
       </tags>
   </entry>
   <entry>
@@ -1110,6 +1138,90 @@ M I o U=\frac{1}{k+1} \sum_{i=0}^{k} \frac{T P}{F N+F P+T P}
       </tags>
   </entry>
   <entry>
+    <title>ML-Decision Tree</title>
+    <url>/2021/12/10/ML-Decision%20Tree/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<ol>
+<li>决策树</li>
+</ol>
+<p><strong>问题：如何挑选用于分裂节点的特征—&gt;ID3 C4.5 …(一个标准：使分裂出来的节点尽可能纯，即一个分支尽可能属于同类)</strong></p>
+<a id="more"></a>
+<ol>
+<li><p>ID3<br><strong>信息增益</strong></p>
+<p> 信息增益 = 信息熵 - 条件熵</p>
+<ul>
+<li>信息增益：针对每个 <strong>属性</strong></li>
+<li>信息熵：整个样本空间的不确定度。其中Pk一定是label取值的概率。</li>
+<li><p>条件熵：给定某个属性，求其信息熵</p>
+<p>—&gt; 问题：某属性所包括的类别越多，信息增益越大。极限：每个类别仅有1个实例（label数量为1），log p = log1 = 0， 所以最终条件熵=0。或：属性类别越多，条件熵越小，其纯度越高。</p>
+<p>—&gt; 信息增益准则其实是对可取值数目较多的属性有所偏好！</p>
+<p>—&gt; 泛化能力不强</p>
+</li>
+</ul>
+</li>
+<li><p>C4.5 <strong>信息增益率+信息增益</strong></p>
+<p> 属性a的信息增益率 = 属性a的信息增益 / a的某个固有统计量IV(a)</p>
+<p> <img src="https://pic4.zhimg.com/80/v2-812104c0291d20935e910919a9fa5c27_hd.png" alt="IV(a)公式"></p>
+<p> V为a的取值数目。<br> （实际上是属性a的信息熵）</p>
+<ul>
+<li>直接使用信息增益率：偏好取值数目小的属性。</li>
+<li>先选择高于平均水平信息增益的属性，再选择最高信息增益率的属性。</li>
+</ul>
+</li>
+<li><p>CART <strong>基尼系数+MAE/MSE</strong></p>
+<p>与ID3、C4.5的不同：形成二叉树，因此 —&gt; 既要确定要分割的属性，也要确定要分割的值</p>
+<ul>
+<li><p>回归树：MAE/MSE</p>
+<ul>
+<li>example(MSE)：<blockquote>
+<ol>
+<li>考虑数据集 D 上的所有特征 j，遍历每一个特征下所有可能的取值或者切分点 s，将数据集 D 划分成两部分 D1 和 D2</li>
+<li>分别计算上述两个子集的平方误差和，选择最小的平方误差对应的特征与分割点，生成两个子节点。</li>
+<li>对上述两个子节点递归调用步骤1 2,直到满足停止条件。</li>
+</ol>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>分类树：(Gini不纯度)</p>
+<p><img src="https://img-blog.csdn.net/20150109184544578?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvQW5kcm9pZGx1c2hhbmdkZXJlbg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="某属性A的基尼不纯度"><br>基尼不纯度越小，纯度越高</p>
+</li>
+</ul>
+<blockquote>
+<ol>
+<li>对每个特征 A，对它的所有可能取值 a，将数据集分为 A＝a，和 A!＝a 两个子集，计算集合 D 的基尼指数：<br>Gini(A) = D1/D <em> Gini(D1) + D2/D </em> Gini(D2)</li>
+<li>遍历所有的特征 A，计算其所有可能取值 a 的基尼指数，选择 D 的基尼指数最小值对应的特征及切分点作为最优的划分，将数据分为两个子集。</li>
+<li>对上述两个子节点递归调用步骤1 2, 直到满足停止条件。</li>
+<li>生成 CART 决策树。</li>
+</ol>
+</blockquote>
+<pre><code>停止条件有：
+1. 节点中的样本个数小于预定阈值;
+2. 样本集的Gini系数小于预定阈值（此时样本基本属于同一类）;
+3. 没有更多特征。
+</code></pre><ul>
+<li>剪枝</li>
+<li>例子：<a href="https://www.jianshu.com/p/b90a9ce05b28">example</a></li>
+</ul>
+</li>
+<li><p>控制决策树过拟合的方法</p>
+<ul>
+<li>剪枝</li>
+<li>控制终止条件，避免树形结构过细</li>
+<li>构建随机森林</li>
+</ul>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>ML</tag>
+        <tag>DecisionTree</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>ML-信息熵&amp;交叉熵&amp;条件熵&amp;相对熵(KL散度)&amp;互信息</title>
     <url>/2021/12/10/ML-%E4%BF%A1%E6%81%AF%E7%86%B5&amp;%E4%BA%A4%E5%8F%89%E7%86%B5&amp;%E6%9D%A1%E4%BB%B6%E7%86%B5&amp;%E7%9B%B8%E5%AF%B9%E7%86%B5(KL%E6%95%A3%E5%BA%A6)&amp;%E4%BA%92%E4%BF%A1%E6%81%AF/</url>
     <content><![CDATA[<ul>
@@ -1233,6 +1345,37 @@ M I o U=\frac{1}{k+1} \sum_{i=0}^{k} \frac{T P}{F N+F P+T P}
       </tags>
   </entry>
   <entry>
+    <title>Python-面向对象</title>
+    <url>/2021/12/10/Python-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/</url>
+    <content><![CDATA[<h3 id="属性命名"><a href="#属性命名" class="headerlink" title="属性命名"></a>属性命名</h3><ul>
+<li>属性以双下划线开头，类内变量，实例无法访问。但可以通过某些方式访问，例如Student例中定义了__name变量，可以用_Student_name来实现访问，但不建议，因为不同的解释器的转化方式不一样。</li>
+<li>单下划线可以打开，但需要注意不能随意更改。</li>
+<li>双下划线结尾与开头，特殊变量，类内可以访问，实例不知。</li>
+</ul>
+<a id="more"></a>
+<h3 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h3><p>开闭原则：定义一个类Animal及其多个之类Dog/Cat/…，当定义一个函数或操作时：</p>
+<ul>
+<li>对扩展开放：允许新增Animal的子类；</li>
+<li>对修改封闭：不需要修改依赖Animal类型的run_twice()等函数，仍然可以传入Dog/Cat等类。<br>事实上，不需要继承也可以实现多态————鸭子类型。</li>
+</ul>
+<h3 id="若干方法"><a href="#若干方法" class="headerlink" title="若干方法"></a>若干方法</h3><ul>
+<li>isinstance(object,class) 判断是否属于某个类</li>
+<li>dir() 列举出一个对象的属性和方法</li>
+<li>getattr()、setattr()、hasattr()可以获得、添加、查询是否需要某个属性<ul>
+<li>__slots__ 限制可以添加的属性，__slots__ = (‘name’, ‘age’) # 用tuple定义允许绑定的属性名称</li>
+</ul>
+</li>
+<li>装饰器</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Python-sort&amp;sorted</title>
     <url>/2021/12/10/Python-sort&amp;sorted%E5%87%BD%E6%95%B0/</url>
     <content><![CDATA[<h2 id="不同"><a href="#不同" class="headerlink" title="不同"></a>不同</h2><ul>
@@ -1273,37 +1416,6 @@ M I o U=\frac{1}{k+1} \sum_{i=0}^{k} \frac{T P}{F N+F P+T P}
 <li>做法2：自己实现cmp类</li>
 </ul>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LargerNumKey</span>(<span class="params"><span class="built_in">str</span></span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__lt__</span>(<span class="params">x, y</span>):</span></span><br><span class="line">        <span class="keyword">return</span> x+y &gt; y+x</span><br><span class="line"></span><br><span class="line">largest_num = <span class="string">&#x27;&#x27;</span>.join(<span class="built_in">sorted</span>(<span class="built_in">map</span>(<span class="built_in">str</span>, nums), key=LargerNumKey))</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>Learning</category>
-      </categories>
-      <tags>
-        <tag>Python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Python-面向对象</title>
-    <url>/2021/12/10/Python-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/</url>
-    <content><![CDATA[<h3 id="属性命名"><a href="#属性命名" class="headerlink" title="属性命名"></a>属性命名</h3><ul>
-<li>属性以双下划线开头，类内变量，实例无法访问。但可以通过某些方式访问，例如Student例中定义了__name变量，可以用_Student_name来实现访问，但不建议，因为不同的解释器的转化方式不一样。</li>
-<li>单下划线可以打开，但需要注意不能随意更改。</li>
-<li>双下划线结尾与开头，特殊变量，类内可以访问，实例不知。</li>
-</ul>
-<a id="more"></a>
-<h3 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h3><p>开闭原则：定义一个类Animal及其多个之类Dog/Cat/…，当定义一个函数或操作时：</p>
-<ul>
-<li>对扩展开放：允许新增Animal的子类；</li>
-<li>对修改封闭：不需要修改依赖Animal类型的run_twice()等函数，仍然可以传入Dog/Cat等类。<br>事实上，不需要继承也可以实现多态————鸭子类型。</li>
-</ul>
-<h3 id="若干方法"><a href="#若干方法" class="headerlink" title="若干方法"></a>若干方法</h3><ul>
-<li>isinstance(object,class) 判断是否属于某个类</li>
-<li>dir() 列举出一个对象的属性和方法</li>
-<li>getattr()、setattr()、hasattr()可以获得、添加、查询是否需要某个属性<ul>
-<li>__slots__ 限制可以添加的属性，__slots__ = (‘name’, ‘age’) # 用tuple定义允许绑定的属性名称</li>
-</ul>
-</li>
-<li>装饰器</li>
-</ul>
-]]></content>
       <categories>
         <category>Learning</category>
       </categories>
@@ -1522,103 +1634,6 @@ M I o U=\frac{1}{k+1} \sum_{i=0}^{k} \frac{T P}{F N+F P+T P}
       </tags>
   </entry>
   <entry>
-    <title>Kaggle-Kaggle相关</title>
-    <url>/2021/12/10/kaggle%E7%9B%B8%E5%85%B3/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<h1 id="如何在-Kaggle-首战中进入前-10"><a href="#如何在-Kaggle-首战中进入前-10" class="headerlink" title="如何在 Kaggle 首战中进入前 10%"></a>如何在 Kaggle 首战中进入前 10%</h1><p><a href="https://dnc1994.com/2016/04/rank-10-percent-in-first-kaggle-competition/">原文</a></p>
-<a id="more"></a>
-<h2 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h2><h3 id="Exploration-Data-Analysis-EDA"><a href="#Exploration-Data-Analysis-EDA" class="headerlink" title="Exploration Data Analysis(EDA)"></a>Exploration Data Analysis(EDA)</h3><h4 id="Visualization"><a href="#Visualization" class="headerlink" title="Visualization"></a>Visualization</h4><p>matplotlib + seaborn</p>
-<ul>
-<li>查看目标变量的分布。当分布不平衡时，根据评分标准和具体模型的使用不同，可能会严重影响性能。</li>
-<li>对 Numerical Variable，可以用 Box Plot 来直观地查看它的分布。</li>
-<li>对于坐标类数据，可以用 Scatter Plot 来查看它们的分布趋势和是否有离群点的存在。</li>
-<li>对于分类问题，将数据根据 Label 的不同着不同的颜色绘制出来，这对 Feature 的构造很有帮助。</li>
-<li>绘制变量之间两两的分布和相关度图表。</li>
-</ul>
-<p><a href="https://www.kaggle.com/benhamner/python-data-visualizations">example_visualization</a></p>
-<h4 id="Statistical-Tests"><a href="#Statistical-Tests" class="headerlink" title="Statistical Tests"></a>Statistical Tests</h4><p>可视化为定性，这里专注于定量，例如对于新创造的特征，可以将其加入原模型当中，看结果的变化。</p>
-<p>在某些比赛中，由于数据分布比较奇葩或是噪声过强，Public LB(Leader board)的分数可能会跟 Local CV(Cross Validation)的结果相去甚远。可以根据一些统计测试的结果来粗略地建立一个阈值，用来衡量一次分数的提高究竟是实质的提高还是由于数据的随机性导致的。</p>
-<h3 id="Data-Preprossing"><a href="#Data-Preprossing" class="headerlink" title="Data Preprossing"></a>Data Preprossing</h3><p>处理策略主要依赖于EDA中得到的结论。</p>
-<ul>
-<li>有时数据会分散在几个不同的文件中，需要 Join 起来。</li>
-<li>处理 Missing Data。</li>
-<li>处理 Outlier。</li>
-<li>必要时转换某些 Categorical Variable 的表示方式。例如应用one-hot encoding(pd.get_dummies)将categorical variable转化为数字变量。</li>
-<li>有些 Float 变量可能是从未知的 Int 变量转换得到的，这个过程中发生精度损失会在数据中产生不必要的 Noise，即两个数值原本是相同的却在小数点后某一位开始有不同。这对 Model 可能会产生很负面的影响，需要设法去除或者减弱 Noise。</li>
-</ul>
-<h3 id="Feature-Engineering"><a href="#Feature-Engineering" class="headerlink" title="Feature Engineering"></a>Feature Engineering</h3><h4 id="Feature-Selection"><a href="#Feature-Selection" class="headerlink" title="Feature Selection"></a>Feature Selection</h4><p>总的来说，应该<strong>生成尽量多的 Feature，相信 Model 能够挑出最有用的 Feature</strong>。但有时先做一遍 Feature Selection 也能带来一些好处：</p>
-<ul>
-<li>Feature 越少，训练越快。</li>
-<li>有些 Feature 之间可能存在线性关系，影响 Model 的性能。</li>
-<li>通过挑选出最重要的 Feature，可以将它们之间进行各种运算和操作的结果作为新的 Feature，可能带来意外的提高。</li>
-<li>Feature Selection 最实用的方法也就是看 Random Forest 训练完以后得到的 Feature Importance 了。其他有一些更复杂的算法在理论上更加 Robust，但是缺乏实用高效的实现。从原理上来讲，增加 Random Forest 中树的数量可以在一定程度上加强其对于 Noisy Data 的 Robustness。</li>
-</ul>
-<p>看 Feature Importance 对于某些数据经过脱敏处理的比赛尤其重要。这可以免得你浪费大把时间在琢磨一个不重要的变量的意义上。(脱敏：数据脱敏(Data Masking),又称数据漂白、数据去隐私化或数据变形。百度百科对数据脱敏的定义为：指对某些敏感信息通过脱敏规则进行数据的变形，实现敏感隐私数据的可靠保护。在涉及客户安全数据或者一些商业性敏感数据的情况下，在不违反系统规则条件下，对真实数据进行改造并提供测试使用，如身份证号、手机号、卡号、客户号等个人信息都需要进行数据脱敏。)</p>
-<h4 id="Feature-Encoding"><a href="#Feature-Encoding" class="headerlink" title="Feature Encoding"></a>Feature Encoding</h4><p>假设有一个 Categorical Variable 一共有几万个取值可能，那么创建 Dummy Variables 的方法就不可行了。这时一个比较好的方法是根据 Feature Importance 或是这些取值本身在数据中的出现频率，为最重要（比如说前 95% 的 Importance）那些取值（有很大可能只有几个或是十几个）创建 Dummy Variables，而所有其他取值都归到一个“其他”类里面。</p>
-<h3 id="Model-Selection"><a href="#Model-Selection" class="headerlink" title="Model Selection"></a>Model Selection</h3><p>Base Model:</p>
-<ul>
-<li>SVM</li>
-<li>Linear Regression</li>
-<li>Logistic Regression</li>
-<li>Neural Networks</li>
-</ul>
-<p>Most Used Models:</p>
-<ul>
-<li>Gradient Boosting</li>
-<li>Random Forest</li>
-<li><p>Extra Randomized Trees</p>
-<p><strong>XGBoost</strong></p>
-</li>
-</ul>
-<h4 id="Model-Training"><a href="#Model-Training" class="headerlink" title="Model Training"></a>Model Training</h4><p>通过Grid Search来确定模型的最佳参数。<br>e.g.</p>
-<ul>
-<li>sklearn 的 RandomForestClassifier 来说，比较重要的就是随机森林中树的数量 n_estimators 以及在训练每棵树时最多选择的特征数量 max_features。</li>
-<li><p>Xgboost 的调参。通常认为对它性能影响较大的参数有：</p>
-<ul>
-<li>eta：每次迭代完成后更新权重时的步长。越小训练越慢。</li>
-<li>num_round：总共迭代的次数。</li>
-<li>subsample：训练每棵树时用来训练的数据占全部的比例。用于防止 Overfitting。</li>
-<li>colsample_bytree：训练每棵树时用来训练的特征的比例，类似 RandomForestClassifier 的 max_features。</li>
-<li>max_depth：每棵树的最大深度限制。与 Random Forest 不同，Gradient Boosting 如果不对深度加以限制，最终是会 Overfit 的。</li>
-<li>early_stopping_rounds：用于控制在 Out Of Sample 的验证集上连续多少个迭代的分数都没有提高后就提前终止训练。用于防止 Overfitting。</li>
-</ul>
-<p>一般的调参步骤是：</p>
-<ol>
-<li>将训练数据的一部分划出来作为验证集。</li>
-<li>先将 eta 设得比较高（比如 0.1），num_round 设为 300 ~ 500。</li>
-<li>用 Grid Search 对其他参数进行搜索。</li>
-<li>逐步将 eta 降低，找到最佳值。</li>
-<li>以验证集为 watchlist，用找到的最佳参数组合重新在训练集上训练。注意观察算法的输出，看每次迭代后在验证集上分数的变化情况，从而得到最佳的 early_stopping_rounds。</li>
-</ol>
-<p><em>所有具有随机性的 Model 一般都会有一个 seed 或是 random_state 参数用于控制随机种子。得到一个好的 Model 后，在记录参数时务必也记录下这个值，从而能够在之后重现 Model。</em></p>
-</li>
-</ul>
-<h4 id="Cross-Validation"><a href="#Cross-Validation" class="headerlink" title="Cross Validation"></a>Cross Validation</h4><p>一般5-fold。</p>
-<p>fold越多训练越慢。</p>
-<h4 id="Ensemble-Generation"><a href="#Ensemble-Generation" class="headerlink" title="Ensemble Generation"></a>Ensemble Generation</h4><p>常见的 Ensemble 方法有这么几种：</p>
-<ul>
-<li>Bagging：使用训练数据的不同随机子集来训练每个 Base Model，最后进行每个 Base Model 权重相同的 Vote。也即 Random Forest 的原理。</li>
-<li>Boosting：迭代地训练 Base Model，每次根据上一个迭代中预测错误的情况修改训练样本的权重。也即 Gradient Boosting 的原理。比 Bagging 效果好，但更容易 Overfit。</li>
-<li>Blending：用不相交的数据训练不同的 Base Model，将它们的输出取（加权）平均。实现简单，但对训练数据利用少了。</li>
-<li>Stacking：接下来会详细介绍。</li>
-</ul>
-<p>从理论上讲，Ensemble 要成功，有两个要素：</p>
-<ul>
-<li>Base Model 之间的相关性要尽可能的小。这就是为什么非 Tree-based Model 往往表现不是最好但还是要将它们包括在 Ensemble 里面的原因。Ensemble 的 Diversity 越大，最终 Model 的 Bias 就越低。</li>
-<li>Base Model 之间的性能表现不能差距太大。这其实是一个 Trade-off，在实际中很有可能表现相近的 Model 只有寥寥几个而且它们之间相关性还不低。但是实践告诉我们即使在这种情况下 Ensemble 还是能大幅提高成绩。</li>
-</ul>
-<h3 id="Pipeline"><a href="#Pipeline" class="headerlink" title="Pipeline"></a>Pipeline</h3><p>workflow比较复杂，因此一个高自动化的pipeline比较重要。</p>
-<p>这里是以一个例子：<a href="https://github.com/ChenglongChen/Kaggle_CrowdFlower">example</a></p>
-]]></content>
-      <categories>
-        <category>Learning</category>
-      </categories>
-      <tags>
-        <tag>ML</tag>
-        <tag>Kaggle</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>tools-vim&amp;tmux</title>
     <url>/2021/12/10/tools/</url>
     <content><![CDATA[<h1 id="Tools"><a href="#Tools" class="headerlink" title="Tools"></a>Tools</h1><p>Some useful tools.</p>
@@ -1743,6 +1758,103 @@ M I o U=\frac{1}{k+1} \sum_{i=0}^{k} \frac{T P}{F N+F P+T P}
       <tags>
         <tag>ML</tag>
         <tag>Apriori</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Kaggle-Kaggle相关</title>
+    <url>/2021/12/10/kaggle%E7%9B%B8%E5%85%B3/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h1 id="如何在-Kaggle-首战中进入前-10"><a href="#如何在-Kaggle-首战中进入前-10" class="headerlink" title="如何在 Kaggle 首战中进入前 10%"></a>如何在 Kaggle 首战中进入前 10%</h1><p><a href="https://dnc1994.com/2016/04/rank-10-percent-in-first-kaggle-competition/">原文</a></p>
+<a id="more"></a>
+<h2 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h2><h3 id="Exploration-Data-Analysis-EDA"><a href="#Exploration-Data-Analysis-EDA" class="headerlink" title="Exploration Data Analysis(EDA)"></a>Exploration Data Analysis(EDA)</h3><h4 id="Visualization"><a href="#Visualization" class="headerlink" title="Visualization"></a>Visualization</h4><p>matplotlib + seaborn</p>
+<ul>
+<li>查看目标变量的分布。当分布不平衡时，根据评分标准和具体模型的使用不同，可能会严重影响性能。</li>
+<li>对 Numerical Variable，可以用 Box Plot 来直观地查看它的分布。</li>
+<li>对于坐标类数据，可以用 Scatter Plot 来查看它们的分布趋势和是否有离群点的存在。</li>
+<li>对于分类问题，将数据根据 Label 的不同着不同的颜色绘制出来，这对 Feature 的构造很有帮助。</li>
+<li>绘制变量之间两两的分布和相关度图表。</li>
+</ul>
+<p><a href="https://www.kaggle.com/benhamner/python-data-visualizations">example_visualization</a></p>
+<h4 id="Statistical-Tests"><a href="#Statistical-Tests" class="headerlink" title="Statistical Tests"></a>Statistical Tests</h4><p>可视化为定性，这里专注于定量，例如对于新创造的特征，可以将其加入原模型当中，看结果的变化。</p>
+<p>在某些比赛中，由于数据分布比较奇葩或是噪声过强，Public LB(Leader board)的分数可能会跟 Local CV(Cross Validation)的结果相去甚远。可以根据一些统计测试的结果来粗略地建立一个阈值，用来衡量一次分数的提高究竟是实质的提高还是由于数据的随机性导致的。</p>
+<h3 id="Data-Preprossing"><a href="#Data-Preprossing" class="headerlink" title="Data Preprossing"></a>Data Preprossing</h3><p>处理策略主要依赖于EDA中得到的结论。</p>
+<ul>
+<li>有时数据会分散在几个不同的文件中，需要 Join 起来。</li>
+<li>处理 Missing Data。</li>
+<li>处理 Outlier。</li>
+<li>必要时转换某些 Categorical Variable 的表示方式。例如应用one-hot encoding(pd.get_dummies)将categorical variable转化为数字变量。</li>
+<li>有些 Float 变量可能是从未知的 Int 变量转换得到的，这个过程中发生精度损失会在数据中产生不必要的 Noise，即两个数值原本是相同的却在小数点后某一位开始有不同。这对 Model 可能会产生很负面的影响，需要设法去除或者减弱 Noise。</li>
+</ul>
+<h3 id="Feature-Engineering"><a href="#Feature-Engineering" class="headerlink" title="Feature Engineering"></a>Feature Engineering</h3><h4 id="Feature-Selection"><a href="#Feature-Selection" class="headerlink" title="Feature Selection"></a>Feature Selection</h4><p>总的来说，应该<strong>生成尽量多的 Feature，相信 Model 能够挑出最有用的 Feature</strong>。但有时先做一遍 Feature Selection 也能带来一些好处：</p>
+<ul>
+<li>Feature 越少，训练越快。</li>
+<li>有些 Feature 之间可能存在线性关系，影响 Model 的性能。</li>
+<li>通过挑选出最重要的 Feature，可以将它们之间进行各种运算和操作的结果作为新的 Feature，可能带来意外的提高。</li>
+<li>Feature Selection 最实用的方法也就是看 Random Forest 训练完以后得到的 Feature Importance 了。其他有一些更复杂的算法在理论上更加 Robust，但是缺乏实用高效的实现。从原理上来讲，增加 Random Forest 中树的数量可以在一定程度上加强其对于 Noisy Data 的 Robustness。</li>
+</ul>
+<p>看 Feature Importance 对于某些数据经过脱敏处理的比赛尤其重要。这可以免得你浪费大把时间在琢磨一个不重要的变量的意义上。(脱敏：数据脱敏(Data Masking),又称数据漂白、数据去隐私化或数据变形。百度百科对数据脱敏的定义为：指对某些敏感信息通过脱敏规则进行数据的变形，实现敏感隐私数据的可靠保护。在涉及客户安全数据或者一些商业性敏感数据的情况下，在不违反系统规则条件下，对真实数据进行改造并提供测试使用，如身份证号、手机号、卡号、客户号等个人信息都需要进行数据脱敏。)</p>
+<h4 id="Feature-Encoding"><a href="#Feature-Encoding" class="headerlink" title="Feature Encoding"></a>Feature Encoding</h4><p>假设有一个 Categorical Variable 一共有几万个取值可能，那么创建 Dummy Variables 的方法就不可行了。这时一个比较好的方法是根据 Feature Importance 或是这些取值本身在数据中的出现频率，为最重要（比如说前 95% 的 Importance）那些取值（有很大可能只有几个或是十几个）创建 Dummy Variables，而所有其他取值都归到一个“其他”类里面。</p>
+<h3 id="Model-Selection"><a href="#Model-Selection" class="headerlink" title="Model Selection"></a>Model Selection</h3><p>Base Model:</p>
+<ul>
+<li>SVM</li>
+<li>Linear Regression</li>
+<li>Logistic Regression</li>
+<li>Neural Networks</li>
+</ul>
+<p>Most Used Models:</p>
+<ul>
+<li>Gradient Boosting</li>
+<li>Random Forest</li>
+<li><p>Extra Randomized Trees</p>
+<p><strong>XGBoost</strong></p>
+</li>
+</ul>
+<h4 id="Model-Training"><a href="#Model-Training" class="headerlink" title="Model Training"></a>Model Training</h4><p>通过Grid Search来确定模型的最佳参数。<br>e.g.</p>
+<ul>
+<li>sklearn 的 RandomForestClassifier 来说，比较重要的就是随机森林中树的数量 n_estimators 以及在训练每棵树时最多选择的特征数量 max_features。</li>
+<li><p>Xgboost 的调参。通常认为对它性能影响较大的参数有：</p>
+<ul>
+<li>eta：每次迭代完成后更新权重时的步长。越小训练越慢。</li>
+<li>num_round：总共迭代的次数。</li>
+<li>subsample：训练每棵树时用来训练的数据占全部的比例。用于防止 Overfitting。</li>
+<li>colsample_bytree：训练每棵树时用来训练的特征的比例，类似 RandomForestClassifier 的 max_features。</li>
+<li>max_depth：每棵树的最大深度限制。与 Random Forest 不同，Gradient Boosting 如果不对深度加以限制，最终是会 Overfit 的。</li>
+<li>early_stopping_rounds：用于控制在 Out Of Sample 的验证集上连续多少个迭代的分数都没有提高后就提前终止训练。用于防止 Overfitting。</li>
+</ul>
+<p>一般的调参步骤是：</p>
+<ol>
+<li>将训练数据的一部分划出来作为验证集。</li>
+<li>先将 eta 设得比较高（比如 0.1），num_round 设为 300 ~ 500。</li>
+<li>用 Grid Search 对其他参数进行搜索。</li>
+<li>逐步将 eta 降低，找到最佳值。</li>
+<li>以验证集为 watchlist，用找到的最佳参数组合重新在训练集上训练。注意观察算法的输出，看每次迭代后在验证集上分数的变化情况，从而得到最佳的 early_stopping_rounds。</li>
+</ol>
+<p><em>所有具有随机性的 Model 一般都会有一个 seed 或是 random_state 参数用于控制随机种子。得到一个好的 Model 后，在记录参数时务必也记录下这个值，从而能够在之后重现 Model。</em></p>
+</li>
+</ul>
+<h4 id="Cross-Validation"><a href="#Cross-Validation" class="headerlink" title="Cross Validation"></a>Cross Validation</h4><p>一般5-fold。</p>
+<p>fold越多训练越慢。</p>
+<h4 id="Ensemble-Generation"><a href="#Ensemble-Generation" class="headerlink" title="Ensemble Generation"></a>Ensemble Generation</h4><p>常见的 Ensemble 方法有这么几种：</p>
+<ul>
+<li>Bagging：使用训练数据的不同随机子集来训练每个 Base Model，最后进行每个 Base Model 权重相同的 Vote。也即 Random Forest 的原理。</li>
+<li>Boosting：迭代地训练 Base Model，每次根据上一个迭代中预测错误的情况修改训练样本的权重。也即 Gradient Boosting 的原理。比 Bagging 效果好，但更容易 Overfit。</li>
+<li>Blending：用不相交的数据训练不同的 Base Model，将它们的输出取（加权）平均。实现简单，但对训练数据利用少了。</li>
+<li>Stacking：接下来会详细介绍。</li>
+</ul>
+<p>从理论上讲，Ensemble 要成功，有两个要素：</p>
+<ul>
+<li>Base Model 之间的相关性要尽可能的小。这就是为什么非 Tree-based Model 往往表现不是最好但还是要将它们包括在 Ensemble 里面的原因。Ensemble 的 Diversity 越大，最终 Model 的 Bias 就越低。</li>
+<li>Base Model 之间的性能表现不能差距太大。这其实是一个 Trade-off，在实际中很有可能表现相近的 Model 只有寥寥几个而且它们之间相关性还不低。但是实践告诉我们即使在这种情况下 Ensemble 还是能大幅提高成绩。</li>
+</ul>
+<h3 id="Pipeline"><a href="#Pipeline" class="headerlink" title="Pipeline"></a>Pipeline</h3><p>workflow比较复杂，因此一个高自动化的pipeline比较重要。</p>
+<p>这里是以一个例子：<a href="https://github.com/ChenglongChen/Kaggle_CrowdFlower">example</a></p>
+]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>ML</tag>
+        <tag>Kaggle</tag>
       </tags>
   </entry>
   <entry>
@@ -2016,6 +2128,210 @@ Gain(D,a) =\underbrace{max}_{t\in T_a}Gain(D,a,t) = \underbrace{max}_{t\in T_a}\
       </tags>
   </entry>
   <entry>
+    <title>机器学习面试题-梯度下降</title>
+    <url>/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D/</url>
+    <content><![CDATA[<h2 id="1-机器学习中为什么需要梯度下降"><a href="#1-机器学习中为什么需要梯度下降" class="headerlink" title="1. 机器学习中为什么需要梯度下降"></a>1. 机器学习中为什么需要梯度下降</h2><ul>
+<li>梯度下降的作用：<ul>
+<li>梯度下降是迭代法的一种，可以用于<strong>求解最小二乘问题</strong>。</li>
+<li>在求解损失函数的最小值时，可以通过梯度下降法来一步步的迭代求解，<strong>得到最小化的损失函数和模型参数值。</strong></li>
+<li>如果我们需要求解损失函数的最大值，可通过梯度上升法来迭代。<strong>梯度下降法和梯度上升法可相互转换</strong>。</li>
+</ul>
+</li>
+</ul>
+<a id="more"></a>
+<h2 id="2-梯度下降法缺点"><a href="#2-梯度下降法缺点" class="headerlink" title="2. 梯度下降法缺点"></a>2. 梯度下降法缺点</h2><p><strong>缺点</strong>：</p>
+<ul>
+<li>靠近极小值时收敛速度减慢。</li>
+<li>直线搜索时可能会产生一些问题。</li>
+<li>可能会“之字形”地下降。</li>
+</ul>
+<p><strong>注意</strong>：</p>
+<ul>
+<li>梯度是一个向量，即<strong>有方向有大小</strong>。 </li>
+<li>梯度的方向是<strong>最大方向导数的方向</strong>。 </li>
+<li>梯度的值是<strong>最大方向导数的值</strong>。</li>
+</ul>
+<h2 id="3-梯度下降法直观理解"><a href="#3-梯度下降法直观理解" class="headerlink" title="3. 梯度下降法直观理解"></a>3. 梯度下降法直观理解</h2><p>​    形象化举例，由上图所示，假如最开始，我们在一座大山上的某处位置，因为到处都是陌生的，不知道下山的路，所以只能摸索着根据直觉，走一步算一步，在此过程中，每走到一个位置的时候，都会求解当前位置的梯度，沿着梯度的负方向，也就是当前最陡峭的位置向下走一步，然后继续求解当前位置梯度，向这一步所在位置沿着最陡峭最易下山的位置走一步。不断循环求梯度，就这样一步步地走下去，一直走到我们觉得已经到了山脚。当然这样走下去，有可能我们不能走到山脚，而是到了某一个局部的山势低处。<br>​    由此，从上面的解释可以看出，梯度下降不一定能够找到全局的最优解，有可能是一个局部的最优解。当然，如果损失函数是凸函数，梯度下降法得到的解就一定是全局最优解。</p>
+<h2 id="4-梯度下降核心思想归纳"><a href="#4-梯度下降核心思想归纳" class="headerlink" title="4. 梯度下降核心思想归纳"></a>4. 梯度下降核心思想归纳</h2><ul>
+<li>确定优化模型的假设函数及损失函数。</li>
+<li>初始化参数，随机选取取值范围内的任意数；</li>
+</ul>
+<ul>
+<li>迭代操作：<ul>
+<li>计算当前梯度</li>
+<li>修改新的变量</li>
+<li>计算朝最陡的下坡方向走一步</li>
+<li>判断是否需要终止，如否，<strong>梯度更新</strong></li>
+</ul>
+</li>
+<li>得到全局最优解或者接近全局最优解。</li>
+</ul>
+<h2 id="5-如何对梯度下降法进行调优"><a href="#5-如何对梯度下降法进行调优" class="headerlink" title="5. 如何对梯度下降法进行调优"></a>5. 如何对梯度下降法进行调优</h2><p>实际使用梯度下降法时，各项参数指标不能一步就达到理想状态，对梯度下降法调优主要体现在以下几个方面：</p>
+<p>(1)<strong>算法迭代步长$\alpha$选择。</strong><br>    在算法参数初始化时，有时根据经验将步长初始化为1。实际取值取决于数据样本。可以从大到小，多取一些值，分别运行算法看迭代效果，如果损失函数在变小，则取值有效。如果取值无效，说明要增大步长。但步长太大，有时会导致迭代速度过快，错过最优解。步长太小，迭代速度慢，算法运行时间长。</p>
+<p>(2)<strong>参数的初始值选择。</strong><br>    初始值不同，获得的最小值也有可能不同，梯度下降有可能得到的是局部最小值。如果损失函数是凸函数，则一定是最优解。由于有局部最优解的风险，需要多次用不同初始值运行算法，关键损失函数的最小值，选择损失函数最小化的初值。</p>
+<p>(3)<strong>标准化处理。</strong><br>    由于样本不同，特征取值范围也不同，导致迭代速度慢。为了减少特征取值的影响，可对特征数据标准化，使新期望为0，新方差为1，可节省算法运行时间。</p>
+<h2 id="6-随机梯度和批量梯度区别"><a href="#6-随机梯度和批量梯度区别" class="headerlink" title="6. 随机梯度和批量梯度区别"></a>6. 随机梯度和批量梯度区别</h2><p>​    随机梯度下降(SDG)和批量梯度下降(BDG)是两种主要梯度下降法，其目的是增加某些限制来加速运算求解。<br>下面通过介绍两种梯度下降法的求解思路，对其进行比较。<br>假设函数为：</p>
+<script type="math/tex; mode=display">
+h_\theta (x_0,x_1,...,x_3) = \theta_0 x_0 + \theta_1 x_1 + ... + \theta_n x_n</script><p>损失函数为：</p>
+<script type="math/tex; mode=display">
+J(\theta_0, \theta_1, ... , \theta_n) = 
+            \frac{1}{2m} \sum^{m}_{j=0}(h_\theta (x^{j}_0
+    ,x^{j}_1,...,x^{j}_n)-y^j)^2</script><p>其中，$m$为样本个数，$j$为参数个数。</p>
+<p>1、 <strong>批量梯度下降的求解思路如下：</strong><br>a) 得到每个$\theta$对应的梯度：</p>
+<script type="math/tex; mode=display">
+\frac{\partial}{\partial \theta_i}J({\theta}_0,{\theta}_1,...,{\theta}_n)=\frac{1}{m}\sum^{m}_{j=0}(h_\theta (x^{j}_0
+    ,x^{j}_1,...,x^{j}_n)-y^j)x^{j}_i</script><p>b) 由于是求最小化风险函数，所以按每个参数 $\theta$ 的梯度负方向更新 $ \theta_i $ ：</p>
+<script type="math/tex; mode=display">
+\theta_i=\theta_i - \frac{1}{m} \sum^{m}_{j=0}(h_\theta (x^{j}_0
+    ,x^{j}_1,...,x^{j}_n)-y^j)x^{j}_i</script><p>c) 从上式可以注意到，它得到的虽然是一个全局最优解，但每迭代一步，都要用到训练集所有的数据，如果样本数据很大，这种方法迭代速度就很慢。<br>相比而言，随机梯度下降可避免这种问题。</p>
+<p>2、<strong>随机梯度下降的求解思路如下：</strong><br>a) 相比批量梯度下降对应所有的训练样本，随机梯度下降法中损失函数对应的是训练集中每个样本的粒度。<br>损失函数可以写成如下这种形式，</p>
+<script type="math/tex; mode=display">
+J(\theta_0, \theta_1, ... , \theta_n) = 
+            \frac{1}{m} \sum^{m}_{j=0}(y^j - h_\theta (x^{j}_0
+            ,x^{j}_1,...,x^{j}_n))^2 = 
+            \frac{1}{m} \sum^{m}_{j=0} cost(\theta,(x^j,y^j))</script><p>b)对每个参数 $ \theta$ 按梯度方向更新 $ \theta$：</p>
+<script type="math/tex; mode=display">
+\theta_i = \theta_i + (y^j - h_\theta (x^{j}_0, x^{j}_1, ... ,x^{j}_n))</script><p>c) 随机梯度下降是通过每个样本来迭代更新一次。<br>随机梯度下降伴随的一个问题是噪音较批量梯度下降要多，使得随机梯度下降并不是每次迭代都向着整体最优化方向。</p>
+<p><strong>小结：</strong><br>随机梯度下降法、批量梯度下降法相对来说都比较极端，简单对比如下：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">方法</th>
+<th style="text-align:left">特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">批量梯度下降</td>
+<td style="text-align:left">a)采用所有数据来梯度下降。<br/>b)批量梯度下降法在样本量很大的时候，训练速度慢。</td>
+</tr>
+<tr>
+<td style="text-align:center">随机梯度下降</td>
+<td style="text-align:left">a)随机梯度下降用一个样本来梯度下降。<br/>b)训练速度很快。<br />c)随机梯度下降法仅仅用一个样本决定梯度方向，导致解有可能不是全局最优。<br />d)收敛速度来说，随机梯度下降法一次迭代一个样本，导致迭代方向变化很大，不能很快的收敛到局部最优解。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>下面介绍能结合两种方法优点的小批量梯度下降法。</p>
+<p>3、 <strong>小批量(Mini-Batch)梯度下降的求解思路如下</strong><br>对于总数为$m$个样本的数据，根据样本的数据，选取其中的$n(1&lt; n&lt; m)$个子样本来迭代。其参数$\theta$按梯度方向更新$\theta_i$公式如下：</p>
+<script type="math/tex; mode=display">
+\theta_i = \theta_i - \alpha \sum^{t+n-1}_{j=t}
+        ( h_\theta (x^{j}_{0}, x^{j}_{1}, ... , x^{j}_{n} ) - y^j ) x^{j}_{i}</script><h2 id="7-各种梯度下降法性能比较"><a href="#7-各种梯度下降法性能比较" class="headerlink" title="7.  各种梯度下降法性能比较"></a>7.  各种梯度下降法性能比较</h2><p>​    下表简单对比随机梯度下降(SGD)、批量梯度下降(BGD)、小批量梯度下降(Mini-batch GD)、和Online GD的区别：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center">BGD</th>
+<th style="text-align:center">SGD</th>
+<th style="text-align:center">Mini-batch GD</th>
+<th style="text-align:center">Online GD</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">训练集</td>
+<td style="text-align:center">固定</td>
+<td style="text-align:center">固定</td>
+<td style="text-align:center">固定</td>
+<td style="text-align:center">实时更新</td>
+</tr>
+<tr>
+<td style="text-align:center">单次迭代样本数</td>
+<td style="text-align:center">整个训练集</td>
+<td style="text-align:center">单个样本</td>
+<td style="text-align:center">训练集的子集</td>
+<td style="text-align:center">根据具体算法定</td>
+</tr>
+<tr>
+<td style="text-align:center">算法复杂度</td>
+<td style="text-align:center">高</td>
+<td style="text-align:center">低</td>
+<td style="text-align:center">一般</td>
+<td style="text-align:center">低</td>
+</tr>
+<tr>
+<td style="text-align:center">时效性</td>
+<td style="text-align:center">低</td>
+<td style="text-align:center">一般</td>
+<td style="text-align:center">一般</td>
+<td style="text-align:center">高</td>
+</tr>
+<tr>
+<td style="text-align:center">收敛性</td>
+<td style="text-align:center">稳定</td>
+<td style="text-align:center">不稳定</td>
+<td style="text-align:center">较稳定</td>
+<td style="text-align:center">不稳定</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>​    Online GD于Mini-batch GD/SGD的区别在于，所有训练数据只用一次，然后丢弃。这样做的优点在于可预测最终模型的变化趋势。</p>
+<p>​    Online GD在互联网领域用的较多，比如搜索广告的点击率(CTR)预估模型，网民的点击行为会随着时间改变。用普通的BGD算法(每天更新一次)一方面耗时较长(需要对所有历史数据重新训练)；另一方面，无法及时反馈用户的点击行为迁移。而Online GD算法可以实时的依据网民的点击行为进行迁移。</p>
+<h2 id="8-推导多元函数梯度下降法的迭代公式。"><a href="#8-推导多元函数梯度下降法的迭代公式。" class="headerlink" title="8. 推导多元函数梯度下降法的迭代公式。"></a>8. 推导多元函数梯度下降法的迭代公式。</h2><p>根据多元函数泰勒公式，如果忽略一次以上的项，函数在$\mathbf{x}$点处可以展开为</p>
+<script type="math/tex; mode=display">
+f(\mathbf{x}+\Delta \mathbf{x})=f(\mathbf{x})+(\nabla f(\mathbf{x}))^{\mathrm{T}} \Delta \mathbf{x}+o(\|\mathbf{\Delta} \mathbf{x}\|)</script><p>对上式变形，函数的增量与自变量增量、函数梯度的关系为</p>
+<script type="math/tex; mode=display">
+f(\mathbf{x}+\Delta \mathbf{x})-f(\mathbf{x})=(\nabla f(\mathbf{x}))^{\mathrm{T}} \Delta \mathbf{x}+o(\|\Delta \mathbf{x}\|)</script><p>如果令$\Delta \mathbf{x}=-\nabla f(\mathbf{x})$则有</p>
+<script type="math/tex; mode=display">
+f(\mathbf{x}+\Delta \mathbf{x})-f(\mathbf{x}) \approx-(\nabla f(\mathbf{x}))^{\mathrm{T}} \nabla f(\mathbf{x}) \leq 0</script><p>即函数值减小。即有</p>
+<script type="math/tex; mode=display">
+f(\mathbf{x}+\Delta \mathbf{x}) \leq f(\mathbf{x})</script><p>梯度下降法每次的迭代增量为</p>
+<script type="math/tex; mode=display">
+\Delta \mathbf{x}=-\alpha \nabla f(\mathbf{x})</script><p>其中$\alpha$为人工设定的接近于的正数，称为步长或学习率。其作用是保证$\mathbf{x}+\Delta \mathbf{x}$在$\mathbf{x}$的<br>邻域内，从而可以忽略泰勒公式中的$o(|\Delta \mathbf{x}|)$项。</p>
+<p>使用该增量则有</p>
+<script type="math/tex; mode=display">
+(\nabla f(\mathbf{x}))^{\mathrm{T}} \Delta \mathbf{x}=-\alpha(\nabla f(\mathbf{x}))^{\mathrm{T}}(\nabla f(\mathbf{x})) \leq 0</script><p>函数值下降。从初始点$\mathbf{x}_{0}$开始，反复使用如下<strong>迭代公式</strong></p>
+<script type="math/tex; mode=display">
+\mathbf{x}_{k+1}=\mathbf{x}_{k}-\alpha \nabla f\left(\mathbf{x}_{k}\right)</script><p>只要没有到达梯度为0的点，函数值会沿序列$\mathbf{x}<em>{k}$递减，最终收敛到梯度为0 的点。从$\mathbf{x}</em>{0}$<br>出发，用<strong>迭代公式</strong>进行迭代，会形成一个函数值递减的序列$\left{\mathbf{x}_{i}\right}$</p>
+<script type="math/tex; mode=display">
+f\left(\mathbf{x}_{0}\right) \geq f\left(\mathbf{x}_{1}\right) \geq f\left(\mathbf{x}_{2}\right) \geq \ldots \geq f\left(\mathbf{x}_{k}\right)</script><h2 id="9-梯度下降法如何判断是否收敛？"><a href="#9-梯度下降法如何判断是否收敛？" class="headerlink" title="9.  梯度下降法如何判断是否收敛？"></a>9.  梯度下降法如何判断是否收敛？</h2><p>迭代终止的条件是函数的梯度值为0(实际实现时是接近于0 即可)，此时认为已经达<br>到极值点。可以通过判定梯度的二范数是否充分接近于0 而实现。</p>
+<h2 id="10-梯度下降法为什么要在迭代公式中使用步长系数？"><a href="#10-梯度下降法为什么要在迭代公式中使用步长系数？" class="headerlink" title="10. 梯度下降法为什么要在迭代公式中使用步长系数？"></a>10. 梯度下降法为什么要在迭代公式中使用步长系数？</h2><p>其作用是保证$\mathbf{x}+\Delta \mathbf{x}$在$\mathbf{x}$的邻域内，即控制增量的步长，从而可以忽略泰勒公式中的<br>$o(|\Delta \mathbf{x}|)$项。否则不能保证每次迭代时函数值下降。</p>
+<h2 id="11-梯度下降法和牛顿法能保证找到函数的极小值点吗，为什么？"><a href="#11-梯度下降法和牛顿法能保证找到函数的极小值点吗，为什么？" class="headerlink" title="11. 梯度下降法和牛顿法能保证找到函数的极小值点吗，为什么？"></a>11. 梯度下降法和牛顿法能保证找到函数的极小值点吗，为什么？</h2><p>不能，可能收敛到鞍点，不是极值点。</p>
+<h2 id="12-解释一元函数极值判别法则。"><a href="#12-解释一元函数极值判别法则。" class="headerlink" title="12. 解释一元函数极值判别法则。"></a>12. 解释一元函数极值判别法则。</h2><p>假设$x_0$为函数的驻点，可分为以下三种情况。<br>case1：在该点处的二阶导数大于0，则为函数的极小值点；<br>case2：在该点处的二阶导数小于0，则为极大值点；<br>case3：在该点处的二阶导数等于0，则情况不定，可能是极值点，也可能不是极值点。</p>
+<h2 id="13-解释多元函数极值判别法则。"><a href="#13-解释多元函数极值判别法则。" class="headerlink" title="13. 解释多元函数极值判别法则。"></a>13. 解释多元函数极值判别法则。</h2><p>假设多元函数在点M的梯度为0 ，即M 是函数的驻点。其Hessian 矩阵有如下几种情<br>况。<br>case1：Hessian 矩阵正定，函数在该点有极小值。<br>case2：Hessian 矩阵负定，函数在该点有极大值。<br>case3：Hessian 矩阵不定，则不是极值点，称为鞍点。<br>Hessian 矩阵正定类似于一元函数的二阶导数大于0，负定则类似于一元函数的二阶导<br>数小于0。</p>
+<h2 id="14-什么是鞍点？"><a href="#14-什么是鞍点？" class="headerlink" title="14. 什么是鞍点？"></a>14. 什么是鞍点？</h2><p><strong>Hessian 矩阵不定的点称为鞍点</strong>，它不是函数的极值点。</p>
+<h2 id="15-解释什么是局部极小值，什么是全局极小值。"><a href="#15-解释什么是局部极小值，什么是全局极小值。" class="headerlink" title="15. 解释什么是局部极小值，什么是全局极小值。"></a>15. 解释什么是局部极小值，什么是全局极小值。</h2><ul>
+<li>全局极小值<ul>
+<li>假设$\mathbf{x}^{*}$是一个可行解，如果对可行域内所有点$\mathbf{x}$都有$f\left(\mathbf{x}^{*}\right) \leq f(\mathbf{x})$，则<br>称$\mathbf{x}^{*}$为全局极小值。</li>
+</ul>
+</li>
+<li>局部极小值<ul>
+<li>对于可行解$\mathbf{x}^{*}$，如果存在其$\delta$邻域，使得该邻域内的所有点即所有满足<br>$\left|\mathbf{x}-\mathbf{x}^{*}\right| \leq \delta$的点$\mathbf{x}$，都有$f\left(x^{*}\right) \leq f(x)$，则称$\mathbf{x}^{*}$为局部极小值。</li>
+</ul>
+</li>
+</ul>
+<h2 id="16-推导多元函数牛顿法的迭代公式。"><a href="#16-推导多元函数牛顿法的迭代公式。" class="headerlink" title="16. 推导多元函数牛顿法的迭代公式。"></a>16. 推导多元函数牛顿法的迭代公式。</h2><p>根据费马定理，函数在点$\mathbf{x}$ 处取得极值的必要条件是梯度为0</p>
+<script type="math/tex; mode=display">
+\nabla f(\mathbf{x})=\mathbf{0}</script><p>对于一般的函数，直接求解此方程组存在困难。对目标函数在$\mathbf{x}_{0}$ 处作二阶泰勒展开</p>
+<script type="math/tex; mode=display">
+f(\mathbf{x})=f\left(\mathbf{x}_{0}\right)+\nabla f\left(\mathbf{x}_{0}\right)^{\mathrm{T}}\left(\mathbf{x}-\mathbf{x}_{0}\right)+\frac{1}{2}\left(\mathbf{x}-\mathbf{x}_{0}\right)^{\mathrm{T}} \nabla^{2} f\left(\mathbf{x}_{0}\right)\left(\mathbf{x}-\mathbf{x}_{0}\right)+o\left(\left\|\mathbf{k}-\mathbf{x}_{0}\right\|^{2}\right)</script><p>忽略二次以上的项，将目标函数近似成二次函数，等式两边同时对$\mathbf{x}$求梯度，可得</p>
+<script type="math/tex; mode=display">
+\nabla f(\mathbf{x}) \approx \nabla f\left(\mathbf{x}_{0}\right)+\nabla^{2} f\left(\mathbf{x}_{0}\right)\left(\mathbf{x}-\mathbf{x}_{0}\right)</script><p>其中 $\nabla^{2} f\left(\mathbf{x}<em>{0}\right)$为在$\mathbf{x}</em>{0}$ 处的Hessian 矩阵。令函数的梯度为0 ，有 </p>
+<script type="math/tex; mode=display">
+\nabla f\left(\mathbf{x}_{0}\right)+\nabla^{2} f\left(\mathbf{x}_{0}\right)\left(\mathbf{x}-\mathbf{x}_{0}\right)=\mathbf{0}</script><p>解这个线性方程组可以得到</p>
+<script type="math/tex; mode=display">
+\tag{1}\mathbf{x}=\mathbf{x}_{0}-\left(\nabla^{2} f\left(\mathbf{x}_{0}\right)\right)^{-1} \nabla f\left(\mathbf{x}_{0}\right)</script><p>如果将梯度向量简写为$\mathbf{g}$ ，Hessian 矩阵简记为$\mathbf{H}$ ，式(1)可以简写为</p>
+<script type="math/tex; mode=display">
+\tag{2}\mathbf{x}=\mathbf{x}_{0}-\mathbf{H}^{-1} \mathbf{g}</script><p>在泰勒公式中忽略了高阶项将函数做了近似，因此这个解不一定是目标函数的驻点，需要反复用式(2) 进行迭代。从初始点$\mathbf{x}_{0}$处开始，计算函数在当前点处的Hessian 矩阵和梯度向量，然后用下面的公式进行迭代</p>
+<script type="math/tex; mode=display">
+\tag{3} \mathbf{x}_{k+1}=\mathbf{x}_{k}-\alpha \mathbf{H}_{k}^{-1} \mathbf{g}_{k}</script><p>直至收敛到驻点处。迭代终止的条件是梯度的模接近于0 ，或达到指定的迭代次数。其中$\alpha$是人工设置的学习率。需要学习率的原因与梯度下降法相同，是为了保证能够忽略泰勒公式中的高阶无穷小项。</p>
+<h2 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h2><p>深度学习500问： <a href="https://github.com/scutan90/DeepLearning-500-questions">https://github.com/scutan90/DeepLearning-500-questions</a> </p>
+<p>机器学习与深度学习习题集答案-1：<a href="https://mp.weixin.qq.com/s/4kWUE8ml_o6iF0F1TREyiA">https://mp.weixin.qq.com/s/4kWUE8ml_o6iF0F1TREyiA</a></p>
+]]></content>
+      <categories>
+        <category>Learning</category>
+        <category>面试</category>
+      </categories>
+      <tags>
+        <tag>DL</tag>
+        <tag>ML</tag>
+        <tag>GradientDescent</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>线性回归&amp;逻辑回归</title>
     <url>/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92+%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/</url>
     <content><![CDATA[<h1 id="线性回归"><a href="#线性回归" class="headerlink" title="线性回归"></a>线性回归</h1><h2 id="1-简单介绍一下线性回归。"><a href="#1-简单介绍一下线性回归。" class="headerlink" title="1. 简单介绍一下线性回归。"></a>1. 简单介绍一下线性回归。</h2><ul>
@@ -2240,210 +2556,6 @@ J(\theta) = -lnL(\theta) = -\sum\limits_{i=1}^{m}(y^{(i)}log(h_{\theta}(x^{(i)})
       </tags>
   </entry>
   <entry>
-    <title>机器学习面试题-梯度下降</title>
-    <url>/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D/</url>
-    <content><![CDATA[<h2 id="1-机器学习中为什么需要梯度下降"><a href="#1-机器学习中为什么需要梯度下降" class="headerlink" title="1. 机器学习中为什么需要梯度下降"></a>1. 机器学习中为什么需要梯度下降</h2><ul>
-<li>梯度下降的作用：<ul>
-<li>梯度下降是迭代法的一种，可以用于<strong>求解最小二乘问题</strong>。</li>
-<li>在求解损失函数的最小值时，可以通过梯度下降法来一步步的迭代求解，<strong>得到最小化的损失函数和模型参数值。</strong></li>
-<li>如果我们需要求解损失函数的最大值，可通过梯度上升法来迭代。<strong>梯度下降法和梯度上升法可相互转换</strong>。</li>
-</ul>
-</li>
-</ul>
-<a id="more"></a>
-<h2 id="2-梯度下降法缺点"><a href="#2-梯度下降法缺点" class="headerlink" title="2. 梯度下降法缺点"></a>2. 梯度下降法缺点</h2><p><strong>缺点</strong>：</p>
-<ul>
-<li>靠近极小值时收敛速度减慢。</li>
-<li>直线搜索时可能会产生一些问题。</li>
-<li>可能会“之字形”地下降。</li>
-</ul>
-<p><strong>注意</strong>：</p>
-<ul>
-<li>梯度是一个向量，即<strong>有方向有大小</strong>。 </li>
-<li>梯度的方向是<strong>最大方向导数的方向</strong>。 </li>
-<li>梯度的值是<strong>最大方向导数的值</strong>。</li>
-</ul>
-<h2 id="3-梯度下降法直观理解"><a href="#3-梯度下降法直观理解" class="headerlink" title="3. 梯度下降法直观理解"></a>3. 梯度下降法直观理解</h2><p>​    形象化举例，由上图所示，假如最开始，我们在一座大山上的某处位置，因为到处都是陌生的，不知道下山的路，所以只能摸索着根据直觉，走一步算一步，在此过程中，每走到一个位置的时候，都会求解当前位置的梯度，沿着梯度的负方向，也就是当前最陡峭的位置向下走一步，然后继续求解当前位置梯度，向这一步所在位置沿着最陡峭最易下山的位置走一步。不断循环求梯度，就这样一步步地走下去，一直走到我们觉得已经到了山脚。当然这样走下去，有可能我们不能走到山脚，而是到了某一个局部的山势低处。<br>​    由此，从上面的解释可以看出，梯度下降不一定能够找到全局的最优解，有可能是一个局部的最优解。当然，如果损失函数是凸函数，梯度下降法得到的解就一定是全局最优解。</p>
-<h2 id="4-梯度下降核心思想归纳"><a href="#4-梯度下降核心思想归纳" class="headerlink" title="4. 梯度下降核心思想归纳"></a>4. 梯度下降核心思想归纳</h2><ul>
-<li>确定优化模型的假设函数及损失函数。</li>
-<li>初始化参数，随机选取取值范围内的任意数；</li>
-</ul>
-<ul>
-<li>迭代操作：<ul>
-<li>计算当前梯度</li>
-<li>修改新的变量</li>
-<li>计算朝最陡的下坡方向走一步</li>
-<li>判断是否需要终止，如否，<strong>梯度更新</strong></li>
-</ul>
-</li>
-<li>得到全局最优解或者接近全局最优解。</li>
-</ul>
-<h2 id="5-如何对梯度下降法进行调优"><a href="#5-如何对梯度下降法进行调优" class="headerlink" title="5. 如何对梯度下降法进行调优"></a>5. 如何对梯度下降法进行调优</h2><p>实际使用梯度下降法时，各项参数指标不能一步就达到理想状态，对梯度下降法调优主要体现在以下几个方面：</p>
-<p>(1)<strong>算法迭代步长$\alpha$选择。</strong><br>    在算法参数初始化时，有时根据经验将步长初始化为1。实际取值取决于数据样本。可以从大到小，多取一些值，分别运行算法看迭代效果，如果损失函数在变小，则取值有效。如果取值无效，说明要增大步长。但步长太大，有时会导致迭代速度过快，错过最优解。步长太小，迭代速度慢，算法运行时间长。</p>
-<p>(2)<strong>参数的初始值选择。</strong><br>    初始值不同，获得的最小值也有可能不同，梯度下降有可能得到的是局部最小值。如果损失函数是凸函数，则一定是最优解。由于有局部最优解的风险，需要多次用不同初始值运行算法，关键损失函数的最小值，选择损失函数最小化的初值。</p>
-<p>(3)<strong>标准化处理。</strong><br>    由于样本不同，特征取值范围也不同，导致迭代速度慢。为了减少特征取值的影响，可对特征数据标准化，使新期望为0，新方差为1，可节省算法运行时间。</p>
-<h2 id="6-随机梯度和批量梯度区别"><a href="#6-随机梯度和批量梯度区别" class="headerlink" title="6. 随机梯度和批量梯度区别"></a>6. 随机梯度和批量梯度区别</h2><p>​    随机梯度下降(SDG)和批量梯度下降(BDG)是两种主要梯度下降法，其目的是增加某些限制来加速运算求解。<br>下面通过介绍两种梯度下降法的求解思路，对其进行比较。<br>假设函数为：</p>
-<script type="math/tex; mode=display">
-h_\theta (x_0,x_1,...,x_3) = \theta_0 x_0 + \theta_1 x_1 + ... + \theta_n x_n</script><p>损失函数为：</p>
-<script type="math/tex; mode=display">
-J(\theta_0, \theta_1, ... , \theta_n) = 
-            \frac{1}{2m} \sum^{m}_{j=0}(h_\theta (x^{j}_0
-    ,x^{j}_1,...,x^{j}_n)-y^j)^2</script><p>其中，$m$为样本个数，$j$为参数个数。</p>
-<p>1、 <strong>批量梯度下降的求解思路如下：</strong><br>a) 得到每个$\theta$对应的梯度：</p>
-<script type="math/tex; mode=display">
-\frac{\partial}{\partial \theta_i}J({\theta}_0,{\theta}_1,...,{\theta}_n)=\frac{1}{m}\sum^{m}_{j=0}(h_\theta (x^{j}_0
-    ,x^{j}_1,...,x^{j}_n)-y^j)x^{j}_i</script><p>b) 由于是求最小化风险函数，所以按每个参数 $\theta$ 的梯度负方向更新 $ \theta_i $ ：</p>
-<script type="math/tex; mode=display">
-\theta_i=\theta_i - \frac{1}{m} \sum^{m}_{j=0}(h_\theta (x^{j}_0
-    ,x^{j}_1,...,x^{j}_n)-y^j)x^{j}_i</script><p>c) 从上式可以注意到，它得到的虽然是一个全局最优解，但每迭代一步，都要用到训练集所有的数据，如果样本数据很大，这种方法迭代速度就很慢。<br>相比而言，随机梯度下降可避免这种问题。</p>
-<p>2、<strong>随机梯度下降的求解思路如下：</strong><br>a) 相比批量梯度下降对应所有的训练样本，随机梯度下降法中损失函数对应的是训练集中每个样本的粒度。<br>损失函数可以写成如下这种形式，</p>
-<script type="math/tex; mode=display">
-J(\theta_0, \theta_1, ... , \theta_n) = 
-            \frac{1}{m} \sum^{m}_{j=0}(y^j - h_\theta (x^{j}_0
-            ,x^{j}_1,...,x^{j}_n))^2 = 
-            \frac{1}{m} \sum^{m}_{j=0} cost(\theta,(x^j,y^j))</script><p>b)对每个参数 $ \theta$ 按梯度方向更新 $ \theta$：</p>
-<script type="math/tex; mode=display">
-\theta_i = \theta_i + (y^j - h_\theta (x^{j}_0, x^{j}_1, ... ,x^{j}_n))</script><p>c) 随机梯度下降是通过每个样本来迭代更新一次。<br>随机梯度下降伴随的一个问题是噪音较批量梯度下降要多，使得随机梯度下降并不是每次迭代都向着整体最优化方向。</p>
-<p><strong>小结：</strong><br>随机梯度下降法、批量梯度下降法相对来说都比较极端，简单对比如下：</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">方法</th>
-<th style="text-align:left">特点</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">批量梯度下降</td>
-<td style="text-align:left">a)采用所有数据来梯度下降。<br/>b)批量梯度下降法在样本量很大的时候，训练速度慢。</td>
-</tr>
-<tr>
-<td style="text-align:center">随机梯度下降</td>
-<td style="text-align:left">a)随机梯度下降用一个样本来梯度下降。<br/>b)训练速度很快。<br />c)随机梯度下降法仅仅用一个样本决定梯度方向，导致解有可能不是全局最优。<br />d)收敛速度来说，随机梯度下降法一次迭代一个样本，导致迭代方向变化很大，不能很快的收敛到局部最优解。</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>下面介绍能结合两种方法优点的小批量梯度下降法。</p>
-<p>3、 <strong>小批量(Mini-Batch)梯度下降的求解思路如下</strong><br>对于总数为$m$个样本的数据，根据样本的数据，选取其中的$n(1&lt; n&lt; m)$个子样本来迭代。其参数$\theta$按梯度方向更新$\theta_i$公式如下：</p>
-<script type="math/tex; mode=display">
-\theta_i = \theta_i - \alpha \sum^{t+n-1}_{j=t}
-        ( h_\theta (x^{j}_{0}, x^{j}_{1}, ... , x^{j}_{n} ) - y^j ) x^{j}_{i}</script><h2 id="7-各种梯度下降法性能比较"><a href="#7-各种梯度下降法性能比较" class="headerlink" title="7.  各种梯度下降法性能比较"></a>7.  各种梯度下降法性能比较</h2><p>​    下表简单对比随机梯度下降(SGD)、批量梯度下降(BGD)、小批量梯度下降(Mini-batch GD)、和Online GD的区别：</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center"></th>
-<th style="text-align:center">BGD</th>
-<th style="text-align:center">SGD</th>
-<th style="text-align:center">Mini-batch GD</th>
-<th style="text-align:center">Online GD</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">训练集</td>
-<td style="text-align:center">固定</td>
-<td style="text-align:center">固定</td>
-<td style="text-align:center">固定</td>
-<td style="text-align:center">实时更新</td>
-</tr>
-<tr>
-<td style="text-align:center">单次迭代样本数</td>
-<td style="text-align:center">整个训练集</td>
-<td style="text-align:center">单个样本</td>
-<td style="text-align:center">训练集的子集</td>
-<td style="text-align:center">根据具体算法定</td>
-</tr>
-<tr>
-<td style="text-align:center">算法复杂度</td>
-<td style="text-align:center">高</td>
-<td style="text-align:center">低</td>
-<td style="text-align:center">一般</td>
-<td style="text-align:center">低</td>
-</tr>
-<tr>
-<td style="text-align:center">时效性</td>
-<td style="text-align:center">低</td>
-<td style="text-align:center">一般</td>
-<td style="text-align:center">一般</td>
-<td style="text-align:center">高</td>
-</tr>
-<tr>
-<td style="text-align:center">收敛性</td>
-<td style="text-align:center">稳定</td>
-<td style="text-align:center">不稳定</td>
-<td style="text-align:center">较稳定</td>
-<td style="text-align:center">不稳定</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>​    Online GD于Mini-batch GD/SGD的区别在于，所有训练数据只用一次，然后丢弃。这样做的优点在于可预测最终模型的变化趋势。</p>
-<p>​    Online GD在互联网领域用的较多，比如搜索广告的点击率(CTR)预估模型，网民的点击行为会随着时间改变。用普通的BGD算法(每天更新一次)一方面耗时较长(需要对所有历史数据重新训练)；另一方面，无法及时反馈用户的点击行为迁移。而Online GD算法可以实时的依据网民的点击行为进行迁移。</p>
-<h2 id="8-推导多元函数梯度下降法的迭代公式。"><a href="#8-推导多元函数梯度下降法的迭代公式。" class="headerlink" title="8. 推导多元函数梯度下降法的迭代公式。"></a>8. 推导多元函数梯度下降法的迭代公式。</h2><p>根据多元函数泰勒公式，如果忽略一次以上的项，函数在$\mathbf{x}$点处可以展开为</p>
-<script type="math/tex; mode=display">
-f(\mathbf{x}+\Delta \mathbf{x})=f(\mathbf{x})+(\nabla f(\mathbf{x}))^{\mathrm{T}} \Delta \mathbf{x}+o(\|\mathbf{\Delta} \mathbf{x}\|)</script><p>对上式变形，函数的增量与自变量增量、函数梯度的关系为</p>
-<script type="math/tex; mode=display">
-f(\mathbf{x}+\Delta \mathbf{x})-f(\mathbf{x})=(\nabla f(\mathbf{x}))^{\mathrm{T}} \Delta \mathbf{x}+o(\|\Delta \mathbf{x}\|)</script><p>如果令$\Delta \mathbf{x}=-\nabla f(\mathbf{x})$则有</p>
-<script type="math/tex; mode=display">
-f(\mathbf{x}+\Delta \mathbf{x})-f(\mathbf{x}) \approx-(\nabla f(\mathbf{x}))^{\mathrm{T}} \nabla f(\mathbf{x}) \leq 0</script><p>即函数值减小。即有</p>
-<script type="math/tex; mode=display">
-f(\mathbf{x}+\Delta \mathbf{x}) \leq f(\mathbf{x})</script><p>梯度下降法每次的迭代增量为</p>
-<script type="math/tex; mode=display">
-\Delta \mathbf{x}=-\alpha \nabla f(\mathbf{x})</script><p>其中$\alpha$为人工设定的接近于的正数，称为步长或学习率。其作用是保证$\mathbf{x}+\Delta \mathbf{x}$在$\mathbf{x}$的<br>邻域内，从而可以忽略泰勒公式中的$o(|\Delta \mathbf{x}|)$项。</p>
-<p>使用该增量则有</p>
-<script type="math/tex; mode=display">
-(\nabla f(\mathbf{x}))^{\mathrm{T}} \Delta \mathbf{x}=-\alpha(\nabla f(\mathbf{x}))^{\mathrm{T}}(\nabla f(\mathbf{x})) \leq 0</script><p>函数值下降。从初始点$\mathbf{x}_{0}$开始，反复使用如下<strong>迭代公式</strong></p>
-<script type="math/tex; mode=display">
-\mathbf{x}_{k+1}=\mathbf{x}_{k}-\alpha \nabla f\left(\mathbf{x}_{k}\right)</script><p>只要没有到达梯度为0的点，函数值会沿序列$\mathbf{x}<em>{k}$递减，最终收敛到梯度为0 的点。从$\mathbf{x}</em>{0}$<br>出发，用<strong>迭代公式</strong>进行迭代，会形成一个函数值递减的序列$\left{\mathbf{x}_{i}\right}$</p>
-<script type="math/tex; mode=display">
-f\left(\mathbf{x}_{0}\right) \geq f\left(\mathbf{x}_{1}\right) \geq f\left(\mathbf{x}_{2}\right) \geq \ldots \geq f\left(\mathbf{x}_{k}\right)</script><h2 id="9-梯度下降法如何判断是否收敛？"><a href="#9-梯度下降法如何判断是否收敛？" class="headerlink" title="9.  梯度下降法如何判断是否收敛？"></a>9.  梯度下降法如何判断是否收敛？</h2><p>迭代终止的条件是函数的梯度值为0(实际实现时是接近于0 即可)，此时认为已经达<br>到极值点。可以通过判定梯度的二范数是否充分接近于0 而实现。</p>
-<h2 id="10-梯度下降法为什么要在迭代公式中使用步长系数？"><a href="#10-梯度下降法为什么要在迭代公式中使用步长系数？" class="headerlink" title="10. 梯度下降法为什么要在迭代公式中使用步长系数？"></a>10. 梯度下降法为什么要在迭代公式中使用步长系数？</h2><p>其作用是保证$\mathbf{x}+\Delta \mathbf{x}$在$\mathbf{x}$的邻域内，即控制增量的步长，从而可以忽略泰勒公式中的<br>$o(|\Delta \mathbf{x}|)$项。否则不能保证每次迭代时函数值下降。</p>
-<h2 id="11-梯度下降法和牛顿法能保证找到函数的极小值点吗，为什么？"><a href="#11-梯度下降法和牛顿法能保证找到函数的极小值点吗，为什么？" class="headerlink" title="11. 梯度下降法和牛顿法能保证找到函数的极小值点吗，为什么？"></a>11. 梯度下降法和牛顿法能保证找到函数的极小值点吗，为什么？</h2><p>不能，可能收敛到鞍点，不是极值点。</p>
-<h2 id="12-解释一元函数极值判别法则。"><a href="#12-解释一元函数极值判别法则。" class="headerlink" title="12. 解释一元函数极值判别法则。"></a>12. 解释一元函数极值判别法则。</h2><p>假设$x_0$为函数的驻点，可分为以下三种情况。<br>case1：在该点处的二阶导数大于0，则为函数的极小值点；<br>case2：在该点处的二阶导数小于0，则为极大值点；<br>case3：在该点处的二阶导数等于0，则情况不定，可能是极值点，也可能不是极值点。</p>
-<h2 id="13-解释多元函数极值判别法则。"><a href="#13-解释多元函数极值判别法则。" class="headerlink" title="13. 解释多元函数极值判别法则。"></a>13. 解释多元函数极值判别法则。</h2><p>假设多元函数在点M的梯度为0 ，即M 是函数的驻点。其Hessian 矩阵有如下几种情<br>况。<br>case1：Hessian 矩阵正定，函数在该点有极小值。<br>case2：Hessian 矩阵负定，函数在该点有极大值。<br>case3：Hessian 矩阵不定，则不是极值点，称为鞍点。<br>Hessian 矩阵正定类似于一元函数的二阶导数大于0，负定则类似于一元函数的二阶导<br>数小于0。</p>
-<h2 id="14-什么是鞍点？"><a href="#14-什么是鞍点？" class="headerlink" title="14. 什么是鞍点？"></a>14. 什么是鞍点？</h2><p><strong>Hessian 矩阵不定的点称为鞍点</strong>，它不是函数的极值点。</p>
-<h2 id="15-解释什么是局部极小值，什么是全局极小值。"><a href="#15-解释什么是局部极小值，什么是全局极小值。" class="headerlink" title="15. 解释什么是局部极小值，什么是全局极小值。"></a>15. 解释什么是局部极小值，什么是全局极小值。</h2><ul>
-<li>全局极小值<ul>
-<li>假设$\mathbf{x}^{*}$是一个可行解，如果对可行域内所有点$\mathbf{x}$都有$f\left(\mathbf{x}^{*}\right) \leq f(\mathbf{x})$，则<br>称$\mathbf{x}^{*}$为全局极小值。</li>
-</ul>
-</li>
-<li>局部极小值<ul>
-<li>对于可行解$\mathbf{x}^{*}$，如果存在其$\delta$邻域，使得该邻域内的所有点即所有满足<br>$\left|\mathbf{x}-\mathbf{x}^{*}\right| \leq \delta$的点$\mathbf{x}$，都有$f\left(x^{*}\right) \leq f(x)$，则称$\mathbf{x}^{*}$为局部极小值。</li>
-</ul>
-</li>
-</ul>
-<h2 id="16-推导多元函数牛顿法的迭代公式。"><a href="#16-推导多元函数牛顿法的迭代公式。" class="headerlink" title="16. 推导多元函数牛顿法的迭代公式。"></a>16. 推导多元函数牛顿法的迭代公式。</h2><p>根据费马定理，函数在点$\mathbf{x}$ 处取得极值的必要条件是梯度为0</p>
-<script type="math/tex; mode=display">
-\nabla f(\mathbf{x})=\mathbf{0}</script><p>对于一般的函数，直接求解此方程组存在困难。对目标函数在$\mathbf{x}_{0}$ 处作二阶泰勒展开</p>
-<script type="math/tex; mode=display">
-f(\mathbf{x})=f\left(\mathbf{x}_{0}\right)+\nabla f\left(\mathbf{x}_{0}\right)^{\mathrm{T}}\left(\mathbf{x}-\mathbf{x}_{0}\right)+\frac{1}{2}\left(\mathbf{x}-\mathbf{x}_{0}\right)^{\mathrm{T}} \nabla^{2} f\left(\mathbf{x}_{0}\right)\left(\mathbf{x}-\mathbf{x}_{0}\right)+o\left(\left\|\mathbf{k}-\mathbf{x}_{0}\right\|^{2}\right)</script><p>忽略二次以上的项，将目标函数近似成二次函数，等式两边同时对$\mathbf{x}$求梯度，可得</p>
-<script type="math/tex; mode=display">
-\nabla f(\mathbf{x}) \approx \nabla f\left(\mathbf{x}_{0}\right)+\nabla^{2} f\left(\mathbf{x}_{0}\right)\left(\mathbf{x}-\mathbf{x}_{0}\right)</script><p>其中 $\nabla^{2} f\left(\mathbf{x}<em>{0}\right)$为在$\mathbf{x}</em>{0}$ 处的Hessian 矩阵。令函数的梯度为0 ，有 </p>
-<script type="math/tex; mode=display">
-\nabla f\left(\mathbf{x}_{0}\right)+\nabla^{2} f\left(\mathbf{x}_{0}\right)\left(\mathbf{x}-\mathbf{x}_{0}\right)=\mathbf{0}</script><p>解这个线性方程组可以得到</p>
-<script type="math/tex; mode=display">
-\tag{1}\mathbf{x}=\mathbf{x}_{0}-\left(\nabla^{2} f\left(\mathbf{x}_{0}\right)\right)^{-1} \nabla f\left(\mathbf{x}_{0}\right)</script><p>如果将梯度向量简写为$\mathbf{g}$ ，Hessian 矩阵简记为$\mathbf{H}$ ，式(1)可以简写为</p>
-<script type="math/tex; mode=display">
-\tag{2}\mathbf{x}=\mathbf{x}_{0}-\mathbf{H}^{-1} \mathbf{g}</script><p>在泰勒公式中忽略了高阶项将函数做了近似，因此这个解不一定是目标函数的驻点，需要反复用式(2) 进行迭代。从初始点$\mathbf{x}_{0}$处开始，计算函数在当前点处的Hessian 矩阵和梯度向量，然后用下面的公式进行迭代</p>
-<script type="math/tex; mode=display">
-\tag{3} \mathbf{x}_{k+1}=\mathbf{x}_{k}-\alpha \mathbf{H}_{k}^{-1} \mathbf{g}_{k}</script><p>直至收敛到驻点处。迭代终止的条件是梯度的模接近于0 ，或达到指定的迭代次数。其中$\alpha$是人工设置的学习率。需要学习率的原因与梯度下降法相同，是为了保证能够忽略泰勒公式中的高阶无穷小项。</p>
-<h2 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h2><p>深度学习500问： <a href="https://github.com/scutan90/DeepLearning-500-questions">https://github.com/scutan90/DeepLearning-500-questions</a> </p>
-<p>机器学习与深度学习习题集答案-1：<a href="https://mp.weixin.qq.com/s/4kWUE8ml_o6iF0F1TREyiA">https://mp.weixin.qq.com/s/4kWUE8ml_o6iF0F1TREyiA</a></p>
-]]></content>
-      <categories>
-        <category>Learning</category>
-        <category>面试</category>
-      </categories>
-      <tags>
-        <tag>DL</tag>
-        <tag>ML</tag>
-        <tag>GradientDescent</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>机器学习面试题-Random Forest</title>
     <url>/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/</url>
     <content><![CDATA[<p>[TOC]</p>
@@ -2575,6 +2687,118 @@ f(\mathbf{x})=f\left(\mathbf{x}_{0}\right)+\nabla f\left(\mathbf{x}_{0}\right)^{
       <tags>
         <tag>ML</tag>
         <tag>RandomForest</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>机器学习面试题-集成学习</title>
+    <url>/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h2 id="1-什么是集成学习算法？"><a href="#1-什么是集成学习算法？" class="headerlink" title="1. 什么是集成学习算法？"></a>1. 什么是集成学习算法？</h2><ul>
+<li><strong>集成学习算法是一种优化手段或者策略</strong>，不算是一种机器学习算法。</li>
+<li>集成方法是由多个较弱的模型集成模型组，一般的弱分类器可以是决策树，SVM，KNN等构成。其中的模型可以单独进行训练，并且它们的预测能以某种方式结合起来去做出一个总体预测。</li>
+<li>该算法主要的问题是要找出哪些较弱的模型可以结合起来，以及如何结合的方法。</li>
+</ul>
+<a id="more"></a>
+<h2 id="2-集成学习主要有哪几种框架？"><a href="#2-集成学习主要有哪几种框架？" class="headerlink" title="2. 集成学习主要有哪几种框架？"></a>2. 集成学习主要有哪几种框架？</h2><p>集成学习从集成思想的架构分为Bagging，Boosting，Stacking三种。</p>
+<h2 id="3-简单介绍一下bagging，常用bagging算法有哪些？"><a href="#3-简单介绍一下bagging，常用bagging算法有哪些？" class="headerlink" title="3. 简单介绍一下bagging，常用bagging算法有哪些？"></a>3. 简单介绍一下bagging，常用bagging算法有哪些？</h2><ul>
+<li>Bagging<ul>
+<li><strong>多次采样，训练多个分类器，集体投票，旨在减小方差</strong>，</li>
+</ul>
+</li>
+<li><p>基于数据<strong>随机重抽样</strong>的分类器构建方法。从训练集中进行子抽样组成每个基模型所需要的子训练集，对所有基模型预测的结果进行综合产生最终的预测结果。</p>
+</li>
+<li><p>算法流程：</p>
+<ul>
+<li>输入为样本集$D={(x_1，y_1)，(x_2，y_2) \dots (x_m，y_m)}$，弱学习器算法，弱分类器迭代次数$T$。</li>
+<li>输出为最终的强分类器$f(x)$</li>
+</ul>
+</li>
+<li><p>对于$t=1，2 \dots T$</p>
+<ul>
+<li>对训练集进行第t次随机采样，共采集$T$次，得到包含$T$个样本的采样集$D_t$</li>
+<li>用采样集$D_t$训练第$t$个弱学习器$G_t(x)$</li>
+</ul>
+</li>
+<li><p>如果是分类算法预测，则$T$个弱学习器投出最多票数的类别或者类别之一为最终类别。如果是回归算法，$T$个弱学习器得到的回归结果进行算术平均得到的值为最终的模型输出。<br>常用bagging算法：随机森林算法</p>
+</li>
+</ul>
+<h2 id="4-简单介绍一下boosting，常用boosting算法有哪些？"><a href="#4-简单介绍一下boosting，常用boosting算法有哪些？" class="headerlink" title="4. 简单介绍一下boosting，常用boosting算法有哪些？"></a>4. 简单介绍一下boosting，常用boosting算法有哪些？</h2><ul>
+<li>Boosting<ul>
+<li><strong>基分类器层层叠加，聚焦分错的样本，旨在减小方差</strong></li>
+</ul>
+</li>
+<li>涉及到两个部分，加法模型和前向分步算法。<ul>
+<li>加法模型就是说强分类器由一系列弱分类器线性相加而成。</li>
+<li>前向分步就是说在训练过程中，下一轮迭代产生的分类器是在上一轮的基础上训练得来的。</li>
+</ul>
+</li>
+<li><p>算法流程：</p>
+<ul>
+<li><p>给定初始训练数据，由此训练出第一个基学习器；</p>
+</li>
+<li><p>根据基学习器的表现对样本进行调整，在之前学习器做错的样本上投入更多关注；</p>
+</li>
+<li>用调整后的样本，训练下一个基学习器；</li>
+<li>重复上述过程T次，将T个学习器加权结合。</li>
+</ul>
+</li>
+<li><p>常用boosting算法：</p>
+<ul>
+<li>Adaboost<ul>
+<li>样本权重：思想是将关注点放在被错误分类的样本上，减小上一轮被正确分类的样本权值，提高那些被错误分类的样本权值。——会因为错误分类样本的权重不断提高而使得模型对噪声敏感。</li>
+<li>弱分类器权重：采用加权多数表决的方法，加大分类误差率小的弱分类器的权重，减小分类误差率大的弱分类器的权重。</li>
+</ul>
+</li>
+<li>GBDT</li>
+<li>XGBoost</li>
+</ul>
+</li>
+</ul>
+<h2 id="5-boosting思想的数学表达式是什么？"><a href="#5-boosting思想的数学表达式是什么？" class="headerlink" title="5. boosting思想的数学表达式是什么？"></a>5. boosting思想的数学表达式是什么？</h2><script type="math/tex; mode=display">
+f(x)=w_{0}+\sum_{m=1}^{M} w_{m} \phi_{m}(x)</script><p>其中$w$是权重，$\phi$是弱分类器的集合，可以看出最终就是基函数的线性组合。</p>
+<h2 id="6-简单介绍一下stacking，常用stacking算法有哪些？"><a href="#6-简单介绍一下stacking，常用stacking算法有哪些？" class="headerlink" title="6. 简单介绍一下stacking，常用stacking算法有哪些？"></a>6. 简单介绍一下stacking，常用stacking算法有哪些？</h2><ul>
+<li>Stacking<ul>
+<li><strong>多次采样，训练多个分类器，将输出作为最后的输入特征</strong></li>
+</ul>
+</li>
+<li><p>将训练好的所有基模型对训练集进行预测，第个$i$基模型对第$i$个训练样本的预测值将作为新的训练集中第$i$个样本的第$i$个特征值，最后基于新的训练集进行训练。同理，预测的过程也要先经过所有基模型的预测形成新的测试集，最后再对测试集进行预测。</p>
+</li>
+<li><p>stacking常见的使用方式：</p>
+<ul>
+<li>由k-NN、随机森林和朴素贝叶斯基础分类器组成，它的预测结果由作为元分类器的Loqistic 回归组合。</li>
+</ul>
+</li>
+</ul>
+<h2 id="7-你意识到你的模型受到低偏差和高方差问题的困扰，应该使用哪种算法来解决问题呢？为什么？"><a href="#7-你意识到你的模型受到低偏差和高方差问题的困扰，应该使用哪种算法来解决问题呢？为什么？" class="headerlink" title="7. 你意识到你的模型受到低偏差和高方差问题的困扰，应该使用哪种算法来解决问题呢？为什么？"></a>7. 你意识到你的模型受到低偏差和高方差问题的困扰，应该使用哪种算法来解决问题呢？为什么？</h2><p>低偏差意味着模型的预测值接近实际值。换句话说，该模型有足够的灵活性，以模仿训练数据的分布。貌似很好，但是别忘了，一个灵活的模型没有泛化能力。这意味着，当这个模型用在对一个未曾见过的数据集进行测试的时候，它会令人很失望。<br>在这种情况下，我们可以使用bagging算法（如随机森林），以解决高方差问题。bagging算法把数据集分成重复随机取样形成的子集。然后，这些样本利用单个学习算法生成一组模型。接着，利用投票（分类）或平均（回归）把模型预测结合在一起。另外，为了应对大方差，我们可以：</p>
+<ul>
+<li>使用正则化技术，惩罚更高的模型系数，从而降低了模型的复杂性。</li>
+<li>使用可变重要性图表中的前n个特征。</li>
+<li>可以用于当一个算法在数据集中的所有变量里很难寻找到有意义信号的时候。</li>
+</ul>
+<h2 id="8-常用的基分类器是什么？"><a href="#8-常用的基分类器是什么？" class="headerlink" title="8. 常用的基分类器是什么？"></a>8. 常用的基分类器是什么？</h2><p>最常用的基分类器是决策树,原因:</p>
+<ul>
+<li>决策树是低偏差高方差的，适合作为基分类器</li>
+<li>决策树可以较为方便地将样本的权重整合到训练过程中，而不需要使用过采样的方法来调整样本权重。</li>
+<li>决策树的表达能力和泛化能力，可以通过调节树的层数来做折中。</li>
+<li>数据样本的扰动对于决策树的影响较大，因此不同子样本集合生成的决策树基分类器随机性较大，这样的“不稳定学习器”更适合作为基分类器。此外，在决策树节点分裂的时候，随机地选择一个特征子集，从中找出最优分裂属性，<strong>很好地引入了随机性。</strong></li>
+</ul>
+<h2 id="9-可否将随机森林中的基分类器，由决策树替换为线性分类器或K-近邻？请解释为什么？"><a href="#9-可否将随机森林中的基分类器，由决策树替换为线性分类器或K-近邻？请解释为什么？" class="headerlink" title="9. 可否将随机森林中的基分类器，由决策树替换为线性分类器或K-近邻？请解释为什么？"></a>9. 可否将随机森林中的基分类器，由决策树替换为线性分类器或K-近邻？请解释为什么？</h2><p>不能：</p>
+<ul>
+<li>Bagging的主要好处是集成后的分类器的方差，比基分类器的方差小。</li>
+<li><p>随机森林属于Bagging类的集成学习，对样本分布较为敏感的分类器更适用于Bagging。</p>
+</li>
+<li><p>线性分类器或者K-近邻都是较为稳定的分类器，本身方差就不大。</p>
+</li>
+<li>线性分类器或者K-近邻可能会由于Bagging的采样，导致在训练中更难收敛，增大偏差。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Learning</category>
+        <category>面试</category>
+      </categories>
+      <tags>
+        <tag>ML</tag>
+        <tag>集成学习</tag>
       </tags>
   </entry>
   <entry>
@@ -2758,115 +2982,25 @@ p(y | \mathbf{x})=\frac{p(\mathbf{x} | y) p(y)}{p(\mathbf{x})}</script><p> 分�
       </tags>
   </entry>
   <entry>
-    <title>机器学习面试题-集成学习</title>
-    <url>/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<h2 id="1-什么是集成学习算法？"><a href="#1-什么是集成学习算法？" class="headerlink" title="1. 什么是集成学习算法？"></a>1. 什么是集成学习算法？</h2><ul>
-<li><strong>集成学习算法是一种优化手段或者策略</strong>，不算是一种机器学习算法。</li>
-<li>集成方法是由多个较弱的模型集成模型组，一般的弱分类器可以是决策树，SVM，KNN等构成。其中的模型可以单独进行训练，并且它们的预测能以某种方式结合起来去做出一个总体预测。</li>
-<li>该算法主要的问题是要找出哪些较弱的模型可以结合起来，以及如何结合的方法。</li>
-</ul>
-<a id="more"></a>
-<h2 id="2-集成学习主要有哪几种框架？"><a href="#2-集成学习主要有哪几种框架？" class="headerlink" title="2. 集成学习主要有哪几种框架？"></a>2. 集成学习主要有哪几种框架？</h2><p>集成学习从集成思想的架构分为Bagging，Boosting，Stacking三种。</p>
-<h2 id="3-简单介绍一下bagging，常用bagging算法有哪些？"><a href="#3-简单介绍一下bagging，常用bagging算法有哪些？" class="headerlink" title="3. 简单介绍一下bagging，常用bagging算法有哪些？"></a>3. 简单介绍一下bagging，常用bagging算法有哪些？</h2><ul>
-<li>Bagging<ul>
-<li><strong>多次采样，训练多个分类器，集体投票，旨在减小方差</strong>，</li>
-</ul>
-</li>
-<li><p>基于数据<strong>随机重抽样</strong>的分类器构建方法。从训练集中进行子抽样组成每个基模型所需要的子训练集，对所有基模型预测的结果进行综合产生最终的预测结果。</p>
-</li>
-<li><p>算法流程：</p>
+    <title>ML-Feature Engineering</title>
+    <url>/2021/12/10/%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/</url>
+    <content><![CDATA[<h2 id="特征离散的作用"><a href="#特征离散的作用" class="headerlink" title="特征离散的作用"></a>特征离散的作用</h2><a id="more"></a>
 <ul>
-<li>输入为样本集$D={(x_1，y_1)，(x_2，y_2) \dots (x_m，y_m)}$，弱学习器算法，弱分类器迭代次数$T$。</li>
-<li>输出为最终的强分类器$f(x)$</li>
-</ul>
-</li>
-<li><p>对于$t=1，2 \dots T$</p>
-<ul>
-<li>对训练集进行第t次随机采样，共采集$T$次，得到包含$T$个样本的采样集$D_t$</li>
-<li>用采样集$D_t$训练第$t$个弱学习器$G_t(x)$</li>
-</ul>
-</li>
-<li><p>如果是分类算法预测，则$T$个弱学习器投出最多票数的类别或者类别之一为最终类别。如果是回归算法，$T$个弱学习器得到的回归结果进行算术平均得到的值为最终的模型输出。<br>常用bagging算法：随机森林算法</p>
-</li>
-</ul>
-<h2 id="4-简单介绍一下boosting，常用boosting算法有哪些？"><a href="#4-简单介绍一下boosting，常用boosting算法有哪些？" class="headerlink" title="4. 简单介绍一下boosting，常用boosting算法有哪些？"></a>4. 简单介绍一下boosting，常用boosting算法有哪些？</h2><ul>
-<li>Boosting<ul>
-<li><strong>基分类器层层叠加，聚焦分错的样本，旨在减小方差</strong></li>
-</ul>
-</li>
-<li>涉及到两个部分，加法模型和前向分步算法。<ul>
-<li>加法模型就是说强分类器由一系列弱分类器线性相加而成。</li>
-<li>前向分步就是说在训练过程中，下一轮迭代产生的分类器是在上一轮的基础上训练得来的。</li>
-</ul>
-</li>
-<li><p>算法流程：</p>
-<ul>
-<li><p>给定初始训练数据，由此训练出第一个基学习器；</p>
-</li>
-<li><p>根据基学习器的表现对样本进行调整，在之前学习器做错的样本上投入更多关注；</p>
-</li>
-<li>用调整后的样本，训练下一个基学习器；</li>
-<li>重复上述过程T次，将T个学习器加权结合。</li>
-</ul>
-</li>
-<li><p>常用boosting算法：</p>
-<ul>
-<li>Adaboost<ul>
-<li>样本权重：思想是将关注点放在被错误分类的样本上，减小上一轮被正确分类的样本权值，提高那些被错误分类的样本权值。——会因为错误分类样本的权重不断提高而使得模型对噪声敏感。</li>
-<li>弱分类器权重：采用加权多数表决的方法，加大分类误差率小的弱分类器的权重，减小分类误差率大的弱分类器的权重。</li>
-</ul>
-</li>
-<li>GBDT</li>
-<li>XGBoost</li>
-</ul>
-</li>
-</ul>
-<h2 id="5-boosting思想的数学表达式是什么？"><a href="#5-boosting思想的数学表达式是什么？" class="headerlink" title="5. boosting思想的数学表达式是什么？"></a>5. boosting思想的数学表达式是什么？</h2><script type="math/tex; mode=display">
-f(x)=w_{0}+\sum_{m=1}^{M} w_{m} \phi_{m}(x)</script><p>其中$w$是权重，$\phi$是弱分类器的集合，可以看出最终就是基函数的线性组合。</p>
-<h2 id="6-简单介绍一下stacking，常用stacking算法有哪些？"><a href="#6-简单介绍一下stacking，常用stacking算法有哪些？" class="headerlink" title="6. 简单介绍一下stacking，常用stacking算法有哪些？"></a>6. 简单介绍一下stacking，常用stacking算法有哪些？</h2><ul>
-<li>Stacking<ul>
-<li><strong>多次采样，训练多个分类器，将输出作为最后的输入特征</strong></li>
-</ul>
-</li>
-<li><p>将训练好的所有基模型对训练集进行预测，第个$i$基模型对第$i$个训练样本的预测值将作为新的训练集中第$i$个样本的第$i$个特征值，最后基于新的训练集进行训练。同理，预测的过程也要先经过所有基模型的预测形成新的测试集，最后再对测试集进行预测。</p>
-</li>
-<li><p>stacking常见的使用方式：</p>
-<ul>
-<li>由k-NN、随机森林和朴素贝叶斯基础分类器组成，它的预测结果由作为元分类器的Loqistic 回归组合。</li>
-</ul>
-</li>
-</ul>
-<h2 id="7-你意识到你的模型受到低偏差和高方差问题的困扰，应该使用哪种算法来解决问题呢？为什么？"><a href="#7-你意识到你的模型受到低偏差和高方差问题的困扰，应该使用哪种算法来解决问题呢？为什么？" class="headerlink" title="7. 你意识到你的模型受到低偏差和高方差问题的困扰，应该使用哪种算法来解决问题呢？为什么？"></a>7. 你意识到你的模型受到低偏差和高方差问题的困扰，应该使用哪种算法来解决问题呢？为什么？</h2><p>低偏差意味着模型的预测值接近实际值。换句话说，该模型有足够的灵活性，以模仿训练数据的分布。貌似很好，但是别忘了，一个灵活的模型没有泛化能力。这意味着，当这个模型用在对一个未曾见过的数据集进行测试的时候，它会令人很失望。<br>在这种情况下，我们可以使用bagging算法（如随机森林），以解决高方差问题。bagging算法把数据集分成重复随机取样形成的子集。然后，这些样本利用单个学习算法生成一组模型。接着，利用投票（分类）或平均（回归）把模型预测结合在一起。另外，为了应对大方差，我们可以：</p>
-<ul>
-<li>使用正则化技术，惩罚更高的模型系数，从而降低了模型的复杂性。</li>
-<li>使用可变重要性图表中的前n个特征。</li>
-<li>可以用于当一个算法在数据集中的所有变量里很难寻找到有意义信号的时候。</li>
-</ul>
-<h2 id="8-常用的基分类器是什么？"><a href="#8-常用的基分类器是什么？" class="headerlink" title="8. 常用的基分类器是什么？"></a>8. 常用的基分类器是什么？</h2><p>最常用的基分类器是决策树,原因:</p>
-<ul>
-<li>决策树是低偏差高方差的，适合作为基分类器</li>
-<li>决策树可以较为方便地将样本的权重整合到训练过程中，而不需要使用过采样的方法来调整样本权重。</li>
-<li>决策树的表达能力和泛化能力，可以通过调节树的层数来做折中。</li>
-<li>数据样本的扰动对于决策树的影响较大，因此不同子样本集合生成的决策树基分类器随机性较大，这样的“不稳定学习器”更适合作为基分类器。此外，在决策树节点分裂的时候，随机地选择一个特征子集，从中找出最优分裂属性，<strong>很好地引入了随机性。</strong></li>
-</ul>
-<h2 id="9-可否将随机森林中的基分类器，由决策树替换为线性分类器或K-近邻？请解释为什么？"><a href="#9-可否将随机森林中的基分类器，由决策树替换为线性分类器或K-近邻？请解释为什么？" class="headerlink" title="9. 可否将随机森林中的基分类器，由决策树替换为线性分类器或K-近邻？请解释为什么？"></a>9. 可否将随机森林中的基分类器，由决策树替换为线性分类器或K-近邻？请解释为什么？</h2><p>不能：</p>
-<ul>
-<li>Bagging的主要好处是集成后的分类器的方差，比基分类器的方差小。</li>
-<li><p>随机森林属于Bagging类的集成学习，对样本分布较为敏感的分类器更适用于Bagging。</p>
-</li>
-<li><p>线性分类器或者K-近邻都是较为稳定的分类器，本身方差就不大。</p>
-</li>
-<li>线性分类器或者K-近邻可能会由于Bagging的采样，导致在训练中更难收敛，增大偏差。</li>
+<li><strong>离散化后的特征对异常数据有很强的鲁棒性</strong><br>比如一个特征是年龄&gt;30是1，否则0。如果特征没有离散化，一个异常数据“年龄300岁”会给模型造成很大的干扰；离散化后年龄300岁也只对应于一个权重，如果训练数据中没有出现特征”年龄-300岁”，那么在LR模型中，其权重对应于0，所以，即使测试数据中出现特征”年龄-300岁”,也不会对预测结果产生影响。特征离散化的过程，比如特征A，如果当做连续特征使用，在LR模型中，A会对应一个权重w,如果离散化，那么A就拓展为特征A-1，A-2，A-3…,每个特征对应于一个权重，如果训练样本中没有出现特征A-4，那么训练的模型对于A-4就没有权重，如果测试样本中出现特征A-4,该特征A-4也不会起作用。相当于无效。但是，如果使用连续特征，在LR模型中，y = w*a,a是特征，w是a对应的权重,比如a代表年龄，那么a的取值范围是[0..100]，如果测试样本中,出现了一个测试用例，a的取值是300，显然a是异常值，但是w*a还是有值，而且值还非常大，所以，异常值会对最后结果产生非常大的影响。</li>
+<li><strong>特征离散化后，模型会更稳定</strong><br>比如如果对用户年龄离散化，20-30作为一个区间，不会因为一个用户年龄长了一岁就变成一个完全不同的人。当然处于区间相邻处的样本会刚好相反，所以怎么划分区间是门学问；按区间离散化，划分区间是非常关键的。</li>
+<li><strong>特征离散化以后，起到了简化了逻辑回归模型的作用，降低了模型过拟合的风险</strong><br>当使用连续特征时，一个特征对应于一个权重，那么，如果这个特征权重较大，模型就会很依赖于这个特征，这个特征的一个微小变化可能会导致最终结果产生很大的变化，这样子的模型很危险，当遇到新样本的时候很可能因为对这个特征过分敏感而得到错误的分类结果，也就是泛化能力差，容易过拟合。而使用离散特征的时候，一个特征变成了多个，权重也变为多个，那么之前连续特征对模型的影响力就被分散弱化了，从而降低了过拟合的风险。</li>
+<li><strong>引入非线性</strong><br>单变量离散化为N个后，每个变量有单独的权重，相当于为模型引入了非线性，能够提升模型表达能力，加大拟合；在LR模型中，特征A作为连续特征对应的权重是Wa。A是线性特征，因为y = Wa*A,y对于A的导数就是Wa,如果离散化后，A按区间离散化为A_1,A_2,A_3。那么y = w_1*A_1+w_2*A_2+w_3*A_3.那么y对于A的函数就相当于分段的线性函数，y对于A的导数也随A的取值变动，所以，相当于引入了非线性。</li>
+<li><strong>离散化后方便进行特征交叉</strong><br>离散化后变为了类别，方便特征交叉。进一步引入非线性，提升表达能力。</li>
+<li>离散特征的增加和减少都很容易，易于模型的快速迭代。(离散特征的增加和减少，模型也不需要调整，重新训练是必须的，相比贝叶斯推断方法或者树模型方法迭代快)</li>
+<li>稀疏向量内积乘法运算速度快，计算结果方便存储，容易扩展；</li>
 </ul>
 ]]></content>
       <categories>
         <category>Learning</category>
-        <category>面试</category>
       </categories>
       <tags>
         <tag>ML</tag>
-        <tag>集成学习</tag>
+        <tag>FeatureEngineering</tag>
       </tags>
   </entry>
   <entry>
@@ -2929,28 +3063,6 @@ f(x)=w_{0}+\sum_{m=1}^{M} w_{m} \phi_{m}(x)</script><p>其中$w$是权重，$\ph
       </categories>
       <tags>
         <tag>ML</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>ML-Feature Engineering</title>
-    <url>/2021/12/10/%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/</url>
-    <content><![CDATA[<h2 id="特征离散的作用"><a href="#特征离散的作用" class="headerlink" title="特征离散的作用"></a>特征离散的作用</h2><a id="more"></a>
-<ul>
-<li><strong>离散化后的特征对异常数据有很强的鲁棒性</strong><br>比如一个特征是年龄&gt;30是1，否则0。如果特征没有离散化，一个异常数据“年龄300岁”会给模型造成很大的干扰；离散化后年龄300岁也只对应于一个权重，如果训练数据中没有出现特征”年龄-300岁”，那么在LR模型中，其权重对应于0，所以，即使测试数据中出现特征”年龄-300岁”,也不会对预测结果产生影响。特征离散化的过程，比如特征A，如果当做连续特征使用，在LR模型中，A会对应一个权重w,如果离散化，那么A就拓展为特征A-1，A-2，A-3…,每个特征对应于一个权重，如果训练样本中没有出现特征A-4，那么训练的模型对于A-4就没有权重，如果测试样本中出现特征A-4,该特征A-4也不会起作用。相当于无效。但是，如果使用连续特征，在LR模型中，y = w*a,a是特征，w是a对应的权重,比如a代表年龄，那么a的取值范围是[0..100]，如果测试样本中,出现了一个测试用例，a的取值是300，显然a是异常值，但是w*a还是有值，而且值还非常大，所以，异常值会对最后结果产生非常大的影响。</li>
-<li><strong>特征离散化后，模型会更稳定</strong><br>比如如果对用户年龄离散化，20-30作为一个区间，不会因为一个用户年龄长了一岁就变成一个完全不同的人。当然处于区间相邻处的样本会刚好相反，所以怎么划分区间是门学问；按区间离散化，划分区间是非常关键的。</li>
-<li><strong>特征离散化以后，起到了简化了逻辑回归模型的作用，降低了模型过拟合的风险</strong><br>当使用连续特征时，一个特征对应于一个权重，那么，如果这个特征权重较大，模型就会很依赖于这个特征，这个特征的一个微小变化可能会导致最终结果产生很大的变化，这样子的模型很危险，当遇到新样本的时候很可能因为对这个特征过分敏感而得到错误的分类结果，也就是泛化能力差，容易过拟合。而使用离散特征的时候，一个特征变成了多个，权重也变为多个，那么之前连续特征对模型的影响力就被分散弱化了，从而降低了过拟合的风险。</li>
-<li><strong>引入非线性</strong><br>单变量离散化为N个后，每个变量有单独的权重，相当于为模型引入了非线性，能够提升模型表达能力，加大拟合；在LR模型中，特征A作为连续特征对应的权重是Wa。A是线性特征，因为y = Wa*A,y对于A的导数就是Wa,如果离散化后，A按区间离散化为A_1,A_2,A_3。那么y = w_1*A_1+w_2*A_2+w_3*A_3.那么y对于A的函数就相当于分段的线性函数，y对于A的导数也随A的取值变动，所以，相当于引入了非线性。</li>
-<li><strong>离散化后方便进行特征交叉</strong><br>离散化后变为了类别，方便特征交叉。进一步引入非线性，提升表达能力。</li>
-<li>离散特征的增加和减少都很容易，易于模型的快速迭代。(离散特征的增加和减少，模型也不需要调整，重新训练是必须的，相比贝叶斯推断方法或者树模型方法迭代快)</li>
-<li>稀疏向量内积乘法运算速度快，计算结果方便存储，容易扩展；</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Learning</category>
-      </categories>
-      <tags>
-        <tag>ML</tag>
-        <tag>FeatureEngineering</tag>
       </tags>
   </entry>
   <entry>
@@ -3848,111 +3960,11 @@ w=m(a+x, b+y)^{*} e^{-\frac{\left(x^{\prime}\right)^{2}+\left(y^{\prime}\right)^
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">splitArray</span>(<span class="params">self, nums: List[<span class="built_in">int</span>], m: <span class="built_in">int</span></span>) -&gt; int:</span></span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">helper</span>(<span class="params">mid</span>):</span></span><br><span class="line">            res = tmp = <span class="number">0</span></span><br><span class="line">            <span class="keyword">for</span> num <span class="keyword">in</span> nums:</span><br><span class="line">                <span class="keyword">if</span> tmp + num &lt;= mid:</span><br><span class="line">                    tmp += num</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    res += <span class="number">1</span></span><br><span class="line">                    tmp = num</span><br><span class="line">            <span class="keyword">return</span> res + <span class="number">1</span></span><br><span class="line"></span><br><span class="line">        lo, hi = <span class="built_in">max</span>(nums), <span class="built_in">sum</span>(nums)</span><br><span class="line">        <span class="keyword">while</span> lo &lt; hi:</span><br><span class="line">            mid = (lo + hi) // <span class="number">2</span></span><br><span class="line">            <span class="keyword">if</span> helper(mid) &gt; m:</span><br><span class="line">                lo = mid + <span class="number">1</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                hi = mid</span><br><span class="line">        <span class="keyword">return</span> lo</span><br></pre></td></tr></table></figure>]]></content>
       <categories>
         <category>Learning</category>
-        <category>查找表</category>
+        <category>Leetcode</category>
       </categories>
       <tags>
         <tag>Leetcode</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CS224WLec3-Node Embeddings</title>
-    <url>/2021/12/15/CS224WLec3/</url>
-    <content><![CDATA[<h1 id="Basic"><a href="#Basic" class="headerlink" title="Basic"></a>Basic</h1><ul>
-<li>goal: 为node生成一个embedding</li>
-<li>两个要素：<strong>encoder/相似度计量方法（encode前后都需要）</strong></li>
-<li>framework: encoder 生成embedding —&gt; 相似度计量方法决定embedding学习的好坏</li>
-<li><strong>unsupervised/self-supervised way</strong> based on random walks</li>
-<li>task independent</li>
-</ul>
-<a id="more"></a>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><ul>
-<li>类似于word2vec: 目标是求node u的embedding <script type="math/tex">\mathbf{z}_{u}</script>,而模型的预测目标是：<script type="math/tex">P\left(v \mid \mathbf{z}_{u}\right)</script>，即node v出现在以node u开始的walk上的概率。</li>
-<li>如何获得“句子”：random walk</li>
-</ul>
-<h2 id="Deep-Walk"><a href="#Deep-Walk" class="headerlink" title="Deep Walk"></a>Deep Walk</h2><h3 id="Random-Walk"><a href="#Random-Walk" class="headerlink" title="Random Walk"></a>Random Walk</h3><ul>
-<li>出发点：如果一个random walk中包括从u到v的路径，那u和v是相似的/有相似的高维的多跳信息</li>
-<li><script type="math/tex; mode=display">N_{\mathrm{R}}(u)$$为策略R下，从u出发的walk中，出现的所有nodes
-$$ \max _{f} \sum_{u \in V} \log \mathrm{P}\left(N_{\mathrm{R}}(u) \mid \mathbf{z}_{u}\right)</script>—》<script type="math/tex; mode=display">\mathcal{L}=\sum_{u \in V} \sum_{v \in N_{R}(u)}-\log \left(P\left(v \mid \mathbf{z}_{u}\right)\right)</script></li>
-<li>利用softmax求p \<script type="math/tex; mode=display">P\left(v \mid \mathbf{z}_{u}\right)=\frac{\exp \left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{v}\right)}{\sum_{n \in V} \exp \left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{n}\right)}</script></li>
-<li>problem: softmax分母 以及 最外层都需要|V|次遍历 —》<script type="math/tex">\mathrm{O}\left(|\mathrm{V}|^{2}\right)</script>的复杂度 —》<strong>优化</strong></li>
-</ul>
-<h3 id="Negative-Sampling"><a href="#Negative-Sampling" class="headerlink" title="Negative Sampling"></a>Negative Sampling</h3><ul>
-<li>使用所有样本做normalization —&gt; 只采样k个负样本做normalization<script type="math/tex; mode=display">P\left(v \mid \mathbf{z}_{u}\right)=\frac{\exp \left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{v}\right)}{\sum_{n \in V } \exp \left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{n}\right)} \approx \log \left(\sigma\left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{v}\right)\right)-\sum_{i=1}^{k} \log \left(\sigma\left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{n_{i}}\right)\right), n_{i} \sim P_{V}</script></li>
-<li>k的选择：<ul>
-<li>k越大，模型越鲁棒</li>
-<li>k越大，对负样本考虑的越多</li>
-<li>5~20间较常见</li>
-</ul>
-</li>
-<li>负样本的选择：可以选择graph内任意样本，但更准确的方法是选择不在walk中的样本</li>
-</ul>
-<h2 id="Node2vec-better-random-walk-strategy"><a href="#Node2vec-better-random-walk-strategy" class="headerlink" title="Node2vec: better  random walk strategy"></a>Node2vec: better  random walk strategy</h2><ul>
-<li>简单的random walk会限制walk中的node相似度与graph中node相似度的一致性</li>
-</ul>
-<h3 id="Biased-2nd-order-random-Walks"><a href="#Biased-2nd-order-random-Walks" class="headerlink" title="Biased 2nd-order random Walks"></a>Biased 2nd-order random Walks</h3><ul>
-<li>trade off between local and global views of the network: BFS &amp; DFS</li>
-<li>当前在w, 上一步在s的walk，有三种行走方向<ul>
-<li>退后：回退到s</li>
-<li>保持：走到和s距离一致的一个节点</li>
-<li>前进：走到距离s更远的节点<img src="/2021/12/15/CS224WLec3/node2vec1.png" class="" title="node2vec1"></li>
-</ul>
-</li>
-<li>实现：两个<strong>超参</strong>p/q，以及“1”来以非归一化的方法表示上述三种情况的概率<img src="/2021/12/15/CS224WLec3/node2vec2.png" class="" title="node2vec2"></li>
-<li>流程<ul>
-<li>Compute random walk probabilities</li>
-<li>Simulate 𝑟 random walks of length 𝑙 starting from each node 𝑢</li>
-<li>Optimize the node2vec objective using Stochastic Gradient Descent</li>
-</ul>
-</li>
-<li>Linear-time complexity</li>
-<li>All 3 steps are individually parallelizable</li>
-</ul>
-<h2 id="Embedding-entire-graphs"><a href="#Embedding-entire-graphs" class="headerlink" title="Embedding entire graphs"></a>Embedding entire graphs</h2><ul>
-<li>approach1: add all node embeddings</li>
-<li>approach2: introduce a “virtual node” or “super node” to represent the graph and learning embedding for this graph</li>
-<li>approach3: anonymous walks embeddings</li>
-</ul>
-<h3 id="Anonymous-walk-embeddings"><a href="#Anonymous-walk-embeddings" class="headerlink" title="Anonymous walk embeddings"></a>Anonymous walk embeddings</h3><ul>
-<li>Anonymous walk: random walk —&gt; 将node表示为距离start node的去重index。因此，确定了walk length的时候，就确定了anonymous walk中index的个数。</li>
-<li>方法1：长度为l的annoy walk共有n种情况 —&gt; 做m次random walks —&gt; 统计每种情况的count，并形成一个vector</li>
-<li>方法2：用Anonymous walks的概率分布，学习图的embedding<ul>
-<li>Learn to predict walks that co-occur in 𝚫-size window (e.g., predict 𝑤3 given 𝑤1, 𝑤2 if Δ = 2)</li>
-<li>objective:<script type="math/tex; mode=display">\max _{z_{G}} \sum_{t=\Delta+1}^{T} \log P\left(w_{t} \mid w_{t-\Delta}, \ldots, w_{t-1}, \mathbf{z}_{G}\right)</script></li>
-</ul>
-</li>
-</ul>
-<img src="/2021/12/15/CS224WLec3/annoywalks1.png" class="" title="annoywalks1">
-<img src="/2021/12/15/CS224WLec3/annoywalks2.png" class="" title="annoywalks2">
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
-<li><a href="http://web.stanford.edu/class/cs224w/slides/03-nodeemb.pdf">ppt</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Learning</category>
-        <category>cs224w</category>
-      </categories>
-      <tags>
-        <tag>cs224w</tag>
-        <tag>graph</tag>
-        <tag>DeepWalk</tag>
-        <tag>node2vec</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CS224WLec4-PageRank</title>
-    <url>/2021/12/18/CS224WLec4/</url>
-    <content><![CDATA[<a id="more"></a>
-
-]]></content>
-      <categories>
-        <category>Learning</category>
-        <category>cs224w</category>
-      </categories>
-      <tags>
-        <tag>cs224w</tag>
-        <tag>graph</tag>
-        <tag>ML</tag>
-        <tag>PageRank</tag>
+        <tag>查找表</tag>
       </tags>
   </entry>
 </search>
