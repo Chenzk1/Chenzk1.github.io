@@ -40,9 +40,11 @@
 ]]></content>
       <categories>
         <category>Learning</category>
+        <category>6.824</category>
       </categories>
       <tags>
         <tag>6.824</tag>
+        <tag>MapReduce</tag>
       </tags>
   </entry>
   <entry>
@@ -116,9 +118,12 @@
 ]]></content>
       <categories>
         <category>Learning</category>
+        <category>6.824</category>
       </categories>
       <tags>
         <tag>6.824</tag>
+        <tag>RPC</tag>
+        <tag>Thread</tag>
       </tags>
   </entry>
   <entry>
@@ -395,6 +400,7 @@
 ]]></content>
       <categories>
         <category>Learning</category>
+        <category>cs224w</category>
       </categories>
       <tags>
         <tag>cs224w</tag>
@@ -553,6 +559,7 @@ k_{v} \\
 ]]></content>
       <categories>
         <category>Learning</category>
+        <category>cs224w</category>
       </categories>
       <tags>
         <tag>cs224w</tag>
@@ -3888,12 +3895,30 @@ $$ \max _{f} \sum_{u \in V} \log \mathrm{P}\left(N_{\mathrm{R}}(u) \mid \mathbf{
 ]]></content>
       <categories>
         <category>Learning</category>
+        <category>cs224w</category>
       </categories>
       <tags>
         <tag>cs224w</tag>
         <tag>graph</tag>
         <tag>DeepWalk</tag>
         <tag>node2vec</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CS224WLec4-PageRank</title>
+    <url>/2021/12/18/CS224WLec4/</url>
+    <content><![CDATA[<a id="more"></a>
+
+]]></content>
+      <categories>
+        <category>Learning</category>
+        <category>cs224w</category>
+      </categories>
+      <tags>
+        <tag>cs224w</tag>
+        <tag>graph</tag>
+        <tag>ML</tag>
+        <tag>PageRank</tag>
       </tags>
   </entry>
 </search>
