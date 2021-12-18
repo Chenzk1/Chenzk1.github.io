@@ -23,21 +23,27 @@
     var CONFIG = {"hostname":"chenzk1.github.io","root":"/","scheme":"Gemini","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 
-  <meta name="description" content="[TOC] 原理 GBDT与传统的Boosting区别较大，它的每一次计算都是为了减少上一次的残差，而为了消除残差，我们可以在残差减小的梯度方向上建立模型,所以说，在GradientBoost中，每个新的模型的建立是为了使得之前的模型的残差往梯度下降的方法，与传统的Boosting中关注正确错误的样本加权有着很大的区别。 在GradientBoosting算法中，关键就是利用损失函数的负梯度方向在">
+  <meta name="description" content="Basic goal: 为node生成一个embedding 两个要素：encoder&#x2F;相似度计量方法（encode前后都需要） framework: encoder 生成embedding —&gt; 相似度计量方法决定embedding学习的好坏 unsupervised&#x2F;self-supervised way based on random walks task independent">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ML-GBDT">
-<meta property="og:url" content="https://chenzk1.github.io/2021/12/10/GBDT/index.html">
+<meta property="og:title" content="CS224WLec3-Node Embeddings">
+<meta property="og:url" content="https://chenzk1.github.io/2021/12/15/CS224WLec3/index.html">
 <meta property="og:site_name" content="Kayden&#39;s Blog">
-<meta property="og:description" content="[TOC] 原理 GBDT与传统的Boosting区别较大，它的每一次计算都是为了减少上一次的残差，而为了消除残差，我们可以在残差减小的梯度方向上建立模型,所以说，在GradientBoost中，每个新的模型的建立是为了使得之前的模型的残差往梯度下降的方法，与传统的Boosting中关注正确错误的样本加权有着很大的区别。 在GradientBoosting算法中，关键就是利用损失函数的负梯度方向在">
+<meta property="og:description" content="Basic goal: 为node生成一个embedding 两个要素：encoder&#x2F;相似度计量方法（encode前后都需要） framework: encoder 生成embedding —&gt; 相似度计量方法决定embedding学习的好坏 unsupervised&#x2F;self-supervised way based on random walks task independent">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2021-12-09T16:00:00.000Z">
-<meta property="article:modified_time" content="2021-12-11T09:40:52.206Z">
+<meta property="og:image" content="https://chenzk1.github.io/2021/12/15/CS224WLec3/node2vec1.png">
+<meta property="og:image" content="https://chenzk1.github.io/2021/12/15/CS224WLec3/node2vec2.png">
+<meta property="og:image" content="https://chenzk1.github.io/2021/12/15/CS224WLec3/annoywalks1.png">
+<meta property="og:image" content="https://chenzk1.github.io/2021/12/15/CS224WLec3/annoywalks2.png">
+<meta property="article:published_time" content="2021-12-15T09:55:00.000Z">
+<meta property="article:modified_time" content="2021-12-18T10:08:33.797Z">
 <meta property="article:author" content="Kayden">
-<meta property="article:tag" content="ML">
+<meta property="article:tag" content="cs224w">
+<meta property="article:tag" content="graph">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://chenzk1.github.io/2021/12/15/CS224WLec3/node2vec1.png">
 
 
-<link rel="canonical" href="https://chenzk1.github.io/2021/12/10/GBDT/">
+<link rel="canonical" href="https://chenzk1.github.io/2021/12/15/CS224WLec3/">
 
 
 <script class="page-configurations">
@@ -50,7 +56,7 @@
   };
 </script>
 
-  <title>ML-GBDT | Kayden's Blog</title>
+  <title>CS224WLec3-Node Embeddings | Kayden's Blog</title>
   
 
 
@@ -211,7 +217,7 @@
 
       <!--noindex-->
       <section class="post-toc-wrap sidebar-panel">
-          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-number">2.</span> <span class="nav-text">优缺点</span></a></li></ol></div>
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Basic"><span class="nav-number">1.</span> <span class="nav-text">Basic</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Method"><span class="nav-number">2.</span> <span class="nav-text">Method</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Deep-Walk"><span class="nav-number">2.1.</span> <span class="nav-text">Deep Walk</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Random-Walk"><span class="nav-number">2.1.1.</span> <span class="nav-text">Random Walk</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Negative-Sampling"><span class="nav-number">2.1.2.</span> <span class="nav-text">Negative Sampling</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Node2vec-better-random-walk-strategy"><span class="nav-number">2.2.</span> <span class="nav-text">Node2vec: better  random walk strategy</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Biased-2nd-order-random-Walks"><span class="nav-number">2.2.1.</span> <span class="nav-text">Biased 2nd-order random Walks</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Embedding-entire-graphs"><span class="nav-number">2.3.</span> <span class="nav-text">Embedding entire graphs</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Anonymous-walk-embeddings"><span class="nav-number">2.3.1.</span> <span class="nav-text">Anonymous walk embeddings</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li></ol></div>
       </section>
       <!--/noindex-->
 
@@ -299,7 +305,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/10/GBDT/">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/15/CS224WLec3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -312,7 +318,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          ML-GBDT
+          CS224WLec3-Node Embeddings
         </h1>
 
         <div class="post-meta-container">
@@ -323,14 +329,14 @@
       </span>
       <span class="post-meta-item-text">Posted on</span>
 
-      <time title="Created: 2021-12-10 00:00:00" itemprop="dateCreated datePublished" datetime="2021-12-10T00:00:00+08:00">2021-12-10</time>
+      <time title="Created: 2021-12-15 17:55:00" itemprop="dateCreated datePublished" datetime="2021-12-15T17:55:00+08:00">2021-12-15</time>
     </span>
       <span class="post-meta-item">
         <span class="post-meta-item-icon">
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-12-11 17:40:52" itemprop="dateModified" datetime="2021-12-11T17:40:52+08:00">2021-12-11</time>
+        <time title="Modified: 2021-12-18 18:08:33" itemprop="dateModified" datetime="2021-12-18T18:08:33+08:00">2021-12-18</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -352,15 +358,74 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>[TOC]</p>
-<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><ul>
-<li>GBDT与传统的Boosting区别较大，它的每一次计算都是为了减少上一次的残差，而为了消除残差，我们可以在残差减小的梯度方向上建立模型,所以说，在GradientBoost中，每个新的模型的建立是为了使得之前的模型的残差往梯度下降的方法，与传统的Boosting中关注正确错误的样本加权有着很大的区别。</li>
-<li>在GradientBoosting算法中，关键就是利用损失函数的负梯度方向在当前模型的值作为残差的近似值，进而拟合一棵CART回归树。</li>
-<li>GBDT的会累加所有树的结果，而这种累加是无法通过分类完成的，因此<strong>GBDT的树都是CART回归树</strong>，而不是分类树（尽管GBDT调整后也可以用于分类但不代表GBDT的树为分类树）。</li>
+        <h1 id="Basic"><a href="#Basic" class="headerlink" title="Basic"></a>Basic</h1><ul>
+<li>goal: 为node生成一个embedding</li>
+<li>两个要素：<strong>encoder/相似度计量方法（encode前后都需要）</strong></li>
+<li>framework: encoder 生成embedding —&gt; 相似度计量方法决定embedding学习的好坏</li>
+<li><strong>unsupervised/self-supervised way</strong> based on random walks</li>
+<li>task independent</li>
 </ul>
-<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><ul>
-<li>GBDT的性能在RF的基础上又有一步提升，因此其优点也很明显，1、它能灵活的处理各种类型的数据；2、在相对较少的调参时间下，预测的准确度较高。</li>
-<li>当然由于它是Boosting，因此基学习器之前存在串行关系，难以并行训练数据。</li>
+<a id="more"></a>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><ul>
+<li>类似于word2vec: 目标是求node u的embedding <script type="math/tex">\mathbf{z}_{u}</script>,而模型的预测目标是：<script type="math/tex">P\left(v \mid \mathbf{z}_{u}\right)</script>，即node v出现在以node u开始的walk上的概率。</li>
+<li>如何获得“句子”：random walk</li>
+</ul>
+<h2 id="Deep-Walk"><a href="#Deep-Walk" class="headerlink" title="Deep Walk"></a>Deep Walk</h2><h3 id="Random-Walk"><a href="#Random-Walk" class="headerlink" title="Random Walk"></a>Random Walk</h3><ul>
+<li>出发点：如果一个random walk中包括从u到v的路径，那u和v是相似的/有相似的高维的多跳信息</li>
+<li><script type="math/tex; mode=display">N_{\mathrm{R}}(u)$$为策略R下，从u出发的walk中，出现的所有nodes
+$$ \max _{f} \sum_{u \in V} \log \mathrm{P}\left(N_{\mathrm{R}}(u) \mid \mathbf{z}_{u}\right)</script>—》<script type="math/tex; mode=display">\mathcal{L}=\sum_{u \in V} \sum_{v \in N_{R}(u)}-\log \left(P\left(v \mid \mathbf{z}_{u}\right)\right)</script></li>
+<li>利用softmax求p \<script type="math/tex; mode=display">P\left(v \mid \mathbf{z}_{u}\right)=\frac{\exp \left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{v}\right)}{\sum_{n \in V} \exp \left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{n}\right)}</script></li>
+<li>problem: softmax分母 以及 最外层都需要|V|次遍历 —》<script type="math/tex">\mathrm{O}\left(|\mathrm{V}|^{2}\right)</script>的复杂度 —》<strong>优化</strong></li>
+</ul>
+<h3 id="Negative-Sampling"><a href="#Negative-Sampling" class="headerlink" title="Negative Sampling"></a>Negative Sampling</h3><ul>
+<li>使用所有样本做normalization —&gt; 只采样k个负样本做normalization<script type="math/tex; mode=display">P\left(v \mid \mathbf{z}_{u}\right)=\frac{\exp \left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{v}\right)}{\sum_{n \in V } \exp \left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{n}\right)} \approx \log \left(\sigma\left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{v}\right)\right)-\sum_{i=1}^{k} \log \left(\sigma\left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{n_{i}}\right)\right), n_{i} \sim P_{V}</script></li>
+<li>k的选择：<ul>
+<li>k越大，模型越鲁棒</li>
+<li>k越大，对负样本考虑的越多</li>
+<li>5~20间较常见</li>
+</ul>
+</li>
+<li>负样本的选择：可以选择graph内任意样本，但更准确的方法是选择不在walk中的样本</li>
+</ul>
+<h2 id="Node2vec-better-random-walk-strategy"><a href="#Node2vec-better-random-walk-strategy" class="headerlink" title="Node2vec: better  random walk strategy"></a>Node2vec: better  random walk strategy</h2><ul>
+<li>简单的random walk会限制walk中的node相似度与graph中node相似度的一致性</li>
+</ul>
+<h3 id="Biased-2nd-order-random-Walks"><a href="#Biased-2nd-order-random-Walks" class="headerlink" title="Biased 2nd-order random Walks"></a>Biased 2nd-order random Walks</h3><ul>
+<li>trade off between local and global views of the network: BFS &amp; DFS</li>
+<li>当前在w, 上一步在s的walk，有三种行走方向<ul>
+<li>退后：回退到s</li>
+<li>保持：走到和s距离一致的一个节点</li>
+<li>前进：走到距离s更远的节点<img src="/2021/12/15/CS224WLec3/node2vec1.png" class="" title="node2vec1"></li>
+</ul>
+</li>
+<li>实现：两个<strong>超参</strong>p/q，以及“1”来以非归一化的方法表示上述三种情况的概率<img src="/2021/12/15/CS224WLec3/node2vec2.png" class="" title="node2vec2"></li>
+<li>流程<ul>
+<li>Compute random walk probabilities</li>
+<li>Simulate 𝑟 random walks of length 𝑙 starting from each node 𝑢</li>
+<li>Optimize the node2vec objective using Stochastic Gradient Descent</li>
+</ul>
+</li>
+<li>Linear-time complexity</li>
+<li>All 3 steps are individually parallelizable</li>
+</ul>
+<h2 id="Embedding-entire-graphs"><a href="#Embedding-entire-graphs" class="headerlink" title="Embedding entire graphs"></a>Embedding entire graphs</h2><ul>
+<li>approach1: add all node embeddings</li>
+<li>approach2: introduce a “virtual node” or “super node” to represent the graph and learning embedding for this graph</li>
+<li>approach3: anonymous walks embeddings</li>
+</ul>
+<h3 id="Anonymous-walk-embeddings"><a href="#Anonymous-walk-embeddings" class="headerlink" title="Anonymous walk embeddings"></a>Anonymous walk embeddings</h3><ul>
+<li>Anonymous walk: random walk —&gt; 将node表示为距离start node的去重index。因此，确定了walk length的时候，就确定了anonymous walk中index的个数。</li>
+<li>方法1：长度为l的annoy walk共有n种情况 —&gt; 做m次random walks —&gt; 统计每种情况的count，并形成一个vector</li>
+<li>方法2：用Anonymous walks的概率分布，学习图的embedding<ul>
+<li>Learn to predict walks that co-occur in 𝚫-size window (e.g., predict 𝑤3 given 𝑤1, 𝑤2 if Δ = 2)</li>
+<li>objective:<script type="math/tex; mode=display">\max _{z_{G}} \sum_{t=\Delta+1}^{T} \log P\left(w_{t} \mid w_{t-\Delta}, \ldots, w_{t-1}, \mathbf{z}_{G}\right)</script></li>
+</ul>
+</li>
+</ul>
+<img src="/2021/12/15/CS224WLec3/annoywalks1.png" class="" title="annoywalks1">
+<img src="/2021/12/15/CS224WLec3/annoywalks2.png" class="" title="annoywalks2">
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a target="_blank" rel="noopener" href="http://web.stanford.edu/class/cs224w/slides/03-nodeemb.pdf">ppt</a></li>
 </ul>
 
     </div>
@@ -371,21 +436,19 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/ML/" rel="tag"># ML</a>
+              <a href="/tags/cs224w/" rel="tag"># cs224w</a>
+              <a href="/tags/graph/" rel="tag"># graph</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2021/12/10/DBSCAN/" rel="prev" title="ML-DBSCAN以及sklearn实现DBSCAN">
-                  <i class="fa fa-chevron-left"></i> ML-DBSCAN以及sklearn实现DBSCAN
+                <a href="/2021/12/15/P&NP&NP-hard/" rel="prev" title="P、NP、NP-hard问题">
+                  <i class="fa fa-chevron-left"></i> P、NP、NP-hard问题
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2021/12/10/CS%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF/" rel="next" title="CS学习路线、资源推荐">
-                  CS学习路线、资源推荐 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
@@ -480,6 +543,50 @@
   
 
   
+      <script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              const target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    const script = document.createElement('script');
+    script.src = '//cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js';
+    script.defer = true;
+    document.head.appendChild(script);
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.typesetClear();
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 

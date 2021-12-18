@@ -3813,4 +3813,85 @@ w=m(a+x, b+y)^{*} e^{-\frac{\left(x^{\prime}\right)^{2}+\left(y^{\prime}\right)^
         <tag>Leetcode</tag>
       </tags>
   </entry>
+  <entry>
+    <title>CS224WLec3-Node Embeddings</title>
+    <url>/2021/12/15/CS224WLec3/</url>
+    <content><![CDATA[<h1 id="Basic"><a href="#Basic" class="headerlink" title="Basic"></a>Basic</h1><ul>
+<li>goal: 为node生成一个embedding</li>
+<li>两个要素：<strong>encoder/相似度计量方法（encode前后都需要）</strong></li>
+<li>framework: encoder 生成embedding —&gt; 相似度计量方法决定embedding学习的好坏</li>
+<li><strong>unsupervised/self-supervised way</strong> based on random walks</li>
+<li>task independent</li>
+</ul>
+<a id="more"></a>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><ul>
+<li>类似于word2vec: 目标是求node u的embedding <script type="math/tex">\mathbf{z}_{u}</script>,而模型的预测目标是：<script type="math/tex">P\left(v \mid \mathbf{z}_{u}\right)</script>，即node v出现在以node u开始的walk上的概率。</li>
+<li>如何获得“句子”：random walk</li>
+</ul>
+<h2 id="Deep-Walk"><a href="#Deep-Walk" class="headerlink" title="Deep Walk"></a>Deep Walk</h2><h3 id="Random-Walk"><a href="#Random-Walk" class="headerlink" title="Random Walk"></a>Random Walk</h3><ul>
+<li>出发点：如果一个random walk中包括从u到v的路径，那u和v是相似的/有相似的高维的多跳信息</li>
+<li><script type="math/tex; mode=display">N_{\mathrm{R}}(u)$$为策略R下，从u出发的walk中，出现的所有nodes
+$$ \max _{f} \sum_{u \in V} \log \mathrm{P}\left(N_{\mathrm{R}}(u) \mid \mathbf{z}_{u}\right)</script>—》<script type="math/tex; mode=display">\mathcal{L}=\sum_{u \in V} \sum_{v \in N_{R}(u)}-\log \left(P\left(v \mid \mathbf{z}_{u}\right)\right)</script></li>
+<li>利用softmax求p \<script type="math/tex; mode=display">P\left(v \mid \mathbf{z}_{u}\right)=\frac{\exp \left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{v}\right)}{\sum_{n \in V} \exp \left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{n}\right)}</script></li>
+<li>problem: softmax分母 以及 最外层都需要|V|次遍历 —》<script type="math/tex">\mathrm{O}\left(|\mathrm{V}|^{2}\right)</script>的复杂度 —》<strong>优化</strong></li>
+</ul>
+<h3 id="Negative-Sampling"><a href="#Negative-Sampling" class="headerlink" title="Negative Sampling"></a>Negative Sampling</h3><ul>
+<li>使用所有样本做normalization —&gt; 只采样k个负样本做normalization<script type="math/tex; mode=display">P\left(v \mid \mathbf{z}_{u}\right)=\frac{\exp \left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{v}\right)}{\sum_{n \in V } \exp \left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{n}\right)} \approx \log \left(\sigma\left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{v}\right)\right)-\sum_{i=1}^{k} \log \left(\sigma\left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{n_{i}}\right)\right), n_{i} \sim P_{V}</script></li>
+<li>k的选择：<ul>
+<li>k越大，模型越鲁棒</li>
+<li>k越大，对负样本考虑的越多</li>
+<li>5~20间较常见</li>
+</ul>
+</li>
+<li>负样本的选择：可以选择graph内任意样本，但更准确的方法是选择不在walk中的样本</li>
+</ul>
+<h2 id="Node2vec-better-random-walk-strategy"><a href="#Node2vec-better-random-walk-strategy" class="headerlink" title="Node2vec: better  random walk strategy"></a>Node2vec: better  random walk strategy</h2><ul>
+<li>简单的random walk会限制walk中的node相似度与graph中node相似度的一致性</li>
+</ul>
+<h3 id="Biased-2nd-order-random-Walks"><a href="#Biased-2nd-order-random-Walks" class="headerlink" title="Biased 2nd-order random Walks"></a>Biased 2nd-order random Walks</h3><ul>
+<li>trade off between local and global views of the network: BFS &amp; DFS</li>
+<li>当前在w, 上一步在s的walk，有三种行走方向<ul>
+<li>退后：回退到s</li>
+<li>保持：走到和s距离一致的一个节点</li>
+<li>前进：走到距离s更远的节点<img src="/2021/12/15/CS224WLec3/node2vec1.png" class="" title="node2vec1"></li>
+</ul>
+</li>
+<li>实现：两个<strong>超参</strong>p/q，以及“1”来以非归一化的方法表示上述三种情况的概率<img src="/2021/12/15/CS224WLec3/node2vec2.png" class="" title="node2vec2"></li>
+<li>流程<ul>
+<li>Compute random walk probabilities</li>
+<li>Simulate 𝑟 random walks of length 𝑙 starting from each node 𝑢</li>
+<li>Optimize the node2vec objective using Stochastic Gradient Descent</li>
+</ul>
+</li>
+<li>Linear-time complexity</li>
+<li>All 3 steps are individually parallelizable</li>
+</ul>
+<h2 id="Embedding-entire-graphs"><a href="#Embedding-entire-graphs" class="headerlink" title="Embedding entire graphs"></a>Embedding entire graphs</h2><ul>
+<li>approach1: add all node embeddings</li>
+<li>approach2: introduce a “virtual node” or “super node” to represent the graph and learning embedding for this graph</li>
+<li>approach3: anonymous walks embeddings</li>
+</ul>
+<h3 id="Anonymous-walk-embeddings"><a href="#Anonymous-walk-embeddings" class="headerlink" title="Anonymous walk embeddings"></a>Anonymous walk embeddings</h3><ul>
+<li>Anonymous walk: random walk —&gt; 将node表示为距离start node的去重index。因此，确定了walk length的时候，就确定了anonymous walk中index的个数。</li>
+<li>方法1：长度为l的annoy walk共有n种情况 —&gt; 做m次random walks —&gt; 统计每种情况的count，并形成一个vector</li>
+<li>方法2：用Anonymous walks的概率分布，学习图的embedding<ul>
+<li>Learn to predict walks that co-occur in 𝚫-size window (e.g., predict 𝑤3 given 𝑤1, 𝑤2 if Δ = 2)</li>
+<li>objective:<script type="math/tex; mode=display">\max _{z_{G}} \sum_{t=\Delta+1}^{T} \log P\left(w_{t} \mid w_{t-\Delta}, \ldots, w_{t-1}, \mathbf{z}_{G}\right)</script></li>
+</ul>
+</li>
+</ul>
+<img src="/2021/12/15/CS224WLec3/annoywalks1.png" class="" title="annoywalks1">
+<img src="/2021/12/15/CS224WLec3/annoywalks2.png" class="" title="annoywalks2">
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a href="http://web.stanford.edu/class/cs224w/slides/03-nodeemb.pdf">ppt</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>cs224w</tag>
+        <tag>graph</tag>
+      </tags>
+  </entry>
 </search>
