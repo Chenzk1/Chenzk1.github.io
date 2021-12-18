@@ -3892,6 +3892,8 @@ $$ \max _{f} \sum_{u \in V} \log \mathrm{P}\left(N_{\mathrm{R}}(u) \mid \mathbf{
       <tags>
         <tag>cs224w</tag>
         <tag>graph</tag>
+        <tag>DeepWalk</tag>
+        <tag>node2vec</tag>
       </tags>
   </entry>
 </search>
