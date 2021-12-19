@@ -569,9 +569,8 @@ k_{v} \\
 </ul>
 <h2 id="Deep-Walk"><a href="#Deep-Walk" class="headerlink" title="Deep Walk"></a>Deep Walk</h2><h3 id="Random-Walk"><a href="#Random-Walk" class="headerlink" title="Random Walk"></a>Random Walk</h3><ul>
 <li>出发点：如果一个random walk中包括从u到v的路径，那u和v是相似的/有相似的高维的多跳信息</li>
-<li><script type="math/tex; mode=display">N_{\mathrm{R}}(u)$$为策略R下，从u出发的walk中，出现的所有nodes
-$$ \max _{f} \sum_{u \in V} \log \mathrm{P}\left(N_{\mathrm{R}}(u) \mid \mathbf{z}_{u}\right)</script>—》<script type="math/tex; mode=display">\mathcal{L}=\sum_{u \in V} \sum_{v \in N_{R}(u)}-\log \left(P\left(v \mid \mathbf{z}_{u}\right)\right)</script></li>
-<li>利用softmax求p \<script type="math/tex; mode=display">P\left(v \mid \mathbf{z}_{u}\right)=\frac{\exp \left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{v}\right)}{\sum_{n \in V} \exp \left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{n}\right)}</script></li>
+<li>$ N_{\mathrm{R}}(u) $为策略R下，从u出发的walk中，出现的所有nodes<script type="math/tex; mode=display">\max _{f} \sum_{u \in V} \log \mathrm{P}\left(N_{\mathrm{R}}(u) \mid \mathbf{z}_{u}\right)</script>—》<script type="math/tex; mode=display">\mathcal{L}=\sum_{u \in V} \sum_{v \in N_{R}(u)}-\log \left(P\left(v \mid \mathbf{z}_{u}\right)\right)</script></li>
+<li>利用softmax求p<script type="math/tex; mode=display">P\left(v \mid \mathbf{z}_{u}\right)=\frac{\exp \left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{v}\right)}{\sum_{n \in V} \exp \left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{n}\right)}</script></li>
 <li>problem: softmax分母 以及 最外层都需要|V|次遍历 —》<script type="math/tex">\mathrm{O}\left(|\mathrm{V}|^{2}\right)</script>的复杂度 —》<strong>优化</strong></li>
 </ul>
 <h3 id="Negative-Sampling"><a href="#Negative-Sampling" class="headerlink" title="Negative Sampling"></a>Negative Sampling</h3><ul>
@@ -656,18 +655,59 @@ $$ \max _{f} \sum_{u \in V} \log \mathrm{P}\left(N_{\mathrm{R}}(u) \mid \mathbf{
     <title>CS224WLec4-PageRank</title>
     <url>/2021/12/18/CS224WLec4/</url>
     <content><![CDATA[<h1 id="PageRank"><a href="#PageRank" class="headerlink" title="PageRank"></a>PageRank</h1><ul>
-<li>一个node的重要性由指向它的节点的重要性决定，node j的重要性为：<script type="math/tex; mode=display">r_{j}=\sum_{i \rightarrow j} \frac{r_{i}}{d_{i}}</script><script type="math/tex; mode=display">d_{i} \ldots$$ out-degree of node $$i</script></li>
+<li>一个node的重要性由指向它的节点的重要性决定 —&gt; <strong>指向该node的节点数越多，且这些节点重要性越高，则该节点越重要</strong>。node j的重要性（传递函数）为：<script type="math/tex; mode=display">r_{j}=\sum_{i \rightarrow j} \frac{r_{i}}{d_{i}}</script><script type="math/tex; mode=display">d_{i} \ldots out-degree of node i</script></li>
 <li>矩阵形式：<ul>
-<li>列随机邻接矩阵M。j有<script type="math/tex">d_{j}</script>个出链，如果j -&gt; i，则<script type="math/tex">M_{ij}=1/d_{j}</script>，因此每一列上的值要么为0，要么为<script type="math/tex">1/d_{j}</script>，且加和为1，称为列随机矩阵</li>
+<li>随机邻接矩阵M。j有<script type="math/tex">d_{j}</script>个出链，如果j -&gt; i，则<script type="math/tex">M_{ij}=1/d_{j}</script>，因此每一列上的值要么为0，要么为<script type="math/tex">1/d_{j}</script>，且加和为1，称为列随机矩阵</li>
 <li>rank vector r: <script type="math/tex">r_{j}</script>为node j的重要性score，且<script type="math/tex">\sum_{i} r_{i}=1</script></li>
-<li><script type="math/tex; mode=display">n*1 = n*n * n*1$$: $$ \boldsymbol{r}=\boldsymbol{M} \cdot \boldsymbol{r} $$, $$\quad r_{j}=\sum_{i \rightarrow j} \frac{r_{i}}{d_{i}}</script></li>
+<li><script type="math/tex; mode=display">n*1 = n*n * n*1$$: 
+$$ \boldsymbol{r}=\boldsymbol{M} \cdot \boldsymbol{r} $$,
+$$\quad r_{j}=\sum_{i \rightarrow j} \frac{r_{i}}{d_{i}}</script></li>
 </ul>
 </li>
 <li>PageRank VS RandomWalk: 当random walk到达静态分布状态时满足<script type="math/tex">\boldsymbol{r}=\boldsymbol{M} \cdot \boldsymbol{r}</script>，即<strong>PageRank得到的重要性向量v是random walk的静态分布</strong></li>
-<li>PangRank VS Eigenvector: <strong>PageRank得到的重要性向量v是当特征值为1时得到的主特征向量</strong></li>
+<li>PangRank VS Eigenvector: <strong>PageRank得到的重要性向量v是当特征值为1时得到的主特征向量</strong><a id="more"></a>
+</li>
 </ul>
-<a id="more"></a>
-<h2 id="Solve-the-equation"><a href="#Solve-the-equation" class="headerlink" title="Solve the equation"></a>Solve the equation</h2><!--  -->
+<h2 id="Solve-the-equation"><a href="#Solve-the-equation" class="headerlink" title="Solve the equation"></a>Solve the equation</h2><ul>
+<li>method: power iteration<ul>
+<li>initialize: 初始化，给每个node一个page rank值。e.g. <script type="math/tex; mode=display">
+\boldsymbol{r}^{0}=[1 / N, \ldots, 1 / N]^{T}</script></li>
+<li>iterate: 迭代<script type="math/tex; mode=display">
+r_{j}^{(t+1)}=\sum_{i \rightarrow j} \frac{r_{i}^{(t)}}{d_{i}}</script>即：<script type="math/tex; mode=display">
+\boldsymbol{r}^{(t+1)}=\boldsymbol{M} \cdot \boldsymbol{r}^{t}</script></li>
+<li>stop: 可以选择其他度量方式<script type="math/tex; mode=display">
+\left|\boldsymbol{r}^{(t+1)}-\boldsymbol{r}^{t}\right|_{1}<\varepsilon</script></li>
+</ul>
+</li>
+</ul>
+<h3 id="Problems"><a href="#Problems" class="headerlink" title="Problems"></a>Problems</h3><ul>
+<li>dead ends: 遇到死胡同 —》 某个节点所在列的M为全0 —》随机矩阵不再随机，秩 &lt; n —》pagerank会收敛为全0<ul>
+<li>solution: 填充M中的该列，例如填充为1/n</li>
+</ul>
+</li>
+<li>spider trap: 在某个节点处死循环<ul>
+<li>solution: 允许random surfer跳到一个随机page。加一个超参β，表示是否沿着这条link走的概率，1-β表示随机jump的概率 —》相当于改了M</li>
+</ul>
+</li>
+<li>Google solution: teleport rankpage。β表示page j由其他page的出链决定，1-β表示由其他随机page决定<ul>
+<li>equation<script type="math/tex; mode=display">
+r_{j}=\sum_{i \rightarrow j} \beta \frac{r_{i}}{d_{i}}+(1-\beta) \frac{1}{N}</script></li>
+<li>matrix G<script type="math/tex; mode=display">\boldsymbol{G}=\beta {\boldsymbol{M}}+(1-\beta)[1/N]_{N*N}</script></li>
+</ul>
+</li>
+</ul>
+<img src="/2021/12/18/CS224WLec4/pagerank1.png" class="" title="pagerank1">
+<h1 id="PageRank扩展"><a href="#PageRank扩展" class="headerlink" title="PageRank扩展"></a>PageRank扩展</h1><ul>
+<li>Personalized PageRank: teleport到在指定的子图S</li>
+<li>Random walks with restarts: teleport到start page<img src="/2021/12/18/CS224WLec4/pagerank2.png" class="" title="pagerank2">
+</li>
+</ul>
+<h1 id="Limitations"><a href="#Limitations" class="headerlink" title="Limitations"></a>Limitations</h1><ul>
+<li>无法获得训练集里没有的node的embedding，必须重新训练</li>
+<li>无法捕获结构相似性：例如同一张图中的局部结构相似性</li>
+<li>无法利用node/edge以及图的特征：例如无法利用节点的其他属性</li>
+<li>解决方法：deep learning, GNN</li>
+</ul>
 ]]></content>
       <categories>
         <category>Learning</category>

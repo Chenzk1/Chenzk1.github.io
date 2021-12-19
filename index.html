@@ -319,10 +319,16 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2021-12-18 21:34:53 / Modified: 22:39:26" itemprop="dateCreated datePublished" datetime="2021-12-18T21:34:53+08:00">2021-12-18</time>
+      <time title="Created: 2021-12-18 21:34:53" itemprop="dateCreated datePublished" datetime="2021-12-18T21:34:53+08:00">2021-12-18</time>
     </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-12-19 14:58:14" itemprop="dateModified" datetime="2021-12-19T14:58:14+08:00">2021-12-19</time>
+      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -348,16 +354,17 @@
     
     <div class="post-body" itemprop="articleBody">
           <h1 id="PageRank"><a href="#PageRank" class="headerlink" title="PageRank"></a>PageRank</h1><ul>
-<li>一个node的重要性由指向它的节点的重要性决定，node j的重要性为：<script type="math/tex; mode=display">r_{j}=\sum_{i \rightarrow j} \frac{r_{i}}{d_{i}}</script><script type="math/tex; mode=display">d_{i} \ldots$$ out-degree of node $$i</script></li>
+<li>一个node的重要性由指向它的节点的重要性决定 —&gt; <strong>指向该node的节点数越多，且这些节点重要性越高，则该节点越重要</strong>。node j的重要性（传递函数）为：<script type="math/tex; mode=display">r_{j}=\sum_{i \rightarrow j} \frac{r_{i}}{d_{i}}</script><script type="math/tex; mode=display">d_{i} \ldots out-degree of node i</script></li>
 <li>矩阵形式：<ul>
-<li>列随机邻接矩阵M。j有<script type="math/tex">d_{j}</script>个出链，如果j -&gt; i，则<script type="math/tex">M_{ij}=1/d_{j}</script>，因此每一列上的值要么为0，要么为<script type="math/tex">1/d_{j}</script>，且加和为1，称为列随机矩阵</li>
+<li>随机邻接矩阵M。j有<script type="math/tex">d_{j}</script>个出链，如果j -&gt; i，则<script type="math/tex">M_{ij}=1/d_{j}</script>，因此每一列上的值要么为0，要么为<script type="math/tex">1/d_{j}</script>，且加和为1，称为列随机矩阵</li>
 <li>rank vector r: <script type="math/tex">r_{j}</script>为node j的重要性score，且<script type="math/tex">\sum_{i} r_{i}=1</script></li>
-<li><script type="math/tex; mode=display">n*1 = n*n * n*1$$: $$ \boldsymbol{r}=\boldsymbol{M} \cdot \boldsymbol{r} $$, $$\quad r_{j}=\sum_{i \rightarrow j} \frac{r_{i}}{d_{i}}</script></li>
+<li><script type="math/tex; mode=display">n*1 = n*n * n*1$$: 
+$$ \boldsymbol{r}=\boldsymbol{M} \cdot \boldsymbol{r} $$,
+$$\quad r_{j}=\sum_{i \rightarrow j} \frac{r_{i}}{d_{i}}</script></li>
 </ul>
 </li>
 <li>PageRank VS RandomWalk: 当random walk到达静态分布状态时满足<script type="math/tex">\boldsymbol{r}=\boldsymbol{M} \cdot \boldsymbol{r}</script>，即<strong>PageRank得到的重要性向量v是random walk的静态分布</strong></li>
-<li>PangRank VS Eigenvector: <strong>PageRank得到的重要性向量v是当特征值为1时得到的主特征向量</strong></li>
-</ul>
+<li>PangRank VS Eigenvector: <strong>PageRank得到的重要性向量v是当特征值为1时得到的主特征向量</strong>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2021/12/18/CS224WLec4/#more" rel="contents">
@@ -423,7 +430,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-12-18 21:41:15" itemprop="dateModified" datetime="2021-12-18T21:41:15+08:00">2021-12-18</time>
+        <time title="Modified: 2021-12-19 12:28:54" itemprop="dateModified" datetime="2021-12-19T12:28:54+08:00">2021-12-19</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
