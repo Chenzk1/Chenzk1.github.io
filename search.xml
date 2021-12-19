@@ -659,8 +659,7 @@ k_{v} \\
 <li>矩阵形式：<ul>
 <li>随机邻接矩阵M。j有<script type="math/tex">d_{j}</script>个出链，如果j -&gt; i，则<script type="math/tex">M_{ij}=1/d_{j}</script>，因此每一列上的值要么为0，要么为<script type="math/tex">1/d_{j}</script>，且加和为1，称为列随机矩阵</li>
 <li>rank vector r: <script type="math/tex">r_{j}</script>为node j的重要性score，且<script type="math/tex">\sum_{i} r_{i}=1</script></li>
-<li><script type="math/tex; mode=display">n*1 = n*n * n*1$$: 
-$$ \boldsymbol{r}=\boldsymbol{M} \cdot \boldsymbol{r} $$,
+<li>n*1 = n*n * n*1: <script type="math/tex; mode=display">\boldsymbol{r}=\boldsymbol{M} \cdot \boldsymbol{r} $$,
 $$\quad r_{j}=\sum_{i \rightarrow j} \frac{r_{i}}{d_{i}}</script></li>
 </ul>
 </li>
@@ -4006,5 +4005,11 @@ w=m(a+x, b+y)^{*} e^{-\frac{\left(x^{\prime}\right)^{2}+\left(y^{\prime}\right)^
         <tag>Leetcode</tag>
         <tag>查找表</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>CS224WLec5</title>
+    <url>/2021/12/19/CS224WLec5/</url>
+    <content><![CDATA[<a id="more"></a>
+]]></content>
   </entry>
 </search>

@@ -33,7 +33,7 @@
 <meta property="og:image" content="https://chenzk1.github.io/2021/12/18/CS224WLec4/pagerank1.png">
 <meta property="og:image" content="https://chenzk1.github.io/2021/12/18/CS224WLec4/pagerank2.png">
 <meta property="article:published_time" content="2021-12-18T13:34:53.000Z">
-<meta property="article:modified_time" content="2021-12-19T06:58:14.998Z">
+<meta property="article:modified_time" content="2021-12-19T07:01:50.972Z">
 <meta property="article:author" content="Kayden">
 <meta property="article:tag" content="cs224w">
 <meta property="article:tag" content="graph">
@@ -231,7 +231,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">41</span>
+          <span class="site-state-item-count">42</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -336,7 +336,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-12-19 14:58:14" itemprop="dateModified" datetime="2021-12-19T14:58:14+08:00">2021-12-19</time>
+        <time title="Modified: 2021-12-19 15:01:50" itemprop="dateModified" datetime="2021-12-19T15:01:50+08:00">2021-12-19</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -367,8 +367,7 @@
 <li>矩阵形式：<ul>
 <li>随机邻接矩阵M。j有<script type="math/tex">d_{j}</script>个出链，如果j -&gt; i，则<script type="math/tex">M_{ij}=1/d_{j}</script>，因此每一列上的值要么为0，要么为<script type="math/tex">1/d_{j}</script>，且加和为1，称为列随机矩阵</li>
 <li>rank vector r: <script type="math/tex">r_{j}</script>为node j的重要性score，且<script type="math/tex">\sum_{i} r_{i}=1</script></li>
-<li><script type="math/tex; mode=display">n*1 = n*n * n*1$$: 
-$$ \boldsymbol{r}=\boldsymbol{M} \cdot \boldsymbol{r} $$,
+<li>n*1 = n*n * n*1: <script type="math/tex; mode=display">\boldsymbol{r}=\boldsymbol{M} \cdot \boldsymbol{r} $$,
 $$\quad r_{j}=\sum_{i \rightarrow j} \frac{r_{i}}{d_{i}}</script></li>
 </ul>
 </li>
@@ -440,6 +439,9 @@ r_{j}=\sum_{i \rightarrow j} \beta \frac{r_{i}}{d_{i}}+(1-\beta) \frac{1}{N}</sc
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/2021/12/19/CS224WLec5/" rel="next" title="CS224WLec5">
+                  CS224WLec5 <i class="fa fa-chevron-right"></i>
+                </a>
             </div>
           </div>
     </footer>

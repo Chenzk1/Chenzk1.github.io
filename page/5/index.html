@@ -222,7 +222,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">41</span>
+          <span class="site-state-item-count">42</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -287,6 +287,112 @@
       
 
       
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94XGBoost%20GBDT%20lightgbm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Kayden">
+      <meta itemprop="description" content="Kayden's Blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kayden's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94XGBoost%20GBDT%20lightgbm/" class="post-title-link" itemprop="url">机器学习面试题-RF&GBDT&XGBoost&LightGBM</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-12-10 00:00:00" itemprop="dateCreated datePublished" datetime="2021-12-10T00:00:00+08:00">2021-12-10</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-12-18 21:55:40" itemprop="dateModified" datetime="2021-12-18T21:55:40+08:00">2021-12-18</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/%E9%9D%A2%E8%AF%95/" itemprop="url" rel="index"><span itemprop="name">面试</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><meta name="referrer" content="no-referrer"/><br>[TOC]</p>
+<h2 id="1-RF和GBDT的区别"><a href="#1-RF和GBDT的区别" class="headerlink" title="1. RF和GBDT的区别"></a>1. RF和GBDT的区别</h2><p><strong>相同点：</strong></p>
+<ul>
+<li>都是由多棵树组成，最终的结果都是由多棵树一起决定。</li>
+</ul>
+<p><strong>不同点：</strong></p>
+<ul>
+<li><strong>集成学习</strong>：$RF$属于$Bagging$思想，而$GBDT$是$Boosting$思想</li>
+<li><strong>偏差-方差权衡</strong>：$RF$不断的降低模型的方差，而$GBDT$不断的降低模型的偏差</li>
+<li><strong>训练样本</strong>：$RF$每次迭代的样本是从全部训练集中有放回抽样形成的，而$GBDT$每次使用全部样本</li>
+<li><strong>并行性</strong>：$RF$的树可以并行生成，而$GBDT$只能顺序生成(需要等上一棵树完全生成)</li>
+<li><strong>最终结果</strong>：$RF$最终是多棵树进行多数表决（回归问题是取平均），而$GBDT$是加权融合</li>
+<li><strong>数据敏感性</strong>：$RF$对异常值不敏感，而$GBDT$对异常值比较敏感</li>
+<li><strong>泛化能力</strong>：$RF$不易过拟合，而$GBDT$容易过拟合</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94XGBoost%20GBDT%20lightgbm/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
     
 
 
