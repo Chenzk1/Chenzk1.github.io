@@ -4017,9 +4017,7 @@ w=m(a+x, b+y)^{*} e^{-\frac{\left(x^{\prime}\right)^{2}+\left(y^{\prime}\right)^
   <entry>
     <title>GraphEmbedding-LINE</title>
     <url>/2021/12/20/GraphEmbedding-LINE/</url>
-    <content><![CDATA[<ul>
-<li><a href="https://arxiv.org/pdf/1503.03578.pdf">LINE: Large-scale Information Network Embedding</a></li>
-</ul>
+    <content><![CDATA[<p>paper: <a href="https://arxiv.org/pdf/1503.03578.pdf">LINE: Large-scale Information Network Embedding</a></p>
 <h1 id="Intro"><a href="#Intro" class="headerlink" title="Intro"></a>Intro</h1><ul>
 <li>包含一阶信息（直接相连的两节点的邻近度）和二阶信息（一对顶点的邻近度用临近节点的相似性衡量）的GE学习模型：<strong>只用到了一阶邻点</strong></li>
 <li>DeepWalk/node2vec: 基于高阶相似度的GE学习模型</li>
