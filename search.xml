@@ -4032,7 +4032,7 @@ w=m(a+x, b+y)^{*} e^{-\frac{\left(x^{\prime}\right)^{2}+\left(y^{\prime}\right)^
 <h2 id="一阶相似度"><a href="#一阶相似度" class="headerlink" title="一阶相似度"></a>一阶相似度</h2><ul>
 <li><strong>只针对无向图，不支持有向图</strong></li>
 <li>边(u,v)的权重Wuv表示u和v之间的一阶相似性，如果在u和v之间无边，它们的一阶相似性为0。</li>
-<li>经验分布 <script type="math/tex">\hat{p}_{1}(i, j)=\frac{w_{i j}}{W}</script>，这里W是W矩阵的模</li>
+<li>经验分布<script type="math/tex">\hat{p}_{1}(i, j)=\frac{w_{i j}}{W}</script>，这里W是W矩阵的模</li>
 <li>预测分布 <script type="math/tex">p_{1}\left(v_{i}, v_{j}\right)=\frac{1}{1+\exp \left(-\vec{u}_{i}^{T} \cdot \vec{u}_{j}\right)}</script></li>
 <li>目标函数 <script type="math/tex">O_{1}=d\left(\hat{p}_{1}(\cdot, \cdot), p_{1}(\cdot, \cdot)\right)</script>, d为距离函数，例如当d为KL散度且忽略常数项时（同交叉熵）：<script type="math/tex; mode=display">
 O_{1}=-\sum_{(i, j) \in E} w_{i j} \log p_{1}\left(v_{i}, v_{j}\right)</script></li>
