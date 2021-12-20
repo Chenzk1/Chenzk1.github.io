@@ -4068,6 +4068,11 @@ O_{1}=-\sum_{(i, j) \in E} w_{i j} \log p_{1}\left(v_{i}, v_{j}\right)</script><
 </li>
 <li>低度数顶点（孤岛节点）：对于一些顶点由于其邻接点非常少会导致embedding向量的学习不充分，论文提到可以利用邻居的邻居构造样本进行学习，这里也暴露出LINE方法仅考虑一阶和二阶相似性，对高阶信息的利用不足。</li>
 </ul>
+<h1 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h1><ul>
+<li>边权重矩阵和节点权重矩阵（pagerank/出度/centrality/clustering coefficient/…）的设计</li>
+<li>不同的loss: KL/cross-entropy/rankloss/…</li>
+<li>采样算法</li>
+</ul>
 <h1 id="Pros-amp-Cons"><a href="#Pros-amp-Cons" class="headerlink" title="Pros &amp; Cons"></a>Pros &amp; Cons</h1><ul>
 <li>效率高</li>
 <li>只用了一跳信息</li>
