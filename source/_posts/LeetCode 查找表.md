@@ -3,7 +3,10 @@ title: leetcode-查找表
 date: 2021-12-10
 tags:  
     - Leetcode
-categories: Learning
+    - 查找表
+categories: 
+    - Learning
+    - Leetcode
 ---
 
 [TOC]

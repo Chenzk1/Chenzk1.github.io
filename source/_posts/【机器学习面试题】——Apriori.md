@@ -3,8 +3,10 @@ title: 机器学习面试题-Apriori
 date: 2021-12-10
 categories: 
     - Learning
+    - 面试
 tags:  
     - ML
+    - Apriori
 mathjax: true
 ---
 <meta name="referrer" content="no-referrer"/>

@@ -6,6 +6,7 @@ categories:
 tags:  
     - ML
     - CV
+    - SIFT
 mathjax: true
 ---
 <meta name="referrer" content="no-referrer"/>

@@ -5,6 +5,8 @@ categories:
     - Learning
 tags:  
     - ML
+    - GBDT
+    - XGBoost
 mathjax: true
 ---
 [TOC]

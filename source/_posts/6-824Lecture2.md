@@ -2,8 +2,13 @@
 title: 6.824Lecture2-RPC&Threads
 mathjax: false
 date: 2021-12-11 22:25:55
-tags: 6.824
-categories: Learning
+tags: 
+  - 6.824
+  - RPC
+  - Thread
+categories: 
+  - Learning
+  - 6.824
 ---
 
 # Background

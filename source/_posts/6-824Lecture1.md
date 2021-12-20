@@ -1,9 +1,12 @@
 ---
 title: 6.824Lecture1-MapReduce
 date: 2021-12-11 19:08:24
-tags: 6.824
+tags: 
+  - 6.824
+  - MapReduce
 categories: 
-    - Learning
+  - Learning
+  - 6.824
 ---
 
 # Backgorund

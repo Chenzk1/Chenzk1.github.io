@@ -5,6 +5,7 @@ categories:
     - Learning
 tags:  
     - ML
+    - NaiveBayes
 mathjax: true
 ---
 [TOC]

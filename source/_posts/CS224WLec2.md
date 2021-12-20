@@ -6,7 +6,9 @@ tags:
   - cs224w
   - graph
   - ML
-categories: Learning
+categories: 
+  - Learning
+  - cs224w
 ---
 
 [ppt](http://web.stanford.edu/class/cs224w/slides/02-tradition-ml.pdf)
@@ -40,7 +42,7 @@ c_{v}=\sum_{s \neq v \neq t} \frac{\#(\text { shortest paths betwen } s \text { 
 $$
 
 #### closeness centrality
-- 一个节点距其他节点之间距离最短，那么认为这个节点是重要的
+- 一个节点距其他节点之间距离最短，那么认为这个节点是重要的。分母：该节点与其他节点的最短距离之和。
 $$
 c_{v}=\frac{1}{\sum_{u \neq v} \text { shortest path length between } u \text { and } v}
 $$

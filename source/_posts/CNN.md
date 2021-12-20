@@ -6,6 +6,7 @@ categories:
 tags:  
     - DL
     - CV
+    - CNN
 ---
 [TOC]
 

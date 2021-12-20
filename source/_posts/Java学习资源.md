@@ -5,7 +5,7 @@ categories:
     - Learning
 tags:  
     - Java
-    - 资源
+    - Resource
 ---
 
 ## 书籍

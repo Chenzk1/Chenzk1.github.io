@@ -3,9 +3,12 @@ title: 机器学习面试题-RNN&LSTM
 date: 2021-12-10
 categories: 
     - Learning
+    - 面试
 tags:  
     - DL
     - NLP
+    - RNN
+    - LSTM
 mathjax: true
 ---
 <meta name="referrer" content="no-referrer"/>

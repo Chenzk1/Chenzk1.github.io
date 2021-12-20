@@ -1,11 +1,13 @@
 ---
-title: CS224WLecture1-Graph Intro & Graph Representations
+title: CS224WLec1-Graph Intro & Graph Representations
 mathjax: false
 date: 2021-12-12 13:10:09
 tags: 
   - cs224w
   - graph
-categories: Learning
+categories: 
+  - Learning
+  - cs224w
 ---
 
 # Intro

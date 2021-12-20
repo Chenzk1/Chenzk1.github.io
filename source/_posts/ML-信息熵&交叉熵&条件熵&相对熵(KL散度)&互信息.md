@@ -5,6 +5,7 @@ categories:
     - Learning
 tags:  
     - ML
+    - 信息论
 mathjax: true
 ---
 

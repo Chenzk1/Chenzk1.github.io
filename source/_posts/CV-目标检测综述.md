@@ -7,6 +7,7 @@ tags:
     - ML
     - DL
     - CV
+    - 目标检测
 mathjax: true
 ---
 <meta name="referrer" content="no-referrer"/>

@@ -5,6 +5,7 @@ categories:
     - Learning
 tags:  
     - ML
+    - XGBoost
 mathjax: true
 ---
 <meta name="referrer" content="no-referrer"/>

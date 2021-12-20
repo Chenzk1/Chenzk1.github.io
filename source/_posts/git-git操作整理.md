@@ -2,7 +2,7 @@
 title: git操作整理
 date: 2021-12-10
 categories: 
-    - Learning
+    - Tools
 tags:  
     - git
 ---
