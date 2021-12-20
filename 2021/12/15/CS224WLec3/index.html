@@ -35,7 +35,7 @@
 <meta property="og:image" content="https://chenzk1.github.io/2021/12/15/CS224WLec3/annoywalks1.png">
 <meta property="og:image" content="https://chenzk1.github.io/2021/12/15/CS224WLec3/annoywalks2.png">
 <meta property="article:published_time" content="2021-12-15T09:55:00.000Z">
-<meta property="article:modified_time" content="2021-12-19T04:28:54.512Z">
+<meta property="article:modified_time" content="2021-12-20T07:25:16.113Z">
 <meta property="article:author" content="Kayden">
 <meta property="article:tag" content="cs224w">
 <meta property="article:tag" content="graph">
@@ -233,7 +233,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-count">43</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -246,7 +246,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">46</span>
+        <span class="site-state-item-count">47</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -338,7 +338,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-12-19 12:28:54" itemprop="dateModified" datetime="2021-12-19T12:28:54+08:00">2021-12-19</time>
+        <time title="Modified: 2021-12-20 15:25:16" itemprop="dateModified" datetime="2021-12-20T15:25:16+08:00">2021-12-20</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -373,11 +373,13 @@
 </ul>
 <a id="more"></a>
 <h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><ul>
+<li>goal: 原始graph中相似的node获得的embeddings也是相似的</li>
 <li>类似于word2vec: 目标是求node u的embedding <script type="math/tex">\mathbf{z}_{u}</script>,而模型的预测目标是：<script type="math/tex">P\left(v \mid \mathbf{z}_{u}\right)</script>，即node v出现在以node u开始的walk上的概率。</li>
 <li>如何获得“句子”：random walk</li>
 </ul>
 <h2 id="Deep-Walk"><a href="#Deep-Walk" class="headerlink" title="Deep Walk"></a>Deep Walk</h2><h3 id="Random-Walk"><a href="#Random-Walk" class="headerlink" title="Random Walk"></a>Random Walk</h3><ul>
 <li>出发点：如果一个random walk中包括从u到v的路径，那u和v是相似的/有相似的高维的多跳信息</li>
+<li>本质：DFS</li>
 <li>$ N_{\mathrm{R}}(u) $为策略R下，从u出发的walk中，出现的所有nodes<script type="math/tex; mode=display">\max _{f} \sum_{u \in V} \log \mathrm{P}\left(N_{\mathrm{R}}(u) \mid \mathbf{z}_{u}\right)</script>—》<script type="math/tex; mode=display">\mathcal{L}=\sum_{u \in V} \sum_{v \in N_{R}(u)}-\log \left(P\left(v \mid \mathbf{z}_{u}\right)\right)</script></li>
 <li>利用softmax求p<script type="math/tex; mode=display">P\left(v \mid \mathbf{z}_{u}\right)=\frac{\exp \left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{v}\right)}{\sum_{n \in V} \exp \left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{n}\right)}</script></li>
 <li>problem: softmax分母 以及 最外层都需要|V|次遍历 —》<script type="math/tex">\mathrm{O}\left(|\mathrm{V}|^{2}\right)</script>的复杂度 —》<strong>优化</strong></li>

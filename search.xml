@@ -430,7 +430,7 @@ c_{v}=\frac{1}{\lambda} \sum_{u \in N(v)} c_{u}</script></li>
 c_{v}=\sum_{s \neq v \neq t} \frac{\#(\text { shortest paths betwen } s \text { and } t \text { that contain } v)}{\#(\text { shortest paths between } s \text { and } t)}</script></li>
 </ul>
 <h4 id="closeness-centrality"><a href="#closeness-centrality" class="headerlink" title="closeness centrality"></a>closeness centrality</h4><ul>
-<li>一个节点距其他节点之间距离最短，那么认为这个节点是重要的<script type="math/tex; mode=display">
+<li>一个节点距其他节点之间距离最短，那么认为这个节点是重要的。分母：该节点与其他节点的最短距离之和。<script type="math/tex; mode=display">
 c_{v}=\frac{1}{\sum_{u \neq v} \text { shortest path length between } u \text { and } v}</script></li>
 </ul>
 <h3 id="clustering-coefficient"><a href="#clustering-coefficient" class="headerlink" title="clustering coefficient"></a>clustering coefficient</h3><ul>
@@ -564,11 +564,13 @@ k_{v} \\
 </ul>
 <a id="more"></a>
 <h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><ul>
+<li>goal: 原始graph中相似的node获得的embeddings也是相似的</li>
 <li>类似于word2vec: 目标是求node u的embedding <script type="math/tex">\mathbf{z}_{u}</script>,而模型的预测目标是：<script type="math/tex">P\left(v \mid \mathbf{z}_{u}\right)</script>，即node v出现在以node u开始的walk上的概率。</li>
 <li>如何获得“句子”：random walk</li>
 </ul>
 <h2 id="Deep-Walk"><a href="#Deep-Walk" class="headerlink" title="Deep Walk"></a>Deep Walk</h2><h3 id="Random-Walk"><a href="#Random-Walk" class="headerlink" title="Random Walk"></a>Random Walk</h3><ul>
 <li>出发点：如果一个random walk中包括从u到v的路径，那u和v是相似的/有相似的高维的多跳信息</li>
+<li>本质：DFS</li>
 <li>$ N_{\mathrm{R}}(u) $为策略R下，从u出发的walk中，出现的所有nodes<script type="math/tex; mode=display">\max _{f} \sum_{u \in V} \log \mathrm{P}\left(N_{\mathrm{R}}(u) \mid \mathbf{z}_{u}\right)</script>—》<script type="math/tex; mode=display">\mathcal{L}=\sum_{u \in V} \sum_{v \in N_{R}(u)}-\log \left(P\left(v \mid \mathbf{z}_{u}\right)\right)</script></li>
 <li>利用softmax求p<script type="math/tex; mode=display">P\left(v \mid \mathbf{z}_{u}\right)=\frac{\exp \left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{v}\right)}{\sum_{n \in V} \exp \left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{n}\right)}</script></li>
 <li>problem: softmax分母 以及 最外层都需要|V|次遍历 —》<script type="math/tex">\mathrm{O}\left(|\mathrm{V}|^{2}\right)</script>的复杂度 —》<strong>优化</strong></li>
@@ -4011,5 +4013,73 @@ w=m(a+x, b+y)^{*} e^{-\frac{\left(x^{\prime}\right)^{2}+\left(y^{\prime}\right)^
     <url>/2021/12/19/CS224WLec5/</url>
     <content><![CDATA[<a id="more"></a>
 ]]></content>
+  </entry>
+  <entry>
+    <title>GraphEmbedding-LINE</title>
+    <url>/2021/12/20/GraphEmbedding-LINE/</url>
+    <content><![CDATA[<ul>
+<li><a href="https://arxiv.org/pdf/1503.03578.pdf">LINE: Large-scale Information Network Embedding</a></li>
+</ul>
+<h1 id="Intro"><a href="#Intro" class="headerlink" title="Intro"></a>Intro</h1><ul>
+<li>包含一阶信息（直接相连的两节点的邻近度）和二阶信息（一对顶点的邻近度用临近节点的相似性衡量）的GE学习模型：<strong>只用到了一阶邻点</strong></li>
+<li>DeepWalk/node2vec: 基于高阶相似度的GE学习模型</li>
+</ul>
+<a id="more"></a>
+<h1 id="Methods"><a href="#Methods" class="headerlink" title="Methods"></a>Methods</h1><ul>
+<li>边权重矩阵W：损失函数计算时用</li>
+<li>节点权重矩阵：节点采样时用</li>
+</ul>
+<h2 id="一阶相似度"><a href="#一阶相似度" class="headerlink" title="一阶相似度"></a>一阶相似度</h2><ul>
+<li><strong>只针对无向图，不支持有向图</strong></li>
+<li>边(u,v)的权重Wuv表示u和v之间的一阶相似性，如果在u和v之间无边，它们的一阶相似性为0。</li>
+<li>经验分布 <script type="math/tex">\hat{p}_{1}(i, j)=\frac{w_{i j}}{W}</script>，这里W是W矩阵的模</li>
+<li>预测分布 <script type="math/tex">p_{1}\left(v_{i}, v_{j}\right)=\frac{1}{1+\exp \left(-\vec{u}_{i}^{T} \cdot \vec{u}_{j}\right)}</script></li>
+<li>目标函数 <script type="math/tex">O_{1}=d\left(\hat{p}_{1}(\cdot, \cdot), p_{1}(\cdot, \cdot)\right)</script>, d为距离函数，例如当d为KL散度且忽略常数项时（同交叉熵）：<script type="math/tex; mode=display">
+O_{1}=-\sum_{(i, j) \in E} w_{i j} \log p_{1}\left(v_{i}, v_{j}\right)</script></li>
+</ul>
+<h2 id="二阶相似度"><a href="#二阶相似度" class="headerlink" title="二阶相似度"></a>二阶相似度</h2><ul>
+<li>如果没有同样的相邻节点，二阶相似性为0</li>
+<li>经验分布 <script type="math/tex">\hat{p}_{2}\left(v_{j} \mid v_{i}\right)=\frac{w_{i j}}{d_{i}}</script>，di是节点i的带权出度，$w<em>{i j}$是边(i,j)的权重，$$ d</em>{i}=\sum<em>{k \in N(i)} w</em>{i k} $$</li>
+<li>预测分布 <script type="math/tex">p_{2}\left(v_{j} \mid v_{i}\right)=\frac{\exp \left(\vec{u}_{j}^{\prime T} \cdot \vec{u}_{i}\right)}{\sum_{k=1}^{|V|} \exp \left(\vec{u}_{k}^{\prime T} \cdot \vec{u}_{i}\right)}</script></li>
+<li>目标函数 <script type="math/tex">O_{2}=\sum_{i \in V} \lambda_{i} d\left(\hat{p}_{2}\left(\cdot \mid v_{i}\right), p_{2}\left(\cdot \mid v_{i}\right)\right)</script>，这里$\lambda<em>{i}$为对节点i的加权，一般取 $\lambda</em>{i}$ 为 $d<em>{i}$，并取KL散度为距离函数时：$$ O</em>{2}=-\sum<em>{(i, j) \in E} w</em>{i j} \log p<em>{2}\left(v</em>{j} \mid v_{i}\right) $$</li>
+</ul>
+<h2 id="结合一阶和二阶"><a href="#结合一阶和二阶" class="headerlink" title="结合一阶和二阶"></a>结合一阶和二阶</h2><ul>
+<li>method1: 训完一阶训二阶，并将两者embedding concat</li>
+<li>method2: 一起训</li>
+</ul>
+<h2 id="其他损失函数"><a href="#其他损失函数" class="headerlink" title="其他损失函数"></a>其他损失函数</h2><ul>
+<li>pair loss: 用learn2rank的loss</li>
+</ul>
+<h2 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h2><h3 id="二阶相似度计算的负采样"><a href="#二阶相似度计算的负采样" class="headerlink" title="二阶相似度计算的负采样"></a>二阶相似度计算的负采样</h3><ul>
+<li>对softmax的优化：负采样，$\sigma$为sigmoid函数，$P<em>{n}(v) \propto d</em>{v}^{3 / 4}$利用出度构成的节点权重做采样，与w2v分布一致<script type="math/tex; mode=display">
+\log \sigma\left(\vec{u}_{j}^{\prime T} \cdot \vec{u}_{i}\right)+\sum_{i=1}^{K} E_{v_{n} \sim P_{n}(v)}\left[\log \sigma\left(-\vec{u}_{n}^{\prime T} \cdot \vec{u}_{i}\right)\right]</script></li>
+</ul>
+<h2 id="边采样"><a href="#边采样" class="headerlink" title="边采样"></a>边采样</h2><ul>
+<li>O2的梯度与边权重wij有关，若学习率的设定由小权重决定，则遇到大权重时会梯度爆炸；反之则会梯度消失<script type="math/tex; mode=display">
+\frac{\partial O_{2}}{\partial \vec{u}_{i}}=w_{i j} \cdot \frac{\partial \log p_{2}\left(v_{j} \mid v_{i}\right)}{\partial \vec{u}_{i}}</script></li>
+<li>简单的优化方式：将权重为w的edge变为w条二进制edge —&gt; oom —&gt; edge sampling</li>
+<li>采样算法：alias算法，可以达到O(1)复杂度</li>
+</ul>
+<h2 id="Problems"><a href="#Problems" class="headerlink" title="Problems"></a>Problems</h2><ul>
+<li>新节点的GE（新节点）：<ul>
+<li>新节点和已有节点相连：优化如下目标函数 <script type="math/tex">-\sum_{j \in N(i)} w_{j i} \log p_{1}\left(v_{j}, v_{i}\right), \text { or }-\sum_{j \in N(i)} w_{j i} \log p_{2}\left(v_{j} \mid v_{i}\right)</script></li>
+<li>新节点不和已有节点相连：文中没给 —》利用side info</li>
+</ul>
+</li>
+<li>低度数顶点（孤岛节点）：对于一些顶点由于其邻接点非常少会导致embedding向量的学习不充分，论文提到可以利用邻居的邻居构造样本进行学习，这里也暴露出LINE方法仅考虑一阶和二阶相似性，对高阶信息的利用不足。</li>
+</ul>
+<h1 id="Pros-amp-Cons"><a href="#Pros-amp-Cons" class="headerlink" title="Pros &amp; Cons"></a>Pros &amp; Cons</h1><ul>
+<li>效率高</li>
+<li>只用了一跳信息</li>
+<li>对孤岛节点和新节点没有好的处理</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>graph</tag>
+        <tag>LINE</tag>
+      </tags>
   </entry>
 </search>

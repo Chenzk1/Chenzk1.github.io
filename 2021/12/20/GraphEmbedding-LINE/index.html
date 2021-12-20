@@ -23,22 +23,22 @@
     var CONFIG = {"hostname":"chenzk1.github.io","root":"/","scheme":"Gemini","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 
-  <meta name="description" content="[TOC] 原理 GBDT与传统的Boosting区别较大，它的每一次计算都是为了减少上一次的残差，而为了消除残差，我们可以在残差减小的梯度方向上建立模型,所以说，在GradientBoost中，每个新的模型的建立是为了使得之前的模型的残差往梯度下降的方法，与传统的Boosting中关注正确错误的样本加权有着很大的区别。 在GradientBoosting算法中，关键就是利用损失函数的负梯度方向在">
+  <meta name="description" content="LINE: Large-scale Information Network Embedding  Intro 包含一阶信息（直接相连的两节点的邻近度）和二阶信息（一对顶点的邻近度用临近节点的相似性衡量）的GE学习模型：只用到了一阶邻点 DeepWalk&#x2F;node2vec: 基于高阶相似度的GE学习模型">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ML-GBDT">
-<meta property="og:url" content="https://chenzk1.github.io/2021/12/10/GBDT/index.html">
+<meta property="og:title" content="GraphEmbedding-LINE">
+<meta property="og:url" content="https://chenzk1.github.io/2021/12/20/GraphEmbedding-LINE/index.html">
 <meta property="og:site_name" content="Kayden&#39;s Blog">
-<meta property="og:description" content="[TOC] 原理 GBDT与传统的Boosting区别较大，它的每一次计算都是为了减少上一次的残差，而为了消除残差，我们可以在残差减小的梯度方向上建立模型,所以说，在GradientBoost中，每个新的模型的建立是为了使得之前的模型的残差往梯度下降的方法，与传统的Boosting中关注正确错误的样本加权有着很大的区别。 在GradientBoosting算法中，关键就是利用损失函数的负梯度方向在">
+<meta property="og:description" content="LINE: Large-scale Information Network Embedding  Intro 包含一阶信息（直接相连的两节点的邻近度）和二阶信息（一对顶点的邻近度用临近节点的相似性衡量）的GE学习模型：只用到了一阶邻点 DeepWalk&#x2F;node2vec: 基于高阶相似度的GE学习模型">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2021-12-09T16:00:00.000Z">
-<meta property="article:modified_time" content="2021-12-18T13:57:56.818Z">
+<meta property="article:published_time" content="2021-12-20T07:29:30.000Z">
+<meta property="article:modified_time" content="2021-12-20T09:13:41.356Z">
 <meta property="article:author" content="Kayden">
-<meta property="article:tag" content="ML">
-<meta property="article:tag" content="GDBT">
+<meta property="article:tag" content="graph">
+<meta property="article:tag" content="LINE">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://chenzk1.github.io/2021/12/10/GBDT/">
+<link rel="canonical" href="https://chenzk1.github.io/2021/12/20/GraphEmbedding-LINE/">
 
 
 <script class="page-configurations">
@@ -51,7 +51,7 @@
   };
 </script>
 
-  <title>ML-GBDT | Kayden's Blog</title>
+  <title>GraphEmbedding-LINE | Kayden's Blog</title>
   
 
 
@@ -212,7 +212,7 @@
 
       <!--noindex-->
       <section class="post-toc-wrap sidebar-panel">
-          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-number">2.</span> <span class="nav-text">优缺点</span></a></li></ol></div>
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Intro"><span class="nav-number">1.</span> <span class="nav-text">Intro</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Methods"><span class="nav-number">2.</span> <span class="nav-text">Methods</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E9%98%B6%E7%9B%B8%E4%BC%BC%E5%BA%A6"><span class="nav-number">2.1.</span> <span class="nav-text">一阶相似度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E9%98%B6%E7%9B%B8%E4%BC%BC%E5%BA%A6"><span class="nav-number">2.2.</span> <span class="nav-text">二阶相似度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E5%90%88%E4%B8%80%E9%98%B6%E5%92%8C%E4%BA%8C%E9%98%B6"><span class="nav-number">2.3.</span> <span class="nav-text">结合一阶和二阶</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="nav-number">2.4.</span> <span class="nav-text">其他损失函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E5%8C%96"><span class="nav-number">2.5.</span> <span class="nav-text">优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E9%98%B6%E7%9B%B8%E4%BC%BC%E5%BA%A6%E8%AE%A1%E7%AE%97%E7%9A%84%E8%B4%9F%E9%87%87%E6%A0%B7"><span class="nav-number">2.5.1.</span> <span class="nav-text">二阶相似度计算的负采样</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%B9%E9%87%87%E6%A0%B7"><span class="nav-number">2.6.</span> <span class="nav-text">边采样</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Problems"><span class="nav-number">2.7.</span> <span class="nav-text">Problems</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Pros-amp-Cons"><span class="nav-number">3.</span> <span class="nav-text">Pros &amp; Cons</span></a></li></ol></div>
       </section>
       <!--/noindex-->
 
@@ -300,7 +300,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/10/GBDT/">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/20/GraphEmbedding-LINE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -313,7 +313,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          ML-GBDT
+          GraphEmbedding-LINE
         </h1>
 
         <div class="post-meta-container">
@@ -323,16 +323,10 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
+      
 
-      <time title="Created: 2021-12-10 00:00:00" itemprop="dateCreated datePublished" datetime="2021-12-10T00:00:00+08:00">2021-12-10</time>
+      <time title="Created: 2021-12-20 15:29:30 / Modified: 17:13:41" itemprop="dateCreated datePublished" datetime="2021-12-20T15:29:30+08:00">2021-12-20</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-12-18 21:57:56" itemprop="dateModified" datetime="2021-12-18T21:57:56+08:00">2021-12-18</time>
-      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -353,15 +347,61 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>[TOC]</p>
-<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><ul>
-<li>GBDT与传统的Boosting区别较大，它的每一次计算都是为了减少上一次的残差，而为了消除残差，我们可以在残差减小的梯度方向上建立模型,所以说，在GradientBoost中，每个新的模型的建立是为了使得之前的模型的残差往梯度下降的方法，与传统的Boosting中关注正确错误的样本加权有着很大的区别。</li>
-<li>在GradientBoosting算法中，关键就是利用损失函数的负梯度方向在当前模型的值作为残差的近似值，进而拟合一棵CART回归树。</li>
-<li>GBDT的会累加所有树的结果，而这种累加是无法通过分类完成的，因此<strong>GBDT的树都是CART回归树</strong>，而不是分类树（尽管GBDT调整后也可以用于分类但不代表GBDT的树为分类树）。</li>
+        <ul>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1503.03578.pdf">LINE: Large-scale Information Network Embedding</a></li>
 </ul>
-<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><ul>
-<li>GBDT的性能在RF的基础上又有一步提升，因此其优点也很明显，1、它能灵活的处理各种类型的数据；2、在相对较少的调参时间下，预测的准确度较高。</li>
-<li>当然由于它是Boosting，因此基学习器之前存在串行关系，难以并行训练数据。</li>
+<h1 id="Intro"><a href="#Intro" class="headerlink" title="Intro"></a>Intro</h1><ul>
+<li>包含一阶信息（直接相连的两节点的邻近度）和二阶信息（一对顶点的邻近度用临近节点的相似性衡量）的GE学习模型：<strong>只用到了一阶邻点</strong></li>
+<li>DeepWalk/node2vec: 基于高阶相似度的GE学习模型</li>
+</ul>
+<a id="more"></a>
+<h1 id="Methods"><a href="#Methods" class="headerlink" title="Methods"></a>Methods</h1><ul>
+<li>边权重矩阵W：损失函数计算时用</li>
+<li>节点权重矩阵：节点采样时用</li>
+</ul>
+<h2 id="一阶相似度"><a href="#一阶相似度" class="headerlink" title="一阶相似度"></a>一阶相似度</h2><ul>
+<li><strong>只针对无向图，不支持有向图</strong></li>
+<li>边(u,v)的权重Wuv表示u和v之间的一阶相似性，如果在u和v之间无边，它们的一阶相似性为0。</li>
+<li>经验分布 <script type="math/tex">\hat{p}_{1}(i, j)=\frac{w_{i j}}{W}</script>，这里W是W矩阵的模</li>
+<li>预测分布 <script type="math/tex">p_{1}\left(v_{i}, v_{j}\right)=\frac{1}{1+\exp \left(-\vec{u}_{i}^{T} \cdot \vec{u}_{j}\right)}</script></li>
+<li>目标函数 <script type="math/tex">O_{1}=d\left(\hat{p}_{1}(\cdot, \cdot), p_{1}(\cdot, \cdot)\right)</script>, d为距离函数，例如当d为KL散度且忽略常数项时（同交叉熵）：<script type="math/tex; mode=display">
+O_{1}=-\sum_{(i, j) \in E} w_{i j} \log p_{1}\left(v_{i}, v_{j}\right)</script></li>
+</ul>
+<h2 id="二阶相似度"><a href="#二阶相似度" class="headerlink" title="二阶相似度"></a>二阶相似度</h2><ul>
+<li>如果没有同样的相邻节点，二阶相似性为0</li>
+<li>经验分布 <script type="math/tex">\hat{p}_{2}\left(v_{j} \mid v_{i}\right)=\frac{w_{i j}}{d_{i}}</script>，di是节点i的带权出度，$w<em>{i j}$是边(i,j)的权重，$$ d</em>{i}=\sum<em>{k \in N(i)} w</em>{i k} $$</li>
+<li>预测分布 <script type="math/tex">p_{2}\left(v_{j} \mid v_{i}\right)=\frac{\exp \left(\vec{u}_{j}^{\prime T} \cdot \vec{u}_{i}\right)}{\sum_{k=1}^{|V|} \exp \left(\vec{u}_{k}^{\prime T} \cdot \vec{u}_{i}\right)}</script></li>
+<li>目标函数 <script type="math/tex">O_{2}=\sum_{i \in V} \lambda_{i} d\left(\hat{p}_{2}\left(\cdot \mid v_{i}\right), p_{2}\left(\cdot \mid v_{i}\right)\right)</script>，这里$\lambda<em>{i}$为对节点i的加权，一般取 $\lambda</em>{i}$ 为 $d<em>{i}$，并取KL散度为距离函数时：$$ O</em>{2}=-\sum<em>{(i, j) \in E} w</em>{i j} \log p<em>{2}\left(v</em>{j} \mid v_{i}\right) $$</li>
+</ul>
+<h2 id="结合一阶和二阶"><a href="#结合一阶和二阶" class="headerlink" title="结合一阶和二阶"></a>结合一阶和二阶</h2><ul>
+<li>method1: 训完一阶训二阶，并将两者embedding concat</li>
+<li>method2: 一起训</li>
+</ul>
+<h2 id="其他损失函数"><a href="#其他损失函数" class="headerlink" title="其他损失函数"></a>其他损失函数</h2><ul>
+<li>pair loss: 用learn2rank的loss</li>
+</ul>
+<h2 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h2><h3 id="二阶相似度计算的负采样"><a href="#二阶相似度计算的负采样" class="headerlink" title="二阶相似度计算的负采样"></a>二阶相似度计算的负采样</h3><ul>
+<li>对softmax的优化：负采样，$\sigma$为sigmoid函数，$P<em>{n}(v) \propto d</em>{v}^{3 / 4}$利用出度构成的节点权重做采样，与w2v分布一致<script type="math/tex; mode=display">
+\log \sigma\left(\vec{u}_{j}^{\prime T} \cdot \vec{u}_{i}\right)+\sum_{i=1}^{K} E_{v_{n} \sim P_{n}(v)}\left[\log \sigma\left(-\vec{u}_{n}^{\prime T} \cdot \vec{u}_{i}\right)\right]</script></li>
+</ul>
+<h2 id="边采样"><a href="#边采样" class="headerlink" title="边采样"></a>边采样</h2><ul>
+<li>O2的梯度与边权重wij有关，若学习率的设定由小权重决定，则遇到大权重时会梯度爆炸；反之则会梯度消失<script type="math/tex; mode=display">
+\frac{\partial O_{2}}{\partial \vec{u}_{i}}=w_{i j} \cdot \frac{\partial \log p_{2}\left(v_{j} \mid v_{i}\right)}{\partial \vec{u}_{i}}</script></li>
+<li>简单的优化方式：将权重为w的edge变为w条二进制edge —&gt; oom —&gt; edge sampling</li>
+<li>采样算法：alias算法，可以达到O(1)复杂度</li>
+</ul>
+<h2 id="Problems"><a href="#Problems" class="headerlink" title="Problems"></a>Problems</h2><ul>
+<li>新节点的GE（新节点）：<ul>
+<li>新节点和已有节点相连：优化如下目标函数 <script type="math/tex">-\sum_{j \in N(i)} w_{j i} \log p_{1}\left(v_{j}, v_{i}\right), \text { or }-\sum_{j \in N(i)} w_{j i} \log p_{2}\left(v_{j} \mid v_{i}\right)</script></li>
+<li>新节点不和已有节点相连：文中没给 —》利用side info</li>
+</ul>
+</li>
+<li>低度数顶点（孤岛节点）：对于一些顶点由于其邻接点非常少会导致embedding向量的学习不充分，论文提到可以利用邻居的邻居构造样本进行学习，这里也暴露出LINE方法仅考虑一阶和二阶相似性，对高阶信息的利用不足。</li>
+</ul>
+<h1 id="Pros-amp-Cons"><a href="#Pros-amp-Cons" class="headerlink" title="Pros &amp; Cons"></a>Pros &amp; Cons</h1><ul>
+<li>效率高</li>
+<li>只用了一跳信息</li>
+<li>对孤岛节点和新节点没有好的处理</li>
 </ul>
 
     </div>
@@ -372,22 +412,19 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/ML/" rel="tag"># ML</a>
-              <a href="/tags/GDBT/" rel="tag"># GDBT</a>
+              <a href="/tags/graph/" rel="tag"># graph</a>
+              <a href="/tags/LINE/" rel="tag"># LINE</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2021/12/10/Java%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%BA%90/" rel="prev" title="Java学习资源">
-                  <i class="fa fa-chevron-left"></i> Java学习资源
+                <a href="/2021/12/19/CS224WLec5/" rel="prev" title="CS224WLec5">
+                  <i class="fa fa-chevron-left"></i> CS224WLec5
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2021/12/10/GBDT%20&%20XGBoost/" rel="next" title="ML-GBDT & XGBoost">
-                  ML-GBDT & XGBoost <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
