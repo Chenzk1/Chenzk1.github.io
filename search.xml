@@ -328,7 +328,7 @@
       </categories>
       <tags>
         <tag>cs224w</tag>
-        <tag>graph</tag>
+        <tag>Graph</tag>
       </tags>
   </entry>
   <entry>
@@ -548,8 +548,8 @@ k_{v} \\
       </categories>
       <tags>
         <tag>cs224w</tag>
-        <tag>graph</tag>
         <tag>ML</tag>
+        <tag>Graph</tag>
       </tags>
   </entry>
   <entry>
@@ -632,9 +632,9 @@ k_{v} \\
       </categories>
       <tags>
         <tag>cs224w</tag>
-        <tag>graph</tag>
         <tag>DeepWalk</tag>
-        <tag>node2vec</tag>
+        <tag>Graph</tag>
+        <tag>Node2vec</tag>
       </tags>
   </entry>
   <entry>
@@ -716,9 +716,9 @@ r_{j}=\sum_{i \rightarrow j} \beta \frac{r_{i}}{d_{i}}+(1-\beta) \frac{1}{N}</sc
       </categories>
       <tags>
         <tag>cs224w</tag>
-        <tag>graph</tag>
         <tag>ML</tag>
         <tag>PageRank</tag>
+        <tag>Graph</tag>
       </tags>
   </entry>
   <entry>
@@ -4009,10 +4009,71 @@ w=m(a+x, b+y)^{*} e^{-\frac{\left(x^{\prime}\right)^{2}+\left(y^{\prime}\right)^
       </tags>
   </entry>
   <entry>
-    <title>CS224WLec5</title>
+    <title>CS224WLec5-Label Propagation for Node Classification[LIP]</title>
     <url>/2021/12/19/CS224WLec5/</url>
-    <content><![CDATA[<a id="more"></a>
+    <content><![CDATA[<p><a href="http://web.stanford.edu/class/cs224w/slides/05-message.pdf">ppt</a></p>
+<h1 id="Semi-supervised-binary-node-classification"><a href="#Semi-supervised-binary-node-classification" class="headerlink" title="Semi-supervised binary node classification"></a>Semi-supervised binary node classification</h1><ul>
+<li>goal: 知道部分节点的label求其他节点的label</li>
+<li>main assumption：网络中存在的同质性。同类的node倾向于相互连接，或者聚在一起。</li>
+<li>framework<ul>
+<li>初始化</li>
+<li>迭代</li>
+<li>收敛</li>
+</ul>
+</li>
+<li>approaches<ul>
+<li>relational classification</li>
+<li>iterative classification</li>
+<li>correct &amp; smooth</li>
+</ul>
+</li>
+<li>以节点二分类为例</li>
+</ul>
+<a id="more"></a>
+<h1 id="Approaches"><a href="#Approaches" class="headerlink" title="Approaches"></a>Approaches</h1><h2 id="Probabilistic-relational-classifier"><a href="#Probabilistic-relational-classifier" class="headerlink" title="Probabilistic relational classifier"></a>Probabilistic relational classifier</h2><ul>
+<li><strong>只用到了邻居节点的label来做分类</strong></li>
+<li>step1: 初始化所有unlabeled nodes为0.5</li>
+<li>step2: update所有unlabeled nodes的预测值 <script type="math/tex">P\left(Y_{v}=c\right)=\frac{1}{\sum_{(v, u) \in E} A_{v, u}} \sum_{(v, u) \in E} A_{v, u} P\left(Y_{u}=c\right)</script><ul>
+<li>这里A为邻接矩阵，若边有权重，则Au,v是带权邻接矩阵</li>
+</ul>
+</li>
+<li>step3: 重复step2直到收敛：达到最大steps，或者所有节点label不再更新</li>
+<li>challenges: <ul>
+<li>不能保证收敛</li>
+<li>没有用到节点特征信息</li>
+</ul>
+</li>
+</ul>
+<h2 id="Iterative-classification"><a href="#Iterative-classification" class="headerlink" title="Iterative classification"></a>Iterative classification</h2><ul>
+<li>Classify node v based on its attributes <script type="math/tex">f_v</script> as well as labels <script type="math/tex">z_v</script> of neighbor set <script type="math/tex">N_v</script></li>
+<li><script type="math/tex">z_v</script>: v的neibors的label特征，可以是<ul>
+<li><script type="math/tex">N_v</script>中每种label的histogram</li>
+<li><script type="math/tex">N_v</script>中数量最多的label</li>
+<li>不同label的数量</li>
+</ul>
+</li>
+<li>流程<img src="/2021/12/19/CS224WLec5/classifier1.png" class="" title="classifier1">
+</li>
+</ul>
+<h2 id="Collective-classification-correct-amp-smooth"><a href="#Collective-classification-correct-amp-smooth" class="headerlink" title="Collective classification: correct &amp; smooth"></a>Collective classification: correct &amp; smooth</h2><ul>
+<li>recent state-of-the-art collective classification method</li>
+<li>一种后处理方法</li>
+<li>基于的假设：相邻节点的误差应该接近</li>
+<li>correct step<ul>
+<li>初始error: labeled node: error = ground truth minus soft label; unlabeled node: error=0</li>
+<li>利用扩散矩阵 <script type="math/tex">\widetilde{\boldsymbol{A}}</script>求取下一步的error<script type="math/tex; mode=display">\boldsymbol{E}^{(t+1)} \leftarrow(1-\alpha) \cdot \boldsymbol{E}^{(t)}+\alpha \cdot \widetilde{\boldsymbol{A}} \boldsymbol{E}^{(t)}</script></li>
+</ul>
+</li>
+</ul>
 ]]></content>
+      <categories>
+        <category>Learning</category>
+        <category>cs224w</category>
+      </categories>
+      <tags>
+        <tag>cs224w</tag>
+        <tag>Graph</tag>
+      </tags>
   </entry>
   <entry>
     <title>GraphEmbedding-LINE</title>
@@ -4081,8 +4142,27 @@ O_{1}=-\sum_{(i, j) \in E} w_{i j} \log p_{1}\left(v_{i}, v_{j}\right)</script><
         <category>Learning</category>
       </categories>
       <tags>
-        <tag>graph</tag>
         <tag>LINE</tag>
+        <tag>Graph</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Graph-机器学习&amp;深度学习中图有用的资源</title>
+    <url>/2021/12/22/Graph/</url>
+    <content><![CDATA[<h2 id="OpenResource"><a href="#OpenResource" class="headerlink" title="OpenResource"></a>OpenResource</h2><ul>
+<li><a href="https://ogb.stanford.edu/">OGB</a>: The Open Graph Benchmark (OGB) is a collection of realistic, large-scale, and diverse benchmark datasets for machine learning on graphs.</li>
+</ul>
+<h2 id="Class"><a href="#Class" class="headerlink" title="Class"></a>Class</h2><ul>
+<li><a href="http://web.stanford.edu/class/cs224w/">CS224W: Machine Learning with Graphs</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>ML</tag>
+        <tag>Resource</tag>
+        <tag>Graph</tag>
       </tags>
   </entry>
 </search>

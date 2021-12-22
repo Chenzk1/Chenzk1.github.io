@@ -23,16 +23,21 @@
     var CONFIG = {"hostname":"chenzk1.github.io","root":"/","scheme":"Gemini","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 
-  <meta property="og:type" content="article">
-<meta property="og:title" content="CS224WLec5">
+  <meta name="description" content="ppt Semi-supervised binary node classification goal: 知道部分节点的label求其他节点的label main assumption：网络中存在的同质性。同类的node倾向于相互连接，或者聚在一起。 framework 初始化 迭代 收敛   approaches relational classification iterative class">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CS224WLec5-Label Propagation for Node Classification[LIP]">
 <meta property="og:url" content="https://chenzk1.github.io/2021/12/19/CS224WLec5/index.html">
 <meta property="og:site_name" content="Kayden&#39;s Blog">
+<meta property="og:description" content="ppt Semi-supervised binary node classification goal: 知道部分节点的label求其他节点的label main assumption：网络中存在的同质性。同类的node倾向于相互连接，或者聚在一起。 framework 初始化 迭代 收敛   approaches relational classification iterative class">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://chenzk1.github.io/2021/12/19/CS224WLec5/classifier1.png">
 <meta property="article:published_time" content="2021-12-19T06:59:40.000Z">
-<meta property="article:modified_time" content="2021-12-19T06:59:40.535Z">
+<meta property="article:modified_time" content="2021-12-22T09:36:49.434Z">
 <meta property="article:author" content="Kayden">
-<meta property="article:tag" content="blog, code, Machine Learning">
+<meta property="article:tag" content="cs224w">
+<meta property="article:tag" content="Graph">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://chenzk1.github.io/2021/12/19/CS224WLec5/classifier1.png">
 
 
 <link rel="canonical" href="https://chenzk1.github.io/2021/12/19/CS224WLec5/">
@@ -48,7 +53,7 @@
   };
 </script>
 
-  <title>CS224WLec5 | Kayden's Blog</title>
+  <title>CS224WLec5-Label Propagation for Node Classification[LIP] | Kayden's Blog</title>
   
 
 
@@ -197,7 +202,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           Table of Contents
@@ -209,6 +214,7 @@
 
       <!--noindex-->
       <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Semi-supervised-binary-node-classification"><span class="nav-number">1.</span> <span class="nav-text">Semi-supervised binary node classification</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Approaches"><span class="nav-number">2.</span> <span class="nav-text">Approaches</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Probabilistic-relational-classifier"><span class="nav-number">2.1.</span> <span class="nav-text">Probabilistic relational classifier</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Iterative-classification"><span class="nav-number">2.2.</span> <span class="nav-text">Iterative classification</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Collective-classification-correct-amp-smooth"><span class="nav-number">2.3.</span> <span class="nav-text">Collective classification: correct &amp; smooth</span></a></li></ol></li></ol></div>
       </section>
       <!--/noindex-->
 
@@ -222,7 +228,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-count">44</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -309,7 +315,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          CS224WLec5
+          CS224WLec5-Label Propagation for Node Classification[LIP]
         </h1>
 
         <div class="post-meta-container">
@@ -322,6 +328,26 @@
 
       <time title="Created: 2021-12-19 14:59:40" itemprop="dateCreated datePublished" datetime="2021-12-19T14:59:40+08:00">2021-12-19</time>
     </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-12-22 17:36:49" itemprop="dateModified" datetime="2021-12-22T17:36:49+08:00">2021-12-22</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/cs224w/" itemprop="url" rel="index"><span itemprop="name">cs224w</span></a>
+        </span>
+    </span>
 
   
 </div>
@@ -333,7 +359,60 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <a id="more"></a>
+        <p><a target="_blank" rel="noopener" href="http://web.stanford.edu/class/cs224w/slides/05-message.pdf">ppt</a></p>
+<h1 id="Semi-supervised-binary-node-classification"><a href="#Semi-supervised-binary-node-classification" class="headerlink" title="Semi-supervised binary node classification"></a>Semi-supervised binary node classification</h1><ul>
+<li>goal: 知道部分节点的label求其他节点的label</li>
+<li>main assumption：网络中存在的同质性。同类的node倾向于相互连接，或者聚在一起。</li>
+<li>framework<ul>
+<li>初始化</li>
+<li>迭代</li>
+<li>收敛</li>
+</ul>
+</li>
+<li>approaches<ul>
+<li>relational classification</li>
+<li>iterative classification</li>
+<li>correct &amp; smooth</li>
+</ul>
+</li>
+<li>以节点二分类为例</li>
+</ul>
+<a id="more"></a>
+<h1 id="Approaches"><a href="#Approaches" class="headerlink" title="Approaches"></a>Approaches</h1><h2 id="Probabilistic-relational-classifier"><a href="#Probabilistic-relational-classifier" class="headerlink" title="Probabilistic relational classifier"></a>Probabilistic relational classifier</h2><ul>
+<li><strong>只用到了邻居节点的label来做分类</strong></li>
+<li>step1: 初始化所有unlabeled nodes为0.5</li>
+<li>step2: update所有unlabeled nodes的预测值 <script type="math/tex">P\left(Y_{v}=c\right)=\frac{1}{\sum_{(v, u) \in E} A_{v, u}} \sum_{(v, u) \in E} A_{v, u} P\left(Y_{u}=c\right)</script><ul>
+<li>这里A为邻接矩阵，若边有权重，则Au,v是带权邻接矩阵</li>
+</ul>
+</li>
+<li>step3: 重复step2直到收敛：达到最大steps，或者所有节点label不再更新</li>
+<li>challenges: <ul>
+<li>不能保证收敛</li>
+<li>没有用到节点特征信息</li>
+</ul>
+</li>
+</ul>
+<h2 id="Iterative-classification"><a href="#Iterative-classification" class="headerlink" title="Iterative classification"></a>Iterative classification</h2><ul>
+<li>Classify node v based on its attributes <script type="math/tex">f_v</script> as well as labels <script type="math/tex">z_v</script> of neighbor set <script type="math/tex">N_v</script></li>
+<li><script type="math/tex">z_v</script>: v的neibors的label特征，可以是<ul>
+<li><script type="math/tex">N_v</script>中每种label的histogram</li>
+<li><script type="math/tex">N_v</script>中数量最多的label</li>
+<li>不同label的数量</li>
+</ul>
+</li>
+<li>流程<img src="/2021/12/19/CS224WLec5/classifier1.png" class="" title="classifier1">
+</li>
+</ul>
+<h2 id="Collective-classification-correct-amp-smooth"><a href="#Collective-classification-correct-amp-smooth" class="headerlink" title="Collective classification: correct &amp; smooth"></a>Collective classification: correct &amp; smooth</h2><ul>
+<li>recent state-of-the-art collective classification method</li>
+<li>一种后处理方法</li>
+<li>基于的假设：相邻节点的误差应该接近</li>
+<li>correct step<ul>
+<li>初始error: labeled node: error = ground truth minus soft label; unlabeled node: error=0</li>
+<li>利用扩散矩阵 <script type="math/tex">\widetilde{\boldsymbol{A}}</script>求取下一步的error<script type="math/tex; mode=display">\boldsymbol{E}^{(t+1)} \leftarrow(1-\alpha) \cdot \boldsymbol{E}^{(t)}+\alpha \cdot \widetilde{\boldsymbol{A}} \boldsymbol{E}^{(t)}</script></li>
+</ul>
+</li>
+</ul>
 
     </div>
 
@@ -342,6 +421,10 @@
     
 
     <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/cs224w/" rel="tag"># cs224w</a>
+              <a href="/tags/Graph/" rel="tag"># Graph</a>
+          </div>
 
         
 
@@ -449,6 +532,50 @@
   
 
   
+      <script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              const target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    const script = document.createElement('script');
+    script.src = '//cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js';
+    script.defer = true;
+    document.head.appendChild(script);
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.typesetClear();
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 
