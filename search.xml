@@ -4217,9 +4217,9 @@ O_{1}=-\sum_{(i, j) \in E} w_{i j} \log p_{1}\left(v_{i}, v_{j}\right)</script><
   <entry>
     <title>优化器</title>
     <url>/2022/01/01/%E4%BC%98%E5%8C%96%E5%99%A8/</url>
-    <content><![CDATA[<a id="more"></a>
-<h1 id="GD-amp-SGD-amp-Mini-batch-GD"><a href="#GD-amp-SGD-amp-Mini-batch-GD" class="headerlink" title="GD&amp;SGD&amp;Mini-batch GD"></a>GD&amp;SGD&amp;Mini-batch GD</h1><script type="math/tex; mode=display">
-\theta=\theta-\eta \cdot \nabla_{\theta} J(\theta)</script><ul>
+    <content><![CDATA[<h1 id="GD-amp-SGD-amp-Mini-batch-GD"><a href="#GD-amp-SGD-amp-Mini-batch-GD" class="headerlink" title="GD&amp;SGD&amp;Mini-batch GD"></a>GD&amp;SGD&amp;Mini-batch GD</h1><script type="math/tex; mode=display">
+\theta=\theta-\eta \cdot \nabla_{\theta} J(\theta)</script><a id="more"></a>
+<ul>
 <li>GD<ul>
 <li>用了全量样本，凸函数可以到全局最小值，非凸函数可以到局部最小值</li>
 <li>慢，不能在线serving</li>
@@ -4298,34 +4298,37 @@ v_t = \beta_2 v_{t-1} + (1-\beta_2) g_t^2 \\
 </ul>
 </li>
 </ul>
-<p>&lt;以下内容未解锁&gt;<br>&lt;!— # AdaMom: An optional optimizer for Dense Module</p>
-<script type="math/tex; mode=display">\Large
+<p><strong>以下内容未解锁</strong></p>
+<!-- # AdaMom: An optional optimizer for Dense Module
+$$\Large
 \begin{cases}
 g_t = \nabla_{\theta}J(\theta_t) + \alpha\theta_t \\
 m_t = \beta_1 m_{t-1} + (1-\beta_1) g_t \\
 v_t = \beta_2 v_{t-1} + g_t^2 \\
 c_t = \beta_2 c_{t-1} + 1 \\
 \theta_{t+1} = \theta_{t} - \eta \frac{1}{\sqrt{\frac{v_t}{c_t} +  \epsilon}} m_t
-\end{cases}</script><ul>
-<li>Adam的基础上，对二阶动量求累计更新次数的平均</li>
-<li>Momentum<br>Adagrad仅使用二阶动量，导致累计梯度平方和单调增长，在某些维度变量频繁更新之后，会导致累计梯度平方和极大，参数几乎不再更新，也就是我们常说的学习不动了。</li>
-<li>在AdaMom中，我们单纯对二阶动量做累计更新次数的均值，缓解上述学习不动的情况。同时继承Adam算法中引入一阶动量的优势。其次，为了更适应在线学习的场景，我们去除了计算二阶动量时在gradient平方上的decay。在这些调整的基础上，可以将学习率设置更小，对学习稳定性和快速收敛带来优势。同时我们观察到adamom训练过程产生的gradient远小于其他优化器，印证了对学习的稳定性和长期更新的判断。但目前没有进行数学论证。</li>
-<li>和Adam的不同在于早期学习率的差距<br>AdaMom可以看成Adam的生产环境改进版，前期降低了m_t的方差/自带了warmup，有效缓解了Dense部分在异步更新场景初期可能出现的梯度爆炸</li>
-</ul>
-<h1 id="AdaNest-an-adaptive-dense-optimizer-with-Nesterov-acceleration"><a href="#AdaNest-an-adaptive-dense-optimizer-with-Nesterov-acceleration" class="headerlink" title="AdaNest: an adaptive dense optimizer with Nesterov acceleration"></a>AdaNest: an adaptive dense optimizer with Nesterov acceleration</h1><ul>
-<li>公式<ul>
-<li>1: Nesterov的工程实现</li>
-<li>2: 保证所有系数和为1，类似配分函数</li>
-<li>3: 继承于AdaMom，Vt除以梯度更新次数，借此解决AdaGrad的梯度衰减问题 </li>
-</ul>
-</li>
-<li>保留Adam/AdaMom二阶动量特性的同时，使用更加激进的Nesterov动量替换Polyak动量，提升了效果</li>
-<li>从引入预判的角度看，AdaNest因为使用了预测点的梯度，对梯度的估计更加准确，总体比Adam更激进</li>
-<li>Adam与RMSProp的折衷，相比RMSProp引入了动量，相比Adam赋予<script type="math/tex">g_t</script> 更大的权重</li>
-</ul>
-<h1 id="GroupLasso"><a href="#GroupLasso" class="headerlink" title="GroupLasso"></a>GroupLasso</h1><ul>
-<li>FTRL的vector版本，为了增强vector的稀疏性，以此来减小PS内存<br>Summary —&gt;</li>
-</ul>
+\end{cases}$$
+- Adam的基础上，对二阶动量求累计更新次数的平均
+- Momentum
+ Adagrad仅使用二阶动量，导致累计梯度平方和单调增长，在某些维度变量频繁更新之后，会导致累计梯度平方和极大，参数几乎不再更新，也就是我们常说的学习不动了。
+- 在AdaMom中，我们单纯对二阶动量做累计更新次数的均值，缓解上述学习不动的情况。同时继承Adam算法中引入一阶动量的优势。其次，为了更适应在线学习的场景，我们去除了计算二阶动量时在gradient平方上的decay。在这些调整的基础上，可以将学习率设置更小，对学习稳定性和快速收敛带来优势。同时我们观察到adamom训练过程产生的gradient远小于其他优化器，印证了对学习的稳定性和长期更新的判断。但目前没有进行数学论证。
+- 和Adam的不同在于早期学习率的差距
+AdaMom可以看成Adam的生产环境改进版，前期降低了m_t的方差/自带了warmup，有效缓解了Dense部分在异步更新场景初期可能出现的梯度爆炸
+
+# AdaNest: an adaptive dense optimizer with Nesterov acceleration
+
+- 公式
+  - 1: Nesterov的工程实现
+  - 2: 保证所有系数和为1，类似配分函数
+  - 3: 继承于AdaMom，Vt除以梯度更新次数，借此解决AdaGrad的梯度衰减问题 
+- 保留Adam/AdaMom二阶动量特性的同时，使用更加激进的Nesterov动量替换Polyak动量，提升了效果
+- 从引入预判的角度看，AdaNest因为使用了预测点的梯度，对梯度的估计更加准确，总体比Adam更激进
+- Adam与RMSProp的折衷，相比RMSProp引入了动量，相比Adam赋予$$g_t$$ 更大的权重
+
+
+# GroupLasso
+- FTRL的vector版本，为了增强vector的稀疏性，以此来减小PS内存
+Summary -->
 ]]></content>
       <categories>
         <category>Learning</category>
