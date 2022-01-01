@@ -48,6 +48,72 @@
       </tags>
   </entry>
   <entry>
+    <title>C++-内存管理</title>
+    <url>/2021/12/10/C++-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</url>
+    <content><![CDATA[<h2 id="C-的内存分配方式"><a href="#C-的内存分配方式" class="headerlink" title="C++的内存分配方式"></a>C++的内存分配方式</h2><ul>
+<li>全局/静态变量区</li>
+<li>常量存储区</li>
+<li>栈：在局部变量和函数参数在栈上创建，函数执行结束时这些存储单元自动被释放。栈内存分配运算内置于处理器的指令集中，效率很高，但是栈的内存容量有限。</li>
+<li>堆：由new分配的内存块，需要手动通过delete来释放。如果没有delete，那么在程序结束后，操作系统会自动回收。</li>
+<li>自由存储区：由malloc等分配的内存块，和堆是十分相似，不过它是用free来结束自己的生命的。</li>
+</ul>
+<a id="more"></a>
+<h3 id="堆和栈"><a href="#堆和栈" class="headerlink" title="堆和栈"></a>堆和栈</h3><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">()</span> </span>&#123; <span class="keyword">int</span>* p = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">5</span>]; &#125;</span><br><span class="line"><span class="keyword">delete</span> []p;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>new了一个在堆上的数组，并在栈上创建一个指针p；用delete []p释放堆上的内存</li>
+<li>未delete的话会造成内存泄漏。delete后的指针为野指针，</li>
+<li><strong>new和delete时分别执行构造函数和析构函数</strong></li>
+<li></li>
+</ul>
+<h4 id="管理方式-amp-申请后系统的响应"><a href="#管理方式-amp-申请后系统的响应" class="headerlink" title="管理方式&amp;申请后系统的响应"></a>管理方式&amp;申请后系统的响应</h4><ul>
+<li>栈：由系统管理。不用手动申请，只要栈的剩余空间大于所申请空间，系统将为程序提供内存，否则将报异常提示栈溢出。  </li>
+<li>堆：要new。<ul>
+<li>首先应该知道操作系统有一个记录空闲内存地址的链表，当系统收到程序的申请时，会遍历该链表，寻找第一个空间大于所申请空间的堆结点，然后将该结点从空闲结点链表中删除，并将该结点的空间分配给程序，另外，对于大多数系统，会在这块内存空间中的首地址处记录本次分配的大小，这样，代码中的delete语句才能正确的释放本内存空间。另外，由于找到的堆结点的大小不一定正好等于申请的大小，系统会自动的将多余的那部分重新放入空闲链表中。   </li>
+</ul>
+</li>
+</ul>
+<h4 id="空间大小"><a href="#空间大小" class="headerlink" title="空间大小"></a>空间大小</h4><ul>
+<li>栈：在Windows下,<strong>栈是向低地址扩展</strong>的数据结构，是一块连续的内存的区域。这句话的意思是栈顶的地址和栈的最大容量是系统预先规定好的，在WINDOWS下，栈的大小是2M（或1M，总之是一个编译时就确定的常数），如果申请的空间超过栈的剩余空间时，将提示overflow。因此，能从栈获得的空间较小。   </li>
+<li>堆：<strong>堆是向高地址扩展</strong>的数据结构，是不连续的内存区域。这是由于系统是用链表来存储的空闲内存地址的，自然是不连续的，而链表的遍历方向是由低地址向高地址。堆的大小受限于计算机系统中有效的虚拟内存。由此可见，堆获得的空间比较灵活，也比较大。   </li>
+</ul>
+<h4 id="申请效率的比较："><a href="#申请效率的比较：" class="headerlink" title="申请效率的比较："></a>申请效率的比较：</h4><ul>
+<li>栈：机器系统提供的数据结构，计算机会在底层对栈提供支持：分配专门的寄存器存放栈的地址，压栈出栈都有专门的指令执行，这就决定了栈的效率比较高。</li>
+<li>堆：则是C/C++函数库提供的，它的机制是很复杂的，例如为了分配一块内存，库函数会按照一定的算法（具体的算法可以参考数据结构/操作系统）在堆内存中搜索可用的足够大小的空间，如果没有足够大小的空间（可能是由于内存碎片太多），就有可能调用系统功能去增加程序数据段的内存空间，这样就有机会分到足够大小的内存，然后进行返回。显然，堆的效率比栈要低得多。</li>
+</ul>
+<h4 id="堆和栈中的存储内容"><a href="#堆和栈中的存储内容" class="headerlink" title="堆和栈中的存储内容"></a>堆和栈中的存储内容</h4><ul>
+<li>栈：在函数调用时，第一个进栈的是主函数中后的下一条指令（函数调用语句的下一条可执行语句）的地址，然后是函数的各个参数，在大多数的C编译器中，参数是由右往左入栈的，然后是函数中的局部变量。注意静态变量是不入栈的。当本次函数调用结束后，局部变量先出栈，然后是参数，最后栈顶指针指向开始存的地址，也就是主函数中的下一条指令，程序由该点继续运行。   </li>
+<li>堆：一般是在堆的头部用一个字节存放堆的大小。堆中的具体内容由程序员安排。   </li>
+</ul>
+<h2 id="函数传递方式"><a href="#函数传递方式" class="headerlink" title="函数传递方式"></a>函数传递方式</h2><ul>
+<li>值传递：调用了一个复制构造函数，相当于创建了一个拷贝，会造成更多的内存占用</li>
+<li>引用传递：传递的是原参数的别名。节省内存，可对实参进行修改。</li>
+<li><p>指针传递：形参是指向实参的指针，对形参指针的操作，会影响到实参。</p>
+</li>
+<li><p>指针传递和引用传递一般适用于：</p>
+<ul>
+<li>函数内部修改参数并且希望改动影响调用者。</li>
+<li>当一个函数实际需要返回多个值，而只能显式返回一个值时，可以将另外需要返回的变量以指针/引用传递。</li>
+</ul>
+</li>
+</ul>
+<h3 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h3><ul>
+<li>引用为别名，不能有null引用</li>
+<li>引用在创建的同时必须对其初始化</li>
+<li>引用在初始化后，无法改变引用关系</li>
+</ul>
+<h3 id="指针"><a href="#指针" class="headerlink" title="指针"></a>指针</h3><ul>
+<li>本质上还是值传递，传递的是地址</li>
+</ul>
+<p>&lt;未完&gt;</p>
+]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>6.824Lecture2-RPC&amp;Threads</title>
     <url>/2021/12/11/6-824Lecture2/</url>
     <content><![CDATA[<h1 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h1><h2 id="Why-Threads"><a href="#Why-Threads" class="headerlink" title="Why Threads?"></a>Why Threads?</h2><ul>
@@ -124,72 +190,6 @@
         <tag>6.824</tag>
         <tag>RPC</tag>
         <tag>Thread</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>C++-内存管理</title>
-    <url>/2021/12/10/C++-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</url>
-    <content><![CDATA[<h2 id="C-的内存分配方式"><a href="#C-的内存分配方式" class="headerlink" title="C++的内存分配方式"></a>C++的内存分配方式</h2><ul>
-<li>全局/静态变量区</li>
-<li>常量存储区</li>
-<li>栈：在局部变量和函数参数在栈上创建，函数执行结束时这些存储单元自动被释放。栈内存分配运算内置于处理器的指令集中，效率很高，但是栈的内存容量有限。</li>
-<li>堆：由new分配的内存块，需要手动通过delete来释放。如果没有delete，那么在程序结束后，操作系统会自动回收。</li>
-<li>自由存储区：由malloc等分配的内存块，和堆是十分相似，不过它是用free来结束自己的生命的。</li>
-</ul>
-<a id="more"></a>
-<h3 id="堆和栈"><a href="#堆和栈" class="headerlink" title="堆和栈"></a>堆和栈</h3><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">()</span> </span>&#123; <span class="keyword">int</span>* p = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">5</span>]; &#125;</span><br><span class="line"><span class="keyword">delete</span> []p;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>new了一个在堆上的数组，并在栈上创建一个指针p；用delete []p释放堆上的内存</li>
-<li>未delete的话会造成内存泄漏。delete后的指针为野指针，</li>
-<li><strong>new和delete时分别执行构造函数和析构函数</strong></li>
-<li></li>
-</ul>
-<h4 id="管理方式-amp-申请后系统的响应"><a href="#管理方式-amp-申请后系统的响应" class="headerlink" title="管理方式&amp;申请后系统的响应"></a>管理方式&amp;申请后系统的响应</h4><ul>
-<li>栈：由系统管理。不用手动申请，只要栈的剩余空间大于所申请空间，系统将为程序提供内存，否则将报异常提示栈溢出。  </li>
-<li>堆：要new。<ul>
-<li>首先应该知道操作系统有一个记录空闲内存地址的链表，当系统收到程序的申请时，会遍历该链表，寻找第一个空间大于所申请空间的堆结点，然后将该结点从空闲结点链表中删除，并将该结点的空间分配给程序，另外，对于大多数系统，会在这块内存空间中的首地址处记录本次分配的大小，这样，代码中的delete语句才能正确的释放本内存空间。另外，由于找到的堆结点的大小不一定正好等于申请的大小，系统会自动的将多余的那部分重新放入空闲链表中。   </li>
-</ul>
-</li>
-</ul>
-<h4 id="空间大小"><a href="#空间大小" class="headerlink" title="空间大小"></a>空间大小</h4><ul>
-<li>栈：在Windows下,<strong>栈是向低地址扩展</strong>的数据结构，是一块连续的内存的区域。这句话的意思是栈顶的地址和栈的最大容量是系统预先规定好的，在WINDOWS下，栈的大小是2M（或1M，总之是一个编译时就确定的常数），如果申请的空间超过栈的剩余空间时，将提示overflow。因此，能从栈获得的空间较小。   </li>
-<li>堆：<strong>堆是向高地址扩展</strong>的数据结构，是不连续的内存区域。这是由于系统是用链表来存储的空闲内存地址的，自然是不连续的，而链表的遍历方向是由低地址向高地址。堆的大小受限于计算机系统中有效的虚拟内存。由此可见，堆获得的空间比较灵活，也比较大。   </li>
-</ul>
-<h4 id="申请效率的比较："><a href="#申请效率的比较：" class="headerlink" title="申请效率的比较："></a>申请效率的比较：</h4><ul>
-<li>栈：机器系统提供的数据结构，计算机会在底层对栈提供支持：分配专门的寄存器存放栈的地址，压栈出栈都有专门的指令执行，这就决定了栈的效率比较高。</li>
-<li>堆：则是C/C++函数库提供的，它的机制是很复杂的，例如为了分配一块内存，库函数会按照一定的算法（具体的算法可以参考数据结构/操作系统）在堆内存中搜索可用的足够大小的空间，如果没有足够大小的空间（可能是由于内存碎片太多），就有可能调用系统功能去增加程序数据段的内存空间，这样就有机会分到足够大小的内存，然后进行返回。显然，堆的效率比栈要低得多。</li>
-</ul>
-<h4 id="堆和栈中的存储内容"><a href="#堆和栈中的存储内容" class="headerlink" title="堆和栈中的存储内容"></a>堆和栈中的存储内容</h4><ul>
-<li>栈：在函数调用时，第一个进栈的是主函数中后的下一条指令（函数调用语句的下一条可执行语句）的地址，然后是函数的各个参数，在大多数的C编译器中，参数是由右往左入栈的，然后是函数中的局部变量。注意静态变量是不入栈的。当本次函数调用结束后，局部变量先出栈，然后是参数，最后栈顶指针指向开始存的地址，也就是主函数中的下一条指令，程序由该点继续运行。   </li>
-<li>堆：一般是在堆的头部用一个字节存放堆的大小。堆中的具体内容由程序员安排。   </li>
-</ul>
-<h2 id="函数传递方式"><a href="#函数传递方式" class="headerlink" title="函数传递方式"></a>函数传递方式</h2><ul>
-<li>值传递：调用了一个复制构造函数，相当于创建了一个拷贝，会造成更多的内存占用</li>
-<li>引用传递：传递的是原参数的别名。节省内存，可对实参进行修改。</li>
-<li><p>指针传递：形参是指向实参的指针，对形参指针的操作，会影响到实参。</p>
-</li>
-<li><p>指针传递和引用传递一般适用于：</p>
-<ul>
-<li>函数内部修改参数并且希望改动影响调用者。</li>
-<li>当一个函数实际需要返回多个值，而只能显式返回一个值时，可以将另外需要返回的变量以指针/引用传递。</li>
-</ul>
-</li>
-</ul>
-<h3 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h3><ul>
-<li>引用为别名，不能有null引用</li>
-<li>引用在创建的同时必须对其初始化</li>
-<li>引用在初始化后，无法改变引用关系</li>
-</ul>
-<h3 id="指针"><a href="#指针" class="headerlink" title="指针"></a>指针</h3><ul>
-<li>本质上还是值传递，传递的是地址</li>
-</ul>
-<p>&lt;未完&gt;</p>
-]]></content>
-      <categories>
-        <category>Learning</category>
-      </categories>
-      <tags>
-        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -548,90 +548,66 @@ k_{v} \\
       </categories>
       <tags>
         <tag>cs224w</tag>
-        <tag>ML</tag>
         <tag>Graph</tag>
+        <tag>ML</tag>
       </tags>
   </entry>
   <entry>
-    <title>CS224WLec3-Node Embeddings</title>
-    <url>/2021/12/15/CS224WLec3/</url>
-    <content><![CDATA[<h1 id="Basic"><a href="#Basic" class="headerlink" title="Basic"></a>Basic</h1><ul>
-<li>goal: 为node生成一个embedding</li>
-<li>两个要素：<strong>encoder/相似度计量方法（encode前后都需要）</strong></li>
-<li>framework: encoder 生成embedding —&gt; 相似度计量方法决定embedding学习的好坏</li>
-<li><strong>unsupervised/self-supervised way</strong> based on random walks</li>
-<li>task independent</li>
+    <title>CS224WLec5-Label Propagation for Node Classification[LIP]</title>
+    <url>/2021/12/19/CS224WLec5/</url>
+    <content><![CDATA[<p><a href="http://web.stanford.edu/class/cs224w/slides/05-message.pdf">ppt</a></p>
+<h1 id="Semi-supervised-binary-node-classification"><a href="#Semi-supervised-binary-node-classification" class="headerlink" title="Semi-supervised binary node classification"></a>Semi-supervised binary node classification</h1><ul>
+<li>goal: 知道部分节点的label求其他节点的label</li>
+<li>main assumption：网络中存在的同质性。同类的node倾向于相互连接，或者聚在一起。</li>
+<li>framework<ul>
+<li>初始化</li>
+<li>迭代</li>
+<li>收敛</li>
+</ul>
+</li>
+<li>approaches<ul>
+<li>relational classification</li>
+<li>iterative classification</li>
+<li>correct &amp; smooth</li>
+</ul>
+</li>
+<li>以节点二分类为例</li>
 </ul>
 <a id="more"></a>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><ul>
-<li>goal: 原始graph中相似的node获得的embeddings也是相似的</li>
-<li>类似于word2vec: 目标是求node u的embedding <script type="math/tex">\mathbf{z}_{u}</script>,而模型的预测目标是：<script type="math/tex">P\left(v \mid \mathbf{z}_{u}\right)</script>，即node v出现在以node u开始的walk上的概率。</li>
-<li>如何获得“句子”：random walk</li>
-</ul>
-<h2 id="Deep-Walk"><a href="#Deep-Walk" class="headerlink" title="Deep Walk"></a>Deep Walk</h2><h3 id="Random-Walk"><a href="#Random-Walk" class="headerlink" title="Random Walk"></a>Random Walk</h3><ul>
-<li>出发点：如果一个random walk中包括从u到v的路径，那u和v是相似的/有相似的高维的多跳信息</li>
-<li>本质：DFS</li>
-<li>$ N_{\mathrm{R}}(u) $为策略R下，从u出发的walk中，出现的所有nodes<script type="math/tex; mode=display">\max _{f} \sum_{u \in V} \log \mathrm{P}\left(N_{\mathrm{R}}(u) \mid \mathbf{z}_{u}\right)</script>—》<script type="math/tex; mode=display">\mathcal{L}=\sum_{u \in V} \sum_{v \in N_{R}(u)}-\log \left(P\left(v \mid \mathbf{z}_{u}\right)\right)</script></li>
-<li>利用softmax求p<script type="math/tex; mode=display">P\left(v \mid \mathbf{z}_{u}\right)=\frac{\exp \left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{v}\right)}{\sum_{n \in V} \exp \left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{n}\right)}</script></li>
-<li>problem: softmax分母 以及 最外层都需要|V|次遍历 —》<script type="math/tex">\mathrm{O}\left(|\mathrm{V}|^{2}\right)</script>的复杂度 —》<strong>优化</strong></li>
-</ul>
-<h3 id="Negative-Sampling"><a href="#Negative-Sampling" class="headerlink" title="Negative Sampling"></a>Negative Sampling</h3><ul>
-<li>使用所有样本做normalization —&gt; 只采样k个负样本做normalization<script type="math/tex; mode=display">P\left(v \mid \mathbf{z}_{u}\right)=\frac{\exp \left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{v}\right)}{\sum_{n \in V } \exp \left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{n}\right)} \approx \log \left(\sigma\left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{v}\right)\right)-\sum_{i=1}^{k} \log \left(\sigma\left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{n_{i}}\right)\right), n_{i} \sim P_{V}</script></li>
-<li>k的选择：<ul>
-<li>k越大，模型越鲁棒</li>
-<li>k越大，对负样本考虑的越多</li>
-<li>5~20间较常见</li>
+<h1 id="Approaches"><a href="#Approaches" class="headerlink" title="Approaches"></a>Approaches</h1><h2 id="Probabilistic-relational-classifier"><a href="#Probabilistic-relational-classifier" class="headerlink" title="Probabilistic relational classifier"></a>Probabilistic relational classifier</h2><ul>
+<li><strong>只用到了邻居节点的label来做分类</strong></li>
+<li>step1: 初始化所有unlabeled nodes为0.5</li>
+<li>step2: update所有unlabeled nodes的预测值 <script type="math/tex">P\left(Y_{v}=c\right)=\frac{1}{\sum_{(v, u) \in E} A_{v, u}} \sum_{(v, u) \in E} A_{v, u} P\left(Y_{u}=c\right)</script><ul>
+<li>这里A为邻接矩阵，若边有权重，则Au,v是带权邻接矩阵</li>
 </ul>
 </li>
-<li>负样本的选择：可以选择graph内任意样本，但更准确的方法是选择不在walk中的样本</li>
-</ul>
-<h2 id="Node2vec-better-random-walk-strategy"><a href="#Node2vec-better-random-walk-strategy" class="headerlink" title="Node2vec: better  random walk strategy"></a>Node2vec: better  random walk strategy</h2><ul>
-<li>简单的random walk会限制walk中的node相似度与graph中node相似度的一致性</li>
-</ul>
-<h3 id="Biased-2nd-order-random-Walks"><a href="#Biased-2nd-order-random-Walks" class="headerlink" title="Biased 2nd-order random Walks"></a>Biased 2nd-order random Walks</h3><ul>
-<li>trade off between local and global views of the network: BFS &amp; DFS</li>
-<li>当前在w, 上一步在s的walk，有三种行走方向<ul>
-<li>退后：回退到s</li>
-<li>保持：走到和s距离一致的一个节点</li>
-<li>前进：走到距离s更远的节点<img src="/2021/12/15/CS224WLec3/node2vec1.png" class="" title="node2vec1"></li>
-</ul>
-</li>
-<li>实现：两个<strong>超参</strong>p/q，以及“1”来以非归一化的方法表示上述三种情况的概率<img src="/2021/12/15/CS224WLec3/node2vec2.png" class="" title="node2vec2"></li>
-<li>流程<ul>
-<li>Compute random walk probabilities</li>
-<li>Simulate 𝑟 random walks of length 𝑙 starting from each node 𝑢</li>
-<li>Optimize the node2vec objective using Stochastic Gradient Descent</li>
-</ul>
-</li>
-<li>Linear-time complexity</li>
-<li>All 3 steps are individually parallelizable</li>
-</ul>
-<h2 id="Embedding-entire-graphs"><a href="#Embedding-entire-graphs" class="headerlink" title="Embedding entire graphs"></a>Embedding entire graphs</h2><ul>
-<li>approach1: add all node embeddings</li>
-<li>approach2: introduce a “virtual node” or “super node” to represent the graph and learning embedding for this graph</li>
-<li>approach3: anonymous walks embeddings</li>
-</ul>
-<h3 id="Anonymous-walk-embeddings"><a href="#Anonymous-walk-embeddings" class="headerlink" title="Anonymous walk embeddings"></a>Anonymous walk embeddings</h3><ul>
-<li>Anonymous walk: random walk —&gt; 将node表示为距离start node的去重index。因此，确定了walk length的时候，就确定了anonymous walk中index的个数。</li>
-<li>方法1：长度为l的annoy walk共有n种情况 —&gt; 做m次random walks —&gt; 统计每种情况的count，并形成一个vector</li>
-<li>方法2：用Anonymous walks的概率分布，学习图的embedding<ul>
-<li>Learn to predict walks that co-occur in 𝚫-size window (e.g., predict 𝑤3 given 𝑤1, 𝑤2 if Δ = 2)</li>
-<li>objective:<script type="math/tex; mode=display">\max _{z_{G}} \sum_{t=\Delta+1}^{T} \log P\left(w_{t} \mid w_{t-\Delta}, \ldots, w_{t-1}, \mathbf{z}_{G}\right)</script></li>
+<li>step3: 重复step2直到收敛：达到最大steps，或者所有节点label不再更新</li>
+<li>challenges: <ul>
+<li>不能保证收敛</li>
+<li>没有用到节点特征信息</li>
 </ul>
 </li>
 </ul>
-<img src="/2021/12/15/CS224WLec3/annoywalks1.png" class="" title="annoywalks1">
-<img src="/2021/12/15/CS224WLec3/annoywalks2.png" class="" title="annoywalks2">
-<h2 id="Pros-amp-Cons"><a href="#Pros-amp-Cons" class="headerlink" title="Pros &amp; Cons"></a>Pros &amp; Cons</h2><ul>
-<li>属于shallow encoding，有如下优缺点：<ul>
-<li>需要O(|V|)的参数量，节点间的embedding不共享，每个node有独立的embedding</li>
-<li>training时没有的node，不会有embedding</li>
-<li>没有利用到节点的特征，只利用了graph structure</li>
+<h2 id="Iterative-classification"><a href="#Iterative-classification" class="headerlink" title="Iterative classification"></a>Iterative classification</h2><ul>
+<li>Classify node v based on its attributes <script type="math/tex">f_v</script> as well as labels <script type="math/tex">z_v</script> of neighbor set <script type="math/tex">N_v</script></li>
+<li><script type="math/tex">z_v</script>: v的neibors的label特征，可以是<ul>
+<li><script type="math/tex">N_v</script>中每种label的histogram</li>
+<li><script type="math/tex">N_v</script>中数量最多的label</li>
+<li>不同label的数量</li>
 </ul>
 </li>
+<li>流程<img src="/2021/12/19/CS224WLec5/classifier1.png" class="" title="classifier1">
+</li>
 </ul>
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
-<li><a href="http://web.stanford.edu/class/cs224w/slides/03-nodeemb.pdf">ppt</a></li>
+<h2 id="Collective-classification-correct-amp-smooth"><a href="#Collective-classification-correct-amp-smooth" class="headerlink" title="Collective classification: correct &amp; smooth"></a>Collective classification: correct &amp; smooth</h2><ul>
+<li>recent state-of-the-art collective classification method</li>
+<li>一种后处理方法</li>
+<li>基于的假设：相邻节点的误差应该接近</li>
+<li>correct step<ul>
+<li>初始error: labeled node: error = ground truth minus soft label; unlabeled node: error=0</li>
+<li>利用扩散矩阵 <script type="math/tex">\widetilde{\boldsymbol{A}}</script>求取下一步的error<script type="math/tex; mode=display">\boldsymbol{E}^{(t+1)} \leftarrow(1-\alpha) \cdot \boldsymbol{E}^{(t)}+\alpha \cdot \widetilde{\boldsymbol{A}} \boldsymbol{E}^{(t)}</script></li>
+</ul>
+</li>
 </ul>
 ]]></content>
       <categories>
@@ -640,9 +616,7 @@ k_{v} \\
       </categories>
       <tags>
         <tag>cs224w</tag>
-        <tag>DeepWalk</tag>
         <tag>Graph</tag>
-        <tag>Node2vec</tag>
       </tags>
   </entry>
   <entry>
@@ -659,74 +633,6 @@ k_{v} \\
       </categories>
       <tags>
         <tag>Resource</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CS224WLec4-PageRank</title>
-    <url>/2021/12/18/CS224WLec4/</url>
-    <content><![CDATA[<h1 id="PageRank"><a href="#PageRank" class="headerlink" title="PageRank"></a>PageRank</h1><ul>
-<li>一个node的重要性由指向它的节点的重要性决定 —&gt; <strong>指向该node的节点数越多，且这些节点重要性越高，则该节点越重要</strong>。node j的重要性（传递函数）为：<script type="math/tex; mode=display">r_{j}=\sum_{i \rightarrow j} \frac{r_{i}}{d_{i}}</script><script type="math/tex; mode=display">d_{i} \ldots out-degree of node i</script></li>
-<li><p>矩阵形式：</p>
-<ul>
-<li>随机邻接矩阵M。j有<script type="math/tex">d_{j}</script>个出链，如果j -&gt; i，则<script type="math/tex">M_{ij}=1/d_{j}</script>，因此每一列上的值要么为0，要么为<script type="math/tex">1/d_{j}</script>，且加和为1，称为列随机矩阵</li>
-<li>rank vector r: <script type="math/tex">r_{j}</script>为node j的重要性score，且<script type="math/tex">\sum_{i} r_{i}=1</script></li>
-<li>n*1 = n*n * n*1:<br><script type="math/tex">\boldsymbol{r}=\boldsymbol{M} \cdot \boldsymbol{r}</script>,</li>
-</ul>
-<script type="math/tex; mode=display">\quad r_{j}=\sum_{i \rightarrow j} \frac{r_{i}}{d_{i}}</script></li>
-<li>PageRank VS RandomWalk: 当random walk到达静态分布状态时满足<script type="math/tex">\boldsymbol{r}=\boldsymbol{M} \cdot \boldsymbol{r}</script>，即<strong>PageRank得到的重要性向量v是random walk的静态分布</strong></li>
-<li>PangRank VS Eigenvector: <strong>PageRank得到的重要性向量v是当特征值为1时得到的主特征向量</strong><a id="more"></a>
-</li>
-</ul>
-<h2 id="Solve-the-equation"><a href="#Solve-the-equation" class="headerlink" title="Solve the equation"></a>Solve the equation</h2><ul>
-<li>method: power iteration<ul>
-<li>initialize: 初始化，给每个node一个page rank值。e.g. <script type="math/tex; mode=display">
-\boldsymbol{r}^{0}=[1 / N, \ldots, 1 / N]^{T}</script></li>
-<li>iterate: 迭代<script type="math/tex; mode=display">
-r_{j}^{(t+1)}=\sum_{i \rightarrow j} \frac{r_{i}^{(t)}}{d_{i}}</script>即：<script type="math/tex; mode=display">
-\boldsymbol{r}^{(t+1)}=\boldsymbol{M} \cdot \boldsymbol{r}^{t}</script></li>
-<li>stop: 也可以选择其他度量方式<script type="math/tex; mode=display">
-\left|\boldsymbol{r}^{(t+1)}-\boldsymbol{r}^{t}\right|_{1}<\varepsilon</script></li>
-</ul>
-</li>
-</ul>
-<h3 id="Problems"><a href="#Problems" class="headerlink" title="Problems"></a>Problems</h3><ul>
-<li>dead ends: 遇到死胡同 —》 某个节点所在列的M为全0 —》随机矩阵不再随机，秩 &lt; n —》pagerank会收敛为全0<ul>
-<li>solution: 填充M中的该列，例如填充为1/n</li>
-</ul>
-</li>
-<li>spider trap: 在某个节点处死循环<ul>
-<li>solution: 允许random surfer跳到一个随机page。加一个超参β，表示是否沿着这条link走的概率，1-β表示随机jump的概率 —》相当于改了M</li>
-</ul>
-</li>
-<li>Google solution: teleport rankpage。β表示page j由其他page的出链决定，1-β表示由其他随机page决定<ul>
-<li>equation<script type="math/tex; mode=display">
-r_{j}=\sum_{i \rightarrow j} \beta \frac{r_{i}}{d_{i}}+(1-\beta) \frac{1}{N}</script></li>
-<li>matrix G<script type="math/tex; mode=display">\boldsymbol{G}=\beta {\boldsymbol{M}}+(1-\beta)[1/N]_{N*N}</script></li>
-</ul>
-</li>
-</ul>
-<img src="/2021/12/18/CS224WLec4/pagerank1.png" class="" title="pagerank1">
-<h1 id="PageRank扩展"><a href="#PageRank扩展" class="headerlink" title="PageRank扩展"></a>PageRank扩展</h1><ul>
-<li>Personalized PageRank: teleport到在指定的子图S</li>
-<li>Random walks with restarts: teleport到start page<img src="/2021/12/18/CS224WLec4/pagerank2.png" class="" title="pagerank2">
-</li>
-</ul>
-<h1 id="Limitations"><a href="#Limitations" class="headerlink" title="Limitations"></a>Limitations</h1><ul>
-<li>无法获得训练集里没有的node的embedding，必须重新训练</li>
-<li>无法捕获结构相似性：例如同一张图中的局部结构相似性</li>
-<li>无法利用node/edge以及图的特征：例如无法利用节点的其他属性</li>
-<li>解决方法：deep learning, GNN</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Learning</category>
-        <category>cs224w</category>
-      </categories>
-      <tags>
-        <tag>cs224w</tag>
-        <tag>ML</tag>
-        <tag>PageRank</tag>
-        <tag>Graph</tag>
       </tags>
   </entry>
   <entry>
@@ -757,6 +663,31 @@ r_{j}=\sum_{i \rightarrow j} \beta \frac{r_{i}}{d_{i}}+(1-\beta) \frac{1}{N}</sc
         <tag>CV</tag>
         <tag>ML</tag>
         <tag>目标检测</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CS224WLec6-GNN</title>
+    <url>/2021/12/22/CS224WLec6/</url>
+    <content><![CDATA[<p><a href="http://web.stanford.edu/class/cs224w/slides/06-GNN1.pdf">ppt</a></p>
+<h1 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h1><ul>
+<li>DeepWalk/Node2vec属于shallow encoding，有如下优缺点：<ul>
+<li>需要O(|V|)的参数量，节点间的embedding不共享，每个node有独立的embedding</li>
+<li>training时没有的node，不会有embedding</li>
+<li>没有利用到节点的特征，只利用了graph structure</li>
+</ul>
+</li>
+<li>GNN: deep encoding</li>
+</ul>
+<a id="more"></a>
+]]></content>
+      <categories>
+        <category>Learning</category>
+        <category>cs224w</category>
+      </categories>
+      <tags>
+        <tag>cs224w</tag>
+        <tag>Graph</tag>
+        <tag>GNN</tag>
       </tags>
   </entry>
   <entry>
@@ -950,6 +881,257 @@ r_{j}=\sum_{i \rightarrow j} \beta \frac{r_{i}}{d_{i}}+(1-\beta) \frac{1}{N}</sc
       </tags>
   </entry>
   <entry>
+    <title>CS224WLec4-PageRank</title>
+    <url>/2021/12/18/CS224WLec4/</url>
+    <content><![CDATA[<h1 id="PageRank"><a href="#PageRank" class="headerlink" title="PageRank"></a>PageRank</h1><ul>
+<li>一个node的重要性由指向它的节点的重要性决定 —&gt; <strong>指向该node的节点数越多，且这些节点重要性越高，则该节点越重要</strong>。node j的重要性（传递函数）为：<script type="math/tex; mode=display">r_{j}=\sum_{i \rightarrow j} \frac{r_{i}}{d_{i}}</script><script type="math/tex; mode=display">d_{i} \ldots out-degree of node i</script></li>
+<li><p>矩阵形式：</p>
+<ul>
+<li>随机邻接矩阵M。j有<script type="math/tex">d_{j}</script>个出链，如果j -&gt; i，则<script type="math/tex">M_{ij}=1/d_{j}</script>，因此每一列上的值要么为0，要么为<script type="math/tex">1/d_{j}</script>，且加和为1，称为列随机矩阵</li>
+<li>rank vector r: <script type="math/tex">r_{j}</script>为node j的重要性score，且<script type="math/tex">\sum_{i} r_{i}=1</script></li>
+<li>n*1 = n*n * n*1:<br><script type="math/tex">\boldsymbol{r}=\boldsymbol{M} \cdot \boldsymbol{r}</script>,</li>
+</ul>
+<script type="math/tex; mode=display">\quad r_{j}=\sum_{i \rightarrow j} \frac{r_{i}}{d_{i}}</script></li>
+<li>PageRank VS RandomWalk: 当random walk到达静态分布状态时满足<script type="math/tex">\boldsymbol{r}=\boldsymbol{M} \cdot \boldsymbol{r}</script>，即<strong>PageRank得到的重要性向量v是random walk的静态分布</strong></li>
+<li>PangRank VS Eigenvector: <strong>PageRank得到的重要性向量v是当特征值为1时得到的主特征向量</strong><a id="more"></a>
+</li>
+</ul>
+<h2 id="Solve-the-equation"><a href="#Solve-the-equation" class="headerlink" title="Solve the equation"></a>Solve the equation</h2><ul>
+<li>method: power iteration<ul>
+<li>initialize: 初始化，给每个node一个page rank值。e.g. <script type="math/tex; mode=display">
+\boldsymbol{r}^{0}=[1 / N, \ldots, 1 / N]^{T}</script></li>
+<li>iterate: 迭代<script type="math/tex; mode=display">
+r_{j}^{(t+1)}=\sum_{i \rightarrow j} \frac{r_{i}^{(t)}}{d_{i}}</script>即：<script type="math/tex; mode=display">
+\boldsymbol{r}^{(t+1)}=\boldsymbol{M} \cdot \boldsymbol{r}^{t}</script></li>
+<li>stop: 也可以选择其他度量方式<script type="math/tex; mode=display">
+\left|\boldsymbol{r}^{(t+1)}-\boldsymbol{r}^{t}\right|_{1}<\varepsilon</script></li>
+</ul>
+</li>
+</ul>
+<h3 id="Problems"><a href="#Problems" class="headerlink" title="Problems"></a>Problems</h3><ul>
+<li>dead ends: 遇到死胡同 —》 某个节点所在列的M为全0 —》随机矩阵不再随机，秩 &lt; n —》pagerank会收敛为全0<ul>
+<li>solution: 填充M中的该列，例如填充为1/n</li>
+</ul>
+</li>
+<li>spider trap: 在某个节点处死循环<ul>
+<li>solution: 允许random surfer跳到一个随机page。加一个超参β，表示是否沿着这条link走的概率，1-β表示随机jump的概率 —》相当于改了M</li>
+</ul>
+</li>
+<li>Google solution: teleport rankpage。β表示page j由其他page的出链决定，1-β表示由其他随机page决定<ul>
+<li>equation<script type="math/tex; mode=display">
+r_{j}=\sum_{i \rightarrow j} \beta \frac{r_{i}}{d_{i}}+(1-\beta) \frac{1}{N}</script></li>
+<li>matrix G<script type="math/tex; mode=display">\boldsymbol{G}=\beta {\boldsymbol{M}}+(1-\beta)[1/N]_{N*N}</script></li>
+</ul>
+</li>
+</ul>
+<img src="/2021/12/18/CS224WLec4/pagerank1.png" class="" title="pagerank1">
+<h1 id="PageRank扩展"><a href="#PageRank扩展" class="headerlink" title="PageRank扩展"></a>PageRank扩展</h1><ul>
+<li>Personalized PageRank: teleport到在指定的子图S</li>
+<li>Random walks with restarts: teleport到start page<img src="/2021/12/18/CS224WLec4/pagerank2.png" class="" title="pagerank2">
+</li>
+</ul>
+<h1 id="Limitations"><a href="#Limitations" class="headerlink" title="Limitations"></a>Limitations</h1><ul>
+<li>无法获得训练集里没有的node的embedding，必须重新训练</li>
+<li>无法捕获结构相似性：例如同一张图中的局部结构相似性</li>
+<li>无法利用node/edge以及图的特征：例如无法利用节点的其他属性</li>
+<li>解决方法：deep learning, GNN</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Learning</category>
+        <category>cs224w</category>
+      </categories>
+      <tags>
+        <tag>cs224w</tag>
+        <tag>Graph</tag>
+        <tag>ML</tag>
+        <tag>PageRank</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Graph-与图有关的资源</title>
+    <url>/2021/12/22/Graph/</url>
+    <content><![CDATA[<h2 id="OpenResource"><a href="#OpenResource" class="headerlink" title="OpenResource"></a>OpenResource</h2><ul>
+<li><a href="https://ogb.stanford.edu/">OGB</a>: The Open Graph Benchmark (OGB) is a collection of realistic, large-scale, and diverse benchmark datasets for machine learning on graphs.</li>
+</ul>
+<h2 id="Class"><a href="#Class" class="headerlink" title="Class"></a>Class</h2><ul>
+<li><a href="http://web.stanford.edu/class/cs224w/">CS224W: Machine Learning with Graphs</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>Graph</tag>
+        <tag>ML</tag>
+        <tag>Resource</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CS224WLec3-Node Embeddings</title>
+    <url>/2021/12/15/CS224WLec3/</url>
+    <content><![CDATA[<h1 id="Basic"><a href="#Basic" class="headerlink" title="Basic"></a>Basic</h1><ul>
+<li>goal: 为node生成一个embedding</li>
+<li>两个要素：<strong>encoder/相似度计量方法（encode前后都需要）</strong></li>
+<li>framework: encoder 生成embedding —&gt; 相似度计量方法决定embedding学习的好坏</li>
+<li><strong>unsupervised/self-supervised way</strong> based on random walks</li>
+<li>task independent</li>
+</ul>
+<a id="more"></a>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><ul>
+<li>goal: 原始graph中相似的node获得的embeddings也是相似的</li>
+<li>类似于word2vec: 目标是求node u的embedding <script type="math/tex">\mathbf{z}_{u}</script>,而模型的预测目标是：<script type="math/tex">P\left(v \mid \mathbf{z}_{u}\right)</script>，即node v出现在以node u开始的walk上的概率。</li>
+<li>如何获得“句子”：random walk</li>
+</ul>
+<h2 id="Deep-Walk"><a href="#Deep-Walk" class="headerlink" title="Deep Walk"></a>Deep Walk</h2><h3 id="Random-Walk"><a href="#Random-Walk" class="headerlink" title="Random Walk"></a>Random Walk</h3><ul>
+<li>出发点：如果一个random walk中包括从u到v的路径，那u和v是相似的/有相似的高维的多跳信息</li>
+<li>本质：DFS</li>
+<li>$ N_{\mathrm{R}}(u) $为策略R下，从u出发的walk中，出现的所有nodes<script type="math/tex; mode=display">\max _{f} \sum_{u \in V} \log \mathrm{P}\left(N_{\mathrm{R}}(u) \mid \mathbf{z}_{u}\right)</script>—》<script type="math/tex; mode=display">\mathcal{L}=\sum_{u \in V} \sum_{v \in N_{R}(u)}-\log \left(P\left(v \mid \mathbf{z}_{u}\right)\right)</script></li>
+<li>利用softmax求p<script type="math/tex; mode=display">P\left(v \mid \mathbf{z}_{u}\right)=\frac{\exp \left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{v}\right)}{\sum_{n \in V} \exp \left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{n}\right)}</script></li>
+<li>problem: softmax分母 以及 最外层都需要|V|次遍历 —》<script type="math/tex">\mathrm{O}\left(|\mathrm{V}|^{2}\right)</script>的复杂度 —》<strong>优化</strong></li>
+</ul>
+<h3 id="Negative-Sampling"><a href="#Negative-Sampling" class="headerlink" title="Negative Sampling"></a>Negative Sampling</h3><ul>
+<li>使用所有样本做normalization —&gt; 只采样k个负样本做normalization<script type="math/tex; mode=display">P\left(v \mid \mathbf{z}_{u}\right)=\frac{\exp \left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{v}\right)}{\sum_{n \in V } \exp \left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{n}\right)} \approx \log \left(\sigma\left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{v}\right)\right)-\sum_{i=1}^{k} \log \left(\sigma\left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{n_{i}}\right)\right), n_{i} \sim P_{V}</script></li>
+<li>k的选择：<ul>
+<li>k越大，模型越鲁棒</li>
+<li>k越大，对负样本考虑的越多</li>
+<li>5~20间较常见</li>
+</ul>
+</li>
+<li>负样本的选择：可以选择graph内任意样本，但更准确的方法是选择不在walk中的样本</li>
+</ul>
+<h2 id="Node2vec-better-random-walk-strategy"><a href="#Node2vec-better-random-walk-strategy" class="headerlink" title="Node2vec: better  random walk strategy"></a>Node2vec: better  random walk strategy</h2><ul>
+<li>简单的random walk会限制walk中的node相似度与graph中node相似度的一致性</li>
+</ul>
+<h3 id="Biased-2nd-order-random-Walks"><a href="#Biased-2nd-order-random-Walks" class="headerlink" title="Biased 2nd-order random Walks"></a>Biased 2nd-order random Walks</h3><ul>
+<li>trade off between local and global views of the network: BFS &amp; DFS</li>
+<li>当前在w, 上一步在s的walk，有三种行走方向<ul>
+<li>退后：回退到s</li>
+<li>保持：走到和s距离一致的一个节点</li>
+<li>前进：走到距离s更远的节点<img src="/2021/12/15/CS224WLec3/node2vec1.png" class="" title="node2vec1"></li>
+</ul>
+</li>
+<li>实现：两个<strong>超参</strong>p/q，以及“1”来以非归一化的方法表示上述三种情况的概率<img src="/2021/12/15/CS224WLec3/node2vec2.png" class="" title="node2vec2"></li>
+<li>流程<ul>
+<li>Compute random walk probabilities</li>
+<li>Simulate 𝑟 random walks of length 𝑙 starting from each node 𝑢</li>
+<li>Optimize the node2vec objective using Stochastic Gradient Descent</li>
+</ul>
+</li>
+<li>Linear-time complexity</li>
+<li>All 3 steps are individually parallelizable</li>
+</ul>
+<h2 id="Embedding-entire-graphs"><a href="#Embedding-entire-graphs" class="headerlink" title="Embedding entire graphs"></a>Embedding entire graphs</h2><ul>
+<li>approach1: add all node embeddings</li>
+<li>approach2: introduce a “virtual node” or “super node” to represent the graph and learning embedding for this graph</li>
+<li>approach3: anonymous walks embeddings</li>
+</ul>
+<h3 id="Anonymous-walk-embeddings"><a href="#Anonymous-walk-embeddings" class="headerlink" title="Anonymous walk embeddings"></a>Anonymous walk embeddings</h3><ul>
+<li>Anonymous walk: random walk —&gt; 将node表示为距离start node的去重index。因此，确定了walk length的时候，就确定了anonymous walk中index的个数。</li>
+<li>方法1：长度为l的annoy walk共有n种情况 —&gt; 做m次random walks —&gt; 统计每种情况的count，并形成一个vector</li>
+<li>方法2：用Anonymous walks的概率分布，学习图的embedding<ul>
+<li>Learn to predict walks that co-occur in 𝚫-size window (e.g., predict 𝑤3 given 𝑤1, 𝑤2 if Δ = 2)</li>
+<li>objective:<script type="math/tex; mode=display">\max _{z_{G}} \sum_{t=\Delta+1}^{T} \log P\left(w_{t} \mid w_{t-\Delta}, \ldots, w_{t-1}, \mathbf{z}_{G}\right)</script></li>
+</ul>
+</li>
+</ul>
+<img src="/2021/12/15/CS224WLec3/annoywalks1.png" class="" title="annoywalks1">
+<img src="/2021/12/15/CS224WLec3/annoywalks2.png" class="" title="annoywalks2">
+<h2 id="Pros-amp-Cons"><a href="#Pros-amp-Cons" class="headerlink" title="Pros &amp; Cons"></a>Pros &amp; Cons</h2><ul>
+<li>属于shallow encoding，有如下优缺点：<ul>
+<li>需要O(|V|)的参数量，节点间的embedding不共享，每个node有独立的embedding</li>
+<li>training时没有的node，不会有embedding</li>
+<li>没有利用到节点的特征，只利用了graph structure</li>
+</ul>
+</li>
+</ul>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a href="http://web.stanford.edu/class/cs224w/slides/03-nodeemb.pdf">ppt</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Learning</category>
+        <category>cs224w</category>
+      </categories>
+      <tags>
+        <tag>cs224w</tag>
+        <tag>Graph</tag>
+        <tag>DeepWalk</tag>
+        <tag>Node2vec</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>GraphEmbedding-LINE</title>
+    <url>/2021/12/20/GraphEmbedding-LINE/</url>
+    <content><![CDATA[<p>paper: <a href="https://arxiv.org/pdf/1503.03578.pdf">LINE: Large-scale Information Network Embedding</a></p>
+<h1 id="Intro"><a href="#Intro" class="headerlink" title="Intro"></a>Intro</h1><ul>
+<li>包含一阶信息（直接相连的两节点的邻近度）和二阶信息（一对顶点的邻近度用临近节点的相似性衡量）的GE学习模型：<strong>只用到了一阶邻点</strong></li>
+<li>DeepWalk/node2vec: 基于高阶相似度的GE学习模型</li>
+</ul>
+<a id="more"></a>
+<h1 id="Methods"><a href="#Methods" class="headerlink" title="Methods"></a>Methods</h1><ul>
+<li>边权重矩阵W：损失函数计算时用</li>
+<li>节点权重矩阵：节点采样时用</li>
+</ul>
+<h2 id="一阶相似度"><a href="#一阶相似度" class="headerlink" title="一阶相似度"></a>一阶相似度</h2><ul>
+<li><strong>只针对无向图，不支持有向图</strong></li>
+<li>边(u,v)的权重Wuv表示u和v之间的一阶相似性，如果在u和v之间无边，它们的一阶相似性为0。</li>
+<li>经验分布<script type="math/tex">\hat{p}_{1}(i, j)=\frac{w_{i j}}{W}</script>，这里W是W矩阵的模</li>
+<li>预测分布 <script type="math/tex">p_{1}\left(v_{i}, v_{j}\right)=\frac{1}{1+\exp \left(-\vec{u}_{i}^{T} \cdot \vec{u}_{j}\right)}</script></li>
+<li>目标函数 <script type="math/tex">O_{1}=d\left(\hat{p}_{1}(\cdot, \cdot), p_{1}(\cdot, \cdot)\right)</script>, d为距离函数，例如当d为KL散度且忽略常数项时（同交叉熵）：<script type="math/tex; mode=display">
+O_{1}=-\sum_{(i, j) \in E} w_{i j} \log p_{1}\left(v_{i}, v_{j}\right)</script></li>
+</ul>
+<h2 id="二阶相似度"><a href="#二阶相似度" class="headerlink" title="二阶相似度"></a>二阶相似度</h2><ul>
+<li>如果没有同样的相邻节点，二阶相似性为0</li>
+<li>经验分布 <script type="math/tex">\hat{p}_{2}\left(v_{j} \mid v_{i}\right)=\frac{w_{i j}}{d_{i}}</script>，di是节点i的带权出度，<script type="math/tex">w_{i j}</script>是边(i,j)的权重，<script type="math/tex">d_{i}=\sum_{k \in N(i)} w_{i k}</script></li>
+<li>预测分布 <script type="math/tex">p_{2}\left(v_{j} \mid v_{i}\right)=\frac{\exp \left(\vec{u}_{j}^{\prime T} \cdot \vec{u}_{i}\right)}{\sum_{k=1}^{|V|} \exp \left(\vec{u}_{k}^{\prime T} \cdot \vec{u}_{i}\right)}</script></li>
+<li>目标函数 <script type="math/tex">O_{2}=\sum_{i \in V} \lambda_{i} d\left(\hat{p}_{2}\left(\cdot \mid v_{i}\right), p_{2}\left(\cdot \mid v_{i}\right)\right)</script>，这里<script type="math/tex">\lambda_{i}</script>为对节点i的加权，一般取 <script type="math/tex">\lambda_{i}</script> 为 <script type="math/tex">d_{i}</script>，并取KL散度为距离函数时：<script type="math/tex">O_{2}=-\sum_{(i, j) \in E} w_{i j} \log p_{2}\left(v_{j} \mid v_{i}\right)</script></li>
+</ul>
+<h2 id="结合一阶和二阶"><a href="#结合一阶和二阶" class="headerlink" title="结合一阶和二阶"></a>结合一阶和二阶</h2><ul>
+<li>method1: 训完一阶训二阶，并将两者embedding concat</li>
+<li>method2: 一起训</li>
+</ul>
+<h2 id="其他损失函数"><a href="#其他损失函数" class="headerlink" title="其他损失函数"></a>其他损失函数</h2><ul>
+<li>pair loss: 用learn2rank的loss</li>
+</ul>
+<h2 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h2><h3 id="二阶相似度计算的负采样"><a href="#二阶相似度计算的负采样" class="headerlink" title="二阶相似度计算的负采样"></a>二阶相似度计算的负采样</h3><ul>
+<li>对softmax的优化：负采样，<script type="math/tex">\sigma</script>为sigmoid函数，<script type="math/tex">P_{n}(v) \propto d_{v}^{3 / 4}</script>利用出度构成的节点权重做采样，与w2v分布一致<script type="math/tex; mode=display">
+\log \sigma\left(\vec{u}_{j}^{\prime T} \cdot \vec{u}_{i}\right)+\sum_{i=1}^{K} E_{v_{n} \sim P_{n}(v)}\left[\log \sigma\left(-\vec{u}_{n}^{\prime T} \cdot \vec{u}_{i}\right)\right]</script></li>
+</ul>
+<h3 id="边采样"><a href="#边采样" class="headerlink" title="边采样"></a>边采样</h3><ul>
+<li>O2的梯度与边权重wij有关，若学习率的设定由小权重决定，则遇到大权重时会梯度爆炸；反之则会梯度消失<script type="math/tex; mode=display">
+\frac{\partial O_{2}}{\partial \vec{u}_{i}}=w_{i j} \cdot \frac{\partial \log p_{2}\left(v_{j} \mid v_{i}\right)}{\partial \vec{u}_{i}}</script></li>
+<li>简单的优化方式：将权重为w的edge变为w条二进制edge —&gt; oom —&gt; edge sampling</li>
+<li>采样算法：alias算法，可以达到O(1)复杂度</li>
+</ul>
+<h2 id="Problems"><a href="#Problems" class="headerlink" title="Problems"></a>Problems</h2><ul>
+<li>新节点的GE（新节点）：<ul>
+<li>新节点和已有节点相连：优化如下目标函数 <script type="math/tex">-\sum_{j \in N(i)} w_{j i} \log p_{1}\left(v_{j}, v_{i}\right), \text { or }-\sum_{j \in N(i)} w_{j i} \log p_{2}\left(v_{j} \mid v_{i}\right)</script></li>
+<li>新节点不和已有节点相连：文中没给 —》利用side info</li>
+</ul>
+</li>
+<li>低度数顶点（孤岛节点）：对于一些顶点由于其邻接点非常少会导致embedding向量的学习不充分，论文提到可以利用邻居的邻居构造样本进行学习，这里也暴露出LINE方法仅考虑一阶和二阶相似性，对高阶信息的利用不足。</li>
+</ul>
+<h1 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h1><ul>
+<li>边权重矩阵和节点权重矩阵（pagerank/出度/centrality/clustering coefficient/…）的设计</li>
+<li>不同的loss: KL/cross-entropy/rankloss/…</li>
+<li>采样算法</li>
+</ul>
+<h1 id="Pros-amp-Cons"><a href="#Pros-amp-Cons" class="headerlink" title="Pros &amp; Cons"></a>Pros &amp; Cons</h1><ul>
+<li>效率高</li>
+<li>只用了一跳信息</li>
+<li>对孤岛节点和新节点没有好的处理</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>Graph</tag>
+        <tag>LINE</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Java学习资源</title>
     <url>/2021/12/10/Java%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%BA%90/</url>
     <content><![CDATA[<h2 id="书籍"><a href="#书籍" class="headerlink" title="书籍"></a>书籍</h2><ul>
@@ -1035,6 +1217,90 @@ r_{j}=\sum_{i \rightarrow j} \beta \frac{r_{i}}{d_{i}}+(1-\beta) \frac{1}{N}</sc
       <tags>
         <tag>ML</tag>
         <tag>LightGBM</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ML-Decision Tree</title>
+    <url>/2021/12/10/ML-Decision%20Tree/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<ol>
+<li>决策树</li>
+</ol>
+<p><strong>问题：如何挑选用于分裂节点的特征—&gt;ID3 C4.5 …(一个标准：使分裂出来的节点尽可能纯，即一个分支尽可能属于同类)</strong></p>
+<a id="more"></a>
+<ol>
+<li><p>ID3<br><strong>信息增益</strong></p>
+<p> 信息增益 = 信息熵 - 条件熵</p>
+<ul>
+<li>信息增益：针对每个 <strong>属性</strong></li>
+<li>信息熵：整个样本空间的不确定度。其中Pk一定是label取值的概率。</li>
+<li><p>条件熵：给定某个属性，求其信息熵</p>
+<p>—&gt; 问题：某属性所包括的类别越多，信息增益越大。极限：每个类别仅有1个实例（label数量为1），log p = log1 = 0， 所以最终条件熵=0。或：属性类别越多，条件熵越小，其纯度越高。</p>
+<p>—&gt; 信息增益准则其实是对可取值数目较多的属性有所偏好！</p>
+<p>—&gt; 泛化能力不强</p>
+</li>
+</ul>
+</li>
+<li><p>C4.5 <strong>信息增益率+信息增益</strong></p>
+<p> 属性a的信息增益率 = 属性a的信息增益 / a的某个固有统计量IV(a)</p>
+<p> <img src="https://pic4.zhimg.com/80/v2-812104c0291d20935e910919a9fa5c27_hd.png" alt="IV(a)公式"></p>
+<p> V为a的取值数目。<br> （实际上是属性a的信息熵）</p>
+<ul>
+<li>直接使用信息增益率：偏好取值数目小的属性。</li>
+<li>先选择高于平均水平信息增益的属性，再选择最高信息增益率的属性。</li>
+</ul>
+</li>
+<li><p>CART <strong>基尼系数+MAE/MSE</strong></p>
+<p>与ID3、C4.5的不同：形成二叉树，因此 —&gt; 既要确定要分割的属性，也要确定要分割的值</p>
+<ul>
+<li><p>回归树：MAE/MSE</p>
+<ul>
+<li>example(MSE)：<blockquote>
+<ol>
+<li>考虑数据集 D 上的所有特征 j，遍历每一个特征下所有可能的取值或者切分点 s，将数据集 D 划分成两部分 D1 和 D2</li>
+<li>分别计算上述两个子集的平方误差和，选择最小的平方误差对应的特征与分割点，生成两个子节点。</li>
+<li>对上述两个子节点递归调用步骤1 2,直到满足停止条件。</li>
+</ol>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>分类树：(Gini不纯度)</p>
+<p><img src="https://img-blog.csdn.net/20150109184544578?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvQW5kcm9pZGx1c2hhbmdkZXJlbg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="某属性A的基尼不纯度"><br>基尼不纯度越小，纯度越高</p>
+</li>
+</ul>
+<blockquote>
+<ol>
+<li>对每个特征 A，对它的所有可能取值 a，将数据集分为 A＝a，和 A!＝a 两个子集，计算集合 D 的基尼指数：<br>Gini(A) = D1/D <em> Gini(D1) + D2/D </em> Gini(D2)</li>
+<li>遍历所有的特征 A，计算其所有可能取值 a 的基尼指数，选择 D 的基尼指数最小值对应的特征及切分点作为最优的划分，将数据分为两个子集。</li>
+<li>对上述两个子节点递归调用步骤1 2, 直到满足停止条件。</li>
+<li>生成 CART 决策树。</li>
+</ol>
+</blockquote>
+<pre><code>停止条件有：
+1. 节点中的样本个数小于预定阈值;
+2. 样本集的Gini系数小于预定阈值（此时样本基本属于同一类）;
+3. 没有更多特征。
+</code></pre><ul>
+<li>剪枝</li>
+<li>例子：<a href="https://www.jianshu.com/p/b90a9ce05b28">example</a></li>
+</ul>
+</li>
+<li><p>控制决策树过拟合的方法</p>
+<ul>
+<li>剪枝</li>
+<li>控制终止条件，避免树形结构过细</li>
+<li>构建随机森林</li>
+</ul>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>ML</tag>
+        <tag>DecisionTree</tag>
       </tags>
   </entry>
   <entry>
@@ -1187,90 +1453,6 @@ M I o U=\frac{1}{k+1} \sum_{i=0}^{k} \frac{T P}{F N+F P+T P}
       </tags>
   </entry>
   <entry>
-    <title>ML-Decision Tree</title>
-    <url>/2021/12/10/ML-Decision%20Tree/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<ol>
-<li>决策树</li>
-</ol>
-<p><strong>问题：如何挑选用于分裂节点的特征—&gt;ID3 C4.5 …(一个标准：使分裂出来的节点尽可能纯，即一个分支尽可能属于同类)</strong></p>
-<a id="more"></a>
-<ol>
-<li><p>ID3<br><strong>信息增益</strong></p>
-<p> 信息增益 = 信息熵 - 条件熵</p>
-<ul>
-<li>信息增益：针对每个 <strong>属性</strong></li>
-<li>信息熵：整个样本空间的不确定度。其中Pk一定是label取值的概率。</li>
-<li><p>条件熵：给定某个属性，求其信息熵</p>
-<p>—&gt; 问题：某属性所包括的类别越多，信息增益越大。极限：每个类别仅有1个实例（label数量为1），log p = log1 = 0， 所以最终条件熵=0。或：属性类别越多，条件熵越小，其纯度越高。</p>
-<p>—&gt; 信息增益准则其实是对可取值数目较多的属性有所偏好！</p>
-<p>—&gt; 泛化能力不强</p>
-</li>
-</ul>
-</li>
-<li><p>C4.5 <strong>信息增益率+信息增益</strong></p>
-<p> 属性a的信息增益率 = 属性a的信息增益 / a的某个固有统计量IV(a)</p>
-<p> <img src="https://pic4.zhimg.com/80/v2-812104c0291d20935e910919a9fa5c27_hd.png" alt="IV(a)公式"></p>
-<p> V为a的取值数目。<br> （实际上是属性a的信息熵）</p>
-<ul>
-<li>直接使用信息增益率：偏好取值数目小的属性。</li>
-<li>先选择高于平均水平信息增益的属性，再选择最高信息增益率的属性。</li>
-</ul>
-</li>
-<li><p>CART <strong>基尼系数+MAE/MSE</strong></p>
-<p>与ID3、C4.5的不同：形成二叉树，因此 —&gt; 既要确定要分割的属性，也要确定要分割的值</p>
-<ul>
-<li><p>回归树：MAE/MSE</p>
-<ul>
-<li>example(MSE)：<blockquote>
-<ol>
-<li>考虑数据集 D 上的所有特征 j，遍历每一个特征下所有可能的取值或者切分点 s，将数据集 D 划分成两部分 D1 和 D2</li>
-<li>分别计算上述两个子集的平方误差和，选择最小的平方误差对应的特征与分割点，生成两个子节点。</li>
-<li>对上述两个子节点递归调用步骤1 2,直到满足停止条件。</li>
-</ol>
-</blockquote>
-</li>
-</ul>
-</li>
-<li><p>分类树：(Gini不纯度)</p>
-<p><img src="https://img-blog.csdn.net/20150109184544578?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvQW5kcm9pZGx1c2hhbmdkZXJlbg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="某属性A的基尼不纯度"><br>基尼不纯度越小，纯度越高</p>
-</li>
-</ul>
-<blockquote>
-<ol>
-<li>对每个特征 A，对它的所有可能取值 a，将数据集分为 A＝a，和 A!＝a 两个子集，计算集合 D 的基尼指数：<br>Gini(A) = D1/D <em> Gini(D1) + D2/D </em> Gini(D2)</li>
-<li>遍历所有的特征 A，计算其所有可能取值 a 的基尼指数，选择 D 的基尼指数最小值对应的特征及切分点作为最优的划分，将数据分为两个子集。</li>
-<li>对上述两个子节点递归调用步骤1 2, 直到满足停止条件。</li>
-<li>生成 CART 决策树。</li>
-</ol>
-</blockquote>
-<pre><code>停止条件有：
-1. 节点中的样本个数小于预定阈值;
-2. 样本集的Gini系数小于预定阈值（此时样本基本属于同一类）;
-3. 没有更多特征。
-</code></pre><ul>
-<li>剪枝</li>
-<li>例子：<a href="https://www.jianshu.com/p/b90a9ce05b28">example</a></li>
-</ul>
-</li>
-<li><p>控制决策树过拟合的方法</p>
-<ul>
-<li>剪枝</li>
-<li>控制终止条件，避免树形结构过细</li>
-<li>构建随机森林</li>
-</ul>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>Learning</category>
-      </categories>
-      <tags>
-        <tag>ML</tag>
-        <tag>DecisionTree</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>ML-信息熵&amp;交叉熵&amp;条件熵&amp;相对熵(KL散度)&amp;互信息</title>
     <url>/2021/12/10/ML-%E4%BF%A1%E6%81%AF%E7%86%B5&amp;%E4%BA%A4%E5%8F%89%E7%86%B5&amp;%E6%9D%A1%E4%BB%B6%E7%86%B5&amp;%E7%9B%B8%E5%AF%B9%E7%86%B5(KL%E6%95%A3%E5%BA%A6)&amp;%E4%BA%92%E4%BF%A1%E6%81%AF/</url>
     <content><![CDATA[<ul>
@@ -1339,6 +1521,26 @@ M I o U=\frac{1}{k+1} \sum_{i=0}^{k} \frac{T P}{F N+F P+T P}
       </tags>
   </entry>
   <entry>
+    <title>P、NP、NP-hard问题</title>
+    <url>/2021/12/15/P&amp;NP&amp;NP-hard/</url>
+    <content><![CDATA[<h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><ul>
+<li>P Problem: <strong>任意性</strong>，对于<strong>任意的</strong>输入规模n，问题都可以在n的多项式时间内得到解决；</li>
+<li>NP(Non-deterministic Polynomial) Problem: <strong>存在性</strong>，<strong>可以</strong>在多项式的时间里验证一个解的问题；</li>
+<li>NPC(Non-deterministic Polynomial Complete) Problem: 满足两个条件 (1)是一个NP问题 (2)所有的NP问题都可以约化到它。可以理解为<strong>NP的泛化问题</strong>。</li>
+<li>NP-Hard Problem: 满足NPC问题的第二条，但不一定要满足第一条 —&gt; <strong>不一定可以在多项式时间内解决的问题</strong></li>
+</ul>
+<h1 id="搞笑版P-NP证明"><a href="#搞笑版P-NP证明" class="headerlink" title="搞笑版P=NP证明"></a>搞笑版P=NP证明</h1><blockquote>
+<p>反证法。设P = NP。令y为一个P = NP的证明。证明y可以用一个合格的计算机科学家在多项式时间内验证，我们认定这样的科学家的存在性为真。但是，因为P = NP，该证明y可以在多项式时间内由这样的科学家发现。但是这样的发现还没有发生（虽然这样的科学家试图发现这样的一个证明），我们得到了矛盾。</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>math</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>ML-Naive Bayes及其sklearn实现</title>
     <url>/2021/12/10/Naive%20Bayes/</url>
     <content><![CDATA[<p>[TOC]</p>
@@ -1371,57 +1573,6 @@ M I o U=\frac{1}{k+1} \sum_{i=0}^{k} \frac{T P}{F N+F P+T P}
       <tags>
         <tag>ML</tag>
         <tag>NaiveBayes</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>P、NP、NP-hard问题</title>
-    <url>/2021/12/15/P&amp;NP&amp;NP-hard/</url>
-    <content><![CDATA[<h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><ul>
-<li>P Problem: <strong>任意性</strong>，对于<strong>任意的</strong>输入规模n，问题都可以在n的多项式时间内得到解决；</li>
-<li>NP(Non-deterministic Polynomial) Problem: <strong>存在性</strong>，<strong>可以</strong>在多项式的时间里验证一个解的问题；</li>
-<li>NPC(Non-deterministic Polynomial Complete) Problem: 满足两个条件 (1)是一个NP问题 (2)所有的NP问题都可以约化到它。可以理解为<strong>NP的泛化问题</strong>。</li>
-<li>NP-Hard Problem: 满足NPC问题的第二条，但不一定要满足第一条 —&gt; <strong>不一定可以在多项式时间内解决的问题</strong></li>
-</ul>
-<h1 id="搞笑版P-NP证明"><a href="#搞笑版P-NP证明" class="headerlink" title="搞笑版P=NP证明"></a>搞笑版P=NP证明</h1><blockquote>
-<p>反证法。设P = NP。令y为一个P = NP的证明。证明y可以用一个合格的计算机科学家在多项式时间内验证，我们认定这样的科学家的存在性为真。但是，因为P = NP，该证明y可以在多项式时间内由这样的科学家发现。但是这样的发现还没有发生（虽然这样的科学家试图发现这样的一个证明），我们得到了矛盾。</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>Learning</category>
-      </categories>
-      <tags>
-        <tag>math</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Python-面向对象</title>
-    <url>/2021/12/10/Python-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/</url>
-    <content><![CDATA[<h3 id="属性命名"><a href="#属性命名" class="headerlink" title="属性命名"></a>属性命名</h3><ul>
-<li>属性以双下划线开头，类内变量，实例无法访问。但可以通过某些方式访问，例如Student例中定义了__name变量，可以用_Student_name来实现访问，但不建议，因为不同的解释器的转化方式不一样。</li>
-<li>单下划线可以打开，但需要注意不能随意更改。</li>
-<li>双下划线结尾与开头，特殊变量，类内可以访问，实例不知。</li>
-</ul>
-<a id="more"></a>
-<h3 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h3><p>开闭原则：定义一个类Animal及其多个之类Dog/Cat/…，当定义一个函数或操作时：</p>
-<ul>
-<li>对扩展开放：允许新增Animal的子类；</li>
-<li>对修改封闭：不需要修改依赖Animal类型的run_twice()等函数，仍然可以传入Dog/Cat等类。<br>事实上，不需要继承也可以实现多态————鸭子类型。</li>
-</ul>
-<h3 id="若干方法"><a href="#若干方法" class="headerlink" title="若干方法"></a>若干方法</h3><ul>
-<li>isinstance(object,class) 判断是否属于某个类</li>
-<li>dir() 列举出一个对象的属性和方法</li>
-<li>getattr()、setattr()、hasattr()可以获得、添加、查询是否需要某个属性<ul>
-<li>__slots__ 限制可以添加的属性，__slots__ = (‘name’, ‘age’) # 用tuple定义允许绑定的属性名称</li>
-</ul>
-</li>
-<li>装饰器</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Learning</category>
-      </categories>
-      <tags>
-        <tag>Python</tag>
       </tags>
   </entry>
   <entry>
@@ -1465,6 +1616,37 @@ M I o U=\frac{1}{k+1} \sum_{i=0}^{k} \frac{T P}{F N+F P+T P}
 <li>做法2：自己实现cmp类</li>
 </ul>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LargerNumKey</span>(<span class="params"><span class="built_in">str</span></span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__lt__</span>(<span class="params">x, y</span>):</span></span><br><span class="line">        <span class="keyword">return</span> x+y &gt; y+x</span><br><span class="line"></span><br><span class="line">largest_num = <span class="string">&#x27;&#x27;</span>.join(<span class="built_in">sorted</span>(<span class="built_in">map</span>(<span class="built_in">str</span>, nums), key=LargerNumKey))</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python-面向对象</title>
+    <url>/2021/12/10/Python-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/</url>
+    <content><![CDATA[<h3 id="属性命名"><a href="#属性命名" class="headerlink" title="属性命名"></a>属性命名</h3><ul>
+<li>属性以双下划线开头，类内变量，实例无法访问。但可以通过某些方式访问，例如Student例中定义了__name变量，可以用_Student_name来实现访问，但不建议，因为不同的解释器的转化方式不一样。</li>
+<li>单下划线可以打开，但需要注意不能随意更改。</li>
+<li>双下划线结尾与开头，特殊变量，类内可以访问，实例不知。</li>
+</ul>
+<a id="more"></a>
+<h3 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h3><p>开闭原则：定义一个类Animal及其多个之类Dog/Cat/…，当定义一个函数或操作时：</p>
+<ul>
+<li>对扩展开放：允许新增Animal的子类；</li>
+<li>对修改封闭：不需要修改依赖Animal类型的run_twice()等函数，仍然可以传入Dog/Cat等类。<br>事实上，不需要继承也可以实现多态————鸭子类型。</li>
+</ul>
+<h3 id="若干方法"><a href="#若干方法" class="headerlink" title="若干方法"></a>若干方法</h3><ul>
+<li>isinstance(object,class) 判断是否属于某个类</li>
+<li>dir() 列举出一个对象的属性和方法</li>
+<li>getattr()、setattr()、hasattr()可以获得、添加、查询是否需要某个属性<ul>
+<li>__slots__ 限制可以添加的属性，__slots__ = (‘name’, ‘age’) # 用tuple定义允许绑定的属性名称</li>
+</ul>
+</li>
+<li>装饰器</li>
+</ul>
+]]></content>
       <categories>
         <category>Learning</category>
       </categories>
@@ -1590,6 +1772,22 @@ M I o U=\frac{1}{k+1} \sum_{i=0}^{k} \frac{T P}{F N+F P+T P}
       </tags>
   </entry>
   <entry>
+    <title>CUDA介绍以及耗时分析</title>
+    <url>/2021/12/28/cuda-intros/</url>
+    <content><![CDATA[<ul>
+<li><a href="https://www.cnblogs.com/1024incn/p/4537177.html">https://www.cnblogs.com/1024incn/p/4537177.html</a>)</li>
+<li><a href="https://developer.download.nvidia.cn/CUDA/training/StreamsAndConcurrencyWebinar.pdf">https://developer.download.nvidia.cn/CUDA/training/StreamsAndConcurrencyWebinar.pdf</a><a id="more"></a>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>CUDA</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>git操作整理</title>
     <url>/2021/12/10/git-git%E6%93%8D%E4%BD%9C%E6%95%B4%E7%90%86/</url>
     <content><![CDATA[<ul>
@@ -1680,6 +1878,103 @@ M I o U=\frac{1}{k+1} \sum_{i=0}^{k} \frac{T P}{F N+F P+T P}
       </categories>
       <tags>
         <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Kaggle-Kaggle相关</title>
+    <url>/2021/12/10/kaggle%E7%9B%B8%E5%85%B3/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h1 id="如何在-Kaggle-首战中进入前-10"><a href="#如何在-Kaggle-首战中进入前-10" class="headerlink" title="如何在 Kaggle 首战中进入前 10%"></a>如何在 Kaggle 首战中进入前 10%</h1><p><a href="https://dnc1994.com/2016/04/rank-10-percent-in-first-kaggle-competition/">原文</a></p>
+<a id="more"></a>
+<h2 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h2><h3 id="Exploration-Data-Analysis-EDA"><a href="#Exploration-Data-Analysis-EDA" class="headerlink" title="Exploration Data Analysis(EDA)"></a>Exploration Data Analysis(EDA)</h3><h4 id="Visualization"><a href="#Visualization" class="headerlink" title="Visualization"></a>Visualization</h4><p>matplotlib + seaborn</p>
+<ul>
+<li>查看目标变量的分布。当分布不平衡时，根据评分标准和具体模型的使用不同，可能会严重影响性能。</li>
+<li>对 Numerical Variable，可以用 Box Plot 来直观地查看它的分布。</li>
+<li>对于坐标类数据，可以用 Scatter Plot 来查看它们的分布趋势和是否有离群点的存在。</li>
+<li>对于分类问题，将数据根据 Label 的不同着不同的颜色绘制出来，这对 Feature 的构造很有帮助。</li>
+<li>绘制变量之间两两的分布和相关度图表。</li>
+</ul>
+<p><a href="https://www.kaggle.com/benhamner/python-data-visualizations">example_visualization</a></p>
+<h4 id="Statistical-Tests"><a href="#Statistical-Tests" class="headerlink" title="Statistical Tests"></a>Statistical Tests</h4><p>可视化为定性，这里专注于定量，例如对于新创造的特征，可以将其加入原模型当中，看结果的变化。</p>
+<p>在某些比赛中，由于数据分布比较奇葩或是噪声过强，Public LB(Leader board)的分数可能会跟 Local CV(Cross Validation)的结果相去甚远。可以根据一些统计测试的结果来粗略地建立一个阈值，用来衡量一次分数的提高究竟是实质的提高还是由于数据的随机性导致的。</p>
+<h3 id="Data-Preprossing"><a href="#Data-Preprossing" class="headerlink" title="Data Preprossing"></a>Data Preprossing</h3><p>处理策略主要依赖于EDA中得到的结论。</p>
+<ul>
+<li>有时数据会分散在几个不同的文件中，需要 Join 起来。</li>
+<li>处理 Missing Data。</li>
+<li>处理 Outlier。</li>
+<li>必要时转换某些 Categorical Variable 的表示方式。例如应用one-hot encoding(pd.get_dummies)将categorical variable转化为数字变量。</li>
+<li>有些 Float 变量可能是从未知的 Int 变量转换得到的，这个过程中发生精度损失会在数据中产生不必要的 Noise，即两个数值原本是相同的却在小数点后某一位开始有不同。这对 Model 可能会产生很负面的影响，需要设法去除或者减弱 Noise。</li>
+</ul>
+<h3 id="Feature-Engineering"><a href="#Feature-Engineering" class="headerlink" title="Feature Engineering"></a>Feature Engineering</h3><h4 id="Feature-Selection"><a href="#Feature-Selection" class="headerlink" title="Feature Selection"></a>Feature Selection</h4><p>总的来说，应该<strong>生成尽量多的 Feature，相信 Model 能够挑出最有用的 Feature</strong>。但有时先做一遍 Feature Selection 也能带来一些好处：</p>
+<ul>
+<li>Feature 越少，训练越快。</li>
+<li>有些 Feature 之间可能存在线性关系，影响 Model 的性能。</li>
+<li>通过挑选出最重要的 Feature，可以将它们之间进行各种运算和操作的结果作为新的 Feature，可能带来意外的提高。</li>
+<li>Feature Selection 最实用的方法也就是看 Random Forest 训练完以后得到的 Feature Importance 了。其他有一些更复杂的算法在理论上更加 Robust，但是缺乏实用高效的实现。从原理上来讲，增加 Random Forest 中树的数量可以在一定程度上加强其对于 Noisy Data 的 Robustness。</li>
+</ul>
+<p>看 Feature Importance 对于某些数据经过脱敏处理的比赛尤其重要。这可以免得你浪费大把时间在琢磨一个不重要的变量的意义上。(脱敏：数据脱敏(Data Masking),又称数据漂白、数据去隐私化或数据变形。百度百科对数据脱敏的定义为：指对某些敏感信息通过脱敏规则进行数据的变形，实现敏感隐私数据的可靠保护。在涉及客户安全数据或者一些商业性敏感数据的情况下，在不违反系统规则条件下，对真实数据进行改造并提供测试使用，如身份证号、手机号、卡号、客户号等个人信息都需要进行数据脱敏。)</p>
+<h4 id="Feature-Encoding"><a href="#Feature-Encoding" class="headerlink" title="Feature Encoding"></a>Feature Encoding</h4><p>假设有一个 Categorical Variable 一共有几万个取值可能，那么创建 Dummy Variables 的方法就不可行了。这时一个比较好的方法是根据 Feature Importance 或是这些取值本身在数据中的出现频率，为最重要（比如说前 95% 的 Importance）那些取值（有很大可能只有几个或是十几个）创建 Dummy Variables，而所有其他取值都归到一个“其他”类里面。</p>
+<h3 id="Model-Selection"><a href="#Model-Selection" class="headerlink" title="Model Selection"></a>Model Selection</h3><p>Base Model:</p>
+<ul>
+<li>SVM</li>
+<li>Linear Regression</li>
+<li>Logistic Regression</li>
+<li>Neural Networks</li>
+</ul>
+<p>Most Used Models:</p>
+<ul>
+<li>Gradient Boosting</li>
+<li>Random Forest</li>
+<li><p>Extra Randomized Trees</p>
+<p><strong>XGBoost</strong></p>
+</li>
+</ul>
+<h4 id="Model-Training"><a href="#Model-Training" class="headerlink" title="Model Training"></a>Model Training</h4><p>通过Grid Search来确定模型的最佳参数。<br>e.g.</p>
+<ul>
+<li>sklearn 的 RandomForestClassifier 来说，比较重要的就是随机森林中树的数量 n_estimators 以及在训练每棵树时最多选择的特征数量 max_features。</li>
+<li><p>Xgboost 的调参。通常认为对它性能影响较大的参数有：</p>
+<ul>
+<li>eta：每次迭代完成后更新权重时的步长。越小训练越慢。</li>
+<li>num_round：总共迭代的次数。</li>
+<li>subsample：训练每棵树时用来训练的数据占全部的比例。用于防止 Overfitting。</li>
+<li>colsample_bytree：训练每棵树时用来训练的特征的比例，类似 RandomForestClassifier 的 max_features。</li>
+<li>max_depth：每棵树的最大深度限制。与 Random Forest 不同，Gradient Boosting 如果不对深度加以限制，最终是会 Overfit 的。</li>
+<li>early_stopping_rounds：用于控制在 Out Of Sample 的验证集上连续多少个迭代的分数都没有提高后就提前终止训练。用于防止 Overfitting。</li>
+</ul>
+<p>一般的调参步骤是：</p>
+<ol>
+<li>将训练数据的一部分划出来作为验证集。</li>
+<li>先将 eta 设得比较高（比如 0.1），num_round 设为 300 ~ 500。</li>
+<li>用 Grid Search 对其他参数进行搜索。</li>
+<li>逐步将 eta 降低，找到最佳值。</li>
+<li>以验证集为 watchlist，用找到的最佳参数组合重新在训练集上训练。注意观察算法的输出，看每次迭代后在验证集上分数的变化情况，从而得到最佳的 early_stopping_rounds。</li>
+</ol>
+<p><em>所有具有随机性的 Model 一般都会有一个 seed 或是 random_state 参数用于控制随机种子。得到一个好的 Model 后，在记录参数时务必也记录下这个值，从而能够在之后重现 Model。</em></p>
+</li>
+</ul>
+<h4 id="Cross-Validation"><a href="#Cross-Validation" class="headerlink" title="Cross Validation"></a>Cross Validation</h4><p>一般5-fold。</p>
+<p>fold越多训练越慢。</p>
+<h4 id="Ensemble-Generation"><a href="#Ensemble-Generation" class="headerlink" title="Ensemble Generation"></a>Ensemble Generation</h4><p>常见的 Ensemble 方法有这么几种：</p>
+<ul>
+<li>Bagging：使用训练数据的不同随机子集来训练每个 Base Model，最后进行每个 Base Model 权重相同的 Vote。也即 Random Forest 的原理。</li>
+<li>Boosting：迭代地训练 Base Model，每次根据上一个迭代中预测错误的情况修改训练样本的权重。也即 Gradient Boosting 的原理。比 Bagging 效果好，但更容易 Overfit。</li>
+<li>Blending：用不相交的数据训练不同的 Base Model，将它们的输出取（加权）平均。实现简单，但对训练数据利用少了。</li>
+<li>Stacking：接下来会详细介绍。</li>
+</ul>
+<p>从理论上讲，Ensemble 要成功，有两个要素：</p>
+<ul>
+<li>Base Model 之间的相关性要尽可能的小。这就是为什么非 Tree-based Model 往往表现不是最好但还是要将它们包括在 Ensemble 里面的原因。Ensemble 的 Diversity 越大，最终 Model 的 Bias 就越低。</li>
+<li>Base Model 之间的性能表现不能差距太大。这其实是一个 Trade-off，在实际中很有可能表现相近的 Model 只有寥寥几个而且它们之间相关性还不低。但是实践告诉我们即使在这种情况下 Ensemble 还是能大幅提高成绩。</li>
+</ul>
+<h3 id="Pipeline"><a href="#Pipeline" class="headerlink" title="Pipeline"></a>Pipeline</h3><p>workflow比较复杂，因此一个高自动化的pipeline比较重要。</p>
+<p>这里是以一个例子：<a href="https://github.com/ChenglongChen/Kaggle_CrowdFlower">example</a></p>
+]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>ML</tag>
+        <tag>Kaggle</tag>
       </tags>
   </entry>
   <entry>
@@ -1807,103 +2102,6 @@ M I o U=\frac{1}{k+1} \sum_{i=0}^{k} \frac{T P}{F N+F P+T P}
       <tags>
         <tag>ML</tag>
         <tag>Apriori</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Kaggle-Kaggle相关</title>
-    <url>/2021/12/10/kaggle%E7%9B%B8%E5%85%B3/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<h1 id="如何在-Kaggle-首战中进入前-10"><a href="#如何在-Kaggle-首战中进入前-10" class="headerlink" title="如何在 Kaggle 首战中进入前 10%"></a>如何在 Kaggle 首战中进入前 10%</h1><p><a href="https://dnc1994.com/2016/04/rank-10-percent-in-first-kaggle-competition/">原文</a></p>
-<a id="more"></a>
-<h2 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h2><h3 id="Exploration-Data-Analysis-EDA"><a href="#Exploration-Data-Analysis-EDA" class="headerlink" title="Exploration Data Analysis(EDA)"></a>Exploration Data Analysis(EDA)</h3><h4 id="Visualization"><a href="#Visualization" class="headerlink" title="Visualization"></a>Visualization</h4><p>matplotlib + seaborn</p>
-<ul>
-<li>查看目标变量的分布。当分布不平衡时，根据评分标准和具体模型的使用不同，可能会严重影响性能。</li>
-<li>对 Numerical Variable，可以用 Box Plot 来直观地查看它的分布。</li>
-<li>对于坐标类数据，可以用 Scatter Plot 来查看它们的分布趋势和是否有离群点的存在。</li>
-<li>对于分类问题，将数据根据 Label 的不同着不同的颜色绘制出来，这对 Feature 的构造很有帮助。</li>
-<li>绘制变量之间两两的分布和相关度图表。</li>
-</ul>
-<p><a href="https://www.kaggle.com/benhamner/python-data-visualizations">example_visualization</a></p>
-<h4 id="Statistical-Tests"><a href="#Statistical-Tests" class="headerlink" title="Statistical Tests"></a>Statistical Tests</h4><p>可视化为定性，这里专注于定量，例如对于新创造的特征，可以将其加入原模型当中，看结果的变化。</p>
-<p>在某些比赛中，由于数据分布比较奇葩或是噪声过强，Public LB(Leader board)的分数可能会跟 Local CV(Cross Validation)的结果相去甚远。可以根据一些统计测试的结果来粗略地建立一个阈值，用来衡量一次分数的提高究竟是实质的提高还是由于数据的随机性导致的。</p>
-<h3 id="Data-Preprossing"><a href="#Data-Preprossing" class="headerlink" title="Data Preprossing"></a>Data Preprossing</h3><p>处理策略主要依赖于EDA中得到的结论。</p>
-<ul>
-<li>有时数据会分散在几个不同的文件中，需要 Join 起来。</li>
-<li>处理 Missing Data。</li>
-<li>处理 Outlier。</li>
-<li>必要时转换某些 Categorical Variable 的表示方式。例如应用one-hot encoding(pd.get_dummies)将categorical variable转化为数字变量。</li>
-<li>有些 Float 变量可能是从未知的 Int 变量转换得到的，这个过程中发生精度损失会在数据中产生不必要的 Noise，即两个数值原本是相同的却在小数点后某一位开始有不同。这对 Model 可能会产生很负面的影响，需要设法去除或者减弱 Noise。</li>
-</ul>
-<h3 id="Feature-Engineering"><a href="#Feature-Engineering" class="headerlink" title="Feature Engineering"></a>Feature Engineering</h3><h4 id="Feature-Selection"><a href="#Feature-Selection" class="headerlink" title="Feature Selection"></a>Feature Selection</h4><p>总的来说，应该<strong>生成尽量多的 Feature，相信 Model 能够挑出最有用的 Feature</strong>。但有时先做一遍 Feature Selection 也能带来一些好处：</p>
-<ul>
-<li>Feature 越少，训练越快。</li>
-<li>有些 Feature 之间可能存在线性关系，影响 Model 的性能。</li>
-<li>通过挑选出最重要的 Feature，可以将它们之间进行各种运算和操作的结果作为新的 Feature，可能带来意外的提高。</li>
-<li>Feature Selection 最实用的方法也就是看 Random Forest 训练完以后得到的 Feature Importance 了。其他有一些更复杂的算法在理论上更加 Robust，但是缺乏实用高效的实现。从原理上来讲，增加 Random Forest 中树的数量可以在一定程度上加强其对于 Noisy Data 的 Robustness。</li>
-</ul>
-<p>看 Feature Importance 对于某些数据经过脱敏处理的比赛尤其重要。这可以免得你浪费大把时间在琢磨一个不重要的变量的意义上。(脱敏：数据脱敏(Data Masking),又称数据漂白、数据去隐私化或数据变形。百度百科对数据脱敏的定义为：指对某些敏感信息通过脱敏规则进行数据的变形，实现敏感隐私数据的可靠保护。在涉及客户安全数据或者一些商业性敏感数据的情况下，在不违反系统规则条件下，对真实数据进行改造并提供测试使用，如身份证号、手机号、卡号、客户号等个人信息都需要进行数据脱敏。)</p>
-<h4 id="Feature-Encoding"><a href="#Feature-Encoding" class="headerlink" title="Feature Encoding"></a>Feature Encoding</h4><p>假设有一个 Categorical Variable 一共有几万个取值可能，那么创建 Dummy Variables 的方法就不可行了。这时一个比较好的方法是根据 Feature Importance 或是这些取值本身在数据中的出现频率，为最重要（比如说前 95% 的 Importance）那些取值（有很大可能只有几个或是十几个）创建 Dummy Variables，而所有其他取值都归到一个“其他”类里面。</p>
-<h3 id="Model-Selection"><a href="#Model-Selection" class="headerlink" title="Model Selection"></a>Model Selection</h3><p>Base Model:</p>
-<ul>
-<li>SVM</li>
-<li>Linear Regression</li>
-<li>Logistic Regression</li>
-<li>Neural Networks</li>
-</ul>
-<p>Most Used Models:</p>
-<ul>
-<li>Gradient Boosting</li>
-<li>Random Forest</li>
-<li><p>Extra Randomized Trees</p>
-<p><strong>XGBoost</strong></p>
-</li>
-</ul>
-<h4 id="Model-Training"><a href="#Model-Training" class="headerlink" title="Model Training"></a>Model Training</h4><p>通过Grid Search来确定模型的最佳参数。<br>e.g.</p>
-<ul>
-<li>sklearn 的 RandomForestClassifier 来说，比较重要的就是随机森林中树的数量 n_estimators 以及在训练每棵树时最多选择的特征数量 max_features。</li>
-<li><p>Xgboost 的调参。通常认为对它性能影响较大的参数有：</p>
-<ul>
-<li>eta：每次迭代完成后更新权重时的步长。越小训练越慢。</li>
-<li>num_round：总共迭代的次数。</li>
-<li>subsample：训练每棵树时用来训练的数据占全部的比例。用于防止 Overfitting。</li>
-<li>colsample_bytree：训练每棵树时用来训练的特征的比例，类似 RandomForestClassifier 的 max_features。</li>
-<li>max_depth：每棵树的最大深度限制。与 Random Forest 不同，Gradient Boosting 如果不对深度加以限制，最终是会 Overfit 的。</li>
-<li>early_stopping_rounds：用于控制在 Out Of Sample 的验证集上连续多少个迭代的分数都没有提高后就提前终止训练。用于防止 Overfitting。</li>
-</ul>
-<p>一般的调参步骤是：</p>
-<ol>
-<li>将训练数据的一部分划出来作为验证集。</li>
-<li>先将 eta 设得比较高（比如 0.1），num_round 设为 300 ~ 500。</li>
-<li>用 Grid Search 对其他参数进行搜索。</li>
-<li>逐步将 eta 降低，找到最佳值。</li>
-<li>以验证集为 watchlist，用找到的最佳参数组合重新在训练集上训练。注意观察算法的输出，看每次迭代后在验证集上分数的变化情况，从而得到最佳的 early_stopping_rounds。</li>
-</ol>
-<p><em>所有具有随机性的 Model 一般都会有一个 seed 或是 random_state 参数用于控制随机种子。得到一个好的 Model 后，在记录参数时务必也记录下这个值，从而能够在之后重现 Model。</em></p>
-</li>
-</ul>
-<h4 id="Cross-Validation"><a href="#Cross-Validation" class="headerlink" title="Cross Validation"></a>Cross Validation</h4><p>一般5-fold。</p>
-<p>fold越多训练越慢。</p>
-<h4 id="Ensemble-Generation"><a href="#Ensemble-Generation" class="headerlink" title="Ensemble Generation"></a>Ensemble Generation</h4><p>常见的 Ensemble 方法有这么几种：</p>
-<ul>
-<li>Bagging：使用训练数据的不同随机子集来训练每个 Base Model，最后进行每个 Base Model 权重相同的 Vote。也即 Random Forest 的原理。</li>
-<li>Boosting：迭代地训练 Base Model，每次根据上一个迭代中预测错误的情况修改训练样本的权重。也即 Gradient Boosting 的原理。比 Bagging 效果好，但更容易 Overfit。</li>
-<li>Blending：用不相交的数据训练不同的 Base Model，将它们的输出取（加权）平均。实现简单，但对训练数据利用少了。</li>
-<li>Stacking：接下来会详细介绍。</li>
-</ul>
-<p>从理论上讲，Ensemble 要成功，有两个要素：</p>
-<ul>
-<li>Base Model 之间的相关性要尽可能的小。这就是为什么非 Tree-based Model 往往表现不是最好但还是要将它们包括在 Ensemble 里面的原因。Ensemble 的 Diversity 越大，最终 Model 的 Bias 就越低。</li>
-<li>Base Model 之间的性能表现不能差距太大。这其实是一个 Trade-off，在实际中很有可能表现相近的 Model 只有寥寥几个而且它们之间相关性还不低。但是实践告诉我们即使在这种情况下 Ensemble 还是能大幅提高成绩。</li>
-</ul>
-<h3 id="Pipeline"><a href="#Pipeline" class="headerlink" title="Pipeline"></a>Pipeline</h3><p>workflow比较复杂，因此一个高自动化的pipeline比较重要。</p>
-<p>这里是以一个例子：<a href="https://github.com/ChenglongChen/Kaggle_CrowdFlower">example</a></p>
-]]></content>
-      <categories>
-        <category>Learning</category>
-      </categories>
-      <tags>
-        <tag>ML</tag>
-        <tag>Kaggle</tag>
       </tags>
   </entry>
   <entry>
@@ -2605,6 +2803,186 @@ J(\theta) = -lnL(\theta) = -\sum\limits_{i=1}^{m}(y^{(i)}log(h_{\theta}(x^{(i)})
       </tags>
   </entry>
   <entry>
+    <title>机器学习面试题-贝叶斯</title>
+    <url>/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E8%B4%9D%E5%8F%B6%E6%96%AF/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h2 id="1-简述朴素贝叶斯算法原理和工作流程"><a href="#1-简述朴素贝叶斯算法原理和工作流程" class="headerlink" title="1.简述朴素贝叶斯算法原理和工作流程"></a>1.简述朴素贝叶斯算法原理和工作流程</h2><p><strong>工作原理</strong>：</p>
+<ul>
+<li>假设现在有样本$x=(x_1, x_2, x_3, \dots x_n)$待分类项</li>
+<li>假设样本有$m$个特征$(a_1,a_2,a_3,\dots a_m)$(特征独立)</li>
+<li>再假设现在有分类目标$Y={ y_1，y_2，y_3，\dots ,y_n}$</li>
+<li>那么就$\max ({ P }({ y }_1 | { x }), { P }({ y }_2 | {x}), {P}({y}_3 | {x}) ,{P}({y_n} | {x}))$是最终的分类类别。</li>
+<li>而$ P(y_i | x)=\frac{P(x | y_i) * P(y_i)}{ P(x)} $，因为$x$对于每个分类目标来说都一样，所以就是求$\max({P}({x}|{y_i})*{P}({y_i}))$</li>
+<li>$P(x | y_i) * P(y_i)=P(y_i) * \prod(P(a_j| y_i))$，而具体的$P(a_j|y_i)$和$P(y_i)$都是能从训练样本中统计出来</li>
+<li>${P}({a_j} | {y_i})$表示该类别下该特征$a_j$出现的概率$P(y_i)$表示全部类别中这个这个类别出现的概率,这样就能找到应该属于的类别了</li>
+</ul>
+<a id="more"></a>
+<h2 id="2-条件概率、先验概率、后验概率、联合概率、贝叶斯公式的概念"><a href="#2-条件概率、先验概率、后验概率、联合概率、贝叶斯公式的概念" class="headerlink" title="2. 条件概率、先验概率、后验概率、联合概率、贝叶斯公式的概念"></a>2. 条件概率、先验概率、后验概率、联合概率、贝叶斯公式的概念</h2><ul>
+<li><p>条件概率：</p>
+<ul>
+<li>$P(X|Y)$含义： 表示$Y$发生的条件下$X$发生的概率。</li>
+</ul>
+</li>
+<li><p>先验概率</p>
+<ul>
+<li><strong>表示事件发生前的预判概率。</strong>这个可以是基于历史数据统计，也可以由背景常识得出，也可以是主观观点得出。一般都是单独事件发生的概率，如 $P(X)$</li>
+</ul>
+</li>
+<li><p>后验概率</p>
+<ul>
+<li>基于先验概率求得的<strong>反向条件概率</strong>，形式上与条件概率相同(若$P(X|Y)$ 为正向，则$P(Y|X)$ 为反向)</li>
+</ul>
+</li>
+<li><p>联合概率：</p>
+</li>
+<li><p>事件$X$与事件$Y$同时发生的概率。</p>
+</li>
+<li><p>贝叶斯公式</p>
+<ul>
+<li><script type="math/tex; mode=display">
+P(Y|X) = \frac{P(X|Y) P(Y)}{P(X)}  \\</script></li>
+<li><p>$P(Y)$ 叫做<strong>先验概率</strong>：事件$X$发生之前，我们根据以往经验和分析对事件$Y$发生的一个概率的判断</p>
+</li>
+<li><p>$P(Y|X)$ 叫做<strong>后验概率</strong>：事件$X$发生之后，我们对事件$Y$发生的一个概率的重新评估</p>
+</li>
+<li><p>$P(Y,X)$叫做<strong>联合概率</strong>：事件$X$与事件$Y$同时发生的概率。</p>
+</li>
+<li><p>先验概率和后验概率是相对的。如果以后还有新的信息引入，更新了现在所谓的后验概率，得到了新的概率值，那么这个新的概率值被称为后验概率。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-为什么朴素贝叶斯如此“朴素”？"><a href="#3-为什么朴素贝叶斯如此“朴素”？" class="headerlink" title="3.为什么朴素贝叶斯如此“朴素”？"></a>3.为什么朴素贝叶斯如此“朴素”？</h2><p>因为它<strong>假定所有的特征在数据集中的作用是同样重要和独立的</strong>。正如我们所知，这个假设在现实世界中是很不真实的，因此，说朴素贝叶斯真的很“朴素”。用贝叶斯公式表达如下：</p>
+<script type="math/tex; mode=display">
+P(Y|X_1, X_2) = \frac{P(X_1|Y) P(X_2|Y) P(Y)}{P(X_1)P(X_2)}</script><p><strong>而在很多情况下，所有变量几乎不可能满足两两之间的条件。</strong></p>
+<p>朴素贝叶斯模型(Naive Bayesian Model)的朴素(Naive)的含义是<strong>“很简单很天真”</strong>地假设样本特征彼此独立.这个假设现实中基本上不存在，但特征相关性很小的实际情况还是很多的，所以这个模型仍然能够工作得很好。</p>
+<h2 id="4-什么是贝叶斯决策理论？"><a href="#4-什么是贝叶斯决策理论？" class="headerlink" title="4.什么是贝叶斯决策理论？"></a>4.什么是贝叶斯决策理论？</h2><p>贝叶斯决策理论是主观贝叶斯派归纳理论的重要组成部分。贝叶斯决策就是在不完全情报下，对部分未知的状态用主观概率估计，然后用贝叶斯公式对发生概率进行修正，最后再利用期望值和修正概率做出最优决策(选择概率最大的类别)。<br>贝叶斯决策理论方法是统计模型决策中的一个基本方法，其<strong>基本思想</strong>是：</p>
+<ul>
+<li>已知类条件概率密度参数表达式和先验概率</li>
+<li>利用贝叶斯公式转换成后验概率</li>
+<li>根据后验概率大小进行决策分类</li>
+</ul>
+<h2 id="5-朴素贝叶斯算法的前提假设是什么？"><a href="#5-朴素贝叶斯算法的前提假设是什么？" class="headerlink" title="5.朴素贝叶斯算法的前提假设是什么？"></a>5.朴素贝叶斯算法的前提假设是什么？</h2><ul>
+<li>特征之间相互独立</li>
+<li>每个特征同等重要</li>
+</ul>
+<h2 id="6-为什么属性独立性假设在实际情况中很难成立，但朴素贝叶斯仍能取得较好的效果"><a href="#6-为什么属性独立性假设在实际情况中很难成立，但朴素贝叶斯仍能取得较好的效果" class="headerlink" title="6.为什么属性独立性假设在实际情况中很难成立，但朴素贝叶斯仍能取得较好的效果?"></a>6.为什么属性独立性假设在实际情况中很难成立，但朴素贝叶斯仍能取得较好的效果?</h2><ul>
+<li>对于分类任务来说，只要各类别的条件概率排序正确、无需精准概率值即可导致正确分类；</li>
+<li>如果属性间依赖对所有类别影响相同，或依赖关系的影响能相互抵消，则属性条件独立性假设在降低计算开销的同时不会对性能产生负面影响。</li>
+</ul>
+<h2 id="7-什么是朴素贝叶斯中的零概率问题？如何解决？"><a href="#7-什么是朴素贝叶斯中的零概率问题？如何解决？" class="headerlink" title="7.什么是朴素贝叶斯中的零概率问题？如何解决？"></a><strong>7.什么是朴素贝叶斯中的零概率问题？如何解决？</strong></h2><p><strong>零概率问题</strong>：在计算实例的概率时，如果某个量$x$，在观察样本库(训练集)中没有出现过，会导致整个实例的概率结果是0。</p>
+<p><strong>解决办法</strong>：若$P(x)$为零则无法计算。为了解决零概率的问题，法国数学家拉普拉斯最早提出用加1的方法估计没有出现过的现象的概率，所以加法平滑也叫做<strong>拉普拉斯平滑</strong>。</p>
+<p><strong>举个栗子</strong>：假设在文本分类中，有3个类，$C1、C2、C3$，在指定的训练样本中，某个词语$K1$，在各个类中观测计数分别为0，990，10，$K1$的概率为0，0.99，0.01，对这三个量使用拉普拉斯平滑的计算方法如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1&#x2F;1003&#x3D;0.001，</span><br><span class="line">991&#x2F;1003&#x3D;0.988，</span><br><span class="line">11&#x2F;1003&#x3D;0.011</span><br><span class="line">在实际的使用中也经常使用加 lambda(1≥lambda≥0)来代替简单加1。如果对N个计数都加上lambda，这时分母也要记得加上N*lambda。</span><br></pre></td></tr></table></figure>
+<p>将朴素贝叶斯中的所有概率计算<strong>应用拉普拉斯平滑即可以解决零概率问题</strong>。</p>
+<h2 id="8-朴素贝叶斯中概率计算的下溢问题如何解决？"><a href="#8-朴素贝叶斯中概率计算的下溢问题如何解决？" class="headerlink" title="8.朴素贝叶斯中概率计算的下溢问题如何解决？"></a>8.朴素贝叶斯中概率计算的下溢问题如何解决？</h2><p><strong>下溢问题</strong>：在朴素贝叶斯的计算过程中，需要对特定分类中各个特征出现的<strong>概率进行连乘，小数相乘，越乘越小，这样就造成了下溢出</strong>。<br>为了解决这个问题，对乘积结果取自然对数。通过求对数可以避免下溢出或者浮点数舍入导致的错误。</p>
+<script type="math/tex; mode=display">
+\prod_{i=x}^{n} p\left(x_{i} | y_{j}\right)</script><p><strong>解决办法</strong>：对其<strong>取对数</strong>：</p>
+<script type="math/tex; mode=display">
+\log \prod_{i=1}^{n} p\left(x_{i} | y_{j}\right)</script><script type="math/tex; mode=display">
+=\sum_{i=1}^{n} \log p\left(x_{i} | y_{j}\right)</script><p>将小数的乘法操作转化为取对数后的加法操作，规避了变为零的风险同时并不影响分类结果。</p>
+<h2 id="9-当数据的属性是连续型变量时，朴素贝叶斯算法如何处理？"><a href="#9-当数据的属性是连续型变量时，朴素贝叶斯算法如何处理？" class="headerlink" title="9.当数据的属性是连续型变量时，朴素贝叶斯算法如何处理？"></a>9.当数据的属性是连续型变量时，朴素贝叶斯算法如何处理？</h2><p>当朴素贝叶斯算法数据的属性为连续型变量时，有两种方法可以计算属性的类条件概率。</p>
+<ul>
+<li>第一种方法：把一个连续的属性离散化，然后用相应的离散区间替换连续属性值。但这种方法不好控制离散区间划分的粒度。如果粒度太细，就会因为每个区间内训练记录太少而不能对$P(X|Y)$<br>做出可靠的估计，如果粒度太粗，那么有些区间就会有来自不同类的记录，因此失去了正确的决策边界。</li>
+<li>第二种方法：假设连续变量服从某种概率分布，然后使用训练数据估计分布的参数，例如可以使用高斯分布来表示连续属性的类条件概率分布。<ul>
+<li>高斯分布有两个参数，均值$\mu$和方差$\sigma 2$，对于每个类$y_i$，属性$X_i$的类条件概率等于：</li>
+</ul>
+</li>
+</ul>
+<script type="math/tex; mode=display">
+P\left(X_{i}=x_{i} | Y=y_{j}\right)=\frac{1}{\sqrt{2 \Pi} \sigma_{i j}^{2}} e^{\frac{\left(x_{i}-\mu_{j}\right)^{2}}{2 \sigma_{i}^{2}}}</script><p>$\mu_{i j}$：类$y_j$的所有训练记录关于$X_i$的样本均值估计</p>
+<p>$\sigma_{i j}^{2}$：类$y_j$的所有训练记录关于$X$的样本方差</p>
+<p>通过高斯分布估计出类条件概率。</p>
+<h2 id="10-朴素贝叶斯有哪几种常用的分类模型？"><a href="#10-朴素贝叶斯有哪几种常用的分类模型？" class="headerlink" title="10.朴素贝叶斯有哪几种常用的分类模型？"></a><strong>10.朴素贝叶斯有哪几种常用的分类模型？</strong></h2><p>三个常用模型：高斯、多项式、伯努利。三个模型都是为了解决连续性变量引起的问题的。</p>
+<ul>
+<li><p>多项式模型：</p>
+<ul>
+<li>思想：将一个连续值视为特征的一个类别，这样会引起很多概率为0的问题。所以用拉普拉斯平滑解决。</li>
+<li>其中$\alpha$为拉普拉斯平滑，加和的是属性出现的总次数，比如文本分类问题里面，不光看词语是否在文本中出现，也得看出现的次数。如果总词数为$n$，出现词数为$m$的话，说起来有点像掷骰子$n$次出现$m$次这个词的场景。<script type="math/tex; mode=display">
+P\left(x_{i} | y_{k}\right)=\frac{N_{y k_{1}}+\alpha}{N_{y_{k}}+\alpha n}</script></li>
+</ul>
+</li>
+<li><p>高斯模型：</p>
+<ul>
+<li>思想：是要得到一个概率值，但是直接把一个值当做一个类别会引起零概率问题，于是假设并模拟一个分布，求其参数，进而求其概率。</li>
+<li>处理包含连续型变量的数据，使用高斯分布概率密度来计算类的条件概率密度</li>
+</ul>
+</li>
+<li><p>伯努利模型：</p>
+<ul>
+<li>伯努利模型特征的取值为布尔型，即出现为true没有出现为false，在文本分类中，就是一个单词有没有在一个文档中出现。</li>
+<li>伯努利模型适用于离散特征情况，它将重复的词语都视为只出现一次。<script type="math/tex; mode=display">
+P( '代开'， '发票'， '发票'， '我' | S) = P('代开' | S)   P( '发票' | S) P('我' | S)</script>我们看到，”发票“出现了两次，但是我们只将其算作一次。我们看到，”发票“出现了两次，但是我们只将其算作一次。</li>
+</ul>
+</li>
+</ul>
+<h2 id="11-为什么说朴素贝叶斯是高偏差低方差？"><a href="#11-为什么说朴素贝叶斯是高偏差低方差？" class="headerlink" title="11.为什么说朴素贝叶斯是高偏差低方差？"></a>11.为什么说朴素贝叶斯是高偏差低方差？</h2><p>在统计学习框架下，大家刻画模型复杂度的时候，有这么个观点，认为$Error=Bias +Variance$。</p>
+<ul>
+<li>$Error$反映的是整个模型的准确度，</li>
+<li>$Bias$反映的是模型在样本上的输出与真实值之间的误差，即模型本身的精准度，</li>
+<li>$Variance$反映的是模型每一次输出结果与模型输出期望(平均值)之间的误差，即模型的稳定性，数据是否集中。</li>
+<li>对于复杂模型，充分拟合了部分数据，使得他们的偏差较小，而由于对部分数据的过度拟合，对于部分数据预测效果不好，整体来看可能引起方差较大。</li>
+<li>对于朴素贝叶斯了。它简单的假设了各个数据之间是无关的，是一个被严重简化了的模型，简单模型与复杂模型相反，大部分场合偏差部分大于方差部分，也就是说高偏差而低方差。</li>
+</ul>
+<h2 id="12-朴素贝叶斯为什么适合增量计算？"><a href="#12-朴素贝叶斯为什么适合增量计算？" class="headerlink" title="12.朴素贝叶斯为什么适合增量计算？"></a>12.朴素贝叶斯为什么适合增量计算？</h2><p>因为朴素贝叶斯在训练过程中实际只需要计算出各个类别的概率和各个特征的类条件概率，这些概率值可以快速的根据增量数据进行更新，无需重新全量训练，所以其十分适合增量计算，该特性可以使用在超出内存的大量数据计算和按小时级等获取的数据计算中。</p>
+<h2 id="13-高度相关的特征对朴素贝叶斯有什么影响？"><a href="#13-高度相关的特征对朴素贝叶斯有什么影响？" class="headerlink" title="13.高度相关的特征对朴素贝叶斯有什么影响？"></a>13.高度相关的特征对朴素贝叶斯有什么影响？</h2><p>假设有两个特征高度相关，相当于该特征在模型中发挥了两次作用(计算两次条件概率)，使得朴素贝叶斯获得的结果向该特征所希望的方向进行了偏移，影响了最终结果的准确性，所以朴素贝叶斯算法应先处理特征，把相关特征去掉。</p>
+<h2 id="14-朴素贝叶斯的应用场景有哪些？"><a href="#14-朴素贝叶斯的应用场景有哪些？" class="headerlink" title="14.朴素贝叶斯的应用场景有哪些？"></a>14.朴素贝叶斯的应用场景有哪些？</h2><ul>
+<li><strong>文本分类/垃圾文本过滤/情感判别</strong>：<br>这大概是朴素贝叶斯应用最多的地方了，即使在现在这种分类器层出不穷的年代，在文本分类场景中，朴素贝叶斯依旧坚挺地占据着一席之地。因为多分类很简单，同时在文本数据中，分布独立这个假设基本是成立的。而垃圾文本过滤(比如垃圾邮件识别)和情感分析(微博上的褒贬情绪)用朴素贝叶斯也通常能取得很好的效果。</li>
+<li><strong>多分类实时预测</strong>：<br>对于文本相关的多分类实时预测，它因为上面提到的优点，被广泛应用，简单又高效。</li>
+<li><strong>推荐系统</strong>：<br>朴素贝叶斯和协同过滤是一对好搭档，协同过滤是强相关性，但是泛化能力略弱，朴素贝叶斯和协同过滤一起，能增强推荐的覆盖度和效果。</li>
+</ul>
+<h2 id="15-朴素贝叶斯有什么优缺点？"><a href="#15-朴素贝叶斯有什么优缺点？" class="headerlink" title="15.朴素贝叶斯有什么优缺点？"></a>15.朴素贝叶斯有什么优缺点？</h2><ul>
+<li>优点：<ul>
+<li>对数据的训练快，分类也快</li>
+<li>对缺失数据不太敏感，算法也比较简单</li>
+<li>对小规模的数据表现很好，能个处理多分类任务，适合增量式训练，尤其是数据量超出内存时，可以一批批的去增量训练</li>
+</ul>
+</li>
+<li>缺点：<ul>
+<li>对输入数据的表达形式很敏感</li>
+<li>由于朴素贝叶斯的“朴素”特点，所以会带来一些准确率上的损失。</li>
+<li>需要计算先验概率，分类决策存在错误率。</li>
+</ul>
+</li>
+</ul>
+<h2 id="16-朴素贝叶斯与-LR-区别？"><a href="#16-朴素贝叶斯与-LR-区别？" class="headerlink" title="16.朴素贝叶斯与 LR 区别？"></a>16.朴素贝叶斯与 LR 区别？</h2><ul>
+<li><strong>朴素贝叶斯是生成模型</strong>，根据已有样本进行贝叶斯估计学习出先验概率 $P(Y)$ 和条件概率 $P(X|Y)$，进而求出联合分布概率 $P(X,Y)$，最后利用贝叶斯定理求解$P(Y|X)$， 而<strong>LR是判别模型</strong>，根据极大化对数似然函数直接求出条件概率 $P(Y|X)$</li>
+<li>朴素贝叶斯是基于很强的<strong>条件独立假设</strong>(在已知分类Y的条件下，各个特征变量取值是相互独立的)，而 LR 则对此没有要求</li>
+<li>朴素贝叶斯适用于数据集少的情景，而LR适用于大规模数据集。</li>
+</ul>
+<h2 id="17-贝叶斯优化算法-参数调优"><a href="#17-贝叶斯优化算法-参数调优" class="headerlink" title="17. 贝叶斯优化算法(参数调优)"></a>17. 贝叶斯优化算法(参数调优)</h2><ul>
+<li><p>网格搜索和随机搜索：在测试一个新点时，会忽略前一个点的信息；</p>
+</li>
+<li><p>贝叶斯优化算法：充分利用了之前的信息。贝叶斯优化算法通过对目标函数形式进行学习，找到使目标函数向全局最优值提升的参数。</p>
+</li>
+<li><p>学习目标函数形式的方法：</p>
+<ul>
+<li>首先根据先验分布，假设一个搜集函数；</li>
+<li>每一次使用新的采样点来测试目标函数时，利用这个信息来更新目标函数的先验分布</li>
+<li>算法测试由后验分布给出的全局最值最可能出现的位置的点。</li>
+</ul>
+</li>
+</ul>
+<p>对于贝叶斯优化算法，有一个需要注意的地方，一旦找到了一个局部最优值，它会在该区域不断采样，所以很容易陷入局部最优值。为了弥补这个缺陷，贝叶斯优化算法会在探索和利用之间找到一个平衡点，“探索”就是在还未取样的区域获取采样点；而“利用”则是根据后验分布在最可能出现全局最值的区域进行采样。</p>
+<h2 id="18-朴素贝叶斯分类器对异常值敏感吗"><a href="#18-朴素贝叶斯分类器对异常值敏感吗" class="headerlink" title="18.朴素贝叶斯分类器对异常值敏感吗?"></a>18.朴素贝叶斯分类器对异常值敏感吗?</h2><p>朴素贝叶斯是一种<strong>对异常值不敏感</strong>的分类器，保留数据中的异常值，常常可以保持贝叶斯算法的整体精度，如果对原始数据进行降噪训练，分类器可能会因为失去部分异常值的信息而导致泛化能力下降。</p>
+<h2 id="19-朴素贝叶斯算法对缺失值敏感吗？"><a href="#19-朴素贝叶斯算法对缺失值敏感吗？" class="headerlink" title="19.朴素贝叶斯算法对缺失值敏感吗？"></a>19.朴素贝叶斯算法对缺失值敏感吗？</h2><p>朴素贝叶斯是一种<strong>对缺失值不敏感</strong>的分类器，朴素贝叶斯算法能够处理缺失的数据，在算法的建模时和预测时数据的属性都是单独处理的。因此<strong>如果一个数据实例缺失了一个属性的数值，在建模时将被忽略</strong>，不影响类条件概率的计算，在预测时，计算数据实例是否属于某类的概率时也将忽略缺失属性，不影响最终结果。</p>
+<h2 id="20-一句话总结贝叶斯算法"><a href="#20-一句话总结贝叶斯算法" class="headerlink" title="20. 一句话总结贝叶斯算法"></a>20. 一句话总结贝叶斯算法</h2><p><strong>贝叶斯分类器直接用贝叶斯公式解决分类问题</strong>。假设样本的特征向量为$x$，类别标签为$y$，根据贝叶斯公式，样本属于每个类的条件概率（后验概率）为： </p>
+<script type="math/tex; mode=display">
+p(y | \mathbf{x})=\frac{p(\mathbf{x} | y) p(y)}{p(\mathbf{x})}</script><p> 分母$p(x)$对所有类都是相同的，<strong>分类的规则是将样本归到后验概率最大的那个类</strong>，不需要计算准确的概率值，只需要知道属于哪个类的概率最大即可，这样可以忽略掉分母。分类器的判别函数为： </p>
+<script type="math/tex; mode=display">
+\arg \max _{y} p(\mathrm{x} | y) p(y)</script><p>在实现贝叶斯分类器时，<strong>需要知道每个类的条件概率分布$p(x|y)$即先验概率</strong>。一般假设样本服从正态分布。训练时确定先验概率分布的参数，一般用最大似然估计，即最大化对数似然函数。</p>
+<p><strong>贝叶斯分类器是一种生成模型，可以处理多分类问题，是一种非线性模型。</strong></p>
+]]></content>
+      <categories>
+        <category>Learning</category>
+        <category>面试</category>
+      </categories>
+      <tags>
+        <tag>ML</tag>
+        <tag>NaiveBayes</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>机器学习面试题-Random Forest</title>
     <url>/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/</url>
     <content><![CDATA[<p>[TOC]</p>
@@ -2851,205 +3229,128 @@ f(x)=w_{0}+\sum_{m=1}^{M} w_{m} \phi_{m}(x)</script><p>其中$w$是权重，$\ph
       </tags>
   </entry>
   <entry>
-    <title>机器学习面试题-贝叶斯</title>
-    <url>/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E8%B4%9D%E5%8F%B6%E6%96%AF/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<h2 id="1-简述朴素贝叶斯算法原理和工作流程"><a href="#1-简述朴素贝叶斯算法原理和工作流程" class="headerlink" title="1.简述朴素贝叶斯算法原理和工作流程"></a>1.简述朴素贝叶斯算法原理和工作流程</h2><p><strong>工作原理</strong>：</p>
+    <title>优化器</title>
+    <url>/2022/01/01/%E4%BC%98%E5%8C%96%E5%99%A8/</url>
+    <content><![CDATA[<h1 id="GD-amp-SGD-amp-Mini-batch-GD"><a href="#GD-amp-SGD-amp-Mini-batch-GD" class="headerlink" title="GD&amp;SGD&amp;Mini-batch GD"></a>GD&amp;SGD&amp;Mini-batch GD</h1><script type="math/tex; mode=display">
+\theta=\theta-\eta \cdot \nabla_{\theta} J(\theta)</script><a id="more"></a>
 <ul>
-<li>假设现在有样本$x=(x_1, x_2, x_3, \dots x_n)$待分类项</li>
-<li>假设样本有$m$个特征$(a_1,a_2,a_3,\dots a_m)$(特征独立)</li>
-<li>再假设现在有分类目标$Y={ y_1，y_2，y_3，\dots ,y_n}$</li>
-<li>那么就$\max ({ P }({ y }_1 | { x }), { P }({ y }_2 | {x}), {P}({y}_3 | {x}) ,{P}({y_n} | {x}))$是最终的分类类别。</li>
-<li>而$ P(y_i | x)=\frac{P(x | y_i) * P(y_i)}{ P(x)} $，因为$x$对于每个分类目标来说都一样，所以就是求$\max({P}({x}|{y_i})*{P}({y_i}))$</li>
-<li>$P(x | y_i) * P(y_i)=P(y_i) * \prod(P(a_j| y_i))$，而具体的$P(a_j|y_i)$和$P(y_i)$都是能从训练样本中统计出来</li>
-<li>${P}({a_j} | {y_i})$表示该类别下该特征$a_j$出现的概率$P(y_i)$表示全部类别中这个这个类别出现的概率,这样就能找到应该属于的类别了</li>
+<li>GD<ul>
+<li>用了全量样本，凸函数可以到全局最小值，非凸函数可以到局部最小值</li>
+<li>慢，不能在线serving</li>
 </ul>
-<a id="more"></a>
-<h2 id="2-条件概率、先验概率、后验概率、联合概率、贝叶斯公式的概念"><a href="#2-条件概率、先验概率、后验概率、联合概率、贝叶斯公式的概念" class="headerlink" title="2. 条件概率、先验概率、后验概率、联合概率、贝叶斯公式的概念"></a>2. 条件概率、先验概率、后验概率、联合概率、贝叶斯公式的概念</h2><ul>
-<li><p>条件概率：</p>
+</li>
+<li>SGD<ul>
+<li>快</li>
+<li>损失函数震荡</li>
+</ul>
+</li>
+<li>Mini-batch GD<ul>
+<li>GD与SGD的结合：降低了参数更新时的方差，收敛较SGD更稳定</li>
+<li>速度较快：可以利用矩阵运算</li>
+</ul>
+</li>
+</ul>
+<p>两个问题</p>
 <ul>
-<li>$P(X|Y)$含义： 表示$Y$发生的条件下$X$发生的概率。</li>
+<li>收敛能力<ul>
+<li>lr太大，容易震荡，甚至偏离极小值；lr太小，收敛慢</li>
+<li>非凸函数，容易陷于局部最小值/鞍点</li>
 </ul>
 </li>
-<li><p>先验概率</p>
-<ul>
-<li><strong>表示事件发生前的预判概率。</strong>这个可以是基于历史数据统计，也可以由背景常识得出，也可以是主观观点得出。一般都是单独事件发生的概率，如 $P(X)$</li>
-</ul>
-</li>
-<li><p>后验概率</p>
-<ul>
-<li>基于先验概率求得的<strong>反向条件概率</strong>，形式上与条件概率相同(若$P(X|Y)$ 为正向，则$P(Y|X)$ 为反向)</li>
-</ul>
-</li>
-<li><p>联合概率：</p>
-</li>
-<li><p>事件$X$与事件$Y$同时发生的概率。</p>
-</li>
-<li><p>贝叶斯公式</p>
-<ul>
-<li><script type="math/tex; mode=display">
-P(Y|X) = \frac{P(X|Y) P(Y)}{P(X)}  \\</script></li>
-<li><p>$P(Y)$ 叫做<strong>先验概率</strong>：事件$X$发生之前，我们根据以往经验和分析对事件$Y$发生的一个概率的判断</p>
-</li>
-<li><p>$P(Y|X)$ 叫做<strong>后验概率</strong>：事件$X$发生之后，我们对事件$Y$发生的一个概率的重新评估</p>
-</li>
-<li><p>$P(Y,X)$叫做<strong>联合概率</strong>：事件$X$与事件$Y$同时发生的概率。</p>
-</li>
-<li><p>先验概率和后验概率是相对的。如果以后还有新的信息引入，更新了现在所谓的后验概率，得到了新的概率值，那么这个新的概率值被称为后验概率。</p>
-</li>
+<li>自适应lr调节<ul>
+<li>SGD对所有参数更新时应用同样的 learning rate，如果我们的数据是稀疏的，我们更希望对出现频率低的特征进行大一点的更新。<br>Mini-batch gradient descent 不能保证很好的收敛性，learning rate 如果选择的太小，收敛速度会很慢，如果太大，loss function 就会在极小值处不停地震荡甚至偏离。（有一种措施是先设定大一点的学习率，当两次迭代之间的变化低于某个阈值后，就减小 learning rate，不过这个阈值的设定需要提前写好，这样的话就不能够适应数据集的特点。）<br>对于非凸函数，还要避免陷于局部极小值处，或者鞍点处，因为鞍点周围的error是一样的，所有维度的梯度都接近于0，SGD 很容易被困在这里。（会在鞍点或者局部最小点震荡跳动，因为在此点处，如果是训练集全集带入即BGD，则优化会停止不动，如果是mini-batch或者SGD，每次找到的梯度都是不同的，就会发生震荡，来回跳动。）</li>
 </ul>
 </li>
 </ul>
-<h2 id="3-为什么朴素贝叶斯如此“朴素”？"><a href="#3-为什么朴素贝叶斯如此“朴素”？" class="headerlink" title="3.为什么朴素贝叶斯如此“朴素”？"></a>3.为什么朴素贝叶斯如此“朴素”？</h2><p>因为它<strong>假定所有的特征在数据集中的作用是同样重要和独立的</strong>。正如我们所知，这个假设在现实世界中是很不真实的，因此，说朴素贝叶斯真的很“朴素”。用贝叶斯公式表达如下：</p>
-<script type="math/tex; mode=display">
-P(Y|X_1, X_2) = \frac{P(X_1|Y) P(X_2|Y) P(Y)}{P(X_1)P(X_2)}</script><p><strong>而在很多情况下，所有变量几乎不可能满足两两之间的条件。</strong></p>
-<p>朴素贝叶斯模型(Naive Bayesian Model)的朴素(Naive)的含义是<strong>“很简单很天真”</strong>地假设样本特征彼此独立.这个假设现实中基本上不存在，但特征相关性很小的实际情况还是很多的，所以这个模型仍然能够工作得很好。</p>
-<h2 id="4-什么是贝叶斯决策理论？"><a href="#4-什么是贝叶斯决策理论？" class="headerlink" title="4.什么是贝叶斯决策理论？"></a>4.什么是贝叶斯决策理论？</h2><p>贝叶斯决策理论是主观贝叶斯派归纳理论的重要组成部分。贝叶斯决策就是在不完全情报下，对部分未知的状态用主观概率估计，然后用贝叶斯公式对发生概率进行修正，最后再利用期望值和修正概率做出最优决策(选择概率最大的类别)。<br>贝叶斯决策理论方法是统计模型决策中的一个基本方法，其<strong>基本思想</strong>是：</p>
-<ul>
-<li>已知类条件概率密度参数表达式和先验概率</li>
-<li>利用贝叶斯公式转换成后验概率</li>
-<li>根据后验概率大小进行决策分类</li>
-</ul>
-<h2 id="5-朴素贝叶斯算法的前提假设是什么？"><a href="#5-朴素贝叶斯算法的前提假设是什么？" class="headerlink" title="5.朴素贝叶斯算法的前提假设是什么？"></a>5.朴素贝叶斯算法的前提假设是什么？</h2><ul>
-<li>特征之间相互独立</li>
-<li>每个特征同等重要</li>
-</ul>
-<h2 id="6-为什么属性独立性假设在实际情况中很难成立，但朴素贝叶斯仍能取得较好的效果"><a href="#6-为什么属性独立性假设在实际情况中很难成立，但朴素贝叶斯仍能取得较好的效果" class="headerlink" title="6.为什么属性独立性假设在实际情况中很难成立，但朴素贝叶斯仍能取得较好的效果?"></a>6.为什么属性独立性假设在实际情况中很难成立，但朴素贝叶斯仍能取得较好的效果?</h2><ul>
-<li>对于分类任务来说，只要各类别的条件概率排序正确、无需精准概率值即可导致正确分类；</li>
-<li>如果属性间依赖对所有类别影响相同，或依赖关系的影响能相互抵消，则属性条件独立性假设在降低计算开销的同时不会对性能产生负面影响。</li>
-</ul>
-<h2 id="7-什么是朴素贝叶斯中的零概率问题？如何解决？"><a href="#7-什么是朴素贝叶斯中的零概率问题？如何解决？" class="headerlink" title="7.什么是朴素贝叶斯中的零概率问题？如何解决？"></a><strong>7.什么是朴素贝叶斯中的零概率问题？如何解决？</strong></h2><p><strong>零概率问题</strong>：在计算实例的概率时，如果某个量$x$，在观察样本库(训练集)中没有出现过，会导致整个实例的概率结果是0。</p>
-<p><strong>解决办法</strong>：若$P(x)$为零则无法计算。为了解决零概率的问题，法国数学家拉普拉斯最早提出用加1的方法估计没有出现过的现象的概率，所以加法平滑也叫做<strong>拉普拉斯平滑</strong>。</p>
-<p><strong>举个栗子</strong>：假设在文本分类中，有3个类，$C1、C2、C3$，在指定的训练样本中，某个词语$K1$，在各个类中观测计数分别为0，990，10，$K1$的概率为0，0.99，0.01，对这三个量使用拉普拉斯平滑的计算方法如下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1&#x2F;1003&#x3D;0.001，</span><br><span class="line">991&#x2F;1003&#x3D;0.988，</span><br><span class="line">11&#x2F;1003&#x3D;0.011</span><br><span class="line">在实际的使用中也经常使用加 lambda(1≥lambda≥0)来代替简单加1。如果对N个计数都加上lambda，这时分母也要记得加上N*lambda。</span><br></pre></td></tr></table></figure>
-<p>将朴素贝叶斯中的所有概率计算<strong>应用拉普拉斯平滑即可以解决零概率问题</strong>。</p>
-<h2 id="8-朴素贝叶斯中概率计算的下溢问题如何解决？"><a href="#8-朴素贝叶斯中概率计算的下溢问题如何解决？" class="headerlink" title="8.朴素贝叶斯中概率计算的下溢问题如何解决？"></a>8.朴素贝叶斯中概率计算的下溢问题如何解决？</h2><p><strong>下溢问题</strong>：在朴素贝叶斯的计算过程中，需要对特定分类中各个特征出现的<strong>概率进行连乘，小数相乘，越乘越小，这样就造成了下溢出</strong>。<br>为了解决这个问题，对乘积结果取自然对数。通过求对数可以避免下溢出或者浮点数舍入导致的错误。</p>
-<script type="math/tex; mode=display">
-\prod_{i=x}^{n} p\left(x_{i} | y_{j}\right)</script><p><strong>解决办法</strong>：对其<strong>取对数</strong>：</p>
-<script type="math/tex; mode=display">
-\log \prod_{i=1}^{n} p\left(x_{i} | y_{j}\right)</script><script type="math/tex; mode=display">
-=\sum_{i=1}^{n} \log p\left(x_{i} | y_{j}\right)</script><p>将小数的乘法操作转化为取对数后的加法操作，规避了变为零的风险同时并不影响分类结果。</p>
-<h2 id="9-当数据的属性是连续型变量时，朴素贝叶斯算法如何处理？"><a href="#9-当数据的属性是连续型变量时，朴素贝叶斯算法如何处理？" class="headerlink" title="9.当数据的属性是连续型变量时，朴素贝叶斯算法如何处理？"></a>9.当数据的属性是连续型变量时，朴素贝叶斯算法如何处理？</h2><p>当朴素贝叶斯算法数据的属性为连续型变量时，有两种方法可以计算属性的类条件概率。</p>
-<ul>
-<li>第一种方法：把一个连续的属性离散化，然后用相应的离散区间替换连续属性值。但这种方法不好控制离散区间划分的粒度。如果粒度太细，就会因为每个区间内训练记录太少而不能对$P(X|Y)$<br>做出可靠的估计，如果粒度太粗，那么有些区间就会有来自不同类的记录，因此失去了正确的决策边界。</li>
-<li>第二种方法：假设连续变量服从某种概率分布，然后使用训练数据估计分布的参数，例如可以使用高斯分布来表示连续属性的类条件概率分布。<ul>
-<li>高斯分布有两个参数，均值$\mu$和方差$\sigma 2$，对于每个类$y_i$，属性$X_i$的类条件概率等于：</li>
+<h1 id="Momentum"><a href="#Momentum" class="headerlink" title="Momentum"></a>Momentum</h1><ul>
+<li>加上惯性，尝试解决容易陷入局部最小值/鞍点的问题<ul>
+<li>使得梯度方向不变的维度上速度变快，梯度方向有所改变的维度上的更新速度变慢，这样就可以加快收敛并减小震荡<br>$ v<em>{t-1} $上加梯度，可以认为是对 $ v</em>{t-1} $ 的预判</li>
 </ul>
 </li>
 </ul>
-<script type="math/tex; mode=display">
-P\left(X_{i}=x_{i} | Y=y_{j}\right)=\frac{1}{\sqrt{2 \Pi} \sigma_{i j}^{2}} e^{\frac{\left(x_{i}-\mu_{j}\right)^{2}}{2 \sigma_{i}^{2}}}</script><p>$\mu_{i j}$：类$y_j$的所有训练记录关于$X_i$的样本均值估计</p>
-<p>$\sigma_{i j}^{2}$：类$y_j$的所有训练记录关于$X$的样本方差</p>
-<p>通过高斯分布估计出类条件概率。</p>
-<h2 id="10-朴素贝叶斯有哪几种常用的分类模型？"><a href="#10-朴素贝叶斯有哪几种常用的分类模型？" class="headerlink" title="10.朴素贝叶斯有哪几种常用的分类模型？"></a><strong>10.朴素贝叶斯有哪几种常用的分类模型？</strong></h2><p>三个常用模型：高斯、多项式、伯努利。三个模型都是为了解决连续性变量引起的问题的。</p>
-<ul>
-<li><p>多项式模型：</p>
-<ul>
-<li>思想：将一个连续值视为特征的一个类别，这样会引起很多概率为0的问题。所以用拉普拉斯平滑解决。</li>
-<li>其中$\alpha$为拉普拉斯平滑，加和的是属性出现的总次数，比如文本分类问题里面，不光看词语是否在文本中出现，也得看出现的次数。如果总词数为$n$，出现词数为$m$的话，说起来有点像掷骰子$n$次出现$m$次这个词的场景。<script type="math/tex; mode=display">
-P\left(x_{i} | y_{k}\right)=\frac{N_{y k_{1}}+\alpha}{N_{y_{k}}+\alpha n}</script></li>
+<script type="math/tex; mode=display">\begin{array}{l}
+v_{t}=\gamma v_{t-1}+\eta \nabla_{\theta} J(\theta) \\
+\theta=\theta-v_{t}
+\end{array}</script><ul>
+<li>由Polyak提出，也叫Polyak动量<br>Nesterov</li>
+<li>优化Polyak动量，“预判我的预判”<script type="math/tex; mode=display">\begin{array}{ll}
+v_{t} & =\beta v_{t-1}+\nabla_{\theta} J\left(\theta_{t}-\eta \beta v_{t-1}\right) \\
+\theta_{t+1} & =\theta_{t}-\eta v_{t} \end{array}</script></li>
+<li>从工程实现上，无法直接获得预判点的梯度，可得如下等价公式：<script type="math/tex; mode=display">\begin{array}{ll}
+v_{t} & =\beta v_{t-1}+g_{t}+\beta\left(g_{t}-g_{t-1}\right) \\
+\theta_{t+1} & =\theta_{t}-\eta v_{t}
+\end{array}</script></li>
+</ul>
+<h1 id="AdaGrad-amp-RMSProp-amp-Adam"><a href="#AdaGrad-amp-RMSProp-amp-Adam" class="headerlink" title="AdaGrad&amp;RMSProp&amp;Adam"></a>AdaGrad&amp;RMSProp&amp;Adam</h1><h2 id="AdaGrad"><a href="#AdaGrad" class="headerlink" title="AdaGrad"></a>AdaGrad</h2><script type="math/tex; mode=display">\Large \begin{cases} 
+g_t = \nabla_{\theta}J(\theta_t) + \alpha\theta_t \\
+v_t = v_{t-1} + g_t^2 \\
+\theta_{t+1} = \theta_{t} - \eta \frac{1}{\sqrt{v_t + \epsilon}} g_t
+\end{cases}</script><h2 id="RMSPropV2"><a href="#RMSPropV2" class="headerlink" title="RMSPropV2"></a>RMSPropV2</h2><script type="math/tex; mode=display">\Large
+\begin{cases}
+g_t = \nabla_{\theta}J(\theta_t) + \alpha\theta_t \\
+v_t = \beta v_{t-1} + g_t^2 \\
+\theta_{t+1} = \theta_{t} - \eta \frac{1}{\sqrt{v_t + 1}} g_t
+\end{cases}</script><h2 id="Adam"><a href="#Adam" class="headerlink" title="Adam"></a>Adam</h2><script type="math/tex; mode=display">\Large
+\begin{cases}
+g_t = \nabla_{\theta}J(\theta_t) + \alpha\theta_t \\
+m_t = \beta_1 m_{t-1} + (1-\beta_1) g_t \\
+v_t = \beta_2 v_{t-1} + (1-\beta_2) g_t^2 \\
+\gamma = \frac{\sqrt{1-\beta_2^{t}}}{1-\beta_1^t} \\
+\theta_{t+1} = \theta_{t} - \eta \frac{\gamma}{\sqrt{v_t +  \epsilon}} m_t
+\end{cases}</script><ul>
+<li>AdaGrad: Adaptive Gradient<ul>
+<li>学习率的自适应调节：学习率 除以 梯度平方累积项，更新次数越多（高频特征）的更新步长减小，稀疏特征步长增大</li>
+<li>后期学不动</li>
 </ul>
 </li>
-<li><p>高斯模型：</p>
-<ul>
-<li>思想：是要得到一个概率值，但是直接把一个值当做一个类别会引起零概率问题，于是假设并模拟一个分布，求其参数，进而求其概率。</li>
-<li>处理包含连续型变量的数据，使用高斯分布概率密度来计算类的条件概率密度</li>
+<li>RMSProp：Root Mean Square Propogation，为了解决AdaGrad后期学不动的问题<ul>
+<li>累积梯度时加上衰减系数，越早的梯度会逐渐衰减</li>
 </ul>
 </li>
-<li><p>伯努利模型：</p>
-<ul>
-<li>伯努利模型特征的取值为布尔型，即出现为true没有出现为false，在文本分类中，就是一个单词有没有在一个文档中出现。</li>
-<li>伯努利模型适用于离散特征情况，它将重复的词语都视为只出现一次。<script type="math/tex; mode=display">
-P( '代开'， '发票'， '发票'， '我' | S) = P('代开' | S)   P( '发票' | S) P('我' | S)</script>我们看到，”发票“出现了两次，但是我们只将其算作一次。我们看到，”发票“出现了两次，但是我们只将其算作一次。</li>
-</ul>
-</li>
-</ul>
-<h2 id="11-为什么说朴素贝叶斯是高偏差低方差？"><a href="#11-为什么说朴素贝叶斯是高偏差低方差？" class="headerlink" title="11.为什么说朴素贝叶斯是高偏差低方差？"></a>11.为什么说朴素贝叶斯是高偏差低方差？</h2><p>在统计学习框架下，大家刻画模型复杂度的时候，有这么个观点，认为$Error=Bias +Variance$。</p>
-<ul>
-<li>$Error$反映的是整个模型的准确度，</li>
-<li>$Bias$反映的是模型在样本上的输出与真实值之间的误差，即模型本身的精准度，</li>
-<li>$Variance$反映的是模型每一次输出结果与模型输出期望(平均值)之间的误差，即模型的稳定性，数据是否集中。</li>
-<li>对于复杂模型，充分拟合了部分数据，使得他们的偏差较小，而由于对部分数据的过度拟合，对于部分数据预测效果不好，整体来看可能引起方差较大。</li>
-<li>对于朴素贝叶斯了。它简单的假设了各个数据之间是无关的，是一个被严重简化了的模型，简单模型与复杂模型相反，大部分场合偏差部分大于方差部分，也就是说高偏差而低方差。</li>
-</ul>
-<h2 id="12-朴素贝叶斯为什么适合增量计算？"><a href="#12-朴素贝叶斯为什么适合增量计算？" class="headerlink" title="12.朴素贝叶斯为什么适合增量计算？"></a>12.朴素贝叶斯为什么适合增量计算？</h2><p>因为朴素贝叶斯在训练过程中实际只需要计算出各个类别的概率和各个特征的类条件概率，这些概率值可以快速的根据增量数据进行更新，无需重新全量训练，所以其十分适合增量计算，该特性可以使用在超出内存的大量数据计算和按小时级等获取的数据计算中。</p>
-<h2 id="13-高度相关的特征对朴素贝叶斯有什么影响？"><a href="#13-高度相关的特征对朴素贝叶斯有什么影响？" class="headerlink" title="13.高度相关的特征对朴素贝叶斯有什么影响？"></a>13.高度相关的特征对朴素贝叶斯有什么影响？</h2><p>假设有两个特征高度相关，相当于该特征在模型中发挥了两次作用(计算两次条件概率)，使得朴素贝叶斯获得的结果向该特征所希望的方向进行了偏移，影响了最终结果的准确性，所以朴素贝叶斯算法应先处理特征，把相关特征去掉。</p>
-<h2 id="14-朴素贝叶斯的应用场景有哪些？"><a href="#14-朴素贝叶斯的应用场景有哪些？" class="headerlink" title="14.朴素贝叶斯的应用场景有哪些？"></a>14.朴素贝叶斯的应用场景有哪些？</h2><ul>
-<li><strong>文本分类/垃圾文本过滤/情感判别</strong>：<br>这大概是朴素贝叶斯应用最多的地方了，即使在现在这种分类器层出不穷的年代，在文本分类场景中，朴素贝叶斯依旧坚挺地占据着一席之地。因为多分类很简单，同时在文本数据中，分布独立这个假设基本是成立的。而垃圾文本过滤(比如垃圾邮件识别)和情感分析(微博上的褒贬情绪)用朴素贝叶斯也通常能取得很好的效果。</li>
-<li><strong>多分类实时预测</strong>：<br>对于文本相关的多分类实时预测，它因为上面提到的优点，被广泛应用，简单又高效。</li>
-<li><strong>推荐系统</strong>：<br>朴素贝叶斯和协同过滤是一对好搭档，协同过滤是强相关性，但是泛化能力略弱，朴素贝叶斯和协同过滤一起，能增强推荐的覆盖度和效果。</li>
-</ul>
-<h2 id="15-朴素贝叶斯有什么优缺点？"><a href="#15-朴素贝叶斯有什么优缺点？" class="headerlink" title="15.朴素贝叶斯有什么优缺点？"></a>15.朴素贝叶斯有什么优缺点？</h2><ul>
-<li>优点：<ul>
-<li>对数据的训练快，分类也快</li>
-<li>对缺失数据不太敏感，算法也比较简单</li>
-<li>对小规模的数据表现很好，能个处理多分类任务，适合增量式训练，尤其是数据量超出内存时，可以一批批的去增量训练</li>
-</ul>
-</li>
-<li>缺点：<ul>
-<li>对输入数据的表达形式很敏感</li>
-<li>由于朴素贝叶斯的“朴素”特点，所以会带来一些准确率上的损失。</li>
-<li>需要计算先验概率，分类决策存在错误率。</li>
+<li>Adam：Adaptive Moment Optimization, <ul>
+<li>RMSProp + Momentum </li>
 </ul>
 </li>
 </ul>
-<h2 id="16-朴素贝叶斯与-LR-区别？"><a href="#16-朴素贝叶斯与-LR-区别？" class="headerlink" title="16.朴素贝叶斯与 LR 区别？"></a>16.朴素贝叶斯与 LR 区别？</h2><ul>
-<li><strong>朴素贝叶斯是生成模型</strong>，根据已有样本进行贝叶斯估计学习出先验概率 $P(Y)$ 和条件概率 $P(X|Y)$，进而求出联合分布概率 $P(X,Y)$，最后利用贝叶斯定理求解$P(Y|X)$， 而<strong>LR是判别模型</strong>，根据极大化对数似然函数直接求出条件概率 $P(Y|X)$</li>
-<li>朴素贝叶斯是基于很强的<strong>条件独立假设</strong>(在已知分类Y的条件下，各个特征变量取值是相互独立的)，而 LR 则对此没有要求</li>
-<li>朴素贝叶斯适用于数据集少的情景，而LR适用于大规模数据集。</li>
-</ul>
-<h2 id="17-贝叶斯优化算法-参数调优"><a href="#17-贝叶斯优化算法-参数调优" class="headerlink" title="17. 贝叶斯优化算法(参数调优)"></a>17. 贝叶斯优化算法(参数调优)</h2><ul>
-<li><p>网格搜索和随机搜索：在测试一个新点时，会忽略前一个点的信息；</p>
-</li>
-<li><p>贝叶斯优化算法：充分利用了之前的信息。贝叶斯优化算法通过对目标函数形式进行学习，找到使目标函数向全局最优值提升的参数。</p>
-</li>
-<li><p>学习目标函数形式的方法：</p>
-<ul>
-<li>首先根据先验分布，假设一个搜集函数；</li>
-<li>每一次使用新的采样点来测试目标函数时，利用这个信息来更新目标函数的先验分布</li>
-<li>算法测试由后验分布给出的全局最值最可能出现的位置的点。</li>
-</ul>
-</li>
-</ul>
-<p>对于贝叶斯优化算法，有一个需要注意的地方，一旦找到了一个局部最优值，它会在该区域不断采样，所以很容易陷入局部最优值。为了弥补这个缺陷，贝叶斯优化算法会在探索和利用之间找到一个平衡点，“探索”就是在还未取样的区域获取采样点；而“利用”则是根据后验分布在最可能出现全局最值的区域进行采样。</p>
-<h2 id="18-朴素贝叶斯分类器对异常值敏感吗"><a href="#18-朴素贝叶斯分类器对异常值敏感吗" class="headerlink" title="18.朴素贝叶斯分类器对异常值敏感吗?"></a>18.朴素贝叶斯分类器对异常值敏感吗?</h2><p>朴素贝叶斯是一种<strong>对异常值不敏感</strong>的分类器，保留数据中的异常值，常常可以保持贝叶斯算法的整体精度，如果对原始数据进行降噪训练，分类器可能会因为失去部分异常值的信息而导致泛化能力下降。</p>
-<h2 id="19-朴素贝叶斯算法对缺失值敏感吗？"><a href="#19-朴素贝叶斯算法对缺失值敏感吗？" class="headerlink" title="19.朴素贝叶斯算法对缺失值敏感吗？"></a>19.朴素贝叶斯算法对缺失值敏感吗？</h2><p>朴素贝叶斯是一种<strong>对缺失值不敏感</strong>的分类器，朴素贝叶斯算法能够处理缺失的数据，在算法的建模时和预测时数据的属性都是单独处理的。因此<strong>如果一个数据实例缺失了一个属性的数值，在建模时将被忽略</strong>，不影响类条件概率的计算，在预测时，计算数据实例是否属于某类的概率时也将忽略缺失属性，不影响最终结果。</p>
-<h2 id="20-一句话总结贝叶斯算法"><a href="#20-一句话总结贝叶斯算法" class="headerlink" title="20. 一句话总结贝叶斯算法"></a>20. 一句话总结贝叶斯算法</h2><p><strong>贝叶斯分类器直接用贝叶斯公式解决分类问题</strong>。假设样本的特征向量为$x$，类别标签为$y$，根据贝叶斯公式，样本属于每个类的条件概率（后验概率）为： </p>
-<script type="math/tex; mode=display">
-p(y | \mathbf{x})=\frac{p(\mathbf{x} | y) p(y)}{p(\mathbf{x})}</script><p> 分母$p(x)$对所有类都是相同的，<strong>分类的规则是将样本归到后验概率最大的那个类</strong>，不需要计算准确的概率值，只需要知道属于哪个类的概率最大即可，这样可以忽略掉分母。分类器的判别函数为： </p>
-<script type="math/tex; mode=display">
-\arg \max _{y} p(\mathrm{x} | y) p(y)</script><p>在实现贝叶斯分类器时，<strong>需要知道每个类的条件概率分布$p(x|y)$即先验概率</strong>。一般假设样本服从正态分布。训练时确定先验概率分布的参数，一般用最大似然估计，即最大化对数似然函数。</p>
-<p><strong>贝叶斯分类器是一种生成模型，可以处理多分类问题，是一种非线性模型。</strong></p>
-]]></content>
-      <categories>
-        <category>Learning</category>
-        <category>面试</category>
-      </categories>
-      <tags>
-        <tag>ML</tag>
-        <tag>NaiveBayes</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>ML-Feature Engineering</title>
-    <url>/2021/12/10/%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/</url>
-    <content><![CDATA[<h2 id="特征离散的作用"><a href="#特征离散的作用" class="headerlink" title="特征离散的作用"></a>特征离散的作用</h2><a id="more"></a>
-<ul>
-<li><strong>离散化后的特征对异常数据有很强的鲁棒性</strong><br>比如一个特征是年龄&gt;30是1，否则0。如果特征没有离散化，一个异常数据“年龄300岁”会给模型造成很大的干扰；离散化后年龄300岁也只对应于一个权重，如果训练数据中没有出现特征”年龄-300岁”，那么在LR模型中，其权重对应于0，所以，即使测试数据中出现特征”年龄-300岁”,也不会对预测结果产生影响。特征离散化的过程，比如特征A，如果当做连续特征使用，在LR模型中，A会对应一个权重w,如果离散化，那么A就拓展为特征A-1，A-2，A-3…,每个特征对应于一个权重，如果训练样本中没有出现特征A-4，那么训练的模型对于A-4就没有权重，如果测试样本中出现特征A-4,该特征A-4也不会起作用。相当于无效。但是，如果使用连续特征，在LR模型中，y = w*a,a是特征，w是a对应的权重,比如a代表年龄，那么a的取值范围是[0..100]，如果测试样本中,出现了一个测试用例，a的取值是300，显然a是异常值，但是w*a还是有值，而且值还非常大，所以，异常值会对最后结果产生非常大的影响。</li>
-<li><strong>特征离散化后，模型会更稳定</strong><br>比如如果对用户年龄离散化，20-30作为一个区间，不会因为一个用户年龄长了一岁就变成一个完全不同的人。当然处于区间相邻处的样本会刚好相反，所以怎么划分区间是门学问；按区间离散化，划分区间是非常关键的。</li>
-<li><strong>特征离散化以后，起到了简化了逻辑回归模型的作用，降低了模型过拟合的风险</strong><br>当使用连续特征时，一个特征对应于一个权重，那么，如果这个特征权重较大，模型就会很依赖于这个特征，这个特征的一个微小变化可能会导致最终结果产生很大的变化，这样子的模型很危险，当遇到新样本的时候很可能因为对这个特征过分敏感而得到错误的分类结果，也就是泛化能力差，容易过拟合。而使用离散特征的时候，一个特征变成了多个，权重也变为多个，那么之前连续特征对模型的影响力就被分散弱化了，从而降低了过拟合的风险。</li>
-<li><strong>引入非线性</strong><br>单变量离散化为N个后，每个变量有单独的权重，相当于为模型引入了非线性，能够提升模型表达能力，加大拟合；在LR模型中，特征A作为连续特征对应的权重是Wa。A是线性特征，因为y = Wa*A,y对于A的导数就是Wa,如果离散化后，A按区间离散化为A_1,A_2,A_3。那么y = w_1*A_1+w_2*A_2+w_3*A_3.那么y对于A的函数就相当于分段的线性函数，y对于A的导数也随A的取值变动，所以，相当于引入了非线性。</li>
-<li><strong>离散化后方便进行特征交叉</strong><br>离散化后变为了类别，方便特征交叉。进一步引入非线性，提升表达能力。</li>
-<li>离散特征的增加和减少都很容易，易于模型的快速迭代。(离散特征的增加和减少，模型也不需要调整，重新训练是必须的，相比贝叶斯推断方法或者树模型方法迭代快)</li>
-<li>稀疏向量内积乘法运算速度快，计算结果方便存储，容易扩展；</li>
-</ul>
+<p><strong>以下内容未解锁</strong></p>
+<!-- # AdaMom: An optional optimizer for Dense Module
+$$\Large
+\begin{cases}
+g_t = \nabla_{\theta}J(\theta_t) + \alpha\theta_t \\
+m_t = \beta_1 m_{t-1} + (1-\beta_1) g_t \\
+v_t = \beta_2 v_{t-1} + g_t^2 \\
+c_t = \beta_2 c_{t-1} + 1 \\
+\theta_{t+1} = \theta_{t} - \eta \frac{1}{\sqrt{\frac{v_t}{c_t} +  \epsilon}} m_t
+\end{cases}$$
+- Adam的基础上，对二阶动量求累计更新次数的平均
+- Momentum
+ Adagrad仅使用二阶动量，导致累计梯度平方和单调增长，在某些维度变量频繁更新之后，会导致累计梯度平方和极大，参数几乎不再更新，也就是我们常说的学习不动了。
+- 在AdaMom中，我们单纯对二阶动量做累计更新次数的均值，缓解上述学习不动的情况。同时继承Adam算法中引入一阶动量的优势。其次，为了更适应在线学习的场景，我们去除了计算二阶动量时在gradient平方上的decay。在这些调整的基础上，可以将学习率设置更小，对学习稳定性和快速收敛带来优势。同时我们观察到adamom训练过程产生的gradient远小于其他优化器，印证了对学习的稳定性和长期更新的判断。但目前没有进行数学论证。
+- 和Adam的不同在于早期学习率的差距
+AdaMom可以看成Adam的生产环境改进版，前期降低了m_t的方差/自带了warmup，有效缓解了Dense部分在异步更新场景初期可能出现的梯度爆炸
+
+# AdaNest: an adaptive dense optimizer with Nesterov acceleration
+
+- 公式
+  - 1: Nesterov的工程实现
+  - 2: 保证所有系数和为1，类似配分函数
+  - 3: 继承于AdaMom，Vt除以梯度更新次数，借此解决AdaGrad的梯度衰减问题 
+- 保留Adam/AdaMom二阶动量特性的同时，使用更加激进的Nesterov动量替换Polyak动量，提升了效果
+- 从引入预判的角度看，AdaNest因为使用了预测点的梯度，对梯度的估计更加准确，总体比Adam更激进
+- Adam与RMSProp的折衷，相比RMSProp引入了动量，相比Adam赋予$$g_t$$ 更大的权重
+
+
+# GroupLasso
+- FTRL的vector版本，为了增强vector的稀疏性，以此来减小PS内存
+Summary -->
 ]]></content>
       <categories>
         <category>Learning</category>
       </categories>
       <tags>
+        <tag>DL</tag>
         <tag>ML</tag>
-        <tag>FeatureEngineering</tag>
+        <tag>优化器</tag>
       </tags>
   </entry>
   <entry>
@@ -3088,6 +3389,28 @@ p(y | \mathbf{x})=\frac{p(\mathbf{x} | y) p(y)}{p(\mathbf{x})}</script><p> 分�
       <tags>
         <tag>ML</tag>
         <tag>Resource</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ML-Feature Engineering</title>
+    <url>/2021/12/10/%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/</url>
+    <content><![CDATA[<h2 id="特征离散的作用"><a href="#特征离散的作用" class="headerlink" title="特征离散的作用"></a>特征离散的作用</h2><a id="more"></a>
+<ul>
+<li><strong>离散化后的特征对异常数据有很强的鲁棒性</strong><br>比如一个特征是年龄&gt;30是1，否则0。如果特征没有离散化，一个异常数据“年龄300岁”会给模型造成很大的干扰；离散化后年龄300岁也只对应于一个权重，如果训练数据中没有出现特征”年龄-300岁”，那么在LR模型中，其权重对应于0，所以，即使测试数据中出现特征”年龄-300岁”,也不会对预测结果产生影响。特征离散化的过程，比如特征A，如果当做连续特征使用，在LR模型中，A会对应一个权重w,如果离散化，那么A就拓展为特征A-1，A-2，A-3…,每个特征对应于一个权重，如果训练样本中没有出现特征A-4，那么训练的模型对于A-4就没有权重，如果测试样本中出现特征A-4,该特征A-4也不会起作用。相当于无效。但是，如果使用连续特征，在LR模型中，y = w*a,a是特征，w是a对应的权重,比如a代表年龄，那么a的取值范围是[0..100]，如果测试样本中,出现了一个测试用例，a的取值是300，显然a是异常值，但是w*a还是有值，而且值还非常大，所以，异常值会对最后结果产生非常大的影响。</li>
+<li><strong>特征离散化后，模型会更稳定</strong><br>比如如果对用户年龄离散化，20-30作为一个区间，不会因为一个用户年龄长了一岁就变成一个完全不同的人。当然处于区间相邻处的样本会刚好相反，所以怎么划分区间是门学问；按区间离散化，划分区间是非常关键的。</li>
+<li><strong>特征离散化以后，起到了简化了逻辑回归模型的作用，降低了模型过拟合的风险</strong><br>当使用连续特征时，一个特征对应于一个权重，那么，如果这个特征权重较大，模型就会很依赖于这个特征，这个特征的一个微小变化可能会导致最终结果产生很大的变化，这样子的模型很危险，当遇到新样本的时候很可能因为对这个特征过分敏感而得到错误的分类结果，也就是泛化能力差，容易过拟合。而使用离散特征的时候，一个特征变成了多个，权重也变为多个，那么之前连续特征对模型的影响力就被分散弱化了，从而降低了过拟合的风险。</li>
+<li><strong>引入非线性</strong><br>单变量离散化为N个后，每个变量有单独的权重，相当于为模型引入了非线性，能够提升模型表达能力，加大拟合；在LR模型中，特征A作为连续特征对应的权重是Wa。A是线性特征，因为y = Wa*A,y对于A的导数就是Wa,如果离散化后，A按区间离散化为A_1,A_2,A_3。那么y = w_1*A_1+w_2*A_2+w_3*A_3.那么y对于A的函数就相当于分段的线性函数，y对于A的导数也随A的取值变动，所以，相当于引入了非线性。</li>
+<li><strong>离散化后方便进行特征交叉</strong><br>离散化后变为了类别，方便特征交叉。进一步引入非线性，提升表达能力。</li>
+<li>离散特征的增加和减少都很容易，易于模型的快速迭代。(离散特征的增加和减少，模型也不需要调整，重新训练是必须的，相比贝叶斯推断方法或者树模型方法迭代快)</li>
+<li>稀疏向量内积乘法运算速度快，计算结果方便存储，容易扩展；</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>ML</tag>
+        <tag>FeatureEngineering</tag>
       </tags>
   </entry>
   <entry>
@@ -4014,329 +4337,6 @@ w=m(a+x, b+y)^{*} e^{-\frac{\left(x^{\prime}\right)^{2}+\left(y^{\prime}\right)^
       <tags>
         <tag>Leetcode</tag>
         <tag>查找表</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CS224WLec5-Label Propagation for Node Classification[LIP]</title>
-    <url>/2021/12/19/CS224WLec5/</url>
-    <content><![CDATA[<p><a href="http://web.stanford.edu/class/cs224w/slides/05-message.pdf">ppt</a></p>
-<h1 id="Semi-supervised-binary-node-classification"><a href="#Semi-supervised-binary-node-classification" class="headerlink" title="Semi-supervised binary node classification"></a>Semi-supervised binary node classification</h1><ul>
-<li>goal: 知道部分节点的label求其他节点的label</li>
-<li>main assumption：网络中存在的同质性。同类的node倾向于相互连接，或者聚在一起。</li>
-<li>framework<ul>
-<li>初始化</li>
-<li>迭代</li>
-<li>收敛</li>
-</ul>
-</li>
-<li>approaches<ul>
-<li>relational classification</li>
-<li>iterative classification</li>
-<li>correct &amp; smooth</li>
-</ul>
-</li>
-<li>以节点二分类为例</li>
-</ul>
-<a id="more"></a>
-<h1 id="Approaches"><a href="#Approaches" class="headerlink" title="Approaches"></a>Approaches</h1><h2 id="Probabilistic-relational-classifier"><a href="#Probabilistic-relational-classifier" class="headerlink" title="Probabilistic relational classifier"></a>Probabilistic relational classifier</h2><ul>
-<li><strong>只用到了邻居节点的label来做分类</strong></li>
-<li>step1: 初始化所有unlabeled nodes为0.5</li>
-<li>step2: update所有unlabeled nodes的预测值 <script type="math/tex">P\left(Y_{v}=c\right)=\frac{1}{\sum_{(v, u) \in E} A_{v, u}} \sum_{(v, u) \in E} A_{v, u} P\left(Y_{u}=c\right)</script><ul>
-<li>这里A为邻接矩阵，若边有权重，则Au,v是带权邻接矩阵</li>
-</ul>
-</li>
-<li>step3: 重复step2直到收敛：达到最大steps，或者所有节点label不再更新</li>
-<li>challenges: <ul>
-<li>不能保证收敛</li>
-<li>没有用到节点特征信息</li>
-</ul>
-</li>
-</ul>
-<h2 id="Iterative-classification"><a href="#Iterative-classification" class="headerlink" title="Iterative classification"></a>Iterative classification</h2><ul>
-<li>Classify node v based on its attributes <script type="math/tex">f_v</script> as well as labels <script type="math/tex">z_v</script> of neighbor set <script type="math/tex">N_v</script></li>
-<li><script type="math/tex">z_v</script>: v的neibors的label特征，可以是<ul>
-<li><script type="math/tex">N_v</script>中每种label的histogram</li>
-<li><script type="math/tex">N_v</script>中数量最多的label</li>
-<li>不同label的数量</li>
-</ul>
-</li>
-<li>流程<img src="/2021/12/19/CS224WLec5/classifier1.png" class="" title="classifier1">
-</li>
-</ul>
-<h2 id="Collective-classification-correct-amp-smooth"><a href="#Collective-classification-correct-amp-smooth" class="headerlink" title="Collective classification: correct &amp; smooth"></a>Collective classification: correct &amp; smooth</h2><ul>
-<li>recent state-of-the-art collective classification method</li>
-<li>一种后处理方法</li>
-<li>基于的假设：相邻节点的误差应该接近</li>
-<li>correct step<ul>
-<li>初始error: labeled node: error = ground truth minus soft label; unlabeled node: error=0</li>
-<li>利用扩散矩阵 <script type="math/tex">\widetilde{\boldsymbol{A}}</script>求取下一步的error<script type="math/tex; mode=display">\boldsymbol{E}^{(t+1)} \leftarrow(1-\alpha) \cdot \boldsymbol{E}^{(t)}+\alpha \cdot \widetilde{\boldsymbol{A}} \boldsymbol{E}^{(t)}</script></li>
-</ul>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Learning</category>
-        <category>cs224w</category>
-      </categories>
-      <tags>
-        <tag>cs224w</tag>
-        <tag>Graph</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>GraphEmbedding-LINE</title>
-    <url>/2021/12/20/GraphEmbedding-LINE/</url>
-    <content><![CDATA[<p>paper: <a href="https://arxiv.org/pdf/1503.03578.pdf">LINE: Large-scale Information Network Embedding</a></p>
-<h1 id="Intro"><a href="#Intro" class="headerlink" title="Intro"></a>Intro</h1><ul>
-<li>包含一阶信息（直接相连的两节点的邻近度）和二阶信息（一对顶点的邻近度用临近节点的相似性衡量）的GE学习模型：<strong>只用到了一阶邻点</strong></li>
-<li>DeepWalk/node2vec: 基于高阶相似度的GE学习模型</li>
-</ul>
-<a id="more"></a>
-<h1 id="Methods"><a href="#Methods" class="headerlink" title="Methods"></a>Methods</h1><ul>
-<li>边权重矩阵W：损失函数计算时用</li>
-<li>节点权重矩阵：节点采样时用</li>
-</ul>
-<h2 id="一阶相似度"><a href="#一阶相似度" class="headerlink" title="一阶相似度"></a>一阶相似度</h2><ul>
-<li><strong>只针对无向图，不支持有向图</strong></li>
-<li>边(u,v)的权重Wuv表示u和v之间的一阶相似性，如果在u和v之间无边，它们的一阶相似性为0。</li>
-<li>经验分布<script type="math/tex">\hat{p}_{1}(i, j)=\frac{w_{i j}}{W}</script>，这里W是W矩阵的模</li>
-<li>预测分布 <script type="math/tex">p_{1}\left(v_{i}, v_{j}\right)=\frac{1}{1+\exp \left(-\vec{u}_{i}^{T} \cdot \vec{u}_{j}\right)}</script></li>
-<li>目标函数 <script type="math/tex">O_{1}=d\left(\hat{p}_{1}(\cdot, \cdot), p_{1}(\cdot, \cdot)\right)</script>, d为距离函数，例如当d为KL散度且忽略常数项时（同交叉熵）：<script type="math/tex; mode=display">
-O_{1}=-\sum_{(i, j) \in E} w_{i j} \log p_{1}\left(v_{i}, v_{j}\right)</script></li>
-</ul>
-<h2 id="二阶相似度"><a href="#二阶相似度" class="headerlink" title="二阶相似度"></a>二阶相似度</h2><ul>
-<li>如果没有同样的相邻节点，二阶相似性为0</li>
-<li>经验分布 <script type="math/tex">\hat{p}_{2}\left(v_{j} \mid v_{i}\right)=\frac{w_{i j}}{d_{i}}</script>，di是节点i的带权出度，<script type="math/tex">w_{i j}</script>是边(i,j)的权重，<script type="math/tex">d_{i}=\sum_{k \in N(i)} w_{i k}</script></li>
-<li>预测分布 <script type="math/tex">p_{2}\left(v_{j} \mid v_{i}\right)=\frac{\exp \left(\vec{u}_{j}^{\prime T} \cdot \vec{u}_{i}\right)}{\sum_{k=1}^{|V|} \exp \left(\vec{u}_{k}^{\prime T} \cdot \vec{u}_{i}\right)}</script></li>
-<li>目标函数 <script type="math/tex">O_{2}=\sum_{i \in V} \lambda_{i} d\left(\hat{p}_{2}\left(\cdot \mid v_{i}\right), p_{2}\left(\cdot \mid v_{i}\right)\right)</script>，这里<script type="math/tex">\lambda_{i}</script>为对节点i的加权，一般取 <script type="math/tex">\lambda_{i}</script> 为 <script type="math/tex">d_{i}</script>，并取KL散度为距离函数时：<script type="math/tex">O_{2}=-\sum_{(i, j) \in E} w_{i j} \log p_{2}\left(v_{j} \mid v_{i}\right)</script></li>
-</ul>
-<h2 id="结合一阶和二阶"><a href="#结合一阶和二阶" class="headerlink" title="结合一阶和二阶"></a>结合一阶和二阶</h2><ul>
-<li>method1: 训完一阶训二阶，并将两者embedding concat</li>
-<li>method2: 一起训</li>
-</ul>
-<h2 id="其他损失函数"><a href="#其他损失函数" class="headerlink" title="其他损失函数"></a>其他损失函数</h2><ul>
-<li>pair loss: 用learn2rank的loss</li>
-</ul>
-<h2 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h2><h3 id="二阶相似度计算的负采样"><a href="#二阶相似度计算的负采样" class="headerlink" title="二阶相似度计算的负采样"></a>二阶相似度计算的负采样</h3><ul>
-<li>对softmax的优化：负采样，<script type="math/tex">\sigma</script>为sigmoid函数，<script type="math/tex">P_{n}(v) \propto d_{v}^{3 / 4}</script>利用出度构成的节点权重做采样，与w2v分布一致<script type="math/tex; mode=display">
-\log \sigma\left(\vec{u}_{j}^{\prime T} \cdot \vec{u}_{i}\right)+\sum_{i=1}^{K} E_{v_{n} \sim P_{n}(v)}\left[\log \sigma\left(-\vec{u}_{n}^{\prime T} \cdot \vec{u}_{i}\right)\right]</script></li>
-</ul>
-<h3 id="边采样"><a href="#边采样" class="headerlink" title="边采样"></a>边采样</h3><ul>
-<li>O2的梯度与边权重wij有关，若学习率的设定由小权重决定，则遇到大权重时会梯度爆炸；反之则会梯度消失<script type="math/tex; mode=display">
-\frac{\partial O_{2}}{\partial \vec{u}_{i}}=w_{i j} \cdot \frac{\partial \log p_{2}\left(v_{j} \mid v_{i}\right)}{\partial \vec{u}_{i}}</script></li>
-<li>简单的优化方式：将权重为w的edge变为w条二进制edge —&gt; oom —&gt; edge sampling</li>
-<li>采样算法：alias算法，可以达到O(1)复杂度</li>
-</ul>
-<h2 id="Problems"><a href="#Problems" class="headerlink" title="Problems"></a>Problems</h2><ul>
-<li>新节点的GE（新节点）：<ul>
-<li>新节点和已有节点相连：优化如下目标函数 <script type="math/tex">-\sum_{j \in N(i)} w_{j i} \log p_{1}\left(v_{j}, v_{i}\right), \text { or }-\sum_{j \in N(i)} w_{j i} \log p_{2}\left(v_{j} \mid v_{i}\right)</script></li>
-<li>新节点不和已有节点相连：文中没给 —》利用side info</li>
-</ul>
-</li>
-<li>低度数顶点（孤岛节点）：对于一些顶点由于其邻接点非常少会导致embedding向量的学习不充分，论文提到可以利用邻居的邻居构造样本进行学习，这里也暴露出LINE方法仅考虑一阶和二阶相似性，对高阶信息的利用不足。</li>
-</ul>
-<h1 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h1><ul>
-<li>边权重矩阵和节点权重矩阵（pagerank/出度/centrality/clustering coefficient/…）的设计</li>
-<li>不同的loss: KL/cross-entropy/rankloss/…</li>
-<li>采样算法</li>
-</ul>
-<h1 id="Pros-amp-Cons"><a href="#Pros-amp-Cons" class="headerlink" title="Pros &amp; Cons"></a>Pros &amp; Cons</h1><ul>
-<li>效率高</li>
-<li>只用了一跳信息</li>
-<li>对孤岛节点和新节点没有好的处理</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Learning</category>
-      </categories>
-      <tags>
-        <tag>LINE</tag>
-        <tag>Graph</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Graph-与图有关的资源</title>
-    <url>/2021/12/22/Graph/</url>
-    <content><![CDATA[<h2 id="OpenResource"><a href="#OpenResource" class="headerlink" title="OpenResource"></a>OpenResource</h2><ul>
-<li><a href="https://ogb.stanford.edu/">OGB</a>: The Open Graph Benchmark (OGB) is a collection of realistic, large-scale, and diverse benchmark datasets for machine learning on graphs.</li>
-</ul>
-<h2 id="Class"><a href="#Class" class="headerlink" title="Class"></a>Class</h2><ul>
-<li><a href="http://web.stanford.edu/class/cs224w/">CS224W: Machine Learning with Graphs</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Learning</category>
-      </categories>
-      <tags>
-        <tag>ML</tag>
-        <tag>Resource</tag>
-        <tag>Graph</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CS224WLec6-GNN</title>
-    <url>/2021/12/22/CS224WLec6/</url>
-    <content><![CDATA[<p><a href="http://web.stanford.edu/class/cs224w/slides/06-GNN1.pdf">ppt</a></p>
-<h1 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h1><ul>
-<li>DeepWalk/Node2vec属于shallow encoding，有如下优缺点：<ul>
-<li>需要O(|V|)的参数量，节点间的embedding不共享，每个node有独立的embedding</li>
-<li>training时没有的node，不会有embedding</li>
-<li>没有利用到节点的特征，只利用了graph structure</li>
-</ul>
-</li>
-<li>GNN: deep encoding</li>
-</ul>
-<a id="more"></a>
-]]></content>
-      <categories>
-        <category>Learning</category>
-        <category>cs224w</category>
-      </categories>
-      <tags>
-        <tag>cs224w</tag>
-        <tag>Graph</tag>
-        <tag>GNN</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CUDA介绍以及耗时分析</title>
-    <url>/2021/12/28/cuda-intros/</url>
-    <content><![CDATA[<ul>
-<li><a href="https://www.cnblogs.com/1024incn/p/4537177.html">https://www.cnblogs.com/1024incn/p/4537177.html</a>)</li>
-<li><a href="https://developer.download.nvidia.cn/CUDA/training/StreamsAndConcurrencyWebinar.pdf">https://developer.download.nvidia.cn/CUDA/training/StreamsAndConcurrencyWebinar.pdf</a><a id="more"></a>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Learning</category>
-      </categories>
-      <tags>
-        <tag>CUDA</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>优化器</title>
-    <url>/2022/01/01/%E4%BC%98%E5%8C%96%E5%99%A8/</url>
-    <content><![CDATA[<h1 id="GD-amp-SGD-amp-Mini-batch-GD"><a href="#GD-amp-SGD-amp-Mini-batch-GD" class="headerlink" title="GD&amp;SGD&amp;Mini-batch GD"></a>GD&amp;SGD&amp;Mini-batch GD</h1><script type="math/tex; mode=display">
-\theta=\theta-\eta \cdot \nabla_{\theta} J(\theta)</script><a id="more"></a>
-<ul>
-<li>GD<ul>
-<li>用了全量样本，凸函数可以到全局最小值，非凸函数可以到局部最小值</li>
-<li>慢，不能在线serving</li>
-</ul>
-</li>
-<li>SGD<ul>
-<li>快</li>
-<li>损失函数震荡</li>
-</ul>
-</li>
-<li>Mini-batch GD<ul>
-<li>GD与SGD的结合：降低了参数更新时的方差，收敛较SGD更稳定</li>
-<li>速度较快：可以利用矩阵运算</li>
-</ul>
-</li>
-</ul>
-<p>两个问题</p>
-<ul>
-<li>收敛能力<ul>
-<li>lr太大，容易震荡，甚至偏离极小值；lr太小，收敛慢</li>
-<li>非凸函数，容易陷于局部最小值/鞍点</li>
-</ul>
-</li>
-<li>自适应lr调节<ul>
-<li>SGD对所有参数更新时应用同样的 learning rate，如果我们的数据是稀疏的，我们更希望对出现频率低的特征进行大一点的更新。<br>Mini-batch gradient descent 不能保证很好的收敛性，learning rate 如果选择的太小，收敛速度会很慢，如果太大，loss function 就会在极小值处不停地震荡甚至偏离。（有一种措施是先设定大一点的学习率，当两次迭代之间的变化低于某个阈值后，就减小 learning rate，不过这个阈值的设定需要提前写好，这样的话就不能够适应数据集的特点。）<br>对于非凸函数，还要避免陷于局部极小值处，或者鞍点处，因为鞍点周围的error是一样的，所有维度的梯度都接近于0，SGD 很容易被困在这里。（会在鞍点或者局部最小点震荡跳动，因为在此点处，如果是训练集全集带入即BGD，则优化会停止不动，如果是mini-batch或者SGD，每次找到的梯度都是不同的，就会发生震荡，来回跳动。）</li>
-</ul>
-</li>
-</ul>
-<h1 id="Momentum"><a href="#Momentum" class="headerlink" title="Momentum"></a>Momentum</h1><ul>
-<li>加上惯性，尝试解决容易陷入局部最小值/鞍点的问题<ul>
-<li>使得梯度方向不变的维度上速度变快，梯度方向有所改变的维度上的更新速度变慢，这样就可以加快收敛并减小震荡<br>$ v<em>{t-1} $上加梯度，可以认为是对 $ v</em>{t-1} $ 的预判</li>
-</ul>
-</li>
-</ul>
-<script type="math/tex; mode=display">\begin{array}{l}
-v_{t}=\gamma v_{t-1}+\eta \nabla_{\theta} J(\theta) \\
-\theta=\theta-v_{t}
-\end{array}</script><ul>
-<li>由Polyak提出，也叫Polyak动量<br>Nesterov</li>
-<li>优化Polyak动量，“预判我的预判”<script type="math/tex; mode=display">\begin{array}{ll}
-v_{t} & =\beta v_{t-1}+\nabla_{\theta} J\left(\theta_{t}-\eta \beta v_{t-1}\right) \\
-\theta_{t+1} & =\theta_{t}-\eta v_{t} \end{array}</script></li>
-<li>从工程实现上，无法直接获得预判点的梯度，可得如下等价公式：<script type="math/tex; mode=display">\begin{array}{ll}
-v_{t} & =\beta v_{t-1}+g_{t}+\beta\left(g_{t}-g_{t-1}\right) \\
-\theta_{t+1} & =\theta_{t}-\eta v_{t}
-\end{array}</script></li>
-</ul>
-<h1 id="AdaGrad-amp-RMSProp-amp-Adam"><a href="#AdaGrad-amp-RMSProp-amp-Adam" class="headerlink" title="AdaGrad&amp;RMSProp&amp;Adam"></a>AdaGrad&amp;RMSProp&amp;Adam</h1><h2 id="AdaGrad"><a href="#AdaGrad" class="headerlink" title="AdaGrad"></a>AdaGrad</h2><script type="math/tex; mode=display">\Large \begin{cases} 
-g_t = \nabla_{\theta}J(\theta_t) + \alpha\theta_t \\
-v_t = v_{t-1} + g_t^2 \\
-\theta_{t+1} = \theta_{t} - \eta \frac{1}{\sqrt{v_t + \epsilon}} g_t
-\end{cases}</script><h2 id="RMSPropV2"><a href="#RMSPropV2" class="headerlink" title="RMSPropV2"></a>RMSPropV2</h2><script type="math/tex; mode=display">\Large
-\begin{cases}
-g_t = \nabla_{\theta}J(\theta_t) + \alpha\theta_t \\
-v_t = \beta v_{t-1} + g_t^2 \\
-\theta_{t+1} = \theta_{t} - \eta \frac{1}{\sqrt{v_t + 1}} g_t
-\end{cases}</script><h2 id="Adam"><a href="#Adam" class="headerlink" title="Adam"></a>Adam</h2><script type="math/tex; mode=display">\Large
-\begin{cases}
-g_t = \nabla_{\theta}J(\theta_t) + \alpha\theta_t \\
-m_t = \beta_1 m_{t-1} + (1-\beta_1) g_t \\
-v_t = \beta_2 v_{t-1} + (1-\beta_2) g_t^2 \\
-\gamma = \frac{\sqrt{1-\beta_2^{t}}}{1-\beta_1^t} \\
-\theta_{t+1} = \theta_{t} - \eta \frac{\gamma}{\sqrt{v_t +  \epsilon}} m_t
-\end{cases}</script><ul>
-<li>AdaGrad: Adaptive Gradient<ul>
-<li>学习率的自适应调节：学习率 除以 梯度平方累积项，更新次数越多（高频特征）的更新步长减小，稀疏特征步长增大</li>
-<li>后期学不动</li>
-</ul>
-</li>
-<li>RMSProp：Root Mean Square Propogation，为了解决AdaGrad后期学不动的问题<ul>
-<li>累积梯度时加上衰减系数，越早的梯度会逐渐衰减</li>
-</ul>
-</li>
-<li>Adam：Adaptive Moment Optimization, <ul>
-<li>RMSProp + Momentum </li>
-</ul>
-</li>
-</ul>
-<p><strong>以下内容未解锁</strong></p>
-<!-- # AdaMom: An optional optimizer for Dense Module
-$$\Large
-\begin{cases}
-g_t = \nabla_{\theta}J(\theta_t) + \alpha\theta_t \\
-m_t = \beta_1 m_{t-1} + (1-\beta_1) g_t \\
-v_t = \beta_2 v_{t-1} + g_t^2 \\
-c_t = \beta_2 c_{t-1} + 1 \\
-\theta_{t+1} = \theta_{t} - \eta \frac{1}{\sqrt{\frac{v_t}{c_t} +  \epsilon}} m_t
-\end{cases}$$
-- Adam的基础上，对二阶动量求累计更新次数的平均
-- Momentum
- Adagrad仅使用二阶动量，导致累计梯度平方和单调增长，在某些维度变量频繁更新之后，会导致累计梯度平方和极大，参数几乎不再更新，也就是我们常说的学习不动了。
-- 在AdaMom中，我们单纯对二阶动量做累计更新次数的均值，缓解上述学习不动的情况。同时继承Adam算法中引入一阶动量的优势。其次，为了更适应在线学习的场景，我们去除了计算二阶动量时在gradient平方上的decay。在这些调整的基础上，可以将学习率设置更小，对学习稳定性和快速收敛带来优势。同时我们观察到adamom训练过程产生的gradient远小于其他优化器，印证了对学习的稳定性和长期更新的判断。但目前没有进行数学论证。
-- 和Adam的不同在于早期学习率的差距
-AdaMom可以看成Adam的生产环境改进版，前期降低了m_t的方差/自带了warmup，有效缓解了Dense部分在异步更新场景初期可能出现的梯度爆炸
-
-# AdaNest: an adaptive dense optimizer with Nesterov acceleration
-
-- 公式
-  - 1: Nesterov的工程实现
-  - 2: 保证所有系数和为1，类似配分函数
-  - 3: 继承于AdaMom，Vt除以梯度更新次数，借此解决AdaGrad的梯度衰减问题 
-- 保留Adam/AdaMom二阶动量特性的同时，使用更加激进的Nesterov动量替换Polyak动量，提升了效果
-- 从引入预判的角度看，AdaNest因为使用了预测点的梯度，对梯度的估计更加准确，总体比Adam更激进
-- Adam与RMSProp的折衷，相比RMSProp引入了动量，相比Adam赋予$$g_t$$ 更大的权重
-
-
-# GroupLasso
-- FTRL的vector版本，为了增强vector的稀疏性，以此来减小PS内存
-Summary -->
-]]></content>
-      <categories>
-        <category>Learning</category>
-      </categories>
-      <tags>
-        <tag>DL</tag>
-        <tag>ML</tag>
-        <tag>优化器</tag>
       </tags>
   </entry>
 </search>
