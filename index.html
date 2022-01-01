@@ -222,7 +222,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">44</span>
+          <span class="site-state-item-count">47</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -235,7 +235,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">47</span>
+        <span class="site-state-item-count">50</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -295,6 +295,374 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2022/01/01/%E4%BC%98%E5%8C%96%E5%99%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Kayden">
+      <meta itemprop="description" content="Kayden's Blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kayden's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/01/%E4%BC%98%E5%8C%96%E5%99%A8/" class="post-title-link" itemprop="url">优化器</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2022-01-01 19:29:23 / Modified: 19:38:00" itemprop="dateCreated datePublished" datetime="2022-01-01T19:29:23+08:00">2022-01-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <a id="more"></a>
+<h1 id="GD-amp-SGD-amp-Mini-batch-GD"><a href="#GD-amp-SGD-amp-Mini-batch-GD" class="headerlink" title="GD&amp;SGD&amp;Mini-batch GD"></a>GD&amp;SGD&amp;Mini-batch GD</h1><script type="math/tex; mode=display">
+\theta=\theta-\eta \cdot \nabla_{\theta} J(\theta)</script><ul>
+<li>GD<ul>
+<li>用了全量样本，凸函数可以到全局最小值，非凸函数可以到局部最小值</li>
+<li>慢，不能在线serving</li>
+</ul>
+</li>
+<li>SGD<ul>
+<li>快</li>
+<li>损失函数震荡</li>
+</ul>
+</li>
+<li>Mini-batch GD<ul>
+<li>GD与SGD的结合：降低了参数更新时的方差，收敛较SGD更稳定</li>
+<li>速度较快：可以利用矩阵运算</li>
+</ul>
+</li>
+</ul>
+<p>两个问题</p>
+<ul>
+<li>收敛能力<ul>
+<li>lr太大，容易震荡，甚至偏离极小值；lr太小，收敛慢</li>
+<li>非凸函数，容易陷于局部最小值/鞍点</li>
+</ul>
+</li>
+<li>自适应lr调节<ul>
+<li>SGD对所有参数更新时应用同样的 learning rate，如果我们的数据是稀疏的，我们更希望对出现频率低的特征进行大一点的更新。<br>Mini-batch gradient descent 不能保证很好的收敛性，learning rate 如果选择的太小，收敛速度会很慢，如果太大，loss function 就会在极小值处不停地震荡甚至偏离。（有一种措施是先设定大一点的学习率，当两次迭代之间的变化低于某个阈值后，就减小 learning rate，不过这个阈值的设定需要提前写好，这样的话就不能够适应数据集的特点。）<br>对于非凸函数，还要避免陷于局部极小值处，或者鞍点处，因为鞍点周围的error是一样的，所有维度的梯度都接近于0，SGD 很容易被困在这里。（会在鞍点或者局部最小点震荡跳动，因为在此点处，如果是训练集全集带入即BGD，则优化会停止不动，如果是mini-batch或者SGD，每次找到的梯度都是不同的，就会发生震荡，来回跳动。）</li>
+</ul>
+</li>
+</ul>
+<h1 id="Momentum"><a href="#Momentum" class="headerlink" title="Momentum"></a>Momentum</h1><ul>
+<li>加上惯性，尝试解决容易陷入局部最小值/鞍点的问题<ul>
+<li>使得梯度方向不变的维度上速度变快，梯度方向有所改变的维度上的更新速度变慢，这样就可以加快收敛并减小震荡<br>$ v<em>{t-1} $上加梯度，可以认为是对 $ v</em>{t-1} $ 的预判</li>
+</ul>
+</li>
+</ul>
+<script type="math/tex; mode=display">\begin{array}{l}
+v_{t}=\gamma v_{t-1}+\eta \nabla_{\theta} J(\theta) \\
+\theta=\theta-v_{t}
+\end{array}</script><ul>
+<li>由Polyak提出，也叫Polyak动量<br>Nesterov</li>
+<li>优化Polyak动量，“预判我的预判”<script type="math/tex; mode=display">\begin{array}{ll}
+v_{t} & =\beta v_{t-1}+\nabla_{\theta} J\left(\theta_{t}-\eta \beta v_{t-1}\right) \\
+\theta_{t+1} & =\theta_{t}-\eta v_{t} \end{array}</script></li>
+<li>从工程实现上，无法直接获得预判点的梯度，可得如下等价公式：<script type="math/tex; mode=display">\begin{array}{ll}
+v_{t} & =\beta v_{t-1}+g_{t}+\beta\left(g_{t}-g_{t-1}\right) \\
+\theta_{t+1} & =\theta_{t}-\eta v_{t}
+\end{array}</script></li>
+</ul>
+<h1 id="AdaGrad-amp-RMSProp-amp-Adam"><a href="#AdaGrad-amp-RMSProp-amp-Adam" class="headerlink" title="AdaGrad&amp;RMSProp&amp;Adam"></a>AdaGrad&amp;RMSProp&amp;Adam</h1><h2 id="AdaGrad"><a href="#AdaGrad" class="headerlink" title="AdaGrad"></a>AdaGrad</h2><script type="math/tex; mode=display">\Large \begin{cases} 
+g_t = \nabla_{\theta}J(\theta_t) + \alpha\theta_t \\
+v_t = v_{t-1} + g_t^2 \\
+\theta_{t+1} = \theta_{t} - \eta \frac{1}{\sqrt{v_t + \epsilon}} g_t
+\end{cases}</script><h2 id="RMSPropV2"><a href="#RMSPropV2" class="headerlink" title="RMSPropV2"></a>RMSPropV2</h2><script type="math/tex; mode=display">\Large
+\begin{cases}
+g_t = \nabla_{\theta}J(\theta_t) + \alpha\theta_t \\
+v_t = \beta v_{t-1} + g_t^2 \\
+\theta_{t+1} = \theta_{t} - \eta \frac{1}{\sqrt{v_t + 1}} g_t
+\end{cases}</script><h2 id="Adam"><a href="#Adam" class="headerlink" title="Adam"></a>Adam</h2><script type="math/tex; mode=display">\Large
+\begin{cases}
+g_t = \nabla_{\theta}J(\theta_t) + \alpha\theta_t \\
+m_t = \beta_1 m_{t-1} + (1-\beta_1) g_t \\
+v_t = \beta_2 v_{t-1} + (1-\beta_2) g_t^2 \\
+\gamma = \frac{\sqrt{1-\beta_2^{t}}}{1-\beta_1^t} \\
+\theta_{t+1} = \theta_{t} - \eta \frac{\gamma}{\sqrt{v_t +  \epsilon}} m_t
+\end{cases}</script><ul>
+<li>AdaGrad: Adaptive Gradient<ul>
+<li>学习率的自适应调节：学习率 除以 梯度平方累积项，更新次数越多（高频特征）的更新步长减小，稀疏特征步长增大</li>
+<li>后期学不动</li>
+</ul>
+</li>
+<li>RMSProp：Root Mean Square Propogation，为了解决AdaGrad后期学不动的问题<ul>
+<li>累积梯度时加上衰减系数，越早的梯度会逐渐衰减</li>
+</ul>
+</li>
+<li>Adam：Adaptive Moment Optimization, <ul>
+<li>RMSProp + Momentum </li>
+</ul>
+</li>
+</ul>
+<p>&lt;以下内容未解锁&gt;<br>&lt;!— # AdaMom: An optional optimizer for Dense Module</p>
+<script type="math/tex; mode=display">\Large
+\begin{cases}
+g_t = \nabla_{\theta}J(\theta_t) + \alpha\theta_t \\
+m_t = \beta_1 m_{t-1} + (1-\beta_1) g_t \\
+v_t = \beta_2 v_{t-1} + g_t^2 \\
+c_t = \beta_2 c_{t-1} + 1 \\
+\theta_{t+1} = \theta_{t} - \eta \frac{1}{\sqrt{\frac{v_t}{c_t} +  \epsilon}} m_t
+\end{cases}</script><ul>
+<li>Adam的基础上，对二阶动量求累计更新次数的平均</li>
+<li>Momentum<br>Adagrad仅使用二阶动量，导致累计梯度平方和单调增长，在某些维度变量频繁更新之后，会导致累计梯度平方和极大，参数几乎不再更新，也就是我们常说的学习不动了。</li>
+<li>在AdaMom中，我们单纯对二阶动量做累计更新次数的均值，缓解上述学习不动的情况。同时继承Adam算法中引入一阶动量的优势。其次，为了更适应在线学习的场景，我们去除了计算二阶动量时在gradient平方上的decay。在这些调整的基础上，可以将学习率设置更小，对学习稳定性和快速收敛带来优势。同时我们观察到adamom训练过程产生的gradient远小于其他优化器，印证了对学习的稳定性和长期更新的判断。但目前没有进行数学论证。</li>
+<li>和Adam的不同在于早期学习率的差距<br>AdaMom可以看成Adam的生产环境改进版，前期降低了m_t的方差/自带了warmup，有效缓解了Dense部分在异步更新场景初期可能出现的梯度爆炸</li>
+</ul>
+<h1 id="AdaNest-an-adaptive-dense-optimizer-with-Nesterov-acceleration"><a href="#AdaNest-an-adaptive-dense-optimizer-with-Nesterov-acceleration" class="headerlink" title="AdaNest: an adaptive dense optimizer with Nesterov acceleration"></a>AdaNest: an adaptive dense optimizer with Nesterov acceleration</h1><ul>
+<li>公式<ul>
+<li>1: Nesterov的工程实现</li>
+<li>2: 保证所有系数和为1，类似配分函数</li>
+<li>3: 继承于AdaMom，Vt除以梯度更新次数，借此解决AdaGrad的梯度衰减问题 </li>
+</ul>
+</li>
+<li>保留Adam/AdaMom二阶动量特性的同时，使用更加激进的Nesterov动量替换Polyak动量，提升了效果</li>
+<li>从引入预判的角度看，AdaNest因为使用了预测点的梯度，对梯度的估计更加准确，总体比Adam更激进</li>
+<li>Adam与RMSProp的折衷，相比RMSProp引入了动量，相比Adam赋予<script type="math/tex">g_t</script> 更大的权重</li>
+</ul>
+<h1 id="GroupLasso"><a href="#GroupLasso" class="headerlink" title="GroupLasso"></a>GroupLasso</h1><ul>
+<li>FTRL的vector版本，为了增强vector的稀疏性，以此来减小PS内存<br>Summary —&gt;</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/28/cuda-intros/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Kayden">
+      <meta itemprop="description" content="Kayden's Blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kayden's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/12/28/cuda-intros/" class="post-title-link" itemprop="url">CUDA介绍以及耗时分析</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-12-28 18:04:43 / Modified: 18:06:22" itemprop="dateCreated datePublished" datetime="2021-12-28T18:04:43+08:00">2021-12-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <ul>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/1024incn/p/4537177.html">https://www.cnblogs.com/1024incn/p/4537177.html</a>)</li>
+<li><a target="_blank" rel="noopener" href="https://developer.download.nvidia.cn/CUDA/training/StreamsAndConcurrencyWebinar.pdf">https://developer.download.nvidia.cn/CUDA/training/StreamsAndConcurrencyWebinar.pdf</a>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/12/28/cuda-intros/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/22/CS224WLec6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Kayden">
+      <meta itemprop="description" content="Kayden's Blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kayden's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/12/22/CS224WLec6/" class="post-title-link" itemprop="url">CS224WLec6-GNN</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-12-22 17:43:04" itemprop="dateCreated datePublished" datetime="2021-12-22T17:43:04+08:00">2021-12-22</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2022-01-01 19:04:42" itemprop="dateModified" datetime="2022-01-01T19:04:42+08:00">2022-01-01</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/cs224w/" itemprop="url" rel="index"><span itemprop="name">cs224w</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><a target="_blank" rel="noopener" href="http://web.stanford.edu/class/cs224w/slides/06-GNN1.pdf">ppt</a></p>
+<h1 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h1><ul>
+<li>DeepWalk/Node2vec属于shallow encoding，有如下优缺点：<ul>
+<li>需要O(|V|)的参数量，节点间的embedding不共享，每个node有独立的embedding</li>
+<li>training时没有的node，不会有embedding</li>
+<li>没有利用到节点的特征，只利用了graph structure</li>
+</ul>
+</li>
+<li>GNN: deep encoding</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/12/22/CS224WLec6/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
     <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/22/Graph/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -309,7 +677,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/12/22/Graph/" class="post-title-link" itemprop="url">Graph-机器学习&深度学习中图有用的资源</a>
+            <a href="/2021/12/22/Graph/" class="post-title-link" itemprop="url">Graph-与图有关的资源</a>
         </h2>
 
         <div class="post-meta-container">
@@ -321,7 +689,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2021-12-22 15:54:47 / Modified: 16:00:09" itemprop="dateCreated datePublished" datetime="2021-12-22T15:54:47+08:00">2021-12-22</time>
+      <time title="Created: 2021-12-22 15:54:47 / Modified: 17:41:57" itemprop="dateCreated datePublished" datetime="2021-12-22T15:54:47+08:00">2021-12-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -608,7 +976,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-12-22 15:57:24" itemprop="dateModified" datetime="2021-12-22T15:57:24+08:00">2021-12-22</time>
+        <time title="Modified: 2022-01-01 19:14:06" itemprop="dateModified" datetime="2022-01-01T19:14:06+08:00">2022-01-01</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -636,13 +1004,13 @@
     <div class="post-body" itemprop="articleBody">
           <h1 id="PageRank"><a href="#PageRank" class="headerlink" title="PageRank"></a>PageRank</h1><ul>
 <li>一个node的重要性由指向它的节点的重要性决定 —&gt; <strong>指向该node的节点数越多，且这些节点重要性越高，则该节点越重要</strong>。node j的重要性（传递函数）为：<script type="math/tex; mode=display">r_{j}=\sum_{i \rightarrow j} \frac{r_{i}}{d_{i}}</script><script type="math/tex; mode=display">d_{i} \ldots out-degree of node i</script></li>
-<li>矩阵形式：<ul>
+<li><p>矩阵形式：</p>
+<ul>
 <li>随机邻接矩阵M。j有<script type="math/tex">d_{j}</script>个出链，如果j -&gt; i，则<script type="math/tex">M_{ij}=1/d_{j}</script>，因此每一列上的值要么为0，要么为<script type="math/tex">1/d_{j}</script>，且加和为1，称为列随机矩阵</li>
 <li>rank vector r: <script type="math/tex">r_{j}</script>为node j的重要性score，且<script type="math/tex">\sum_{i} r_{i}=1</script></li>
-<li>n*1 = n*n * n*1: <script type="math/tex; mode=display">\boldsymbol{r}=\boldsymbol{M} \cdot \boldsymbol{r} $$,
-$$\quad r_{j}=\sum_{i \rightarrow j} \frac{r_{i}}{d_{i}}</script></li>
+<li>n*1 = n*n * n*1:<br><script type="math/tex">\boldsymbol{r}=\boldsymbol{M} \cdot \boldsymbol{r}</script>,</li>
 </ul>
-</li>
+<script type="math/tex; mode=display">\quad r_{j}=\sum_{i \rightarrow j} \frac{r_{i}}{d_{i}}</script></li>
 <li>PageRank VS RandomWalk: 当random walk到达静态分布状态时满足<script type="math/tex">\boldsymbol{r}=\boldsymbol{M} \cdot \boldsymbol{r}</script>，即<strong>PageRank得到的重要性向量v是random walk的静态分布</strong></li>
 <li>PangRank VS Eigenvector: <strong>PageRank得到的重要性向量v是当特征值为1时得到的主特征向量</strong>
           <!--noindex-->
@@ -710,7 +1078,7 @@ $$\quad r_{j}=\sum_{i \rightarrow j} \frac{r_{i}}{d_{i}}</script></li>
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-12-22 15:57:08" itemprop="dateModified" datetime="2021-12-22T15:57:08+08:00">2021-12-22</time>
+        <time title="Modified: 2021-12-23 11:55:56" itemprop="dateModified" datetime="2021-12-23T11:55:56+08:00">2021-12-23</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -944,294 +1312,6 @@ $$\quad r_{j}=\sum_{i \rightarrow j} \frac{r_{i}}{d_{i}}</script></li>
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/12/CS224WLec1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Kayden">
-      <meta itemprop="description" content="Kayden's Blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Kayden's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/12/12/CS224WLec1/" class="post-title-link" itemprop="url">CS224WLec1-Graph Intro & Graph Representations</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-12-12 13:10:09" itemprop="dateCreated datePublished" datetime="2021-12-12T13:10:09+08:00">2021-12-12</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-12-22 15:56:52" itemprop="dateModified" datetime="2021-12-22T15:56:52+08:00">2021-12-22</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
-        </span>
-          , 
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Learning/cs224w/" itemprop="url" rel="index"><span itemprop="name">cs224w</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="Intro"><a href="#Intro" class="headerlink" title="Intro"></a>Intro</h1><ul>
-<li>title: Machine Learning with Graphs</li>
-<li>year: Fall 2021</li>
-<li><a target="_blank" rel="noopener" href="http://web.stanford.edu/class/cs224w/">CS224W page</a></li>
-<li><a target="_blank" rel="noopener" href="https://snap-stanford.github.io/cs224w-notes/">note</a>、<a target="_blank" rel="noopener" href="https://yasoz.github.io/cs224w-zh/#/Introduction-and-Graph-Structure">note中文翻译</a>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/12/12/CS224WLec1/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/11/6-824Lecture2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Kayden">
-      <meta itemprop="description" content="Kayden's Blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Kayden's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/12/11/6-824Lecture2/" class="post-title-link" itemprop="url">6.824Lecture2-RPC&Threads</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-12-11 22:25:55" itemprop="dateCreated datePublished" datetime="2021-12-11T22:25:55+08:00">2021-12-11</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-12-18 21:42:54" itemprop="dateModified" datetime="2021-12-18T21:42:54+08:00">2021-12-18</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
-        </span>
-          , 
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Learning/6-824/" itemprop="url" rel="index"><span itemprop="name">6.824</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h1><h2 id="Why-Threads"><a href="#Why-Threads" class="headerlink" title="Why Threads?"></a>Why Threads?</h2><ul>
-<li>I/O concurrency</li>
-<li>multi core parallelism</li>
-<li>convenience for, like routine</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/12/11/6-824Lecture2/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/11/6-824Lecture1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Kayden">
-      <meta itemprop="description" content="Kayden's Blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Kayden's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/12/11/6-824Lecture1/" class="post-title-link" itemprop="url">6.824Lecture1-MapReduce</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-12-11 19:08:24" itemprop="dateCreated datePublished" datetime="2021-12-11T19:08:24+08:00">2021-12-11</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-12-18 21:42:14" itemprop="dateModified" datetime="2021-12-18T21:42:14+08:00">2021-12-18</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
-        </span>
-          , 
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Learning/6-824/" itemprop="url" rel="index"><span itemprop="name">6.824</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="Backgorund"><a href="#Backgorund" class="headerlink" title="Backgorund"></a>Backgorund</h1><ul>
-<li>big data</li>
-<li>lots of kv data stuctures, like inverted index</li>
-</ul>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><h2 id="Abstract-view"><a href="#Abstract-view" class="headerlink" title="Abstract view"></a>Abstract view</h2><img src="/2021/12/11/6-824Lecture1/workflow.png" class="" title="workflow">
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/12/11/6-824Lecture1/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
 
   
   <nav class="pagination">
@@ -1276,7 +1356,7 @@ $$\quad r_{j}=\sum_{i \rightarrow j} \frac{r_{i}}{d_{i}}</script></li>
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
