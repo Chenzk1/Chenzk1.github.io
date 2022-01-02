@@ -666,20 +666,86 @@ k_{v} \\
       </tags>
   </entry>
   <entry>
-    <title>CS224WLec6-GNN</title>
+    <title>CS224WLec6~Lec9-GNN</title>
     <url>/2021/12/22/CS224WLec6/</url>
     <content><![CDATA[<p><a href="http://web.stanford.edu/class/cs224w/slides/06-GNN1.pdf">ppt</a></p>
 <h1 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h1><ul>
 <li>DeepWalk/Node2vec属于shallow encoding，有如下优缺点：<ul>
 <li>需要O(|V|)的参数量，节点间的embedding不共享，每个node有独立的embedding</li>
-<li>training时没有的node，不会有embedding</li>
+<li>推导式的（transductive）：training时没有的node，不会有embedding</li>
 <li>没有利用到节点的特征，只利用了graph structure</li>
 </ul>
 </li>
-<li>GNN: deep encoding</li>
+<li>范式: <ul>
+<li>encoder生成node embedding，DeepWalk&amp;Node2vec中为一个|V|*D的权重矩阵: <script type="math/tex">\operatorname{ENC}(v)=\mathbf{z}_{v}</script></li>
+<li>decoder将node embedding映射回原空间，这里存在隐式的decoder，embedding空间两向量的点积可以表示原空间u,v的相似度: <script type="math/tex">\operatorname{similarity}(u, v) \approx \mathbf{z}_{v}^{\mathrm{T}} \mathbf{z}_{u}</script><ul>
+<li>点积相似度：最小化两向量的模以及夹角余弦的乘积</li>
 </ul>
-<a id="more"></a>
-]]></content>
+</li>
+</ul>
+</li>
+<li>GNN: deep encoding<ul>
+<li>encoder为MLP</li>
+<li>decoder为某种向量相似度<a id="more"></a>
+<blockquote>
+<p>Lec6: Graph Neural Networks 1: GNN Model<br>Lec7: Graph Neural Networks 2: Design Space<br>Lec8: Applications of Graph Neural Networks<br>Lec9: Theory of Graph Neural Networks</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="GNN-Basics"><a href="#GNN-Basics" class="headerlink" title="GNN Basics"></a>GNN Basics</h1><ul>
+<li>其他NN：<strong>依赖于IID(independent and identically distributed)，不同样本间是独立的</strong>，因此其无需满足排列不变性，而<strong>GNN节点间不独立</strong> —》 每个节点的特征依赖于其他节点 —》 节点顺序改变后，输入GNN的特征也会改变 —》 需要满足排列不变性，使得不同的节点排列，也能有同样的结果</li>
+<li>原则<ul>
+<li>排列不变性：调整输入节点的顺序，得到的同一个节点的表达应该一致。A为邻接矩阵，X为节点特征矩阵，两种不同的节点顺序下，得到的同一个节点的表达应该一致<script type="math/tex; mode=display">
+f\left(\boldsymbol{A}_{1}, \boldsymbol{X}_{1}\right)=f\left(\boldsymbol{A}_{2}, \boldsymbol{X}_{2}\right)</script></li>
+</ul>
+</li>
+<li>MLP：不满足排列不变性<img src="/2021/12/22/CS224WLec6/GNN1.png" class="" title="GNN1"></li>
+<li>利用MLP实现GNN不符合预期<img src="/2021/12/22/CS224WLec6/GNN2.png" class="" title="GNN2"></li>
+<li>Insights: <strong>借鉴CNN，每次卷积操作只取某个点及其邻域点</strong><ul>
+<li><strong>卷积：对邻域信息的提取以及归纳</strong></li>
+</ul>
+</li>
+</ul>
+<h2 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h2><h3 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h3><ul>
+<li>利用每个节点的邻域节点为每个节点建立计算图</li>
+<li>每个节点都有不同的计算图<img src="/2021/12/22/CS224WLec6/GNN4.png" class="" title="GNN4"></li>
+<li>layer0: node v的<strong>输入特征</strong></li>
+<li>layerk: 经过了k跳后，node v的节点信息</li>
+</ul>
+<h3 id="模型参数"><a href="#模型参数" class="headerlink" title="模型参数"></a>模型参数</h3><ul>
+<li>每一层包含两个阶段：信息aggregation &amp; passing<img src="/2021/12/22/CS224WLec6/GNN5.png" class="" title="GNN5"></li>
+<li><script type="math/tex">h_{v}^{k}</script>: the hidden representation of node v at layer k</li>
+<li><script type="math/tex">W_{k}</script>: weight matrix for neighborhood aggregation</li>
+<li><script type="math/tex">B_{k}</script>: weight matrix for transforming hidden vector of self</li>
+<li>当aggregate为简单的平均时，可以转化为稀疏矩阵表达式<img src="/2021/12/22/CS224WLec6/GNN6.png" class="" title="GNN6">
+</li>
+</ul>
+<h2 id="性质"><a href="#性质" class="headerlink" title="性质"></a>性质</h2><ul>
+<li>本质：<strong>假设将节点作为特征向量作为输入feed into MLP, 特征向量会包含邻域节点的信息，因此不能满足排列不变性，而GNN则是把节点的领域信息存在了NN结构里，因此每个节点都拥有自己的计算图/神经网络结构</strong></li>
+<li>流程：1）定义neighborhood aggregation function; 2) 定义loss function; 3) train; 4) generate node embeddings</li>
+<li>权重矩阵共享：参数量为|V|的次线性</li>
+<li>Inductive(归纳式的)：可以为没出现过的node生成embedding。由于权重矩阵W/B的共享，即使没有出现过的node，也可以为其生成计算图，进而生成embedding</li>
+<li>可以为新的graph生成embedding，前提是new graph中的节点都出现在了old graph中</li>
+</ul>
+<h2 id="与MLP-CNN-Transformer的异同"><a href="#与MLP-CNN-Transformer的异同" class="headerlink" title="与MLP/CNN/Transformer的异同"></a>与MLP/CNN/Transformer的异同</h2><h3 id="GNN-VS-MLP"><a href="#GNN-VS-MLP" class="headerlink" title="GNN VS MLP"></a>GNN VS MLP</h3><ul>
+<li>MLP假设IID，不同样本间独立，因此无需满足排列不变性</li>
+<li>Graph数据node间不独立，因此需要满足排列不变性</li>
+<li>将node的特征向量作为输入，使用MLP —》 将graph的结构作为MLP的输入 —》 一般一个数据集就一种nn结构</li>
+<li>GNN —》 将graph的结构作为nn的结构 —》 一个graph有多种nn结构</li>
+</ul>
+<h3 id="GNN-VS-CNN"><a href="#GNN-VS-CNN" class="headerlink" title="GNN VS CNN"></a>GNN VS CNN</h3><ul>
+<li>GNN: <script type="math/tex">\mathrm{h}_{v}^{(l+1)}=\sigma\left(\mathrm{W}_{l} \sum_{u \in \mathrm{N}(v)} \frac{\mathrm{h}_{u}^{(l)}}{|\mathrm{N}(v)|}+\mathrm{B}_{l} \mathrm{~h}_{v}^{(l)}\right), \forall l \in\{0, \ldots, L-1\}</script></li>
+<li>CNN: <script type="math/tex">\mathrm{h}_{v}^{(l+1)}=\sigma\left(\sum_{u \in \mathrm{N}(v) \cup\{v\}} \mathrm{W}_{l}^{u} \mathrm{~h}_{u}^{(l)}\right), \forall l \in\{0, \ldots, L-1\}</script></li>
+<li>重写CNN：<script type="math/tex">\mathrm{h}_{v}^{(l+1)}=\sigma\left(\sum_{u \in \mathrm{N}(v)} \mathrm{W}_{l}^{u} \mathrm{~h}_{u}^{(l)}+\mathrm{B}_{l} \mathrm{~h}_{v}^{(l)}\right), \forall l \in\{0, \ldots, L-1\}</script></li>
+<li>从邻域选择讲，CNN是邻域确定的特殊GNN</li>
+<li>CNN不满足排列不变性，改变像素排列，输出也不同</li>
+</ul>
+<h3 id="GNN-VS-Transformer"><a href="#GNN-VS-Transformer" class="headerlink" title="GNN VS Transformer"></a>GNN VS Transformer</h3><ul>
+<li>Transformer是针对序列数据的，一个序列中两个node互为上下文，因此可以看做是所有node都互相连接的graph</li>
+</ul>
+<h1 id="GNN"><a href="#GNN" class="headerlink" title="GNN"></a>GNN</h1>]]></content>
       <categories>
         <category>Learning</category>
         <category>cs224w</category>
@@ -982,6 +1048,14 @@ r_{j}=\sum_{i \rightarrow j} \beta \frac{r_{i}}{d_{i}}+(1-\beta) \frac{1}{N}</sc
 <li>goal: 原始graph中相似的node获得的embeddings也是相似的</li>
 <li>类似于word2vec: 目标是求node u的embedding <script type="math/tex">\mathbf{z}_{u}</script>,而模型的预测目标是：<script type="math/tex">P\left(v \mid \mathbf{z}_{u}\right)</script>，即node v出现在以node u开始的walk上的概率。</li>
 <li>如何获得“句子”：random walk</li>
+<li>范式: <ul>
+<li>encoder生成node embedding，本节的encoder为word2vec中的权重矩阵: <script type="math/tex">\operatorname{ENC}(v)=\mathbf{z}_{v}</script></li>
+<li>decoder将node embedding映射回原空间，这里存在隐式的decoder，embedding空间两向量的点积可以表示原空间u,v的相似度: <script type="math/tex">\operatorname{similarity}(u, v) \approx \mathbf{z}_{v}^{\mathrm{T}} \mathbf{z}_{u}</script><ul>
+<li>点击相似度：最小化两向量的模以及夹角余弦的乘积</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 <h2 id="Deep-Walk"><a href="#Deep-Walk" class="headerlink" title="Deep Walk"></a>Deep Walk</h2><h3 id="Random-Walk"><a href="#Random-Walk" class="headerlink" title="Random Walk"></a>Random Walk</h3><ul>
 <li>出发点：如果一个random walk中包括从u到v的路径，那u和v是相似的/有相似的高维的多跳信息</li>
@@ -4337,6 +4411,50 @@ w=m(a+x, b+y)^{*} e^{-\frac{\left(x^{\prime}\right)^{2}+\left(y^{\prime}\right)^
       <tags>
         <tag>Leetcode</tag>
         <tag>查找表</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>相似度</title>
+    <url>/2022/01/02/%E7%9B%B8%E4%BC%BC%E5%BA%A6/</url>
+    <content><![CDATA[<h1 id="Basics"><a href="#Basics" class="headerlink" title="Basics"></a>Basics</h1><ul>
+<li>可以分为距离类、角度类、角度+距离类</li>
+</ul>
+<h1 id="距离类"><a href="#距离类" class="headerlink" title="距离类"></a>距离类</h1><h2 id="欧式距离（Euclidean-Distance）"><a href="#欧式距离（Euclidean-Distance）" class="headerlink" title="欧式距离（Euclidean Distance）"></a>欧式距离（Euclidean Distance）</h2><ul>
+<li>欧式距离：欧式空间中两点间的距离公式。</li>
+<li>例如平面空间内的欧式距离：<script type="math/tex; mode=display">
+d=\sqrt{(x 1-x 2)^{2}+(y 1-y 2)^{2}}</script></li>
+</ul>
+<h2 id="曼哈顿距离-Manhattan-Distance"><a href="#曼哈顿距离-Manhattan-Distance" class="headerlink" title="曼哈顿距离(Manhattan Distance)"></a>曼哈顿距离(Manhattan Distance)</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Manhattan</span>(<span class="params">dataA,dataB</span>):</span></span><br><span class="line">    <span class="keyword">return</span> np.<span class="built_in">sum</span>(np.<span class="built_in">abs</span>(dataA - dataB))</span><br><span class="line">print(Manhattan(dataA,dataB))</span><br></pre></td></tr></table></figure>
+<h2 id="汉明距离（Hamming-distance）"><a href="#汉明距离（Hamming-distance）" class="headerlink" title="汉明距离（Hamming distance）"></a>汉明距离（Hamming distance）</h2><ul>
+<li>汉明距离表示的是两个字符串（相同长度）对应位不同的数量。比如有两个等长的字符串 str1 = “11111” 和 str2 = “10001” 那么它们之间的汉明距离就是3（这样说就简单多了吧。哈哈）。</li>
+<li><strong>汉明距离多用于图像像素的匹配（同图搜索）、通信领域统计错误数据位的数量等</strong>。<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hammingDistance</span>(<span class="params">dataA,dataB</span>):</span></span><br><span class="line">    distanceArr = dataA - dataB</span><br><span class="line">    <span class="keyword">return</span> dataA.shape[<span class="number">0</span>] - np.<span class="built_in">sum</span>(distanceArr == <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="角度类"><a href="#角度类" class="headerlink" title="角度类"></a>角度类</h1><h2 id="余弦相似度（Cosine）"><a href="#余弦相似度（Cosine）" class="headerlink" title="余弦相似度（Cosine）"></a>余弦相似度（Cosine）</h2><ul>
+<li>首先，样本数据的夹角余弦并不是真正几何意义上的夹角余弦，只不过是借了它的名字，实际是借用了它的概念变成了是代数意义上的“夹角余弦”，<strong>用来衡量样本向量间的差异</strong>。</li>
+<li>二维情况下，即几何意义上的夹角余弦。夹角越小，余弦值越接近于1，反之则趋于-1。<script type="math/tex; mode=display">
+\cos (\theta)=\frac{\sum_{k=1}^{n} x_{1 k} x_{2 k}}{\sqrt{\sum_{k=1}^{n} x_{1 k}^{2}} \sqrt{\sum_{k=1}^{n} x_{2 k}{ }^{2}}}</script></li>
+<li>余弦相似度对夹角敏感，对数值的相对大小不敏感</li>
+</ul>
+<h2 id="皮尔逊相关系数（Pearson-Correlation-Coefficient）"><a href="#皮尔逊相关系数（Pearson-Correlation-Coefficient）" class="headerlink" title="皮尔逊相关系数（Pearson Correlation Coefficient）"></a>皮尔逊相关系数（Pearson Correlation Coefficient）</h2><script type="math/tex; mode=display">
+\operatorname{sim}\left(x_{1}, x_{2}\right)=\frac{\sum_{k=1}^{n}\left(x_{1 k}-\overline{x_{1}}\right)\left(x_{2 k}-\overline{x_{2}}\right)}{\sqrt{\sum_{k=1}^{n}\left(x_{1 k}-\overline{x_{1}}\right)^{2}} \sqrt{\sum_{k=1}^{n}\left(x_{2 k}-\overline{x_{2}}\right)^{2}}}</script><ul>
+<li>在计算夹角余弦之前将两个向量减去各个样本的平均值，达到<strong>中心化</strong>的目的。<strong>皮尔逊相关函数是余弦相似度在维度缺失上面的一种改进方法</strong>。</li>
+</ul>
+<h1 id="角度-距离"><a href="#角度-距离" class="headerlink" title="角度+距离"></a>角度+距离</h1><h2 id="点积相似度（Dot）"><a href="#点积相似度（Dot）" class="headerlink" title="点积相似度（Dot）"></a>点积相似度（Dot）</h2><script type="math/tex; mode=display">
+\vec{a} * \vec{b}=\overrightarrow{|a||b|} \mid \cos \theta</script><ul>
+<li>常见于word2vec、deepwalk等算法中，用于作为loss（最小化向量ab的模以及两者的夹角），也可以理解为decoder（两向量的点积可以理解为原空间的两点相似度）</li>
+<li>当向量模长固定时，点积相似度等同于余弦相似度</li>
+</ul>
+<h1 id="Refs"><a href="#Refs" class="headerlink" title="Refs"></a>Refs</h1><ul>
+<li><a href="https://zhuanlan.zhihu.com/p/33164335">from zhihu</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>ML</tag>
+        <tag>Math</tag>
       </tags>
   </entry>
 </search>
