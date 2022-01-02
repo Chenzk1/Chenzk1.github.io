@@ -48,72 +48,6 @@
       </tags>
   </entry>
   <entry>
-    <title>C++-内存管理</title>
-    <url>/2021/12/10/C++-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</url>
-    <content><![CDATA[<h2 id="C-的内存分配方式"><a href="#C-的内存分配方式" class="headerlink" title="C++的内存分配方式"></a>C++的内存分配方式</h2><ul>
-<li>全局/静态变量区</li>
-<li>常量存储区</li>
-<li>栈：在局部变量和函数参数在栈上创建，函数执行结束时这些存储单元自动被释放。栈内存分配运算内置于处理器的指令集中，效率很高，但是栈的内存容量有限。</li>
-<li>堆：由new分配的内存块，需要手动通过delete来释放。如果没有delete，那么在程序结束后，操作系统会自动回收。</li>
-<li>自由存储区：由malloc等分配的内存块，和堆是十分相似，不过它是用free来结束自己的生命的。</li>
-</ul>
-<a id="more"></a>
-<h3 id="堆和栈"><a href="#堆和栈" class="headerlink" title="堆和栈"></a>堆和栈</h3><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">()</span> </span>&#123; <span class="keyword">int</span>* p = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">5</span>]; &#125;</span><br><span class="line"><span class="keyword">delete</span> []p;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>new了一个在堆上的数组，并在栈上创建一个指针p；用delete []p释放堆上的内存</li>
-<li>未delete的话会造成内存泄漏。delete后的指针为野指针，</li>
-<li><strong>new和delete时分别执行构造函数和析构函数</strong></li>
-<li></li>
-</ul>
-<h4 id="管理方式-amp-申请后系统的响应"><a href="#管理方式-amp-申请后系统的响应" class="headerlink" title="管理方式&amp;申请后系统的响应"></a>管理方式&amp;申请后系统的响应</h4><ul>
-<li>栈：由系统管理。不用手动申请，只要栈的剩余空间大于所申请空间，系统将为程序提供内存，否则将报异常提示栈溢出。  </li>
-<li>堆：要new。<ul>
-<li>首先应该知道操作系统有一个记录空闲内存地址的链表，当系统收到程序的申请时，会遍历该链表，寻找第一个空间大于所申请空间的堆结点，然后将该结点从空闲结点链表中删除，并将该结点的空间分配给程序，另外，对于大多数系统，会在这块内存空间中的首地址处记录本次分配的大小，这样，代码中的delete语句才能正确的释放本内存空间。另外，由于找到的堆结点的大小不一定正好等于申请的大小，系统会自动的将多余的那部分重新放入空闲链表中。   </li>
-</ul>
-</li>
-</ul>
-<h4 id="空间大小"><a href="#空间大小" class="headerlink" title="空间大小"></a>空间大小</h4><ul>
-<li>栈：在Windows下,<strong>栈是向低地址扩展</strong>的数据结构，是一块连续的内存的区域。这句话的意思是栈顶的地址和栈的最大容量是系统预先规定好的，在WINDOWS下，栈的大小是2M（或1M，总之是一个编译时就确定的常数），如果申请的空间超过栈的剩余空间时，将提示overflow。因此，能从栈获得的空间较小。   </li>
-<li>堆：<strong>堆是向高地址扩展</strong>的数据结构，是不连续的内存区域。这是由于系统是用链表来存储的空闲内存地址的，自然是不连续的，而链表的遍历方向是由低地址向高地址。堆的大小受限于计算机系统中有效的虚拟内存。由此可见，堆获得的空间比较灵活，也比较大。   </li>
-</ul>
-<h4 id="申请效率的比较："><a href="#申请效率的比较：" class="headerlink" title="申请效率的比较："></a>申请效率的比较：</h4><ul>
-<li>栈：机器系统提供的数据结构，计算机会在底层对栈提供支持：分配专门的寄存器存放栈的地址，压栈出栈都有专门的指令执行，这就决定了栈的效率比较高。</li>
-<li>堆：则是C/C++函数库提供的，它的机制是很复杂的，例如为了分配一块内存，库函数会按照一定的算法（具体的算法可以参考数据结构/操作系统）在堆内存中搜索可用的足够大小的空间，如果没有足够大小的空间（可能是由于内存碎片太多），就有可能调用系统功能去增加程序数据段的内存空间，这样就有机会分到足够大小的内存，然后进行返回。显然，堆的效率比栈要低得多。</li>
-</ul>
-<h4 id="堆和栈中的存储内容"><a href="#堆和栈中的存储内容" class="headerlink" title="堆和栈中的存储内容"></a>堆和栈中的存储内容</h4><ul>
-<li>栈：在函数调用时，第一个进栈的是主函数中后的下一条指令（函数调用语句的下一条可执行语句）的地址，然后是函数的各个参数，在大多数的C编译器中，参数是由右往左入栈的，然后是函数中的局部变量。注意静态变量是不入栈的。当本次函数调用结束后，局部变量先出栈，然后是参数，最后栈顶指针指向开始存的地址，也就是主函数中的下一条指令，程序由该点继续运行。   </li>
-<li>堆：一般是在堆的头部用一个字节存放堆的大小。堆中的具体内容由程序员安排。   </li>
-</ul>
-<h2 id="函数传递方式"><a href="#函数传递方式" class="headerlink" title="函数传递方式"></a>函数传递方式</h2><ul>
-<li>值传递：调用了一个复制构造函数，相当于创建了一个拷贝，会造成更多的内存占用</li>
-<li>引用传递：传递的是原参数的别名。节省内存，可对实参进行修改。</li>
-<li><p>指针传递：形参是指向实参的指针，对形参指针的操作，会影响到实参。</p>
-</li>
-<li><p>指针传递和引用传递一般适用于：</p>
-<ul>
-<li>函数内部修改参数并且希望改动影响调用者。</li>
-<li>当一个函数实际需要返回多个值，而只能显式返回一个值时，可以将另外需要返回的变量以指针/引用传递。</li>
-</ul>
-</li>
-</ul>
-<h3 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h3><ul>
-<li>引用为别名，不能有null引用</li>
-<li>引用在创建的同时必须对其初始化</li>
-<li>引用在初始化后，无法改变引用关系</li>
-</ul>
-<h3 id="指针"><a href="#指针" class="headerlink" title="指针"></a>指针</h3><ul>
-<li>本质上还是值传递，传递的是地址</li>
-</ul>
-<p>&lt;未完&gt;</p>
-]]></content>
-      <categories>
-        <category>Learning</category>
-      </categories>
-      <tags>
-        <tag>C++</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>6.824Lecture2-RPC&amp;Threads</title>
     <url>/2021/12/11/6-824Lecture2/</url>
     <content><![CDATA[<h1 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h1><h2 id="Why-Threads"><a href="#Why-Threads" class="headerlink" title="Why Threads?"></a>Why Threads?</h2><ul>
@@ -190,6 +124,149 @@
         <tag>6.824</tag>
         <tag>RPC</tag>
         <tag>Thread</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++-内存管理</title>
+    <url>/2021/12/10/C++-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</url>
+    <content><![CDATA[<h2 id="C-的内存分配方式"><a href="#C-的内存分配方式" class="headerlink" title="C++的内存分配方式"></a>C++的内存分配方式</h2><ul>
+<li>全局/静态变量区</li>
+<li>常量存储区</li>
+<li>栈：在局部变量和函数参数在栈上创建，函数执行结束时这些存储单元自动被释放。栈内存分配运算内置于处理器的指令集中，效率很高，但是栈的内存容量有限。</li>
+<li>堆：由new分配的内存块，需要手动通过delete来释放。如果没有delete，那么在程序结束后，操作系统会自动回收。</li>
+<li>自由存储区：由malloc等分配的内存块，和堆是十分相似，不过它是用free来结束自己的生命的。</li>
+</ul>
+<a id="more"></a>
+<h3 id="堆和栈"><a href="#堆和栈" class="headerlink" title="堆和栈"></a>堆和栈</h3><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">()</span> </span>&#123; <span class="keyword">int</span>* p = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">5</span>]; &#125;</span><br><span class="line"><span class="keyword">delete</span> []p;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>new了一个在堆上的数组，并在栈上创建一个指针p；用delete []p释放堆上的内存</li>
+<li>未delete的话会造成内存泄漏。delete后的指针为野指针，</li>
+<li><strong>new和delete时分别执行构造函数和析构函数</strong></li>
+<li></li>
+</ul>
+<h4 id="管理方式-amp-申请后系统的响应"><a href="#管理方式-amp-申请后系统的响应" class="headerlink" title="管理方式&amp;申请后系统的响应"></a>管理方式&amp;申请后系统的响应</h4><ul>
+<li>栈：由系统管理。不用手动申请，只要栈的剩余空间大于所申请空间，系统将为程序提供内存，否则将报异常提示栈溢出。  </li>
+<li>堆：要new。<ul>
+<li>首先应该知道操作系统有一个记录空闲内存地址的链表，当系统收到程序的申请时，会遍历该链表，寻找第一个空间大于所申请空间的堆结点，然后将该结点从空闲结点链表中删除，并将该结点的空间分配给程序，另外，对于大多数系统，会在这块内存空间中的首地址处记录本次分配的大小，这样，代码中的delete语句才能正确的释放本内存空间。另外，由于找到的堆结点的大小不一定正好等于申请的大小，系统会自动的将多余的那部分重新放入空闲链表中。   </li>
+</ul>
+</li>
+</ul>
+<h4 id="空间大小"><a href="#空间大小" class="headerlink" title="空间大小"></a>空间大小</h4><ul>
+<li>栈：在Windows下,<strong>栈是向低地址扩展</strong>的数据结构，是一块连续的内存的区域。这句话的意思是栈顶的地址和栈的最大容量是系统预先规定好的，在WINDOWS下，栈的大小是2M（或1M，总之是一个编译时就确定的常数），如果申请的空间超过栈的剩余空间时，将提示overflow。因此，能从栈获得的空间较小。   </li>
+<li>堆：<strong>堆是向高地址扩展</strong>的数据结构，是不连续的内存区域。这是由于系统是用链表来存储的空闲内存地址的，自然是不连续的，而链表的遍历方向是由低地址向高地址。堆的大小受限于计算机系统中有效的虚拟内存。由此可见，堆获得的空间比较灵活，也比较大。   </li>
+</ul>
+<h4 id="申请效率的比较："><a href="#申请效率的比较：" class="headerlink" title="申请效率的比较："></a>申请效率的比较：</h4><ul>
+<li>栈：机器系统提供的数据结构，计算机会在底层对栈提供支持：分配专门的寄存器存放栈的地址，压栈出栈都有专门的指令执行，这就决定了栈的效率比较高。</li>
+<li>堆：则是C/C++函数库提供的，它的机制是很复杂的，例如为了分配一块内存，库函数会按照一定的算法（具体的算法可以参考数据结构/操作系统）在堆内存中搜索可用的足够大小的空间，如果没有足够大小的空间（可能是由于内存碎片太多），就有可能调用系统功能去增加程序数据段的内存空间，这样就有机会分到足够大小的内存，然后进行返回。显然，堆的效率比栈要低得多。</li>
+</ul>
+<h4 id="堆和栈中的存储内容"><a href="#堆和栈中的存储内容" class="headerlink" title="堆和栈中的存储内容"></a>堆和栈中的存储内容</h4><ul>
+<li>栈：在函数调用时，第一个进栈的是主函数中后的下一条指令（函数调用语句的下一条可执行语句）的地址，然后是函数的各个参数，在大多数的C编译器中，参数是由右往左入栈的，然后是函数中的局部变量。注意静态变量是不入栈的。当本次函数调用结束后，局部变量先出栈，然后是参数，最后栈顶指针指向开始存的地址，也就是主函数中的下一条指令，程序由该点继续运行。   </li>
+<li>堆：一般是在堆的头部用一个字节存放堆的大小。堆中的具体内容由程序员安排。   </li>
+</ul>
+<h2 id="函数传递方式"><a href="#函数传递方式" class="headerlink" title="函数传递方式"></a>函数传递方式</h2><ul>
+<li>值传递：调用了一个复制构造函数，相当于创建了一个拷贝，会造成更多的内存占用</li>
+<li>引用传递：传递的是原参数的别名。节省内存，可对实参进行修改。</li>
+<li><p>指针传递：形参是指向实参的指针，对形参指针的操作，会影响到实参。</p>
+</li>
+<li><p>指针传递和引用传递一般适用于：</p>
+<ul>
+<li>函数内部修改参数并且希望改动影响调用者。</li>
+<li>当一个函数实际需要返回多个值，而只能显式返回一个值时，可以将另外需要返回的变量以指针/引用传递。</li>
+</ul>
+</li>
+</ul>
+<h3 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h3><ul>
+<li>引用为别名，不能有null引用</li>
+<li>引用在创建的同时必须对其初始化</li>
+<li>引用在初始化后，无法改变引用关系</li>
+</ul>
+<h3 id="指针"><a href="#指针" class="headerlink" title="指针"></a>指针</h3><ul>
+<li>本质上还是值传递，传递的是地址</li>
+</ul>
+<p>&lt;未完&gt;</p>
+]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++-自建数组及STL中的array&amp;vector</title>
+    <url>/2021/12/10/C++-%E8%87%AA%E5%BB%BA%E6%95%B0%E7%BB%84%E5%8F%8ASTL%E4%B8%AD%E7%9A%84array&amp;vector/</url>
+    <content><![CDATA[<h2 id="相同点"><a href="#相同点" class="headerlink" title="相同点"></a>相同点</h2><ul>
+<li>三者皆使用连续内存，且array和vector的底层由自建数组实现</li>
+<li>都可以用下标访问</li>
+</ul>
+<a id="more"></a>
+<h2 id="不同点"><a href="#不同点" class="headerlink" title="不同点"></a>不同点</h2><ol>
+<li>vector属于变长容器，即可以根据数据的插入删除重新构建容器容量；但array和数组属于定长容器。</li>
+<li>vector提供了可以动态插入和删除元素的机制，而array和数组则无法做到，或者说array和数组需要完成该功能则需要自己实现完成。</li>
+<li>由于vector的动态内存变化的机制，<strong>在插入和删除时，需要考虑迭代的是否失效的问题</strong>，vector容器增长时，不是在原有内存空间中添加，而是重新申请+分配内存。</li>
+<li>vector和array提供了更好的数据访问机制，即可以使用front和back以及at访问方式，使得访问更加安全。而数组只能通过下标访问，在程序的设计过程中，更容易引发访问错误。</li>
+<li>vector和array提供了更好的遍历机制，有正向迭代器和反向迭代器两种</li>
+<li>vector和array提供了size和判空的获取机制，而数组只能通过遍历或者通过额外的变量记录数组的size。</li>
+<li>vector和array提供了两个容器对象的内容交换，即swap的机制，而数组对于交换只能通过遍历的方式，逐个元素交换的方式使用</li>
+<li>array提供了初始化所有成员的方法fill</li>
+</ol>
+<h2 id="自建数组"><a href="#自建数组" class="headerlink" title="自建数组"></a>自建数组</h2><h3 id="静态数组-amp-动态数组"><a href="#静态数组-amp-动态数组" class="headerlink" title="静态数组&amp;动态数组"></a>静态数组&amp;动态数组</h3><h4 id="静态数组"><a href="#静态数组" class="headerlink" title="静态数组"></a>静态数组</h4><ul>
+<li><strong>在栈中</strong></li>
+<li>在编译期间在栈中分配好内存的数组，在运行期间不能改变存储空间，运行后由<strong>系统自动释放</strong>。</li>
+<li>必须用常量指定数组大小</li>
+<li>数组名为第一个数组元素</li>
+</ul>
+<h4 id="动态数组"><a href="#动态数组" class="headerlink" title="动态数组"></a>动态数组</h4><ul>
+<li>程序运行时才分配内存的数组</li>
+<li><strong>在堆中</strong></li>
+<li>数组名为指向第一个数组元素的指针</li>
+</ul>
+<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><ul>
+<li>int a[3]; 局部作用域中，只做了声明，未初始化，其值未定</li>
+<li>int a[3]; 静态数组以及直接声明在某个namespace中（函数外部），默认初始化为全0</li>
+<li>int a[3] = {}; 初始化为0</li>
+<li>int a[3] = {1}; 初始化为{1, 0, 0}</li>
+<li>int a[] = {1,2,3,4}; 声明大小为4的数组，并初始化为{1,2,3,4}</li>
+<li>int a[] {1,2,3,4}; <strong>通用初始化</strong>方法，声明和初始化程序之间不用等号</li>
+<li>int* a = new int[10]; //new 分配了一个大小为10的未初始化的int数组，并返回指向该数组第一个元素的指针，此指针初始化了指针a<ul>
+<li>a = {4, -3, 5, -2, -1, 2, 6, -2, 3}; // 错误，注意这种用大括号的数组赋值只能用在声明时，此处已经不是声明，所以出错。</li>
+<li>int *a = new int[10] ();  // 默认初始化，每个元素初始化为0,括号内不能写其他值，只能初始化为0</li>
+<li>int* a = new int[n];// t</li>
+<li>string* Dynamic_Arr4 = new string[size]{“aa”, “bb”,”cc”, “dd”, string(2, ‘e’) };      //显式的初始化</li>
+<li>delete [ ] Dynamic_Arr4；//动态数组的释放</li>
+</ul>
+</li>
+<li>维度为变量时，不能在声明时同时初始化，即int a[b]={1};是不合法的。 </li>
+<li>多维数组为1维数组的特殊形式，定义多维数组时，如果不对它进行初始化，必须标明每个维度的大小；如果进行了显式的初始化，可以不标明最高维度的大小，（也就是第一个维度，当第一个维度不标明大小，则不需进行初始化）</li>
+</ul>
+<h2 id="array"><a href="#array" class="headerlink" title="array"></a>array</h2><ul>
+<li><a href="https://www.cplusplus.com/reference/array/array/">ref</a></li>
+<li>大小固定</li>
+</ul>
+<h2 id="vector"><a href="#vector" class="headerlink" title="vector"></a>vector</h2><ul>
+<li><a href="https://www.cplusplus.com/reference/vector/vector/">ref</a></li>
+<li>动态数组</li>
+</ul>
+<h3 id="初始化-1"><a href="#初始化-1" class="headerlink" title="初始化"></a>初始化</h3><ul>
+<li>构造函数<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="built_in">vector</span>():创建一个空<span class="built_in">vector</span></span><br><span class="line"><span class="built_in">vector</span>(<span class="keyword">int</span> nSize):创建一个<span class="built_in">vector</span>,元素个数为nSize</span><br><span class="line"><span class="built_in">vector</span>(<span class="keyword">int</span> nSize,<span class="keyword">const</span> t&amp; t):创建一个<span class="built_in">vector</span>，元素个数为nSize,且值均为t</span><br><span class="line"><span class="built_in">vector</span>(<span class="keyword">const</span> <span class="built_in">vector</span>&amp;):复制构造函数</span><br><span class="line"><span class="built_in">vector</span>(begin,end):复制[begin,end)区间内另一个数组的元素到<span class="built_in">vector</span>中</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; first;                                <span class="comment">// empty vector of ints</span></span><br><span class="line"><span class="function"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">second</span> <span class="params">(<span class="number">4</span>,<span class="number">100</span>)</span></span>;                       <span class="comment">// four ints with value 100</span></span><br><span class="line"><span class="function"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">third</span> <span class="params">(second.begin(),second.end())</span></span>;  <span class="comment">// iterating through second</span></span><br><span class="line"><span class="function"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">fourth</span> <span class="params">(third)</span></span>;                       <span class="comment">// a copy of third</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// the iterator constructor can also be used to construct from arrays:</span></span><br><span class="line"><span class="keyword">int</span> myints[] = &#123;<span class="number">16</span>,<span class="number">2</span>,<span class="number">77</span>,<span class="number">29</span>&#125;;</span><br><span class="line"><span class="function"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">fifth</span> <span class="params">(myints, myints + <span class="keyword">sizeof</span>(myints) / <span class="keyword">sizeof</span>(<span class="keyword">int</span>) )</span></span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>二维vector若要使用A[i].push_back(3)等方式初始化，则应事先定义好第一维的大小，例如<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">ans</span><span class="params">(<span class="number">5</span>)</span></span>;</span><br><span class="line">ans[<span class="number">3</span>].push_back(<span class="number">3</span>);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="增加"><a href="#增加" class="headerlink" title="增加"></a>增加</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">void push_back(const T&amp; x):向量尾部增加一个元素X</span><br><span class="line">iterator insert(iterator it,const T&amp; x):向量中迭代器指向元素前增加一个元素x</span><br><span class="line">iterator insert(iterator it,int n,const T&amp; x):向量中迭代器指向元素前增加n个相同的元素x</span><br><span class="line">iterator insert(iterator it,const_iterator first,const_iterator last):向量中迭代器指向元素前插入另一个相同类型向量的[first,last)间的数据</span><br></pre></td></tr></table></figure>
+<h3 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">iterator erase(iterator it):删除向量中迭代器指向元素</span><br><span class="line">iterator erase(iterator first,iterator last):删除向量中[first,last)中元素</span><br><span class="line">void pop_back():删除向量中最后一个元素</span><br><span class="line">void clear():清空向量中所有元素</span><br></pre></td></tr></table></figure>
+<h3 id="遍历"><a href="#遍历" class="headerlink" title="遍历"></a>遍历</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">reference at(int pos):返回pos位置元素的引用</span><br><span class="line">reference front():返回首元素的引用</span><br><span class="line">reference back():返回尾元素的引用</span><br><span class="line">iterator begin():返回向量头指针，指向第一个元素</span><br><span class="line">iterator end():返回向量尾指针，指向向量最后一个元素的下一个位置</span><br><span class="line">reverse_iterator rbegin():反向迭代器，指向最后一个元素</span><br><span class="line">reverse_iterator rend():反向迭代器，指向第一个元素之前的位置</span><br></pre></td></tr></table></figure>
+<h3 id="判断"><a href="#判断" class="headerlink" title="判断"></a>判断</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">bool empty() const:判断向量是否为空，若为空，则向量中无元素</span><br></pre></td></tr></table></figure>
+<h3 id="大小"><a href="#大小" class="headerlink" title="大小"></a>大小</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">int size() const:返回向量中元素的个数</span><br><span class="line">int capacity() const:返回当前向量所能容纳的最大元素值</span><br><span class="line">int max_size() const:返回最大可允许的vector元素数量值</span><br></pre></td></tr></table></figure>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">void swap(vector&amp;):交换两个同类型向量的数据</span><br><span class="line">void assign(int n,const T&amp; x):设置向量中第n个元素的值为x</span><br><span class="line">void assign(const_iterator first,const_iterator last):向量中[first,last)中元素设置成当前向量元素</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -329,83 +406,6 @@
       <tags>
         <tag>cs224w</tag>
         <tag>Graph</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>C++-自建数组及STL中的array&amp;vector</title>
-    <url>/2021/12/10/C++-%E8%87%AA%E5%BB%BA%E6%95%B0%E7%BB%84%E5%8F%8ASTL%E4%B8%AD%E7%9A%84array&amp;vector/</url>
-    <content><![CDATA[<h2 id="相同点"><a href="#相同点" class="headerlink" title="相同点"></a>相同点</h2><ul>
-<li>三者皆使用连续内存，且array和vector的底层由自建数组实现</li>
-<li>都可以用下标访问</li>
-</ul>
-<a id="more"></a>
-<h2 id="不同点"><a href="#不同点" class="headerlink" title="不同点"></a>不同点</h2><ol>
-<li>vector属于变长容器，即可以根据数据的插入删除重新构建容器容量；但array和数组属于定长容器。</li>
-<li>vector提供了可以动态插入和删除元素的机制，而array和数组则无法做到，或者说array和数组需要完成该功能则需要自己实现完成。</li>
-<li>由于vector的动态内存变化的机制，<strong>在插入和删除时，需要考虑迭代的是否失效的问题</strong>，vector容器增长时，不是在原有内存空间中添加，而是重新申请+分配内存。</li>
-<li>vector和array提供了更好的数据访问机制，即可以使用front和back以及at访问方式，使得访问更加安全。而数组只能通过下标访问，在程序的设计过程中，更容易引发访问错误。</li>
-<li>vector和array提供了更好的遍历机制，有正向迭代器和反向迭代器两种</li>
-<li>vector和array提供了size和判空的获取机制，而数组只能通过遍历或者通过额外的变量记录数组的size。</li>
-<li>vector和array提供了两个容器对象的内容交换，即swap的机制，而数组对于交换只能通过遍历的方式，逐个元素交换的方式使用</li>
-<li>array提供了初始化所有成员的方法fill</li>
-</ol>
-<h2 id="自建数组"><a href="#自建数组" class="headerlink" title="自建数组"></a>自建数组</h2><h3 id="静态数组-amp-动态数组"><a href="#静态数组-amp-动态数组" class="headerlink" title="静态数组&amp;动态数组"></a>静态数组&amp;动态数组</h3><h4 id="静态数组"><a href="#静态数组" class="headerlink" title="静态数组"></a>静态数组</h4><ul>
-<li><strong>在栈中</strong></li>
-<li>在编译期间在栈中分配好内存的数组，在运行期间不能改变存储空间，运行后由<strong>系统自动释放</strong>。</li>
-<li>必须用常量指定数组大小</li>
-<li>数组名为第一个数组元素</li>
-</ul>
-<h4 id="动态数组"><a href="#动态数组" class="headerlink" title="动态数组"></a>动态数组</h4><ul>
-<li>程序运行时才分配内存的数组</li>
-<li><strong>在堆中</strong></li>
-<li>数组名为指向第一个数组元素的指针</li>
-</ul>
-<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><ul>
-<li>int a[3]; 局部作用域中，只做了声明，未初始化，其值未定</li>
-<li>int a[3]; 静态数组以及直接声明在某个namespace中（函数外部），默认初始化为全0</li>
-<li>int a[3] = {}; 初始化为0</li>
-<li>int a[3] = {1}; 初始化为{1, 0, 0}</li>
-<li>int a[] = {1,2,3,4}; 声明大小为4的数组，并初始化为{1,2,3,4}</li>
-<li>int a[] {1,2,3,4}; <strong>通用初始化</strong>方法，声明和初始化程序之间不用等号</li>
-<li>int* a = new int[10]; //new 分配了一个大小为10的未初始化的int数组，并返回指向该数组第一个元素的指针，此指针初始化了指针a<ul>
-<li>a = {4, -3, 5, -2, -1, 2, 6, -2, 3}; // 错误，注意这种用大括号的数组赋值只能用在声明时，此处已经不是声明，所以出错。</li>
-<li>int *a = new int[10] ();  // 默认初始化，每个元素初始化为0,括号内不能写其他值，只能初始化为0</li>
-<li>int* a = new int[n];// t</li>
-<li>string* Dynamic_Arr4 = new string[size]{“aa”, “bb”,”cc”, “dd”, string(2, ‘e’) };      //显式的初始化</li>
-<li>delete [ ] Dynamic_Arr4；//动态数组的释放</li>
-</ul>
-</li>
-<li>维度为变量时，不能在声明时同时初始化，即int a[b]={1};是不合法的。 </li>
-<li>多维数组为1维数组的特殊形式，定义多维数组时，如果不对它进行初始化，必须标明每个维度的大小；如果进行了显式的初始化，可以不标明最高维度的大小，（也就是第一个维度，当第一个维度不标明大小，则不需进行初始化）</li>
-</ul>
-<h2 id="array"><a href="#array" class="headerlink" title="array"></a>array</h2><ul>
-<li><a href="https://www.cplusplus.com/reference/array/array/">ref</a></li>
-<li>大小固定</li>
-</ul>
-<h2 id="vector"><a href="#vector" class="headerlink" title="vector"></a>vector</h2><ul>
-<li><a href="https://www.cplusplus.com/reference/vector/vector/">ref</a></li>
-<li>动态数组</li>
-</ul>
-<h3 id="初始化-1"><a href="#初始化-1" class="headerlink" title="初始化"></a>初始化</h3><ul>
-<li>构造函数<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="built_in">vector</span>():创建一个空<span class="built_in">vector</span></span><br><span class="line"><span class="built_in">vector</span>(<span class="keyword">int</span> nSize):创建一个<span class="built_in">vector</span>,元素个数为nSize</span><br><span class="line"><span class="built_in">vector</span>(<span class="keyword">int</span> nSize,<span class="keyword">const</span> t&amp; t):创建一个<span class="built_in">vector</span>，元素个数为nSize,且值均为t</span><br><span class="line"><span class="built_in">vector</span>(<span class="keyword">const</span> <span class="built_in">vector</span>&amp;):复制构造函数</span><br><span class="line"><span class="built_in">vector</span>(begin,end):复制[begin,end)区间内另一个数组的元素到<span class="built_in">vector</span>中</span><br></pre></td></tr></table></figure>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; first;                                <span class="comment">// empty vector of ints</span></span><br><span class="line"><span class="function"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">second</span> <span class="params">(<span class="number">4</span>,<span class="number">100</span>)</span></span>;                       <span class="comment">// four ints with value 100</span></span><br><span class="line"><span class="function"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">third</span> <span class="params">(second.begin(),second.end())</span></span>;  <span class="comment">// iterating through second</span></span><br><span class="line"><span class="function"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">fourth</span> <span class="params">(third)</span></span>;                       <span class="comment">// a copy of third</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// the iterator constructor can also be used to construct from arrays:</span></span><br><span class="line"><span class="keyword">int</span> myints[] = &#123;<span class="number">16</span>,<span class="number">2</span>,<span class="number">77</span>,<span class="number">29</span>&#125;;</span><br><span class="line"><span class="function"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">fifth</span> <span class="params">(myints, myints + <span class="keyword">sizeof</span>(myints) / <span class="keyword">sizeof</span>(<span class="keyword">int</span>) )</span></span>;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>二维vector若要使用A[i].push_back(3)等方式初始化，则应事先定义好第一维的大小，例如<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">ans</span><span class="params">(<span class="number">5</span>)</span></span>;</span><br><span class="line">ans[<span class="number">3</span>].push_back(<span class="number">3</span>);</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="增加"><a href="#增加" class="headerlink" title="增加"></a>增加</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">void push_back(const T&amp; x):向量尾部增加一个元素X</span><br><span class="line">iterator insert(iterator it,const T&amp; x):向量中迭代器指向元素前增加一个元素x</span><br><span class="line">iterator insert(iterator it,int n,const T&amp; x):向量中迭代器指向元素前增加n个相同的元素x</span><br><span class="line">iterator insert(iterator it,const_iterator first,const_iterator last):向量中迭代器指向元素前插入另一个相同类型向量的[first,last)间的数据</span><br></pre></td></tr></table></figure>
-<h3 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">iterator erase(iterator it):删除向量中迭代器指向元素</span><br><span class="line">iterator erase(iterator first,iterator last):删除向量中[first,last)中元素</span><br><span class="line">void pop_back():删除向量中最后一个元素</span><br><span class="line">void clear():清空向量中所有元素</span><br></pre></td></tr></table></figure>
-<h3 id="遍历"><a href="#遍历" class="headerlink" title="遍历"></a>遍历</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">reference at(int pos):返回pos位置元素的引用</span><br><span class="line">reference front():返回首元素的引用</span><br><span class="line">reference back():返回尾元素的引用</span><br><span class="line">iterator begin():返回向量头指针，指向第一个元素</span><br><span class="line">iterator end():返回向量尾指针，指向向量最后一个元素的下一个位置</span><br><span class="line">reverse_iterator rbegin():反向迭代器，指向最后一个元素</span><br><span class="line">reverse_iterator rend():反向迭代器，指向第一个元素之前的位置</span><br></pre></td></tr></table></figure>
-<h3 id="判断"><a href="#判断" class="headerlink" title="判断"></a>判断</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">bool empty() const:判断向量是否为空，若为空，则向量中无元素</span><br></pre></td></tr></table></figure>
-<h3 id="大小"><a href="#大小" class="headerlink" title="大小"></a>大小</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">int size() const:返回向量中元素的个数</span><br><span class="line">int capacity() const:返回当前向量所能容纳的最大元素值</span><br><span class="line">int max_size() const:返回最大可允许的vector元素数量值</span><br></pre></td></tr></table></figure>
-<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">void swap(vector&amp;):交换两个同类型向量的数据</span><br><span class="line">void assign(int n,const T&amp; x):设置向量中第n个元素的值为x</span><br><span class="line">void assign(const_iterator first,const_iterator last):向量中[first,last)中元素设置成当前向量元素</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>Learning</category>
-      </categories>
-      <tags>
-        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -553,6 +553,175 @@ k_{v} \\
       </tags>
   </entry>
   <entry>
+    <title>CS224WLec3-Node Embeddings</title>
+    <url>/2021/12/15/CS224WLec3/</url>
+    <content><![CDATA[<h1 id="Basic"><a href="#Basic" class="headerlink" title="Basic"></a>Basic</h1><ul>
+<li>goal: 为node生成一个embedding</li>
+<li>两个要素：<strong>encoder/相似度计量方法（encode前后都需要）</strong></li>
+<li>framework: encoder 生成embedding —&gt; 相似度计量方法决定embedding学习的好坏</li>
+<li><strong>unsupervised/self-supervised way</strong> based on random walks</li>
+<li>task independent</li>
+</ul>
+<a id="more"></a>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><ul>
+<li>goal: 原始graph中相似的node获得的embeddings也是相似的</li>
+<li>类似于word2vec: 目标是求node u的embedding <script type="math/tex">\mathbf{z}_{u}</script>,而模型的预测目标是：<script type="math/tex">P\left(v \mid \mathbf{z}_{u}\right)</script>，即node v出现在以node u开始的walk上的概率。</li>
+<li>如何获得“句子”：random walk</li>
+<li>范式: <ul>
+<li>encoder生成node embedding，本节的encoder为word2vec中的权重矩阵: <script type="math/tex">\operatorname{ENC}(v)=\mathbf{z}_{v}</script></li>
+<li>decoder将node embedding映射回原空间，这里存在隐式的decoder，embedding空间两向量的点积可以表示原空间u,v的相似度: <script type="math/tex">\operatorname{similarity}(u, v) \approx \mathbf{z}_{v}^{\mathrm{T}} \mathbf{z}_{u}</script><ul>
+<li>点击相似度：最小化两向量的模以及夹角余弦的乘积</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Deep-Walk"><a href="#Deep-Walk" class="headerlink" title="Deep Walk"></a>Deep Walk</h2><h3 id="Random-Walk"><a href="#Random-Walk" class="headerlink" title="Random Walk"></a>Random Walk</h3><ul>
+<li>出发点：如果一个random walk中包括从u到v的路径，那u和v是相似的/有相似的高维的多跳信息</li>
+<li>本质：DFS</li>
+<li>$ N_{\mathrm{R}}(u) $为策略R下，从u出发的walk中，出现的所有nodes<script type="math/tex; mode=display">\max _{f} \sum_{u \in V} \log \mathrm{P}\left(N_{\mathrm{R}}(u) \mid \mathbf{z}_{u}\right)</script>—》<script type="math/tex; mode=display">\mathcal{L}=\sum_{u \in V} \sum_{v \in N_{R}(u)}-\log \left(P\left(v \mid \mathbf{z}_{u}\right)\right)</script></li>
+<li>利用softmax求p<script type="math/tex; mode=display">P\left(v \mid \mathbf{z}_{u}\right)=\frac{\exp \left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{v}\right)}{\sum_{n \in V} \exp \left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{n}\right)}</script></li>
+<li>problem: softmax分母 以及 最外层都需要|V|次遍历 —》<script type="math/tex">\mathrm{O}\left(|\mathrm{V}|^{2}\right)</script>的复杂度 —》<strong>优化</strong></li>
+</ul>
+<h3 id="Negative-Sampling"><a href="#Negative-Sampling" class="headerlink" title="Negative Sampling"></a>Negative Sampling</h3><ul>
+<li>使用所有样本做normalization —&gt; 只采样k个负样本做normalization<script type="math/tex; mode=display">P\left(v \mid \mathbf{z}_{u}\right)=\frac{\exp \left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{v}\right)}{\sum_{n \in V } \exp \left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{n}\right)} \approx \log \left(\sigma\left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{v}\right)\right)-\sum_{i=1}^{k} \log \left(\sigma\left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{n_{i}}\right)\right), n_{i} \sim P_{V}</script></li>
+<li>k的选择：<ul>
+<li>k越大，模型越鲁棒</li>
+<li>k越大，对负样本考虑的越多</li>
+<li>5~20间较常见</li>
+</ul>
+</li>
+<li>负样本的选择：可以选择graph内任意样本，但更准确的方法是选择不在walk中的样本</li>
+</ul>
+<h2 id="Node2vec-better-random-walk-strategy"><a href="#Node2vec-better-random-walk-strategy" class="headerlink" title="Node2vec: better  random walk strategy"></a>Node2vec: better  random walk strategy</h2><ul>
+<li>简单的random walk会限制walk中的node相似度与graph中node相似度的一致性</li>
+</ul>
+<h3 id="Biased-2nd-order-random-Walks"><a href="#Biased-2nd-order-random-Walks" class="headerlink" title="Biased 2nd-order random Walks"></a>Biased 2nd-order random Walks</h3><ul>
+<li>trade off between local and global views of the network: BFS &amp; DFS</li>
+<li>当前在w, 上一步在s的walk，有三种行走方向<ul>
+<li>退后：回退到s</li>
+<li>保持：走到和s距离一致的一个节点</li>
+<li>前进：走到距离s更远的节点<img src="/2021/12/15/CS224WLec3/node2vec1.png" class="" title="node2vec1"></li>
+</ul>
+</li>
+<li>实现：两个<strong>超参</strong>p/q，以及“1”来以非归一化的方法表示上述三种情况的概率<img src="/2021/12/15/CS224WLec3/node2vec2.png" class="" title="node2vec2"></li>
+<li>流程<ul>
+<li>Compute random walk probabilities</li>
+<li>Simulate 𝑟 random walks of length 𝑙 starting from each node 𝑢</li>
+<li>Optimize the node2vec objective using Stochastic Gradient Descent</li>
+</ul>
+</li>
+<li>Linear-time complexity</li>
+<li>All 3 steps are individually parallelizable</li>
+</ul>
+<h2 id="Embedding-entire-graphs"><a href="#Embedding-entire-graphs" class="headerlink" title="Embedding entire graphs"></a>Embedding entire graphs</h2><ul>
+<li>approach1: add all node embeddings</li>
+<li>approach2: introduce a “virtual node” or “super node” to represent the graph and learning embedding for this graph</li>
+<li>approach3: anonymous walks embeddings</li>
+</ul>
+<h3 id="Anonymous-walk-embeddings"><a href="#Anonymous-walk-embeddings" class="headerlink" title="Anonymous walk embeddings"></a>Anonymous walk embeddings</h3><ul>
+<li>Anonymous walk: random walk —&gt; 将node表示为距离start node的去重index。因此，确定了walk length的时候，就确定了anonymous walk中index的个数。</li>
+<li>方法1：长度为l的annoy walk共有n种情况 —&gt; 做m次random walks —&gt; 统计每种情况的count，并形成一个vector</li>
+<li>方法2：用Anonymous walks的概率分布，学习图的embedding<ul>
+<li>Learn to predict walks that co-occur in 𝚫-size window (e.g., predict 𝑤3 given 𝑤1, 𝑤2 if Δ = 2)</li>
+<li>objective:<script type="math/tex; mode=display">\max _{z_{G}} \sum_{t=\Delta+1}^{T} \log P\left(w_{t} \mid w_{t-\Delta}, \ldots, w_{t-1}, \mathbf{z}_{G}\right)</script></li>
+</ul>
+</li>
+</ul>
+<img src="/2021/12/15/CS224WLec3/annoywalks1.png" class="" title="annoywalks1">
+<img src="/2021/12/15/CS224WLec3/annoywalks2.png" class="" title="annoywalks2">
+<h2 id="Pros-amp-Cons"><a href="#Pros-amp-Cons" class="headerlink" title="Pros &amp; Cons"></a>Pros &amp; Cons</h2><ul>
+<li>属于shallow encoding，有如下优缺点：<ul>
+<li>需要O(|V|)的参数量，节点间的embedding不共享，每个node有独立的embedding</li>
+<li>training时没有的node，不会有embedding</li>
+<li>没有利用到节点的特征，只利用了graph structure</li>
+</ul>
+</li>
+</ul>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a href="http://web.stanford.edu/class/cs224w/slides/03-nodeemb.pdf">ppt</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Learning</category>
+        <category>cs224w</category>
+      </categories>
+      <tags>
+        <tag>cs224w</tag>
+        <tag>Graph</tag>
+        <tag>DeepWalk</tag>
+        <tag>Node2vec</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CS224WLec4-PageRank</title>
+    <url>/2021/12/18/CS224WLec4/</url>
+    <content><![CDATA[<h1 id="PageRank"><a href="#PageRank" class="headerlink" title="PageRank"></a>PageRank</h1><ul>
+<li>一个node的重要性由指向它的节点的重要性决定 —&gt; <strong>指向该node的节点数越多，且这些节点重要性越高，则该节点越重要</strong>。node j的重要性（传递函数）为：<script type="math/tex; mode=display">r_{j}=\sum_{i \rightarrow j} \frac{r_{i}}{d_{i}}</script><script type="math/tex; mode=display">d_{i} \ldots out-degree of node i</script></li>
+<li><p>矩阵形式：</p>
+<ul>
+<li>随机邻接矩阵M。j有<script type="math/tex">d_{j}</script>个出链，如果j -&gt; i，则<script type="math/tex">M_{ij}=1/d_{j}</script>，因此每一列上的值要么为0，要么为<script type="math/tex">1/d_{j}</script>，且加和为1，称为列随机矩阵</li>
+<li>rank vector r: <script type="math/tex">r_{j}</script>为node j的重要性score，且<script type="math/tex">\sum_{i} r_{i}=1</script></li>
+<li>n*1 = n*n * n*1:<br><script type="math/tex">\boldsymbol{r}=\boldsymbol{M} \cdot \boldsymbol{r}</script>,</li>
+</ul>
+<script type="math/tex; mode=display">\quad r_{j}=\sum_{i \rightarrow j} \frac{r_{i}}{d_{i}}</script></li>
+<li>PageRank VS RandomWalk: 当random walk到达静态分布状态时满足<script type="math/tex">\boldsymbol{r}=\boldsymbol{M} \cdot \boldsymbol{r}</script>，即<strong>PageRank得到的重要性向量v是random walk的静态分布</strong></li>
+<li>PangRank VS Eigenvector: <strong>PageRank得到的重要性向量v是当特征值为1时得到的主特征向量</strong><a id="more"></a>
+</li>
+</ul>
+<h2 id="Solve-the-equation"><a href="#Solve-the-equation" class="headerlink" title="Solve the equation"></a>Solve the equation</h2><ul>
+<li>method: power iteration<ul>
+<li>initialize: 初始化，给每个node一个page rank值。e.g. <script type="math/tex; mode=display">
+\boldsymbol{r}^{0}=[1 / N, \ldots, 1 / N]^{T}</script></li>
+<li>iterate: 迭代<script type="math/tex; mode=display">
+r_{j}^{(t+1)}=\sum_{i \rightarrow j} \frac{r_{i}^{(t)}}{d_{i}}</script>即：<script type="math/tex; mode=display">
+\boldsymbol{r}^{(t+1)}=\boldsymbol{M} \cdot \boldsymbol{r}^{t}</script></li>
+<li>stop: 也可以选择其他度量方式<script type="math/tex; mode=display">
+\left|\boldsymbol{r}^{(t+1)}-\boldsymbol{r}^{t}\right|_{1}<\varepsilon</script></li>
+</ul>
+</li>
+</ul>
+<h3 id="Problems"><a href="#Problems" class="headerlink" title="Problems"></a>Problems</h3><ul>
+<li>dead ends: 遇到死胡同 —》 某个节点所在列的M为全0 —》随机矩阵不再随机，秩 &lt; n —》pagerank会收敛为全0<ul>
+<li>solution: 填充M中的该列，例如填充为1/n</li>
+</ul>
+</li>
+<li>spider trap: 在某个节点处死循环<ul>
+<li>solution: 允许random surfer跳到一个随机page。加一个超参β，表示是否沿着这条link走的概率，1-β表示随机jump的概率 —》相当于改了M</li>
+</ul>
+</li>
+<li>Google solution: teleport rankpage。β表示page j由其他page的出链决定，1-β表示由其他随机page决定<ul>
+<li>equation<script type="math/tex; mode=display">
+r_{j}=\sum_{i \rightarrow j} \beta \frac{r_{i}}{d_{i}}+(1-\beta) \frac{1}{N}</script></li>
+<li>matrix G<script type="math/tex; mode=display">\boldsymbol{G}=\beta {\boldsymbol{M}}+(1-\beta)[1/N]_{N*N}</script></li>
+</ul>
+</li>
+</ul>
+<img src="/2021/12/18/CS224WLec4/pagerank1.png" class="" title="pagerank1">
+<h1 id="PageRank扩展"><a href="#PageRank扩展" class="headerlink" title="PageRank扩展"></a>PageRank扩展</h1><ul>
+<li>Personalized PageRank: teleport到在指定的子图S</li>
+<li>Random walks with restarts: teleport到start page<img src="/2021/12/18/CS224WLec4/pagerank2.png" class="" title="pagerank2">
+</li>
+</ul>
+<h1 id="Limitations"><a href="#Limitations" class="headerlink" title="Limitations"></a>Limitations</h1><ul>
+<li>无法获得训练集里没有的node的embedding，必须重新训练</li>
+<li>无法捕获结构相似性：例如同一张图中的局部结构相似性</li>
+<li>无法利用node/edge以及图的特征：例如无法利用节点的其他属性</li>
+<li>解决方法：deep learning, GNN</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Learning</category>
+        <category>cs224w</category>
+      </categories>
+      <tags>
+        <tag>cs224w</tag>
+        <tag>Graph</tag>
+        <tag>ML</tag>
+        <tag>PageRank</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>CS224WLec5-Label Propagation for Node Classification[LIP]</title>
     <url>/2021/12/19/CS224WLec5/</url>
     <content><![CDATA[<p><a href="http://web.stanford.edu/class/cs224w/slides/05-message.pdf">ppt</a></p>
@@ -617,52 +786,6 @@ k_{v} \\
       <tags>
         <tag>cs224w</tag>
         <tag>Graph</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CS学习路线、资源推荐</title>
-    <url>/2021/12/10/CS%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF/</url>
-    <content><![CDATA[<ul>
-<li><a href="https://conanhujinming.github.io/post/how_to_learn_cs/">转载自胡神的“自学CS路线、资源推荐”</a></li>
-<li><a href="https://conanhujinming.github.io/comments-for-awesome-courses/">名校公开课程评价网
-</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Learning</category>
-      </categories>
-      <tags>
-        <tag>Resource</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CV-目标检测综述</title>
-    <url>/2021/12/10/CV-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BB%BC%E8%BF%B0/</url>
-    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
-
-<h2 id="目标检测"><a href="#目标检测" class="headerlink" title="目标检测"></a>目标检测</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><ul>
-<li>图像识别+定位</li>
-<li>识别：分类问题，准确率</li>
-<li>定位：分类/回归问题，找到一个框/4个坐标，IOU</li>
-</ul>
-<h2 id="传统目标检测"><a href="#传统目标检测" class="headerlink" title="传统目标检测"></a>传统目标检测</h2><h3 id="用回归做定位问题"><a href="#用回归做定位问题" class="headerlink" title="用回归做定位问题"></a>用回归做定位问题</h3><ul>
-<li>训练一个cnn网络，在最后一个卷积层后分两个head，一个head做分类，另一个回归</li>
-<li>先fine tuning分类任务，再fine tuning回归</li>
-<li>缺点：回归问题，很难做</li>
-</ul>
-<h3 id="用分类做定位问题"><a href="#用分类做定位问题" class="headerlink" title="用分类做定位问题"></a>用分类做定位问题</h3><ul>
-<li>滑动窗口（选择不同位置不同大小的区域），对其定位，对每个框内的图像做分类</li>
-<li>缺点：窗口冗余、复杂度高、多物体多分类时复杂度更高</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Learning</category>
-      </categories>
-      <tags>
-        <tag>DL</tag>
-        <tag>CV</tag>
-        <tag>ML</tag>
-        <tag>目标检测</tag>
       </tags>
   </entry>
   <entry>
@@ -754,6 +877,52 @@ f\left(\boldsymbol{A}_{1}, \boldsymbol{X}_{1}\right)=f\left(\boldsymbol{A}_{2}, 
         <tag>cs224w</tag>
         <tag>Graph</tag>
         <tag>GNN</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CS学习路线、资源推荐</title>
+    <url>/2021/12/10/CS%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF/</url>
+    <content><![CDATA[<ul>
+<li><a href="https://conanhujinming.github.io/post/how_to_learn_cs/">转载自胡神的“自学CS路线、资源推荐”</a></li>
+<li><a href="https://conanhujinming.github.io/comments-for-awesome-courses/">名校公开课程评价网
+</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>Resource</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CV-目标检测综述</title>
+    <url>/2021/12/10/CV-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BB%BC%E8%BF%B0/</url>
+    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
+
+<h2 id="目标检测"><a href="#目标检测" class="headerlink" title="目标检测"></a>目标检测</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><ul>
+<li>图像识别+定位</li>
+<li>识别：分类问题，准确率</li>
+<li>定位：分类/回归问题，找到一个框/4个坐标，IOU</li>
+</ul>
+<h2 id="传统目标检测"><a href="#传统目标检测" class="headerlink" title="传统目标检测"></a>传统目标检测</h2><h3 id="用回归做定位问题"><a href="#用回归做定位问题" class="headerlink" title="用回归做定位问题"></a>用回归做定位问题</h3><ul>
+<li>训练一个cnn网络，在最后一个卷积层后分两个head，一个head做分类，另一个回归</li>
+<li>先fine tuning分类任务，再fine tuning回归</li>
+<li>缺点：回归问题，很难做</li>
+</ul>
+<h3 id="用分类做定位问题"><a href="#用分类做定位问题" class="headerlink" title="用分类做定位问题"></a>用分类做定位问题</h3><ul>
+<li>滑动窗口（选择不同位置不同大小的区域），对其定位，对每个框内的图像做分类</li>
+<li>缺点：窗口冗余、复杂度高、多物体多分类时复杂度更高</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>DL</tag>
+        <tag>CV</tag>
+        <tag>ML</tag>
+        <tag>目标检测</tag>
       </tags>
   </entry>
   <entry>
@@ -947,74 +1116,6 @@ f\left(\boldsymbol{A}_{1}, \boldsymbol{X}_{1}\right)=f\left(\boldsymbol{A}_{2}, 
       </tags>
   </entry>
   <entry>
-    <title>CS224WLec4-PageRank</title>
-    <url>/2021/12/18/CS224WLec4/</url>
-    <content><![CDATA[<h1 id="PageRank"><a href="#PageRank" class="headerlink" title="PageRank"></a>PageRank</h1><ul>
-<li>一个node的重要性由指向它的节点的重要性决定 —&gt; <strong>指向该node的节点数越多，且这些节点重要性越高，则该节点越重要</strong>。node j的重要性（传递函数）为：<script type="math/tex; mode=display">r_{j}=\sum_{i \rightarrow j} \frac{r_{i}}{d_{i}}</script><script type="math/tex; mode=display">d_{i} \ldots out-degree of node i</script></li>
-<li><p>矩阵形式：</p>
-<ul>
-<li>随机邻接矩阵M。j有<script type="math/tex">d_{j}</script>个出链，如果j -&gt; i，则<script type="math/tex">M_{ij}=1/d_{j}</script>，因此每一列上的值要么为0，要么为<script type="math/tex">1/d_{j}</script>，且加和为1，称为列随机矩阵</li>
-<li>rank vector r: <script type="math/tex">r_{j}</script>为node j的重要性score，且<script type="math/tex">\sum_{i} r_{i}=1</script></li>
-<li>n*1 = n*n * n*1:<br><script type="math/tex">\boldsymbol{r}=\boldsymbol{M} \cdot \boldsymbol{r}</script>,</li>
-</ul>
-<script type="math/tex; mode=display">\quad r_{j}=\sum_{i \rightarrow j} \frac{r_{i}}{d_{i}}</script></li>
-<li>PageRank VS RandomWalk: 当random walk到达静态分布状态时满足<script type="math/tex">\boldsymbol{r}=\boldsymbol{M} \cdot \boldsymbol{r}</script>，即<strong>PageRank得到的重要性向量v是random walk的静态分布</strong></li>
-<li>PangRank VS Eigenvector: <strong>PageRank得到的重要性向量v是当特征值为1时得到的主特征向量</strong><a id="more"></a>
-</li>
-</ul>
-<h2 id="Solve-the-equation"><a href="#Solve-the-equation" class="headerlink" title="Solve the equation"></a>Solve the equation</h2><ul>
-<li>method: power iteration<ul>
-<li>initialize: 初始化，给每个node一个page rank值。e.g. <script type="math/tex; mode=display">
-\boldsymbol{r}^{0}=[1 / N, \ldots, 1 / N]^{T}</script></li>
-<li>iterate: 迭代<script type="math/tex; mode=display">
-r_{j}^{(t+1)}=\sum_{i \rightarrow j} \frac{r_{i}^{(t)}}{d_{i}}</script>即：<script type="math/tex; mode=display">
-\boldsymbol{r}^{(t+1)}=\boldsymbol{M} \cdot \boldsymbol{r}^{t}</script></li>
-<li>stop: 也可以选择其他度量方式<script type="math/tex; mode=display">
-\left|\boldsymbol{r}^{(t+1)}-\boldsymbol{r}^{t}\right|_{1}<\varepsilon</script></li>
-</ul>
-</li>
-</ul>
-<h3 id="Problems"><a href="#Problems" class="headerlink" title="Problems"></a>Problems</h3><ul>
-<li>dead ends: 遇到死胡同 —》 某个节点所在列的M为全0 —》随机矩阵不再随机，秩 &lt; n —》pagerank会收敛为全0<ul>
-<li>solution: 填充M中的该列，例如填充为1/n</li>
-</ul>
-</li>
-<li>spider trap: 在某个节点处死循环<ul>
-<li>solution: 允许random surfer跳到一个随机page。加一个超参β，表示是否沿着这条link走的概率，1-β表示随机jump的概率 —》相当于改了M</li>
-</ul>
-</li>
-<li>Google solution: teleport rankpage。β表示page j由其他page的出链决定，1-β表示由其他随机page决定<ul>
-<li>equation<script type="math/tex; mode=display">
-r_{j}=\sum_{i \rightarrow j} \beta \frac{r_{i}}{d_{i}}+(1-\beta) \frac{1}{N}</script></li>
-<li>matrix G<script type="math/tex; mode=display">\boldsymbol{G}=\beta {\boldsymbol{M}}+(1-\beta)[1/N]_{N*N}</script></li>
-</ul>
-</li>
-</ul>
-<img src="/2021/12/18/CS224WLec4/pagerank1.png" class="" title="pagerank1">
-<h1 id="PageRank扩展"><a href="#PageRank扩展" class="headerlink" title="PageRank扩展"></a>PageRank扩展</h1><ul>
-<li>Personalized PageRank: teleport到在指定的子图S</li>
-<li>Random walks with restarts: teleport到start page<img src="/2021/12/18/CS224WLec4/pagerank2.png" class="" title="pagerank2">
-</li>
-</ul>
-<h1 id="Limitations"><a href="#Limitations" class="headerlink" title="Limitations"></a>Limitations</h1><ul>
-<li>无法获得训练集里没有的node的embedding，必须重新训练</li>
-<li>无法捕获结构相似性：例如同一张图中的局部结构相似性</li>
-<li>无法利用node/edge以及图的特征：例如无法利用节点的其他属性</li>
-<li>解决方法：deep learning, GNN</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Learning</category>
-        <category>cs224w</category>
-      </categories>
-      <tags>
-        <tag>cs224w</tag>
-        <tag>Graph</tag>
-        <tag>ML</tag>
-        <tag>PageRank</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Graph-与图有关的资源</title>
     <url>/2021/12/22/Graph/</url>
     <content><![CDATA[<h2 id="OpenResource"><a href="#OpenResource" class="headerlink" title="OpenResource"></a>OpenResource</h2><ul>
@@ -1034,104 +1135,28 @@ r_{j}=\sum_{i \rightarrow j} \beta \frac{r_{i}}{d_{i}}+(1-\beta) \frac{1}{N}</sc
       </tags>
   </entry>
   <entry>
-    <title>CS224WLec3-Node Embeddings</title>
-    <url>/2021/12/15/CS224WLec3/</url>
-    <content><![CDATA[<h1 id="Basic"><a href="#Basic" class="headerlink" title="Basic"></a>Basic</h1><ul>
-<li>goal: 为node生成一个embedding</li>
-<li>两个要素：<strong>encoder/相似度计量方法（encode前后都需要）</strong></li>
-<li>framework: encoder 生成embedding —&gt; 相似度计量方法决定embedding学习的好坏</li>
-<li><strong>unsupervised/self-supervised way</strong> based on random walks</li>
-<li>task independent</li>
+    <title>Java学习资源</title>
+    <url>/2021/12/10/Java%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%BA%90/</url>
+    <content><![CDATA[<h2 id="书籍"><a href="#书籍" class="headerlink" title="书籍"></a>书籍</h2><ul>
+<li><a href="https://github.com/apachecn/thinking-in-java-zh">Java编程思想</a></li>
+<li><a href="https://github.com/Chenzk1/PrivateNotes/blob/master/books/Head%20First%20Java%28%E7%AC%AC2%E7%89%88%29.pdf">Head First Java</a></li>
+<li><a href="https://github.com/Chenzk1/PrivateNotes/blob/master/books/Java%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%20%E5%8D%B71%20%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%20%E5%8E%9F%E4%B9%A6%E7%AC%AC9%E7%89%88%20%E5%AE%8C%E6%95%B4%E4%B8%AD%E6%96%87%E7%89%88%20.pdf">Java核心技术卷1</a></li>
 </ul>
-<a id="more"></a>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><ul>
-<li>goal: 原始graph中相似的node获得的embeddings也是相似的</li>
-<li>类似于word2vec: 目标是求node u的embedding <script type="math/tex">\mathbf{z}_{u}</script>,而模型的预测目标是：<script type="math/tex">P\left(v \mid \mathbf{z}_{u}\right)</script>，即node v出现在以node u开始的walk上的概率。</li>
-<li>如何获得“句子”：random walk</li>
-<li>范式: <ul>
-<li>encoder生成node embedding，本节的encoder为word2vec中的权重矩阵: <script type="math/tex">\operatorname{ENC}(v)=\mathbf{z}_{v}</script></li>
-<li>decoder将node embedding映射回原空间，这里存在隐式的decoder，embedding空间两向量的点积可以表示原空间u,v的相似度: <script type="math/tex">\operatorname{similarity}(u, v) \approx \mathbf{z}_{v}^{\mathrm{T}} \mathbf{z}_{u}</script><ul>
-<li>点击相似度：最小化两向量的模以及夹角余弦的乘积</li>
+<h2 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h2><ul>
+<li><a href="https://www.liaoxuefeng.com/wiki/1252599548343744">廖雪峰的Java教程</a></li>
 </ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="Deep-Walk"><a href="#Deep-Walk" class="headerlink" title="Deep Walk"></a>Deep Walk</h2><h3 id="Random-Walk"><a href="#Random-Walk" class="headerlink" title="Random Walk"></a>Random Walk</h3><ul>
-<li>出发点：如果一个random walk中包括从u到v的路径，那u和v是相似的/有相似的高维的多跳信息</li>
-<li>本质：DFS</li>
-<li>$ N_{\mathrm{R}}(u) $为策略R下，从u出发的walk中，出现的所有nodes<script type="math/tex; mode=display">\max _{f} \sum_{u \in V} \log \mathrm{P}\left(N_{\mathrm{R}}(u) \mid \mathbf{z}_{u}\right)</script>—》<script type="math/tex; mode=display">\mathcal{L}=\sum_{u \in V} \sum_{v \in N_{R}(u)}-\log \left(P\left(v \mid \mathbf{z}_{u}\right)\right)</script></li>
-<li>利用softmax求p<script type="math/tex; mode=display">P\left(v \mid \mathbf{z}_{u}\right)=\frac{\exp \left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{v}\right)}{\sum_{n \in V} \exp \left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{n}\right)}</script></li>
-<li>problem: softmax分母 以及 最外层都需要|V|次遍历 —》<script type="math/tex">\mathrm{O}\left(|\mathrm{V}|^{2}\right)</script>的复杂度 —》<strong>优化</strong></li>
-</ul>
-<h3 id="Negative-Sampling"><a href="#Negative-Sampling" class="headerlink" title="Negative Sampling"></a>Negative Sampling</h3><ul>
-<li>使用所有样本做normalization —&gt; 只采样k个负样本做normalization<script type="math/tex; mode=display">P\left(v \mid \mathbf{z}_{u}\right)=\frac{\exp \left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{v}\right)}{\sum_{n \in V } \exp \left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{n}\right)} \approx \log \left(\sigma\left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{v}\right)\right)-\sum_{i=1}^{k} \log \left(\sigma\left(\mathbf{z}_{u}^{\mathrm{T}} \mathbf{z}_{n_{i}}\right)\right), n_{i} \sim P_{V}</script></li>
-<li>k的选择：<ul>
-<li>k越大，模型越鲁棒</li>
-<li>k越大，对负样本考虑的越多</li>
-<li>5~20间较常见</li>
-</ul>
-</li>
-<li>负样本的选择：可以选择graph内任意样本，但更准确的方法是选择不在walk中的样本</li>
-</ul>
-<h2 id="Node2vec-better-random-walk-strategy"><a href="#Node2vec-better-random-walk-strategy" class="headerlink" title="Node2vec: better  random walk strategy"></a>Node2vec: better  random walk strategy</h2><ul>
-<li>简单的random walk会限制walk中的node相似度与graph中node相似度的一致性</li>
-</ul>
-<h3 id="Biased-2nd-order-random-Walks"><a href="#Biased-2nd-order-random-Walks" class="headerlink" title="Biased 2nd-order random Walks"></a>Biased 2nd-order random Walks</h3><ul>
-<li>trade off between local and global views of the network: BFS &amp; DFS</li>
-<li>当前在w, 上一步在s的walk，有三种行走方向<ul>
-<li>退后：回退到s</li>
-<li>保持：走到和s距离一致的一个节点</li>
-<li>前进：走到距离s更远的节点<img src="/2021/12/15/CS224WLec3/node2vec1.png" class="" title="node2vec1"></li>
-</ul>
-</li>
-<li>实现：两个<strong>超参</strong>p/q，以及“1”来以非归一化的方法表示上述三种情况的概率<img src="/2021/12/15/CS224WLec3/node2vec2.png" class="" title="node2vec2"></li>
-<li>流程<ul>
-<li>Compute random walk probabilities</li>
-<li>Simulate 𝑟 random walks of length 𝑙 starting from each node 𝑢</li>
-<li>Optimize the node2vec objective using Stochastic Gradient Descent</li>
-</ul>
-</li>
-<li>Linear-time complexity</li>
-<li>All 3 steps are individually parallelizable</li>
-</ul>
-<h2 id="Embedding-entire-graphs"><a href="#Embedding-entire-graphs" class="headerlink" title="Embedding entire graphs"></a>Embedding entire graphs</h2><ul>
-<li>approach1: add all node embeddings</li>
-<li>approach2: introduce a “virtual node” or “super node” to represent the graph and learning embedding for this graph</li>
-<li>approach3: anonymous walks embeddings</li>
-</ul>
-<h3 id="Anonymous-walk-embeddings"><a href="#Anonymous-walk-embeddings" class="headerlink" title="Anonymous walk embeddings"></a>Anonymous walk embeddings</h3><ul>
-<li>Anonymous walk: random walk —&gt; 将node表示为距离start node的去重index。因此，确定了walk length的时候，就确定了anonymous walk中index的个数。</li>
-<li>方法1：长度为l的annoy walk共有n种情况 —&gt; 做m次random walks —&gt; 统计每种情况的count，并形成一个vector</li>
-<li>方法2：用Anonymous walks的概率分布，学习图的embedding<ul>
-<li>Learn to predict walks that co-occur in 𝚫-size window (e.g., predict 𝑤3 given 𝑤1, 𝑤2 if Δ = 2)</li>
-<li>objective:<script type="math/tex; mode=display">\max _{z_{G}} \sum_{t=\Delta+1}^{T} \log P\left(w_{t} \mid w_{t-\Delta}, \ldots, w_{t-1}, \mathbf{z}_{G}\right)</script></li>
-</ul>
-</li>
-</ul>
-<img src="/2021/12/15/CS224WLec3/annoywalks1.png" class="" title="annoywalks1">
-<img src="/2021/12/15/CS224WLec3/annoywalks2.png" class="" title="annoywalks2">
-<h2 id="Pros-amp-Cons"><a href="#Pros-amp-Cons" class="headerlink" title="Pros &amp; Cons"></a>Pros &amp; Cons</h2><ul>
-<li>属于shallow encoding，有如下优缺点：<ul>
-<li>需要O(|V|)的参数量，节点间的embedding不共享，每个node有独立的embedding</li>
-<li>training时没有的node，不会有embedding</li>
-<li>没有利用到节点的特征，只利用了graph structure</li>
-</ul>
-</li>
-</ul>
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
-<li><a href="http://web.stanford.edu/class/cs224w/slides/03-nodeemb.pdf">ppt</a></li>
+<h2 id="博客"><a href="#博客" class="headerlink" title="博客"></a>博客</h2><ul>
+<li><a href="https://segmentfault.com/a/1190000014933213">Java学习的四个阶段</a></li>
+<li><a href="https://juejin.cn/post/6844903985170612238">可能是最适合你的 Java 学习路线和方法</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/115890802">2020年最新Java学习路线图</a></li>
 </ul>
 ]]></content>
       <categories>
         <category>Learning</category>
-        <category>cs224w</category>
       </categories>
       <tags>
-        <tag>cs224w</tag>
-        <tag>Graph</tag>
-        <tag>DeepWalk</tag>
-        <tag>Node2vec</tag>
+        <tag>Resource</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -1203,31 +1228,6 @@ O_{1}=-\sum_{(i, j) \in E} w_{i j} \log p_{1}\left(v_{i}, v_{j}\right)</script><
       <tags>
         <tag>Graph</tag>
         <tag>LINE</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Java学习资源</title>
-    <url>/2021/12/10/Java%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%BA%90/</url>
-    <content><![CDATA[<h2 id="书籍"><a href="#书籍" class="headerlink" title="书籍"></a>书籍</h2><ul>
-<li><a href="https://github.com/apachecn/thinking-in-java-zh">Java编程思想</a></li>
-<li><a href="https://github.com/Chenzk1/PrivateNotes/blob/master/books/Head%20First%20Java%28%E7%AC%AC2%E7%89%88%29.pdf">Head First Java</a></li>
-<li><a href="https://github.com/Chenzk1/PrivateNotes/blob/master/books/Java%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%20%E5%8D%B71%20%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%20%E5%8E%9F%E4%B9%A6%E7%AC%AC9%E7%89%88%20%E5%AE%8C%E6%95%B4%E4%B8%AD%E6%96%87%E7%89%88%20.pdf">Java核心技术卷1</a></li>
-</ul>
-<h2 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h2><ul>
-<li><a href="https://www.liaoxuefeng.com/wiki/1252599548343744">廖雪峰的Java教程</a></li>
-</ul>
-<h2 id="博客"><a href="#博客" class="headerlink" title="博客"></a>博客</h2><ul>
-<li><a href="https://segmentfault.com/a/1190000014933213">Java学习的四个阶段</a></li>
-<li><a href="https://juejin.cn/post/6844903985170612238">可能是最适合你的 Java 学习路线和方法</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/115890802">2020年最新Java学习路线图</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Learning</category>
-      </categories>
-      <tags>
-        <tag>Resource</tag>
-        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -1595,26 +1595,6 @@ M I o U=\frac{1}{k+1} \sum_{i=0}^{k} \frac{T P}{F N+F P+T P}
       </tags>
   </entry>
   <entry>
-    <title>P、NP、NP-hard问题</title>
-    <url>/2021/12/15/P&amp;NP&amp;NP-hard/</url>
-    <content><![CDATA[<h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><ul>
-<li>P Problem: <strong>任意性</strong>，对于<strong>任意的</strong>输入规模n，问题都可以在n的多项式时间内得到解决；</li>
-<li>NP(Non-deterministic Polynomial) Problem: <strong>存在性</strong>，<strong>可以</strong>在多项式的时间里验证一个解的问题；</li>
-<li>NPC(Non-deterministic Polynomial Complete) Problem: 满足两个条件 (1)是一个NP问题 (2)所有的NP问题都可以约化到它。可以理解为<strong>NP的泛化问题</strong>。</li>
-<li>NP-Hard Problem: 满足NPC问题的第二条，但不一定要满足第一条 —&gt; <strong>不一定可以在多项式时间内解决的问题</strong></li>
-</ul>
-<h1 id="搞笑版P-NP证明"><a href="#搞笑版P-NP证明" class="headerlink" title="搞笑版P=NP证明"></a>搞笑版P=NP证明</h1><blockquote>
-<p>反证法。设P = NP。令y为一个P = NP的证明。证明y可以用一个合格的计算机科学家在多项式时间内验证，我们认定这样的科学家的存在性为真。但是，因为P = NP，该证明y可以在多项式时间内由这样的科学家发现。但是这样的发现还没有发生（虽然这样的科学家试图发现这样的一个证明），我们得到了矛盾。</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>Learning</category>
-      </categories>
-      <tags>
-        <tag>math</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>ML-Naive Bayes及其sklearn实现</title>
     <url>/2021/12/10/Naive%20Bayes/</url>
     <content><![CDATA[<p>[TOC]</p>
@@ -1647,6 +1627,26 @@ M I o U=\frac{1}{k+1} \sum_{i=0}^{k} \frac{T P}{F N+F P+T P}
       <tags>
         <tag>ML</tag>
         <tag>NaiveBayes</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>P、NP、NP-hard问题</title>
+    <url>/2021/12/15/P&amp;NP&amp;NP-hard/</url>
+    <content><![CDATA[<h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><ul>
+<li>P Problem: <strong>任意性</strong>，对于<strong>任意的</strong>输入规模n，问题都可以在n的多项式时间内得到解决；</li>
+<li>NP(Non-deterministic Polynomial) Problem: <strong>存在性</strong>，<strong>可以</strong>在多项式的时间里验证一个解的问题；</li>
+<li>NPC(Non-deterministic Polynomial Complete) Problem: 满足两个条件 (1)是一个NP问题 (2)所有的NP问题都可以约化到它。可以理解为<strong>NP的泛化问题</strong>。</li>
+<li>NP-Hard Problem: 满足NPC问题的第二条，但不一定要满足第一条 —&gt; <strong>不一定可以在多项式时间内解决的问题</strong></li>
+</ul>
+<h1 id="搞笑版P-NP证明"><a href="#搞笑版P-NP证明" class="headerlink" title="搞笑版P=NP证明"></a>搞笑版P=NP证明</h1><blockquote>
+<p>反证法。设P = NP。令y为一个P = NP的证明。证明y可以用一个合格的计算机科学家在多项式时间内验证，我们认定这样的科学家的存在性为真。但是，因为P = NP，该证明y可以在多项式时间内由这样的科学家发现。但是这样的发现还没有发生（虽然这样的科学家试图发现这样的一个证明），我们得到了矛盾。</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>math</tag>
       </tags>
   </entry>
   <entry>
@@ -3488,6 +3488,50 @@ Summary -->
       </tags>
   </entry>
   <entry>
+    <title>相似度</title>
+    <url>/2022/01/02/%E7%9B%B8%E4%BC%BC%E5%BA%A6/</url>
+    <content><![CDATA[<h1 id="Basics"><a href="#Basics" class="headerlink" title="Basics"></a>Basics</h1><ul>
+<li>可以分为距离类、角度类、角度+距离类</li>
+</ul>
+<h1 id="距离类"><a href="#距离类" class="headerlink" title="距离类"></a>距离类</h1><h2 id="欧式距离（Euclidean-Distance）"><a href="#欧式距离（Euclidean-Distance）" class="headerlink" title="欧式距离（Euclidean Distance）"></a>欧式距离（Euclidean Distance）</h2><ul>
+<li>欧式距离：欧式空间中两点间的距离公式。</li>
+<li>例如平面空间内的欧式距离：<script type="math/tex; mode=display">
+d=\sqrt{(x 1-x 2)^{2}+(y 1-y 2)^{2}}</script></li>
+</ul>
+<h2 id="曼哈顿距离-Manhattan-Distance"><a href="#曼哈顿距离-Manhattan-Distance" class="headerlink" title="曼哈顿距离(Manhattan Distance)"></a>曼哈顿距离(Manhattan Distance)</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Manhattan</span>(<span class="params">dataA,dataB</span>):</span></span><br><span class="line">    <span class="keyword">return</span> np.<span class="built_in">sum</span>(np.<span class="built_in">abs</span>(dataA - dataB))</span><br><span class="line">print(Manhattan(dataA,dataB))</span><br></pre></td></tr></table></figure>
+<h2 id="汉明距离（Hamming-distance）"><a href="#汉明距离（Hamming-distance）" class="headerlink" title="汉明距离（Hamming distance）"></a>汉明距离（Hamming distance）</h2><ul>
+<li>汉明距离表示的是两个字符串（相同长度）对应位不同的数量。比如有两个等长的字符串 str1 = “11111” 和 str2 = “10001” 那么它们之间的汉明距离就是3（这样说就简单多了吧。哈哈）。</li>
+<li><strong>汉明距离多用于图像像素的匹配（同图搜索）、通信领域统计错误数据位的数量等</strong>。<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hammingDistance</span>(<span class="params">dataA,dataB</span>):</span></span><br><span class="line">    distanceArr = dataA - dataB</span><br><span class="line">    <span class="keyword">return</span> dataA.shape[<span class="number">0</span>] - np.<span class="built_in">sum</span>(distanceArr == <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="角度类"><a href="#角度类" class="headerlink" title="角度类"></a>角度类</h1><h2 id="余弦相似度（Cosine）"><a href="#余弦相似度（Cosine）" class="headerlink" title="余弦相似度（Cosine）"></a>余弦相似度（Cosine）</h2><ul>
+<li>首先，样本数据的夹角余弦并不是真正几何意义上的夹角余弦，只不过是借了它的名字，实际是借用了它的概念变成了是代数意义上的“夹角余弦”，<strong>用来衡量样本向量间的差异</strong>。</li>
+<li>二维情况下，即几何意义上的夹角余弦。夹角越小，余弦值越接近于1，反之则趋于-1。<script type="math/tex; mode=display">
+\cos (\theta)=\frac{\sum_{k=1}^{n} x_{1 k} x_{2 k}}{\sqrt{\sum_{k=1}^{n} x_{1 k}^{2}} \sqrt{\sum_{k=1}^{n} x_{2 k}{ }^{2}}}</script></li>
+<li>余弦相似度对夹角敏感，对数值的相对大小不敏感</li>
+</ul>
+<h2 id="皮尔逊相关系数（Pearson-Correlation-Coefficient）"><a href="#皮尔逊相关系数（Pearson-Correlation-Coefficient）" class="headerlink" title="皮尔逊相关系数（Pearson Correlation Coefficient）"></a>皮尔逊相关系数（Pearson Correlation Coefficient）</h2><script type="math/tex; mode=display">
+\operatorname{sim}\left(x_{1}, x_{2}\right)=\frac{\sum_{k=1}^{n}\left(x_{1 k}-\overline{x_{1}}\right)\left(x_{2 k}-\overline{x_{2}}\right)}{\sqrt{\sum_{k=1}^{n}\left(x_{1 k}-\overline{x_{1}}\right)^{2}} \sqrt{\sum_{k=1}^{n}\left(x_{2 k}-\overline{x_{2}}\right)^{2}}}</script><ul>
+<li>在计算夹角余弦之前将两个向量减去各个样本的平均值，达到<strong>中心化</strong>的目的。<strong>皮尔逊相关函数是余弦相似度在维度缺失上面的一种改进方法</strong>。</li>
+</ul>
+<h1 id="角度-距离"><a href="#角度-距离" class="headerlink" title="角度+距离"></a>角度+距离</h1><h2 id="点积相似度（Dot）"><a href="#点积相似度（Dot）" class="headerlink" title="点积相似度（Dot）"></a>点积相似度（Dot）</h2><script type="math/tex; mode=display">
+\vec{a} * \vec{b}=\overrightarrow{|a||b|} \mid \cos \theta</script><ul>
+<li>常见于word2vec、deepwalk等算法中，用于作为loss（最小化向量ab的模以及两者的夹角），也可以理解为decoder（两向量的点积可以理解为原空间的两点相似度）</li>
+<li>当向量模长固定时，点积相似度等同于余弦相似度</li>
+</ul>
+<h1 id="Refs"><a href="#Refs" class="headerlink" title="Refs"></a>Refs</h1><ul>
+<li><a href="https://zhuanlan.zhihu.com/p/33164335">from zhihu</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>ML</tag>
+        <tag>Math</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>ML-经验风险、期望风险、结构风险</title>
     <url>/2021/12/10/%E7%BB%8F%E9%AA%8C%20%E6%9C%9F%E6%9C%9B%20%E7%BB%93%E6%9E%84/</url>
     <content><![CDATA[<h3 id="经验风险"><a href="#经验风险" class="headerlink" title="经验风险"></a>经验风险</h3><ul>
@@ -4411,50 +4455,6 @@ w=m(a+x, b+y)^{*} e^{-\frac{\left(x^{\prime}\right)^{2}+\left(y^{\prime}\right)^
       <tags>
         <tag>Leetcode</tag>
         <tag>查找表</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>相似度</title>
-    <url>/2022/01/02/%E7%9B%B8%E4%BC%BC%E5%BA%A6/</url>
-    <content><![CDATA[<h1 id="Basics"><a href="#Basics" class="headerlink" title="Basics"></a>Basics</h1><ul>
-<li>可以分为距离类、角度类、角度+距离类</li>
-</ul>
-<h1 id="距离类"><a href="#距离类" class="headerlink" title="距离类"></a>距离类</h1><h2 id="欧式距离（Euclidean-Distance）"><a href="#欧式距离（Euclidean-Distance）" class="headerlink" title="欧式距离（Euclidean Distance）"></a>欧式距离（Euclidean Distance）</h2><ul>
-<li>欧式距离：欧式空间中两点间的距离公式。</li>
-<li>例如平面空间内的欧式距离：<script type="math/tex; mode=display">
-d=\sqrt{(x 1-x 2)^{2}+(y 1-y 2)^{2}}</script></li>
-</ul>
-<h2 id="曼哈顿距离-Manhattan-Distance"><a href="#曼哈顿距离-Manhattan-Distance" class="headerlink" title="曼哈顿距离(Manhattan Distance)"></a>曼哈顿距离(Manhattan Distance)</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Manhattan</span>(<span class="params">dataA,dataB</span>):</span></span><br><span class="line">    <span class="keyword">return</span> np.<span class="built_in">sum</span>(np.<span class="built_in">abs</span>(dataA - dataB))</span><br><span class="line">print(Manhattan(dataA,dataB))</span><br></pre></td></tr></table></figure>
-<h2 id="汉明距离（Hamming-distance）"><a href="#汉明距离（Hamming-distance）" class="headerlink" title="汉明距离（Hamming distance）"></a>汉明距离（Hamming distance）</h2><ul>
-<li>汉明距离表示的是两个字符串（相同长度）对应位不同的数量。比如有两个等长的字符串 str1 = “11111” 和 str2 = “10001” 那么它们之间的汉明距离就是3（这样说就简单多了吧。哈哈）。</li>
-<li><strong>汉明距离多用于图像像素的匹配（同图搜索）、通信领域统计错误数据位的数量等</strong>。<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hammingDistance</span>(<span class="params">dataA,dataB</span>):</span></span><br><span class="line">    distanceArr = dataA - dataB</span><br><span class="line">    <span class="keyword">return</span> dataA.shape[<span class="number">0</span>] - np.<span class="built_in">sum</span>(distanceArr == <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h1 id="角度类"><a href="#角度类" class="headerlink" title="角度类"></a>角度类</h1><h2 id="余弦相似度（Cosine）"><a href="#余弦相似度（Cosine）" class="headerlink" title="余弦相似度（Cosine）"></a>余弦相似度（Cosine）</h2><ul>
-<li>首先，样本数据的夹角余弦并不是真正几何意义上的夹角余弦，只不过是借了它的名字，实际是借用了它的概念变成了是代数意义上的“夹角余弦”，<strong>用来衡量样本向量间的差异</strong>。</li>
-<li>二维情况下，即几何意义上的夹角余弦。夹角越小，余弦值越接近于1，反之则趋于-1。<script type="math/tex; mode=display">
-\cos (\theta)=\frac{\sum_{k=1}^{n} x_{1 k} x_{2 k}}{\sqrt{\sum_{k=1}^{n} x_{1 k}^{2}} \sqrt{\sum_{k=1}^{n} x_{2 k}{ }^{2}}}</script></li>
-<li>余弦相似度对夹角敏感，对数值的相对大小不敏感</li>
-</ul>
-<h2 id="皮尔逊相关系数（Pearson-Correlation-Coefficient）"><a href="#皮尔逊相关系数（Pearson-Correlation-Coefficient）" class="headerlink" title="皮尔逊相关系数（Pearson Correlation Coefficient）"></a>皮尔逊相关系数（Pearson Correlation Coefficient）</h2><script type="math/tex; mode=display">
-\operatorname{sim}\left(x_{1}, x_{2}\right)=\frac{\sum_{k=1}^{n}\left(x_{1 k}-\overline{x_{1}}\right)\left(x_{2 k}-\overline{x_{2}}\right)}{\sqrt{\sum_{k=1}^{n}\left(x_{1 k}-\overline{x_{1}}\right)^{2}} \sqrt{\sum_{k=1}^{n}\left(x_{2 k}-\overline{x_{2}}\right)^{2}}}</script><ul>
-<li>在计算夹角余弦之前将两个向量减去各个样本的平均值，达到<strong>中心化</strong>的目的。<strong>皮尔逊相关函数是余弦相似度在维度缺失上面的一种改进方法</strong>。</li>
-</ul>
-<h1 id="角度-距离"><a href="#角度-距离" class="headerlink" title="角度+距离"></a>角度+距离</h1><h2 id="点积相似度（Dot）"><a href="#点积相似度（Dot）" class="headerlink" title="点积相似度（Dot）"></a>点积相似度（Dot）</h2><script type="math/tex; mode=display">
-\vec{a} * \vec{b}=\overrightarrow{|a||b|} \mid \cos \theta</script><ul>
-<li>常见于word2vec、deepwalk等算法中，用于作为loss（最小化向量ab的模以及两者的夹角），也可以理解为decoder（两向量的点积可以理解为原空间的两点相似度）</li>
-<li>当向量模长固定时，点积相似度等同于余弦相似度</li>
-</ul>
-<h1 id="Refs"><a href="#Refs" class="headerlink" title="Refs"></a>Refs</h1><ul>
-<li><a href="https://zhuanlan.zhihu.com/p/33164335">from zhihu</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Learning</category>
-      </categories>
-      <tags>
-        <tag>ML</tag>
-        <tag>Math</tag>
       </tags>
   </entry>
 </search>
