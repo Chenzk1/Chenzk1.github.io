@@ -809,14 +809,14 @@ r_{j}=\sum_{i \rightarrow j} \beta \frac{r_{i}}{d_{i}}+(1-\beta) \frac{1}{N}</sc
 </li>
 <li>GNN: deep encoding<ul>
 <li>encoder为MLP</li>
-<li>decoder为某种向量相似度<a id="more"></a>
+<li>decoder为某种向量相似度</li>
+</ul>
+</li>
+</ul>
+<a id="more"></a>
 <blockquote>
 <p>Lec6: Graph Neural Networks 1: GNN Model<br>Lec7: Graph Neural Networks 2: Design Space<br>Lec8: Applications of Graph Neural Networks<br>Lec9: Theory of Graph Neural Networks</p>
 </blockquote>
-</li>
-</ul>
-</li>
-</ul>
 <h1 id="GNN-Basics"><a href="#GNN-Basics" class="headerlink" title="GNN Basics"></a>GNN Basics</h1><ul>
 <li>其他NN：<strong>依赖于IID(independent and identically distributed)，不同样本间是独立的</strong>，因此其无需满足排列不变性，而<strong>GNN节点间不独立</strong> —》 每个节点的特征依赖于其他节点 —》 节点顺序改变后，输入GNN的特征也会改变 —》 需要满足排列不变性，使得不同的节点排列，也能有同样的结果</li>
 <li>原则<ul>
@@ -837,8 +837,13 @@ f\left(\boldsymbol{A}_{1}, \boldsymbol{X}_{1}\right)=f\left(\boldsymbol{A}_{2}, 
 <li>layer0: node v的<strong>输入特征</strong></li>
 <li>layerk: 经过了k跳后，node v的节点信息</li>
 </ul>
+<h4 id="单层结构"><a href="#单层结构" class="headerlink" title="单层结构"></a>单层结构</h4><ul>
+<li>加自己：residual</li>
+<li>非线性：增加表达能力</li>
+</ul>
 <h3 id="模型参数"><a href="#模型参数" class="headerlink" title="模型参数"></a>模型参数</h3><ul>
 <li>每一层包含两个阶段：信息aggregation &amp; passing<img src="/2021/12/22/CS224WLec6/GNN5.png" class="" title="GNN5"></li>
+<li>每层参数共享</li>
 <li><script type="math/tex">h_{v}^{k}</script>: the hidden representation of node v at layer k</li>
 <li><script type="math/tex">W_{k}</script>: weight matrix for neighborhood aggregation</li>
 <li><script type="math/tex">B_{k}</script>: weight matrix for transforming hidden vector of self</li>
@@ -877,6 +882,8 @@ f\left(\boldsymbol{A}_{1}, \boldsymbol{X}_{1}\right)=f\left(\boldsymbol{A}_{2}, 
         <tag>cs224w</tag>
         <tag>Graph</tag>
         <tag>GNN</tag>
+        <tag>GraphSAGE</tag>
+        <tag>GAT</tag>
       </tags>
   </entry>
   <entry>
@@ -1094,28 +1101,6 @@ f\left(\boldsymbol{A}_{1}, \boldsymbol{X}_{1}\right)=f\left(\boldsymbol{A}_{2}, 
       </tags>
   </entry>
   <entry>
-    <title>ML-GBDT</title>
-    <url>/2021/12/10/GBDT/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><ul>
-<li>GBDT与传统的Boosting区别较大，它的每一次计算都是为了减少上一次的残差，而为了消除残差，我们可以在残差减小的梯度方向上建立模型,所以说，在GradientBoost中，每个新的模型的建立是为了使得之前的模型的残差往梯度下降的方法，与传统的Boosting中关注正确错误的样本加权有着很大的区别。</li>
-<li>在GradientBoosting算法中，关键就是利用损失函数的负梯度方向在当前模型的值作为残差的近似值，进而拟合一棵CART回归树。</li>
-<li>GBDT的会累加所有树的结果，而这种累加是无法通过分类完成的，因此<strong>GBDT的树都是CART回归树</strong>，而不是分类树（尽管GBDT调整后也可以用于分类但不代表GBDT的树为分类树）。</li>
-</ul>
-<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><ul>
-<li>GBDT的性能在RF的基础上又有一步提升，因此其优点也很明显，1、它能灵活的处理各种类型的数据；2、在相对较少的调参时间下，预测的准确度较高。</li>
-<li>当然由于它是Boosting，因此基学习器之前存在串行关系，难以并行训练数据。</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Learning</category>
-      </categories>
-      <tags>
-        <tag>ML</tag>
-        <tag>GDBT</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Graph-与图有关的资源</title>
     <url>/2021/12/22/Graph/</url>
     <content><![CDATA[<h2 id="OpenResource"><a href="#OpenResource" class="headerlink" title="OpenResource"></a>OpenResource</h2><ul>
@@ -1132,31 +1117,6 @@ f\left(\boldsymbol{A}_{1}, \boldsymbol{X}_{1}\right)=f\left(\boldsymbol{A}_{2}, 
         <tag>Graph</tag>
         <tag>ML</tag>
         <tag>Resource</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Java学习资源</title>
-    <url>/2021/12/10/Java%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%BA%90/</url>
-    <content><![CDATA[<h2 id="书籍"><a href="#书籍" class="headerlink" title="书籍"></a>书籍</h2><ul>
-<li><a href="https://github.com/apachecn/thinking-in-java-zh">Java编程思想</a></li>
-<li><a href="https://github.com/Chenzk1/PrivateNotes/blob/master/books/Head%20First%20Java%28%E7%AC%AC2%E7%89%88%29.pdf">Head First Java</a></li>
-<li><a href="https://github.com/Chenzk1/PrivateNotes/blob/master/books/Java%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%20%E5%8D%B71%20%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%20%E5%8E%9F%E4%B9%A6%E7%AC%AC9%E7%89%88%20%E5%AE%8C%E6%95%B4%E4%B8%AD%E6%96%87%E7%89%88%20.pdf">Java核心技术卷1</a></li>
-</ul>
-<h2 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h2><ul>
-<li><a href="https://www.liaoxuefeng.com/wiki/1252599548343744">廖雪峰的Java教程</a></li>
-</ul>
-<h2 id="博客"><a href="#博客" class="headerlink" title="博客"></a>博客</h2><ul>
-<li><a href="https://segmentfault.com/a/1190000014933213">Java学习的四个阶段</a></li>
-<li><a href="https://juejin.cn/post/6844903985170612238">可能是最适合你的 Java 学习路线和方法</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/115890802">2020年最新Java学习路线图</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Learning</category>
-      </categories>
-      <tags>
-        <tag>Resource</tag>
-        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -1228,6 +1188,53 @@ O_{1}=-\sum_{(i, j) \in E} w_{i j} \log p_{1}\left(v_{i}, v_{j}\right)</script><
       <tags>
         <tag>Graph</tag>
         <tag>LINE</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java学习资源</title>
+    <url>/2021/12/10/Java%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%BA%90/</url>
+    <content><![CDATA[<h2 id="书籍"><a href="#书籍" class="headerlink" title="书籍"></a>书籍</h2><ul>
+<li><a href="https://github.com/apachecn/thinking-in-java-zh">Java编程思想</a></li>
+<li><a href="https://github.com/Chenzk1/PrivateNotes/blob/master/books/Head%20First%20Java%28%E7%AC%AC2%E7%89%88%29.pdf">Head First Java</a></li>
+<li><a href="https://github.com/Chenzk1/PrivateNotes/blob/master/books/Java%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%20%E5%8D%B71%20%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%20%E5%8E%9F%E4%B9%A6%E7%AC%AC9%E7%89%88%20%E5%AE%8C%E6%95%B4%E4%B8%AD%E6%96%87%E7%89%88%20.pdf">Java核心技术卷1</a></li>
+</ul>
+<h2 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h2><ul>
+<li><a href="https://www.liaoxuefeng.com/wiki/1252599548343744">廖雪峰的Java教程</a></li>
+</ul>
+<h2 id="博客"><a href="#博客" class="headerlink" title="博客"></a>博客</h2><ul>
+<li><a href="https://segmentfault.com/a/1190000014933213">Java学习的四个阶段</a></li>
+<li><a href="https://juejin.cn/post/6844903985170612238">可能是最适合你的 Java 学习路线和方法</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/115890802">2020年最新Java学习路线图</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>Resource</tag>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ML-GBDT</title>
+    <url>/2021/12/10/GBDT/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><ul>
+<li>GBDT与传统的Boosting区别较大，它的每一次计算都是为了减少上一次的残差，而为了消除残差，我们可以在残差减小的梯度方向上建立模型,所以说，在GradientBoost中，每个新的模型的建立是为了使得之前的模型的残差往梯度下降的方法，与传统的Boosting中关注正确错误的样本加权有着很大的区别。</li>
+<li>在GradientBoosting算法中，关键就是利用损失函数的负梯度方向在当前模型的值作为残差的近似值，进而拟合一棵CART回归树。</li>
+<li>GBDT的会累加所有树的结果，而这种累加是无法通过分类完成的，因此<strong>GBDT的树都是CART回归树</strong>，而不是分类树（尽管GBDT调整后也可以用于分类但不代表GBDT的树为分类树）。</li>
+</ul>
+<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><ul>
+<li>GBDT的性能在RF的基础上又有一步提升，因此其优点也很明显，1、它能灵活的处理各种类型的数据；2、在相对较少的调参时间下，预测的准确度较高。</li>
+<li>当然由于它是Boosting，因此基学习器之前存在串行关系，难以并行训练数据。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>ML</tag>
+        <tag>GDBT</tag>
       </tags>
   </entry>
   <entry>
@@ -1527,6 +1534,41 @@ M I o U=\frac{1}{k+1} \sum_{i=0}^{k} \frac{T P}{F N+F P+T P}
       </tags>
   </entry>
   <entry>
+    <title>ML-Naive Bayes及其sklearn实现</title>
+    <url>/2021/12/10/Naive%20Bayes/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<p>P(B|A) = P(A|B)*P(B)/P(A)</p>
+<p>朴素：特征之间相互独立</p>
+<h1 id="算法流程"><a href="#算法流程" class="headerlink" title="算法流程"></a>算法流程</h1><ol>
+<li>x = {a1, a2, …, am}为待分类项，a是特征。</li>
+<li>类别集合C = {y1, …, yn}.</li>
+<li>计算P(y1|x), P(y2|x) …</li>
+<li>P(yk|x) = max{P(yi|x)}，则x属于yk类</li>
+</ol>
+<a id="more"></a>
+<p><strong>总结：</strong>某类在待分类项出现的条件下的概率是所有类中最大的，这个分类项就属于这一类。</p>
+<p>e.g.判断一个黑人来自哪个洲，求取每个洲黑人的比率，非洲最高，选非洲。</p>
+<p>其中x = {a1, a2, …, am}，即P(C|a1,a2…) = P(C)*P(a1,a2,…|C)/P(a1,a2…)。posterior = prior * likelihood / evidence, 这里evidence是常数，不影响。</p>
+<p>——-&gt;求解P(C) * P(a1,a2,a3…|C)</p>
+<p>——-&gt;链式法则：P(C) * P(a2,a3…|C, a1) * P(a1|C)</p>
+<p>—-&gt; …</p>
+<p>—-&gt; P(C) * P(a1|C) * P(a2|C, a1) * P(a3|C, a1, a2)…<br>由于特征之间的相互独立性，a2发生于a1无关，转化为</p>
+<p>—-&gt; P(C) * P(a1|C) * P(a2|C) …  * P(am|C)</p>
+<p>——-&gt;问题转化为求取条件概率：</p>
+<ol>
+<li>找到一个已知分类的待分类项集合，这个集合叫做训练样本集。</li>
+<li>统计得到在各类别下各个特征属性的条件概率估计。</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>ML</tag>
+        <tag>NaiveBayes</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>ML-信息熵&amp;交叉熵&amp;条件熵&amp;相对熵(KL散度)&amp;互信息</title>
     <url>/2021/12/10/ML-%E4%BF%A1%E6%81%AF%E7%86%B5&amp;%E4%BA%A4%E5%8F%89%E7%86%B5&amp;%E6%9D%A1%E4%BB%B6%E7%86%B5&amp;%E7%9B%B8%E5%AF%B9%E7%86%B5(KL%E6%95%A3%E5%BA%A6)&amp;%E4%BA%92%E4%BF%A1%E6%81%AF/</url>
     <content><![CDATA[<ul>
@@ -1595,41 +1637,6 @@ M I o U=\frac{1}{k+1} \sum_{i=0}^{k} \frac{T P}{F N+F P+T P}
       </tags>
   </entry>
   <entry>
-    <title>ML-Naive Bayes及其sklearn实现</title>
-    <url>/2021/12/10/Naive%20Bayes/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<p>P(B|A) = P(A|B)*P(B)/P(A)</p>
-<p>朴素：特征之间相互独立</p>
-<h1 id="算法流程"><a href="#算法流程" class="headerlink" title="算法流程"></a>算法流程</h1><ol>
-<li>x = {a1, a2, …, am}为待分类项，a是特征。</li>
-<li>类别集合C = {y1, …, yn}.</li>
-<li>计算P(y1|x), P(y2|x) …</li>
-<li>P(yk|x) = max{P(yi|x)}，则x属于yk类</li>
-</ol>
-<a id="more"></a>
-<p><strong>总结：</strong>某类在待分类项出现的条件下的概率是所有类中最大的，这个分类项就属于这一类。</p>
-<p>e.g.判断一个黑人来自哪个洲，求取每个洲黑人的比率，非洲最高，选非洲。</p>
-<p>其中x = {a1, a2, …, am}，即P(C|a1,a2…) = P(C)*P(a1,a2,…|C)/P(a1,a2…)。posterior = prior * likelihood / evidence, 这里evidence是常数，不影响。</p>
-<p>——-&gt;求解P(C) * P(a1,a2,a3…|C)</p>
-<p>——-&gt;链式法则：P(C) * P(a2,a3…|C, a1) * P(a1|C)</p>
-<p>—-&gt; …</p>
-<p>—-&gt; P(C) * P(a1|C) * P(a2|C, a1) * P(a3|C, a1, a2)…<br>由于特征之间的相互独立性，a2发生于a1无关，转化为</p>
-<p>—-&gt; P(C) * P(a1|C) * P(a2|C) …  * P(am|C)</p>
-<p>——-&gt;问题转化为求取条件概率：</p>
-<ol>
-<li>找到一个已知分类的待分类项集合，这个集合叫做训练样本集。</li>
-<li>统计得到在各类别下各个特征属性的条件概率估计。</li>
-</ol>
-]]></content>
-      <categories>
-        <category>Learning</category>
-      </categories>
-      <tags>
-        <tag>ML</tag>
-        <tag>NaiveBayes</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>P、NP、NP-hard问题</title>
     <url>/2021/12/15/P&amp;NP&amp;NP-hard/</url>
     <content><![CDATA[<h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><ul>
@@ -1646,7 +1653,7 @@ M I o U=\frac{1}{k+1} \sum_{i=0}^{k} \frac{T P}{F N+F P+T P}
         <category>Learning</category>
       </categories>
       <tags>
-        <tag>math</tag>
+        <tag>Math</tag>
       </tags>
   </entry>
   <entry>
@@ -1952,103 +1959,6 @@ M I o U=\frac{1}{k+1} \sum_{i=0}^{k} \frac{T P}{F N+F P+T P}
       </categories>
       <tags>
         <tag>git</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Kaggle-Kaggle相关</title>
-    <url>/2021/12/10/kaggle%E7%9B%B8%E5%85%B3/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<h1 id="如何在-Kaggle-首战中进入前-10"><a href="#如何在-Kaggle-首战中进入前-10" class="headerlink" title="如何在 Kaggle 首战中进入前 10%"></a>如何在 Kaggle 首战中进入前 10%</h1><p><a href="https://dnc1994.com/2016/04/rank-10-percent-in-first-kaggle-competition/">原文</a></p>
-<a id="more"></a>
-<h2 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h2><h3 id="Exploration-Data-Analysis-EDA"><a href="#Exploration-Data-Analysis-EDA" class="headerlink" title="Exploration Data Analysis(EDA)"></a>Exploration Data Analysis(EDA)</h3><h4 id="Visualization"><a href="#Visualization" class="headerlink" title="Visualization"></a>Visualization</h4><p>matplotlib + seaborn</p>
-<ul>
-<li>查看目标变量的分布。当分布不平衡时，根据评分标准和具体模型的使用不同，可能会严重影响性能。</li>
-<li>对 Numerical Variable，可以用 Box Plot 来直观地查看它的分布。</li>
-<li>对于坐标类数据，可以用 Scatter Plot 来查看它们的分布趋势和是否有离群点的存在。</li>
-<li>对于分类问题，将数据根据 Label 的不同着不同的颜色绘制出来，这对 Feature 的构造很有帮助。</li>
-<li>绘制变量之间两两的分布和相关度图表。</li>
-</ul>
-<p><a href="https://www.kaggle.com/benhamner/python-data-visualizations">example_visualization</a></p>
-<h4 id="Statistical-Tests"><a href="#Statistical-Tests" class="headerlink" title="Statistical Tests"></a>Statistical Tests</h4><p>可视化为定性，这里专注于定量，例如对于新创造的特征，可以将其加入原模型当中，看结果的变化。</p>
-<p>在某些比赛中，由于数据分布比较奇葩或是噪声过强，Public LB(Leader board)的分数可能会跟 Local CV(Cross Validation)的结果相去甚远。可以根据一些统计测试的结果来粗略地建立一个阈值，用来衡量一次分数的提高究竟是实质的提高还是由于数据的随机性导致的。</p>
-<h3 id="Data-Preprossing"><a href="#Data-Preprossing" class="headerlink" title="Data Preprossing"></a>Data Preprossing</h3><p>处理策略主要依赖于EDA中得到的结论。</p>
-<ul>
-<li>有时数据会分散在几个不同的文件中，需要 Join 起来。</li>
-<li>处理 Missing Data。</li>
-<li>处理 Outlier。</li>
-<li>必要时转换某些 Categorical Variable 的表示方式。例如应用one-hot encoding(pd.get_dummies)将categorical variable转化为数字变量。</li>
-<li>有些 Float 变量可能是从未知的 Int 变量转换得到的，这个过程中发生精度损失会在数据中产生不必要的 Noise，即两个数值原本是相同的却在小数点后某一位开始有不同。这对 Model 可能会产生很负面的影响，需要设法去除或者减弱 Noise。</li>
-</ul>
-<h3 id="Feature-Engineering"><a href="#Feature-Engineering" class="headerlink" title="Feature Engineering"></a>Feature Engineering</h3><h4 id="Feature-Selection"><a href="#Feature-Selection" class="headerlink" title="Feature Selection"></a>Feature Selection</h4><p>总的来说，应该<strong>生成尽量多的 Feature，相信 Model 能够挑出最有用的 Feature</strong>。但有时先做一遍 Feature Selection 也能带来一些好处：</p>
-<ul>
-<li>Feature 越少，训练越快。</li>
-<li>有些 Feature 之间可能存在线性关系，影响 Model 的性能。</li>
-<li>通过挑选出最重要的 Feature，可以将它们之间进行各种运算和操作的结果作为新的 Feature，可能带来意外的提高。</li>
-<li>Feature Selection 最实用的方法也就是看 Random Forest 训练完以后得到的 Feature Importance 了。其他有一些更复杂的算法在理论上更加 Robust，但是缺乏实用高效的实现。从原理上来讲，增加 Random Forest 中树的数量可以在一定程度上加强其对于 Noisy Data 的 Robustness。</li>
-</ul>
-<p>看 Feature Importance 对于某些数据经过脱敏处理的比赛尤其重要。这可以免得你浪费大把时间在琢磨一个不重要的变量的意义上。(脱敏：数据脱敏(Data Masking),又称数据漂白、数据去隐私化或数据变形。百度百科对数据脱敏的定义为：指对某些敏感信息通过脱敏规则进行数据的变形，实现敏感隐私数据的可靠保护。在涉及客户安全数据或者一些商业性敏感数据的情况下，在不违反系统规则条件下，对真实数据进行改造并提供测试使用，如身份证号、手机号、卡号、客户号等个人信息都需要进行数据脱敏。)</p>
-<h4 id="Feature-Encoding"><a href="#Feature-Encoding" class="headerlink" title="Feature Encoding"></a>Feature Encoding</h4><p>假设有一个 Categorical Variable 一共有几万个取值可能，那么创建 Dummy Variables 的方法就不可行了。这时一个比较好的方法是根据 Feature Importance 或是这些取值本身在数据中的出现频率，为最重要（比如说前 95% 的 Importance）那些取值（有很大可能只有几个或是十几个）创建 Dummy Variables，而所有其他取值都归到一个“其他”类里面。</p>
-<h3 id="Model-Selection"><a href="#Model-Selection" class="headerlink" title="Model Selection"></a>Model Selection</h3><p>Base Model:</p>
-<ul>
-<li>SVM</li>
-<li>Linear Regression</li>
-<li>Logistic Regression</li>
-<li>Neural Networks</li>
-</ul>
-<p>Most Used Models:</p>
-<ul>
-<li>Gradient Boosting</li>
-<li>Random Forest</li>
-<li><p>Extra Randomized Trees</p>
-<p><strong>XGBoost</strong></p>
-</li>
-</ul>
-<h4 id="Model-Training"><a href="#Model-Training" class="headerlink" title="Model Training"></a>Model Training</h4><p>通过Grid Search来确定模型的最佳参数。<br>e.g.</p>
-<ul>
-<li>sklearn 的 RandomForestClassifier 来说，比较重要的就是随机森林中树的数量 n_estimators 以及在训练每棵树时最多选择的特征数量 max_features。</li>
-<li><p>Xgboost 的调参。通常认为对它性能影响较大的参数有：</p>
-<ul>
-<li>eta：每次迭代完成后更新权重时的步长。越小训练越慢。</li>
-<li>num_round：总共迭代的次数。</li>
-<li>subsample：训练每棵树时用来训练的数据占全部的比例。用于防止 Overfitting。</li>
-<li>colsample_bytree：训练每棵树时用来训练的特征的比例，类似 RandomForestClassifier 的 max_features。</li>
-<li>max_depth：每棵树的最大深度限制。与 Random Forest 不同，Gradient Boosting 如果不对深度加以限制，最终是会 Overfit 的。</li>
-<li>early_stopping_rounds：用于控制在 Out Of Sample 的验证集上连续多少个迭代的分数都没有提高后就提前终止训练。用于防止 Overfitting。</li>
-</ul>
-<p>一般的调参步骤是：</p>
-<ol>
-<li>将训练数据的一部分划出来作为验证集。</li>
-<li>先将 eta 设得比较高（比如 0.1），num_round 设为 300 ~ 500。</li>
-<li>用 Grid Search 对其他参数进行搜索。</li>
-<li>逐步将 eta 降低，找到最佳值。</li>
-<li>以验证集为 watchlist，用找到的最佳参数组合重新在训练集上训练。注意观察算法的输出，看每次迭代后在验证集上分数的变化情况，从而得到最佳的 early_stopping_rounds。</li>
-</ol>
-<p><em>所有具有随机性的 Model 一般都会有一个 seed 或是 random_state 参数用于控制随机种子。得到一个好的 Model 后，在记录参数时务必也记录下这个值，从而能够在之后重现 Model。</em></p>
-</li>
-</ul>
-<h4 id="Cross-Validation"><a href="#Cross-Validation" class="headerlink" title="Cross Validation"></a>Cross Validation</h4><p>一般5-fold。</p>
-<p>fold越多训练越慢。</p>
-<h4 id="Ensemble-Generation"><a href="#Ensemble-Generation" class="headerlink" title="Ensemble Generation"></a>Ensemble Generation</h4><p>常见的 Ensemble 方法有这么几种：</p>
-<ul>
-<li>Bagging：使用训练数据的不同随机子集来训练每个 Base Model，最后进行每个 Base Model 权重相同的 Vote。也即 Random Forest 的原理。</li>
-<li>Boosting：迭代地训练 Base Model，每次根据上一个迭代中预测错误的情况修改训练样本的权重。也即 Gradient Boosting 的原理。比 Bagging 效果好，但更容易 Overfit。</li>
-<li>Blending：用不相交的数据训练不同的 Base Model，将它们的输出取（加权）平均。实现简单，但对训练数据利用少了。</li>
-<li>Stacking：接下来会详细介绍。</li>
-</ul>
-<p>从理论上讲，Ensemble 要成功，有两个要素：</p>
-<ul>
-<li>Base Model 之间的相关性要尽可能的小。这就是为什么非 Tree-based Model 往往表现不是最好但还是要将它们包括在 Ensemble 里面的原因。Ensemble 的 Diversity 越大，最终 Model 的 Bias 就越低。</li>
-<li>Base Model 之间的性能表现不能差距太大。这其实是一个 Trade-off，在实际中很有可能表现相近的 Model 只有寥寥几个而且它们之间相关性还不低。但是实践告诉我们即使在这种情况下 Ensemble 还是能大幅提高成绩。</li>
-</ul>
-<h3 id="Pipeline"><a href="#Pipeline" class="headerlink" title="Pipeline"></a>Pipeline</h3><p>workflow比较复杂，因此一个高自动化的pipeline比较重要。</p>
-<p>这里是以一个例子：<a href="https://github.com/ChenglongChen/Kaggle_CrowdFlower">example</a></p>
-]]></content>
-      <categories>
-        <category>Learning</category>
-      </categories>
-      <tags>
-        <tag>ML</tag>
-        <tag>Kaggle</tag>
       </tags>
   </entry>
   <entry>
@@ -3466,32 +3376,108 @@ Summary -->
       </tags>
   </entry>
   <entry>
-    <title>ML-Feature Engineering</title>
-    <url>/2021/12/10/%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/</url>
-    <content><![CDATA[<h2 id="特征离散的作用"><a href="#特征离散的作用" class="headerlink" title="特征离散的作用"></a>特征离散的作用</h2><a id="more"></a>
+    <title>Kaggle-Kaggle相关</title>
+    <url>/2021/12/10/kaggle%E7%9B%B8%E5%85%B3/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h1 id="如何在-Kaggle-首战中进入前-10"><a href="#如何在-Kaggle-首战中进入前-10" class="headerlink" title="如何在 Kaggle 首战中进入前 10%"></a>如何在 Kaggle 首战中进入前 10%</h1><p><a href="https://dnc1994.com/2016/04/rank-10-percent-in-first-kaggle-competition/">原文</a></p>
+<a id="more"></a>
+<h2 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h2><h3 id="Exploration-Data-Analysis-EDA"><a href="#Exploration-Data-Analysis-EDA" class="headerlink" title="Exploration Data Analysis(EDA)"></a>Exploration Data Analysis(EDA)</h3><h4 id="Visualization"><a href="#Visualization" class="headerlink" title="Visualization"></a>Visualization</h4><p>matplotlib + seaborn</p>
 <ul>
-<li><strong>离散化后的特征对异常数据有很强的鲁棒性</strong><br>比如一个特征是年龄&gt;30是1，否则0。如果特征没有离散化，一个异常数据“年龄300岁”会给模型造成很大的干扰；离散化后年龄300岁也只对应于一个权重，如果训练数据中没有出现特征”年龄-300岁”，那么在LR模型中，其权重对应于0，所以，即使测试数据中出现特征”年龄-300岁”,也不会对预测结果产生影响。特征离散化的过程，比如特征A，如果当做连续特征使用，在LR模型中，A会对应一个权重w,如果离散化，那么A就拓展为特征A-1，A-2，A-3…,每个特征对应于一个权重，如果训练样本中没有出现特征A-4，那么训练的模型对于A-4就没有权重，如果测试样本中出现特征A-4,该特征A-4也不会起作用。相当于无效。但是，如果使用连续特征，在LR模型中，y = w*a,a是特征，w是a对应的权重,比如a代表年龄，那么a的取值范围是[0..100]，如果测试样本中,出现了一个测试用例，a的取值是300，显然a是异常值，但是w*a还是有值，而且值还非常大，所以，异常值会对最后结果产生非常大的影响。</li>
-<li><strong>特征离散化后，模型会更稳定</strong><br>比如如果对用户年龄离散化，20-30作为一个区间，不会因为一个用户年龄长了一岁就变成一个完全不同的人。当然处于区间相邻处的样本会刚好相反，所以怎么划分区间是门学问；按区间离散化，划分区间是非常关键的。</li>
-<li><strong>特征离散化以后，起到了简化了逻辑回归模型的作用，降低了模型过拟合的风险</strong><br>当使用连续特征时，一个特征对应于一个权重，那么，如果这个特征权重较大，模型就会很依赖于这个特征，这个特征的一个微小变化可能会导致最终结果产生很大的变化，这样子的模型很危险，当遇到新样本的时候很可能因为对这个特征过分敏感而得到错误的分类结果，也就是泛化能力差，容易过拟合。而使用离散特征的时候，一个特征变成了多个，权重也变为多个，那么之前连续特征对模型的影响力就被分散弱化了，从而降低了过拟合的风险。</li>
-<li><strong>引入非线性</strong><br>单变量离散化为N个后，每个变量有单独的权重，相当于为模型引入了非线性，能够提升模型表达能力，加大拟合；在LR模型中，特征A作为连续特征对应的权重是Wa。A是线性特征，因为y = Wa*A,y对于A的导数就是Wa,如果离散化后，A按区间离散化为A_1,A_2,A_3。那么y = w_1*A_1+w_2*A_2+w_3*A_3.那么y对于A的函数就相当于分段的线性函数，y对于A的导数也随A的取值变动，所以，相当于引入了非线性。</li>
-<li><strong>离散化后方便进行特征交叉</strong><br>离散化后变为了类别，方便特征交叉。进一步引入非线性，提升表达能力。</li>
-<li>离散特征的增加和减少都很容易，易于模型的快速迭代。(离散特征的增加和减少，模型也不需要调整，重新训练是必须的，相比贝叶斯推断方法或者树模型方法迭代快)</li>
-<li>稀疏向量内积乘法运算速度快，计算结果方便存储，容易扩展；</li>
+<li>查看目标变量的分布。当分布不平衡时，根据评分标准和具体模型的使用不同，可能会严重影响性能。</li>
+<li>对 Numerical Variable，可以用 Box Plot 来直观地查看它的分布。</li>
+<li>对于坐标类数据，可以用 Scatter Plot 来查看它们的分布趋势和是否有离群点的存在。</li>
+<li>对于分类问题，将数据根据 Label 的不同着不同的颜色绘制出来，这对 Feature 的构造很有帮助。</li>
+<li>绘制变量之间两两的分布和相关度图表。</li>
 </ul>
+<p><a href="https://www.kaggle.com/benhamner/python-data-visualizations">example_visualization</a></p>
+<h4 id="Statistical-Tests"><a href="#Statistical-Tests" class="headerlink" title="Statistical Tests"></a>Statistical Tests</h4><p>可视化为定性，这里专注于定量，例如对于新创造的特征，可以将其加入原模型当中，看结果的变化。</p>
+<p>在某些比赛中，由于数据分布比较奇葩或是噪声过强，Public LB(Leader board)的分数可能会跟 Local CV(Cross Validation)的结果相去甚远。可以根据一些统计测试的结果来粗略地建立一个阈值，用来衡量一次分数的提高究竟是实质的提高还是由于数据的随机性导致的。</p>
+<h3 id="Data-Preprossing"><a href="#Data-Preprossing" class="headerlink" title="Data Preprossing"></a>Data Preprossing</h3><p>处理策略主要依赖于EDA中得到的结论。</p>
+<ul>
+<li>有时数据会分散在几个不同的文件中，需要 Join 起来。</li>
+<li>处理 Missing Data。</li>
+<li>处理 Outlier。</li>
+<li>必要时转换某些 Categorical Variable 的表示方式。例如应用one-hot encoding(pd.get_dummies)将categorical variable转化为数字变量。</li>
+<li>有些 Float 变量可能是从未知的 Int 变量转换得到的，这个过程中发生精度损失会在数据中产生不必要的 Noise，即两个数值原本是相同的却在小数点后某一位开始有不同。这对 Model 可能会产生很负面的影响，需要设法去除或者减弱 Noise。</li>
+</ul>
+<h3 id="Feature-Engineering"><a href="#Feature-Engineering" class="headerlink" title="Feature Engineering"></a>Feature Engineering</h3><h4 id="Feature-Selection"><a href="#Feature-Selection" class="headerlink" title="Feature Selection"></a>Feature Selection</h4><p>总的来说，应该<strong>生成尽量多的 Feature，相信 Model 能够挑出最有用的 Feature</strong>。但有时先做一遍 Feature Selection 也能带来一些好处：</p>
+<ul>
+<li>Feature 越少，训练越快。</li>
+<li>有些 Feature 之间可能存在线性关系，影响 Model 的性能。</li>
+<li>通过挑选出最重要的 Feature，可以将它们之间进行各种运算和操作的结果作为新的 Feature，可能带来意外的提高。</li>
+<li>Feature Selection 最实用的方法也就是看 Random Forest 训练完以后得到的 Feature Importance 了。其他有一些更复杂的算法在理论上更加 Robust，但是缺乏实用高效的实现。从原理上来讲，增加 Random Forest 中树的数量可以在一定程度上加强其对于 Noisy Data 的 Robustness。</li>
+</ul>
+<p>看 Feature Importance 对于某些数据经过脱敏处理的比赛尤其重要。这可以免得你浪费大把时间在琢磨一个不重要的变量的意义上。(脱敏：数据脱敏(Data Masking),又称数据漂白、数据去隐私化或数据变形。百度百科对数据脱敏的定义为：指对某些敏感信息通过脱敏规则进行数据的变形，实现敏感隐私数据的可靠保护。在涉及客户安全数据或者一些商业性敏感数据的情况下，在不违反系统规则条件下，对真实数据进行改造并提供测试使用，如身份证号、手机号、卡号、客户号等个人信息都需要进行数据脱敏。)</p>
+<h4 id="Feature-Encoding"><a href="#Feature-Encoding" class="headerlink" title="Feature Encoding"></a>Feature Encoding</h4><p>假设有一个 Categorical Variable 一共有几万个取值可能，那么创建 Dummy Variables 的方法就不可行了。这时一个比较好的方法是根据 Feature Importance 或是这些取值本身在数据中的出现频率，为最重要（比如说前 95% 的 Importance）那些取值（有很大可能只有几个或是十几个）创建 Dummy Variables，而所有其他取值都归到一个“其他”类里面。</p>
+<h3 id="Model-Selection"><a href="#Model-Selection" class="headerlink" title="Model Selection"></a>Model Selection</h3><p>Base Model:</p>
+<ul>
+<li>SVM</li>
+<li>Linear Regression</li>
+<li>Logistic Regression</li>
+<li>Neural Networks</li>
+</ul>
+<p>Most Used Models:</p>
+<ul>
+<li>Gradient Boosting</li>
+<li>Random Forest</li>
+<li><p>Extra Randomized Trees</p>
+<p><strong>XGBoost</strong></p>
+</li>
+</ul>
+<h4 id="Model-Training"><a href="#Model-Training" class="headerlink" title="Model Training"></a>Model Training</h4><p>通过Grid Search来确定模型的最佳参数。<br>e.g.</p>
+<ul>
+<li>sklearn 的 RandomForestClassifier 来说，比较重要的就是随机森林中树的数量 n_estimators 以及在训练每棵树时最多选择的特征数量 max_features。</li>
+<li><p>Xgboost 的调参。通常认为对它性能影响较大的参数有：</p>
+<ul>
+<li>eta：每次迭代完成后更新权重时的步长。越小训练越慢。</li>
+<li>num_round：总共迭代的次数。</li>
+<li>subsample：训练每棵树时用来训练的数据占全部的比例。用于防止 Overfitting。</li>
+<li>colsample_bytree：训练每棵树时用来训练的特征的比例，类似 RandomForestClassifier 的 max_features。</li>
+<li>max_depth：每棵树的最大深度限制。与 Random Forest 不同，Gradient Boosting 如果不对深度加以限制，最终是会 Overfit 的。</li>
+<li>early_stopping_rounds：用于控制在 Out Of Sample 的验证集上连续多少个迭代的分数都没有提高后就提前终止训练。用于防止 Overfitting。</li>
+</ul>
+<p>一般的调参步骤是：</p>
+<ol>
+<li>将训练数据的一部分划出来作为验证集。</li>
+<li>先将 eta 设得比较高（比如 0.1），num_round 设为 300 ~ 500。</li>
+<li>用 Grid Search 对其他参数进行搜索。</li>
+<li>逐步将 eta 降低，找到最佳值。</li>
+<li>以验证集为 watchlist，用找到的最佳参数组合重新在训练集上训练。注意观察算法的输出，看每次迭代后在验证集上分数的变化情况，从而得到最佳的 early_stopping_rounds。</li>
+</ol>
+<p><em>所有具有随机性的 Model 一般都会有一个 seed 或是 random_state 参数用于控制随机种子。得到一个好的 Model 后，在记录参数时务必也记录下这个值，从而能够在之后重现 Model。</em></p>
+</li>
+</ul>
+<h4 id="Cross-Validation"><a href="#Cross-Validation" class="headerlink" title="Cross Validation"></a>Cross Validation</h4><p>一般5-fold。</p>
+<p>fold越多训练越慢。</p>
+<h4 id="Ensemble-Generation"><a href="#Ensemble-Generation" class="headerlink" title="Ensemble Generation"></a>Ensemble Generation</h4><p>常见的 Ensemble 方法有这么几种：</p>
+<ul>
+<li>Bagging：使用训练数据的不同随机子集来训练每个 Base Model，最后进行每个 Base Model 权重相同的 Vote。也即 Random Forest 的原理。</li>
+<li>Boosting：迭代地训练 Base Model，每次根据上一个迭代中预测错误的情况修改训练样本的权重。也即 Gradient Boosting 的原理。比 Bagging 效果好，但更容易 Overfit。</li>
+<li>Blending：用不相交的数据训练不同的 Base Model，将它们的输出取（加权）平均。实现简单，但对训练数据利用少了。</li>
+<li>Stacking：接下来会详细介绍。</li>
+</ul>
+<p>从理论上讲，Ensemble 要成功，有两个要素：</p>
+<ul>
+<li>Base Model 之间的相关性要尽可能的小。这就是为什么非 Tree-based Model 往往表现不是最好但还是要将它们包括在 Ensemble 里面的原因。Ensemble 的 Diversity 越大，最终 Model 的 Bias 就越低。</li>
+<li>Base Model 之间的性能表现不能差距太大。这其实是一个 Trade-off，在实际中很有可能表现相近的 Model 只有寥寥几个而且它们之间相关性还不低。但是实践告诉我们即使在这种情况下 Ensemble 还是能大幅提高成绩。</li>
+</ul>
+<h3 id="Pipeline"><a href="#Pipeline" class="headerlink" title="Pipeline"></a>Pipeline</h3><p>workflow比较复杂，因此一个高自动化的pipeline比较重要。</p>
+<p>这里是以一个例子：<a href="https://github.com/ChenglongChen/Kaggle_CrowdFlower">example</a></p>
 ]]></content>
       <categories>
         <category>Learning</category>
       </categories>
       <tags>
         <tag>ML</tag>
-        <tag>FeatureEngineering</tag>
+        <tag>Kaggle</tag>
       </tags>
   </entry>
   <entry>
     <title>相似度</title>
     <url>/2022/01/02/%E7%9B%B8%E4%BC%BC%E5%BA%A6/</url>
     <content><![CDATA[<h1 id="Basics"><a href="#Basics" class="headerlink" title="Basics"></a>Basics</h1><ul>
-<li>可以分为距离类、角度类、角度+距离类</li>
+<li>可以分为距离类、角度类、角度+距离类<a id="more"></a>
+</li>
 </ul>
 <h1 id="距离类"><a href="#距离类" class="headerlink" title="距离类"></a>距离类</h1><h2 id="欧式距离（Euclidean-Distance）"><a href="#欧式距离（Euclidean-Distance）" class="headerlink" title="欧式距离（Euclidean Distance）"></a>欧式距离（Euclidean Distance）</h2><ul>
 <li>欧式距离：欧式空间中两点间的距离公式。</li>
@@ -3553,6 +3539,28 @@ d=\sqrt{(x 1-x 2)^{2}+(y 1-y 2)^{2}}</script></li>
       </categories>
       <tags>
         <tag>ML</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ML-Feature Engineering</title>
+    <url>/2021/12/10/%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/</url>
+    <content><![CDATA[<h2 id="特征离散的作用"><a href="#特征离散的作用" class="headerlink" title="特征离散的作用"></a>特征离散的作用</h2><a id="more"></a>
+<ul>
+<li><strong>离散化后的特征对异常数据有很强的鲁棒性</strong><br>比如一个特征是年龄&gt;30是1，否则0。如果特征没有离散化，一个异常数据“年龄300岁”会给模型造成很大的干扰；离散化后年龄300岁也只对应于一个权重，如果训练数据中没有出现特征”年龄-300岁”，那么在LR模型中，其权重对应于0，所以，即使测试数据中出现特征”年龄-300岁”,也不会对预测结果产生影响。特征离散化的过程，比如特征A，如果当做连续特征使用，在LR模型中，A会对应一个权重w,如果离散化，那么A就拓展为特征A-1，A-2，A-3…,每个特征对应于一个权重，如果训练样本中没有出现特征A-4，那么训练的模型对于A-4就没有权重，如果测试样本中出现特征A-4,该特征A-4也不会起作用。相当于无效。但是，如果使用连续特征，在LR模型中，y = w*a,a是特征，w是a对应的权重,比如a代表年龄，那么a的取值范围是[0..100]，如果测试样本中,出现了一个测试用例，a的取值是300，显然a是异常值，但是w*a还是有值，而且值还非常大，所以，异常值会对最后结果产生非常大的影响。</li>
+<li><strong>特征离散化后，模型会更稳定</strong><br>比如如果对用户年龄离散化，20-30作为一个区间，不会因为一个用户年龄长了一岁就变成一个完全不同的人。当然处于区间相邻处的样本会刚好相反，所以怎么划分区间是门学问；按区间离散化，划分区间是非常关键的。</li>
+<li><strong>特征离散化以后，起到了简化了逻辑回归模型的作用，降低了模型过拟合的风险</strong><br>当使用连续特征时，一个特征对应于一个权重，那么，如果这个特征权重较大，模型就会很依赖于这个特征，这个特征的一个微小变化可能会导致最终结果产生很大的变化，这样子的模型很危险，当遇到新样本的时候很可能因为对这个特征过分敏感而得到错误的分类结果，也就是泛化能力差，容易过拟合。而使用离散特征的时候，一个特征变成了多个，权重也变为多个，那么之前连续特征对模型的影响力就被分散弱化了，从而降低了过拟合的风险。</li>
+<li><strong>引入非线性</strong><br>单变量离散化为N个后，每个变量有单独的权重，相当于为模型引入了非线性，能够提升模型表达能力，加大拟合；在LR模型中，特征A作为连续特征对应的权重是Wa。A是线性特征，因为y = Wa*A,y对于A的导数就是Wa,如果离散化后，A按区间离散化为A_1,A_2,A_3。那么y = w_1*A_1+w_2*A_2+w_3*A_3.那么y对于A的函数就相当于分段的线性函数，y对于A的导数也随A的取值变动，所以，相当于引入了非线性。</li>
+<li><strong>离散化后方便进行特征交叉</strong><br>离散化后变为了类别，方便特征交叉。进一步引入非线性，提升表达能力。</li>
+<li>离散特征的增加和减少都很容易，易于模型的快速迭代。(离散特征的增加和减少，模型也不需要调整，重新训练是必须的，相比贝叶斯推断方法或者树模型方法迭代快)</li>
+<li>稀疏向量内积乘法运算速度快，计算结果方便存储，容易扩展；</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>ML</tag>
+        <tag>FeatureEngineering</tag>
       </tags>
   </entry>
   <entry>
