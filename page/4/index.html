@@ -295,7 +295,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/10/Python-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/10/XGBoost/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -309,7 +309,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/12/10/Python-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" class="post-title-link" itemprop="url">Python-面向对象</a>
+            <a href="/2021/12/10/XGBoost/" class="post-title-link" itemprop="url">ML-XGBoost</a>
         </h2>
 
         <div class="post-meta-container">
@@ -327,7 +327,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-12-11 17:40:52" itemprop="dateModified" datetime="2021-12-11T17:40:52+08:00">2021-12-11</time>
+        <time title="Modified: 2021-12-18 22:01:10" itemprop="dateModified" datetime="2021-12-18T22:01:10+08:00">2021-12-18</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -349,103 +349,13 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h3 id="属性命名"><a href="#属性命名" class="headerlink" title="属性命名"></a>属性命名</h3><ul>
-<li>属性以双下划线开头，类内变量，实例无法访问。但可以通过某些方式访问，例如Student例中定义了__name变量，可以用_Student_name来实现访问，但不建议，因为不同的解释器的转化方式不一样。</li>
-<li>单下划线可以打开，但需要注意不能随意更改。</li>
-<li>双下划线结尾与开头，特殊变量，类内可以访问，实例不知。</li>
-</ul>
+          <meta name="referrer" content="no-referrer"/>
+
+<p>[toc]<br><a target="_blank" rel="noopener" href="https://xgboost.readthedocs.io/en/latest/tutorials/model.html">Doc</a><br><a target="_blank" rel="noopener" href="https://homes.cs.washington.edu/~tqchen/pdf/BoostedTree.pdf">Slides</a></p>
+<h2 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h2><p><img src="http://i.imgur.com/L7PhJwO.png" alt="Summary"><br><img src="https://img-blog.csdnimg.cn/2019031119461897.?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI0ODUyNDM5,size_16,color_FFFFFF,t_70" alt="Summary"></p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2021/12/10/Python-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/10/kaggle%E7%9B%B8%E5%85%B3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Kayden">
-      <meta itemprop="description" content="Kayden's Blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Kayden's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/12/10/kaggle%E7%9B%B8%E5%85%B3/" class="post-title-link" itemprop="url">Kaggle-Kaggle相关</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-12-10 00:00:00" itemprop="dateCreated datePublished" datetime="2021-12-10T00:00:00+08:00">2021-12-10</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-12-11 17:40:52" itemprop="dateModified" datetime="2021-12-11T17:40:52+08:00">2021-12-11</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>[TOC]</p>
-<h1 id="如何在-Kaggle-首战中进入前-10"><a href="#如何在-Kaggle-首战中进入前-10" class="headerlink" title="如何在 Kaggle 首战中进入前 10%"></a>如何在 Kaggle 首战中进入前 10%</h1><p><a target="_blank" rel="noopener" href="https://dnc1994.com/2016/04/rank-10-percent-in-first-kaggle-competition/">原文</a></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/12/10/kaggle%E7%9B%B8%E5%85%B3/#more" rel="contents">
+              <a class="btn" href="/2021/12/10/XGBoost/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -638,7 +548,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94Apriori/">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/10/kaggle%E7%9B%B8%E5%85%B3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -652,7 +562,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94Apriori/" class="post-title-link" itemprop="url">机器学习面试题-Apriori</a>
+            <a href="/2021/12/10/kaggle%E7%9B%B8%E5%85%B3/" class="post-title-link" itemprop="url">Kaggle-Kaggle相关</a>
         </h2>
 
         <div class="post-meta-container">
@@ -670,7 +580,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-12-18 21:54:12" itemprop="dateModified" datetime="2021-12-18T21:54:12+08:00">2021-12-18</time>
+        <time title="Modified: 2021-12-11 17:40:52" itemprop="dateModified" datetime="2021-12-11T17:40:52+08:00">2021-12-11</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -679,10 +589,6 @@
       <span class="post-meta-item-text">In</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
           <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
-        </span>
-          , 
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Learning/%E9%9D%A2%E8%AF%95/" itemprop="url" rel="index"><span itemprop="name">面试</span></a>
         </span>
     </span>
 
@@ -696,23 +602,11 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <meta name="referrer" content="no-referrer"/>
-
-<p>[TOC]</p>
-<h2 id="协同过滤推荐有哪些类型"><a href="#协同过滤推荐有哪些类型" class="headerlink" title="协同过滤推荐有哪些类型"></a>协同过滤推荐有哪些类型</h2><ul>
-<li><p>基于用户(user-based)的协同过滤</p>
-<p>基于用户(user-based)的协同过滤主要考虑的是用户和用户之间的相似度，只要找出相似用户喜欢的物品，并预测目标用户对对应物品的评分，就可以找到评分最高的若干个物品推荐给用户。 </p>
-</li>
-<li><p>基于项目(item-based)的协同过滤</p>
-<p>基于项目(item-based)的协同过滤和基于用户的协同过滤类似，只不过这时我们转向找到物品和物品之间的相似度，只有找到了目标用户对某些物品的评分，那么我们就可以对相似度高的类似物品进行预测，将评分最高的若干个相似物品推荐给用户 </p>
-</li>
-<li><p>基于模型(model based)的协同过滤 </p>
-<p>用机器学习的思想来建模解决，主流的方法可以分为：用关联算法，聚类算法，分类算法，回归算法，矩阵分解，神经网络,图模型以及隐语义模型来解决。</p>
-</li>
-</ul>
+          <p>[TOC]</p>
+<h1 id="如何在-Kaggle-首战中进入前-10"><a href="#如何在-Kaggle-首战中进入前-10" class="headerlink" title="如何在 Kaggle 首战中进入前 10%"></a>如何在 Kaggle 首战中进入前 10%</h1><p><a target="_blank" rel="noopener" href="https://dnc1994.com/2016/04/rank-10-percent-in-first-kaggle-competition/">原文</a></p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94Apriori/#more" rel="contents">
+              <a class="btn" href="/2021/12/10/kaggle%E7%9B%B8%E5%85%B3/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -826,7 +720,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E5%86%B3%E7%AD%96%E6%A0%91/">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94Apriori/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -840,7 +734,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E5%86%B3%E7%AD%96%E6%A0%91/" class="post-title-link" itemprop="url">机器学习面试题-决策树</a>
+            <a href="/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94Apriori/" class="post-title-link" itemprop="url">机器学习面试题-Apriori</a>
         </h2>
 
         <div class="post-meta-container">
@@ -858,7 +752,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-12-18 21:52:30" itemprop="dateModified" datetime="2021-12-18T21:52:30+08:00">2021-12-18</time>
+        <time title="Modified: 2021-12-18 21:54:12" itemprop="dateModified" datetime="2021-12-18T21:54:12+08:00">2021-12-18</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -887,112 +781,20 @@
           <meta name="referrer" content="no-referrer"/>
 
 <p>[TOC]</p>
-<h2 id="1-简单介绍决策树算法"><a href="#1-简单介绍决策树算法" class="headerlink" title="1. 简单介绍决策树算法"></a>1. 简单介绍决策树算法</h2><ul>
-<li>决策树将算法组织成一颗树的形式。其实这就是将平时所说的<strong>if-then语句</strong>构建成了树的形式。决策树主要包括<strong>三个部分：内部节点、叶节点、边。内部节点是划分的特征，边代表划分的条件，叶节点表示类别。</strong></li>
-<li>构建决策树 就是一个递归的选择内部节点，计算划分条件的边，最后到达叶子节点的过程。 决策树在本质上是一组嵌套的if-else判定规则，从数学上看是分段常数函数，对应于用平行于坐标轴的平面对空间的划分。判定规则是人类处理很多问题时的常用方法，这些规则是我们通过经验总结出来的，而决策树的这些规则是通过训练样本自动学习得到的。</li>
-<li>训练时，通过最大化Gini或者其他指标来寻找最佳分裂。决策树可以输特征向量每个分量的重要性。</li>
-<li><strong>决策树是一种判别模型，既支持分类问题，也支持回归问题，是一种非线性模型（分段线性函数不是线性的）。它天然的支持多分类问题。</strong></li>
+<h2 id="协同过滤推荐有哪些类型"><a href="#协同过滤推荐有哪些类型" class="headerlink" title="协同过滤推荐有哪些类型"></a>协同过滤推荐有哪些类型</h2><ul>
+<li><p>基于用户(user-based)的协同过滤</p>
+<p>基于用户(user-based)的协同过滤主要考虑的是用户和用户之间的相似度，只要找出相似用户喜欢的物品，并预测目标用户对对应物品的评分，就可以找到评分最高的若干个物品推荐给用户。 </p>
+</li>
+<li><p>基于项目(item-based)的协同过滤</p>
+<p>基于项目(item-based)的协同过滤和基于用户的协同过滤类似，只不过这时我们转向找到物品和物品之间的相似度，只有找到了目标用户对某些物品的评分，那么我们就可以对相似度高的类似物品进行预测，将评分最高的若干个相似物品推荐给用户 </p>
+</li>
+<li><p>基于模型(model based)的协同过滤 </p>
+<p>用机器学习的思想来建模解决，主流的方法可以分为：用关联算法，聚类算法，分类算法，回归算法，矩阵分解，神经网络,图模型以及隐语义模型来解决。</p>
+</li>
 </ul>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E5%86%B3%E7%AD%96%E6%A0%91/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92+%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Kayden">
-      <meta itemprop="description" content="Kayden's Blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Kayden's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92+%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/" class="post-title-link" itemprop="url">线性回归&逻辑回归</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-12-10 00:00:00" itemprop="dateCreated datePublished" datetime="2021-12-10T00:00:00+08:00">2021-12-10</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-12-18 21:53:42" itemprop="dateModified" datetime="2021-12-18T21:53:42+08:00">2021-12-18</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
-        </span>
-          , 
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Learning/%E9%9D%A2%E8%AF%95/" itemprop="url" rel="index"><span itemprop="name">面试</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="线性回归"><a href="#线性回归" class="headerlink" title="线性回归"></a>线性回归</h1><h2 id="1-简单介绍一下线性回归。"><a href="#1-简单介绍一下线性回归。" class="headerlink" title="1. 简单介绍一下线性回归。"></a>1. 简单介绍一下线性回归。</h2><ul>
-<li>线性：两个变量之间的关系<strong>是</strong>一次函数关系的——图象<strong>是直线</strong>，叫做线性。</li>
-<li>非线性：两个变量之间的关系<strong>不是</strong>一次函数关系的——图象<strong>不是直线</strong>，叫做非线性。</li>
-<li>回归：人们在测量事物的时候因为客观条件所限，求得的都是测量值，而不是事物真实的值，为了能够得到真实值，无限次的进行测量，最后通过这些测量数据计算<strong>回归到真实值</strong>，这就是回归的由来。</li>
-<li>线性回归就是利用的样本$D=(\mathrm{x}_i, \mathrm{y}_i)<br>$，$ \mathrm{i}=1,2,3 \ldots \mathrm{N}, \mathrm{x}_i$是特征数据，可能是一个，也可能是多个，通过有监督的学习，学习到由$x$到$y$的映射$h$，利用该映射关系对未知的数据进行预估，因为$y$为连续值，所以是回归问题。</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92+%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/#more" rel="contents">
+              <a class="btn" href="/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94Apriori/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -1119,6 +921,106 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E5%86%B3%E7%AD%96%E6%A0%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Kayden">
+      <meta itemprop="description" content="Kayden's Blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kayden's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E5%86%B3%E7%AD%96%E6%A0%91/" class="post-title-link" itemprop="url">机器学习面试题-决策树</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-12-10 00:00:00" itemprop="dateCreated datePublished" datetime="2021-12-10T00:00:00+08:00">2021-12-10</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-12-18 21:52:30" itemprop="dateModified" datetime="2021-12-18T21:52:30+08:00">2021-12-18</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/%E9%9D%A2%E8%AF%95/" itemprop="url" rel="index"><span itemprop="name">面试</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <meta name="referrer" content="no-referrer"/>
+
+<p>[TOC]</p>
+<h2 id="1-简单介绍决策树算法"><a href="#1-简单介绍决策树算法" class="headerlink" title="1. 简单介绍决策树算法"></a>1. 简单介绍决策树算法</h2><ul>
+<li>决策树将算法组织成一颗树的形式。其实这就是将平时所说的<strong>if-then语句</strong>构建成了树的形式。决策树主要包括<strong>三个部分：内部节点、叶节点、边。内部节点是划分的特征，边代表划分的条件，叶节点表示类别。</strong></li>
+<li>构建决策树 就是一个递归的选择内部节点，计算划分条件的边，最后到达叶子节点的过程。 决策树在本质上是一组嵌套的if-else判定规则，从数学上看是分段常数函数，对应于用平行于坐标轴的平面对空间的划分。判定规则是人类处理很多问题时的常用方法，这些规则是我们通过经验总结出来的，而决策树的这些规则是通过训练样本自动学习得到的。</li>
+<li>训练时，通过最大化Gini或者其他指标来寻找最佳分裂。决策树可以输特征向量每个分量的重要性。</li>
+<li><strong>决策树是一种判别模型，既支持分类问题，也支持回归问题，是一种非线性模型（分段线性函数不是线性的）。它天然的支持多分类问题。</strong></li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E5%86%B3%E7%AD%96%E6%A0%91/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
     <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1188,6 +1090,103 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92+%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Kayden">
+      <meta itemprop="description" content="Kayden's Blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kayden's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92+%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/" class="post-title-link" itemprop="url">线性回归&逻辑回归</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-12-10 00:00:00" itemprop="dateCreated datePublished" datetime="2021-12-10T00:00:00+08:00">2021-12-10</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-12-18 21:53:42" itemprop="dateModified" datetime="2021-12-18T21:53:42+08:00">2021-12-18</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/%E9%9D%A2%E8%AF%95/" itemprop="url" rel="index"><span itemprop="name">面试</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="线性回归"><a href="#线性回归" class="headerlink" title="线性回归"></a>线性回归</h1><h2 id="1-简单介绍一下线性回归。"><a href="#1-简单介绍一下线性回归。" class="headerlink" title="1. 简单介绍一下线性回归。"></a>1. 简单介绍一下线性回归。</h2><ul>
+<li>线性：两个变量之间的关系<strong>是</strong>一次函数关系的——图象<strong>是直线</strong>，叫做线性。</li>
+<li>非线性：两个变量之间的关系<strong>不是</strong>一次函数关系的——图象<strong>不是直线</strong>，叫做非线性。</li>
+<li>回归：人们在测量事物的时候因为客观条件所限，求得的都是测量值，而不是事物真实的值，为了能够得到真实值，无限次的进行测量，最后通过这些测量数据计算<strong>回归到真实值</strong>，这就是回归的由来。</li>
+<li>线性回归就是利用的样本$D=(\mathrm{x}_i, \mathrm{y}_i)<br>$，$ \mathrm{i}=1,2,3 \ldots \mathrm{N}, \mathrm{x}_i$是特征数据，可能是一个，也可能是多个，通过有监督的学习，学习到由$x$到$y$的映射$h$，利用该映射关系对未知的数据进行预估，因为$y$为连续值，所以是回归问题。</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/12/10/%E3%80%90%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E2%80%94%E2%80%94%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92+%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
