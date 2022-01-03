@@ -823,8 +823,9 @@ r_{j}=\sum_{i \rightarrow j} \beta \frac{r_{i}}{d_{i}}+(1-\beta) \frac{1}{N}</sc
 </ul>
 <h4 id="GAT"><a href="#GAT" class="headerlink" title="GAT"></a>GAT</h4><ul>
 <li><strong>显式地获得不同邻域节点对目标节点的重要性</strong></li>
-<li><script type="math/tex; mode=display">\alpha_{v u} $$为u(key)对v(value)的attention. 
-- 例如GCN中$$ \alpha_{v u}=\frac{1}{|N(v)|} $$，每个节点u对v的attention是一样的</script>\mathbf{h}<em>{v}^{(l)}=\sigma\left(\sum</em>{u \in N(v)}{\alpha<em>{v u}} \mathbf{W}^{(l)} \mathbf{h}</em>{u}^{(l-1)}\right)<br>$$</li>
+<li><script type="math/tex; mode=display">\alpha_{v u} $$ 为u(key)对v(value)的attention. 
+- 例如GCN中$$ \alpha_{v u}=\frac{1}{|N(v)|} $$，每个节点u对v的attention是一样的
+$$ \mathbf{h}_{v}^{(l)}=\sigma\left(\sum_{u \in N(v)}{\alpha_{v u}} \mathbf{W}^{(l)} \mathbf{h}_{u}^{(l-1)}\right)</script></li>
 <li>attention计算<ul>
 <li>attention系数计算：相似度/MLP<script type="math/tex; mode=display">e_{v u}=a\left(\mathbf{W}^{(l)} \mathbf{h}_{u}^{(l-1)}, \mathbf{W}^{(l)} \boldsymbol{h}_{v}^{(l-1)}\right)</script></li>
 <li>归一化: softmax<script type="math/tex; mode=display">\alpha_{v u}=\frac{\exp \left(e_{v u}\right)}{\sum_{k \in N(v)} \exp \left(e_{v k}\right)}</script></li>
@@ -1283,6 +1284,7 @@ O_{1}=-\sum_{(i, j) \in E} w_{i j} \log p_{1}\left(v_{i}, v_{j}\right)</script><
     <url>/2021/12/22/Graph/</url>
     <content><![CDATA[<h2 id="OpenResource"><a href="#OpenResource" class="headerlink" title="OpenResource"></a>OpenResource</h2><ul>
 <li><a href="https://ogb.stanford.edu/">OGB</a>: The Open Graph Benchmark (OGB) is a collection of realistic, large-scale, and diverse benchmark datasets for machine learning on graphs.</li>
+<li><a href="https://github.com/snap-stanford/GraphGym">GraphGym</a>: GraphGym is a platform for designing and evaluating Graph Neural Networks</li>
 </ul>
 <h2 id="Class"><a href="#Class" class="headerlink" title="Class"></a>Class</h2><ul>
 <li><a href="http://web.stanford.edu/class/cs224w/">CS224W: Machine Learning with Graphs</a></li>
