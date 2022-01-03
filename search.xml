@@ -824,7 +824,7 @@ r_{j}=\sum_{i \rightarrow j} \beta \frac{r_{i}}{d_{i}}+(1-\beta) \frac{1}{N}</sc
 <h4 id="GAT"><a href="#GAT" class="headerlink" title="GAT"></a>GAT</h4><ul>
 <li><strong>显式地获得不同邻域节点对目标节点的重要性</strong></li>
 <li><script type="math/tex; mode=display">\alpha_{v u} $$ 为u(key)对v(value)的attention. 
-- 例如GCN中$$ \alpha_{v u}=\frac{1}{|N(v)|} $$，每个节点u对v的attention是一样的
+- 例如GCN中 $$ \alpha_{v u}=\frac{1}{|N(v)|} $$ ，每个节点u对v的attention是一样的
 $$ \mathbf{h}_{v}^{(l)}=\sigma\left(\sum_{u \in N(v)}{\alpha_{v u}} \mathbf{W}^{(l)} \mathbf{h}_{u}^{(l-1)}\right)</script></li>
 <li>attention计算<ul>
 <li>attention系数计算：相似度/MLP<script type="math/tex; mode=display">e_{v u}=a\left(\mathbf{W}^{(l)} \mathbf{h}_{u}^{(l-1)}, \mathbf{W}^{(l)} \boldsymbol{h}_{v}^{(l-1)}\right)</script></li>
@@ -885,7 +885,7 @@ $$ \mathbf{h}_{v}^{(l)}=\sigma\left(\sum_{u \in N(v)}{\alpha_{v u}} \mathbf{W}^{
 <h2 id="GNN-VS-Transformer"><a href="#GNN-VS-Transformer" class="headerlink" title="GNN VS Transformer"></a>GNN VS Transformer</h2><ul>
 <li>Transformer是针对序列数据的，一个序列中两个node互为上下文，因此可以看做是所有node都互相连接的graph</li>
 </ul>
-<h1 id="增强GNN"><a href="#增强GNN" class="headerlink" title="增强GNN"></a>增强GNN</h1><h1 id="Refs"><a href="#Refs" class="headerlink" title="Refs"></a>Refs</h1><ul>
+<h1 id="增强GNN"><a href="#增强GNN" class="headerlink" title="增强GNN"></a>增强GNN</h1><h1 id="GNN内部理论"><a href="#GNN内部理论" class="headerlink" title="GNN内部理论"></a>GNN内部理论</h1><h1 id="Refs"><a href="#Refs" class="headerlink" title="Refs"></a>Refs</h1><ul>
 <li><a href="http://web.stanford.edu/class/cs224w/slides/06-GNN1.pdf">ppt Lec6: Graph Neural Networks 1: GNN Model</a></li>
 <li><a href="http://web.stanford.edu/class/cs224w/slides/07-GNN2.pdf">ppt Lec7: Graph Neural Networks 2: Design Space</a></li>
 <li><a href="http://web.stanford.edu/class/cs224w/slides/08-GNN-application.pdf">ppt Lec8: Applications of Graph Neural Networks</a></li>
