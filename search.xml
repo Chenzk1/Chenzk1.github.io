@@ -813,7 +813,7 @@ r_{j}=\sum_{i \rightarrow j} \beta \frac{r_{i}}{d_{i}}+(1-\beta) \frac{1}{N}</sc
 </li>
 </ul>
 <a id="more"></a>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><h2 id="Basics"><a href="#Basics" class="headerlink" title="Basics"></a>Basics</h2><h3 id="Insights"><a href="#Insights" class="headerlink" title="Insights"></a>Insights</h3><ul>
+<h1 id="Model"><a href="#Model" class="headerlink" title="Model"></a>Model</h1><h2 id="Basics"><a href="#Basics" class="headerlink" title="Basics"></a>Basics</h2><h3 id="Insights"><a href="#Insights" class="headerlink" title="Insights"></a>Insights</h3><ul>
 <li>其他NN：<strong>依赖于IID(independent and identically distributed)，不同样本间是独立的</strong>，因此其无需满足排列不变性，而<strong>GNN节点间不独立</strong> —》 每个节点的特征依赖于其他节点 —》 节点顺序改变后，输入GNN的特征也会改变 —》 需要满足排列不变性，使得不同的节点排列，也能有同样的结果</li>
 <li>原则<ul>
 <li>排列不变性：调整输入节点的顺序，得到的同一个节点的表达应该一致。A为邻接矩阵，X为节点特征矩阵，两种不同的节点顺序下，得到的同一个节点的表达应该一致<script type="math/tex; mode=display">f\left(\boldsymbol{A}_{1}, \boldsymbol{X}_{1}\right)=f\left(\boldsymbol{A}_{2}, \boldsymbol{X}_{2}\right)</script></li>
@@ -952,7 +952,19 @@ $$ \mathbf{h}_{v}^{(l)}=\sigma\left(\sum_{u \in N(v)}{\alpha_{v u}} \mathbf{W}^{
 <h2 id="GNN-VS-Transformer"><a href="#GNN-VS-Transformer" class="headerlink" title="GNN VS Transformer"></a>GNN VS Transformer</h2><ul>
 <li>Transformer是针对序列数据的，一个序列中两个node互为上下文，因此可以看做是所有node都互相连接的graph</li>
 </ul>
-<h1 id="增强GNN"><a href="#增强GNN" class="headerlink" title="增强GNN"></a>增强GNN</h1><h1 id="GNN内部理论"><a href="#GNN内部理论" class="headerlink" title="GNN内部理论"></a>GNN内部理论</h1><h1 id="Refs"><a href="#Refs" class="headerlink" title="Refs"></a>Refs</h1><ul>
+<h1 id="Graph-Augmentation"><a href="#Graph-Augmentation" class="headerlink" title="Graph Augmentation"></a>Graph Augmentation</h1><ul>
+<li>idea: raw input graph ≠ computation graph: <strong>计算图不必和实际的图结构保持一致</strong></li>
+</ul>
+<h2 id="Reason-for-augmentation"><a href="#Reason-for-augmentation" class="headerlink" title="Reason for augmentation"></a>Reason for augmentation</h2><ul>
+<li>特征：原始图的特征可能比较少 —》 feature augmentation</li>
+<li>图结构<ul>
+<li>图太稀疏：inefficient message passing —》 Add virtual nodes / edges</li>
+<li>图太稠密：costly —》 Sample neighbors when doing message passing</li>
+<li>图太大：GPU放不下 —》 Sample subgraphs to compute embeddings </li>
+</ul>
+</li>
+</ul>
+<h1 id="GNN-Theory"><a href="#GNN-Theory" class="headerlink" title="GNN Theory"></a>GNN Theory</h1><h1 id="Refs"><a href="#Refs" class="headerlink" title="Refs"></a>Refs</h1><ul>
 <li><a href="http://web.stanford.edu/class/cs224w/slides/06-GNN1.pdf">ppt Lec6: Graph Neural Networks 1: GNN Model</a></li>
 <li><a href="http://web.stanford.edu/class/cs224w/slides/07-GNN2.pdf">ppt Lec7: Graph Neural Networks 2: Design Space</a></li>
 <li><a href="http://web.stanford.edu/class/cs224w/slides/08-GNN-application.pdf">ppt Lec8: Applications of Graph Neural Networks</a></li>
@@ -4550,6 +4562,25 @@ w=m(a+x, b+y)^{*} e^{-\frac{\left(x^{\prime}\right)^{2}+\left(y^{\prime}\right)^
       <tags>
         <tag>Leetcode</tag>
         <tag>查找表</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>健身Basics</title>
+    <url>/2022/01/16/bodyfitting/</url>
+    <content><![CDATA[<h1 id="Basics"><a href="#Basics" class="headerlink" title="Basics"></a>Basics</h1><ul>
+<li>水平对照：<a href="https://strengthlevel.com/strength-standards">https://strengthlevel.com/strength-standards</a></li>
+</ul>
+<h1 id="Guides"><a href="#Guides" class="headerlink" title="Guides"></a>Guides</h1><ul>
+<li><a href="https://stronglifts.com/#guides">https://stronglifts.com/#guides</a></li>
+</ul>
+<a id="more"></a>
+]]></content>
+      <categories>
+        <category>BodyFitness</category>
+      </categories>
+      <tags>
+        <tag>Resource</tag>
+        <tag>健身</tag>
       </tags>
   </entry>
 </search>

@@ -37,7 +37,7 @@
 <meta property="og:image" content="https://chenzk1.github.io/2021/12/22/CS224WLec6/GNN6.png">
 <meta property="og:image" content="https://chenzk1.github.io/2021/12/22/CS224WLec6/GNN7.png">
 <meta property="article:published_time" content="2021-12-22T09:43:04.000Z">
-<meta property="article:modified_time" content="2022-01-03T07:18:59.550Z">
+<meta property="article:modified_time" content="2022-01-04T12:02:51.166Z">
 <meta property="article:author" content="Kayden">
 <meta property="article:tag" content="cs224w">
 <meta property="article:tag" content="Graph">
@@ -223,7 +223,7 @@
 
       <!--noindex-->
       <section class="post-toc-wrap sidebar-panel">
-          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Background"><span class="nav-number">1.</span> <span class="nav-text">Background</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Method"><span class="nav-number">2.</span> <span class="nav-text">Method</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Basics"><span class="nav-number">2.1.</span> <span class="nav-text">Basics</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Insights"><span class="nav-number">2.1.1.</span> <span class="nav-text">Insights</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%84"><span class="nav-number">2.1.2.</span> <span class="nav-text">模型结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E5%8F%82%E6%95%B0"><span class="nav-number">2.1.3.</span> <span class="nav-text">模型参数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#A-Single-GNN-Layer"><span class="nav-number">2.2.</span> <span class="nav-text">A Single GNN Layer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Message"><span class="nav-number">2.2.1.</span> <span class="nav-text">Message</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Aggregation"><span class="nav-number">2.2.2.</span> <span class="nav-text">Aggregation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Issues-amp-Solutions"><span class="nav-number">2.2.3.</span> <span class="nav-text">Issues &amp; Solutions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Frame"><span class="nav-number">2.2.4.</span> <span class="nav-text">Frame</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Classical-GNN-Layers"><span class="nav-number">2.2.5.</span> <span class="nav-text">Classical GNN Layers</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GCN-Graph-Convolutional-Networks"><span class="nav-number">2.2.5.1.</span> <span class="nav-text">GCN(Graph Convolutional Networks)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#GraphSAGE"><span class="nav-number">2.2.5.2.</span> <span class="nav-text">GraphSAGE</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#GAT"><span class="nav-number">2.2.5.3.</span> <span class="nav-text">GAT</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Stacking-GNN-layers"><span class="nav-number">2.3.</span> <span class="nav-text">Stacking GNN layers</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#The-over-smoothing-problem"><span class="nav-number">2.3.1.</span> <span class="nav-text">The over-smoothing problem</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E9%AB%98GNN%E8%A1%A8%E8%BE%BE%E8%83%BD%E5%8A%9B"><span class="nav-number">2.3.2.</span> <span class="nav-text">提高GNN表达能力</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%A7%E8%B4%A8"><span class="nav-number">3.</span> <span class="nav-text">性质</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%8EMLP-CNN-Transformer%E7%9A%84%E5%BC%82%E5%90%8C"><span class="nav-number">4.</span> <span class="nav-text">与MLP&#x2F;CNN&#x2F;Transformer的异同</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GNN-VS-MLP"><span class="nav-number">4.1.</span> <span class="nav-text">GNN VS MLP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GNN-VS-CNN"><span class="nav-number">4.2.</span> <span class="nav-text">GNN VS CNN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GNN-VS-Transformer"><span class="nav-number">4.3.</span> <span class="nav-text">GNN VS Transformer</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A2%9E%E5%BC%BAGNN"><span class="nav-number">5.</span> <span class="nav-text">增强GNN</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GNN%E5%86%85%E9%83%A8%E7%90%86%E8%AE%BA"><span class="nav-number">6.</span> <span class="nav-text">GNN内部理论</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Refs"><span class="nav-number">7.</span> <span class="nav-text">Refs</span></a></li></ol></div>
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Background"><span class="nav-number">1.</span> <span class="nav-text">Background</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Model"><span class="nav-number">2.</span> <span class="nav-text">Model</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Basics"><span class="nav-number">2.1.</span> <span class="nav-text">Basics</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Insights"><span class="nav-number">2.1.1.</span> <span class="nav-text">Insights</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%84"><span class="nav-number">2.1.2.</span> <span class="nav-text">模型结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E5%8F%82%E6%95%B0"><span class="nav-number">2.1.3.</span> <span class="nav-text">模型参数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#A-Single-GNN-Layer"><span class="nav-number">2.2.</span> <span class="nav-text">A Single GNN Layer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Message"><span class="nav-number">2.2.1.</span> <span class="nav-text">Message</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Aggregation"><span class="nav-number">2.2.2.</span> <span class="nav-text">Aggregation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Issues-amp-Solutions"><span class="nav-number">2.2.3.</span> <span class="nav-text">Issues &amp; Solutions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Frame"><span class="nav-number">2.2.4.</span> <span class="nav-text">Frame</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Classical-GNN-Layers"><span class="nav-number">2.2.5.</span> <span class="nav-text">Classical GNN Layers</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GCN-Graph-Convolutional-Networks"><span class="nav-number">2.2.5.1.</span> <span class="nav-text">GCN(Graph Convolutional Networks)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#GraphSAGE"><span class="nav-number">2.2.5.2.</span> <span class="nav-text">GraphSAGE</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#GAT"><span class="nav-number">2.2.5.3.</span> <span class="nav-text">GAT</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Stacking-GNN-layers"><span class="nav-number">2.3.</span> <span class="nav-text">Stacking GNN layers</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#The-over-smoothing-problem"><span class="nav-number">2.3.1.</span> <span class="nav-text">The over-smoothing problem</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E9%AB%98GNN%E8%A1%A8%E8%BE%BE%E8%83%BD%E5%8A%9B"><span class="nav-number">2.3.2.</span> <span class="nav-text">提高GNN表达能力</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%A7%E8%B4%A8"><span class="nav-number">3.</span> <span class="nav-text">性质</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%8EMLP-CNN-Transformer%E7%9A%84%E5%BC%82%E5%90%8C"><span class="nav-number">4.</span> <span class="nav-text">与MLP&#x2F;CNN&#x2F;Transformer的异同</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GNN-VS-MLP"><span class="nav-number">4.1.</span> <span class="nav-text">GNN VS MLP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GNN-VS-CNN"><span class="nav-number">4.2.</span> <span class="nav-text">GNN VS CNN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GNN-VS-Transformer"><span class="nav-number">4.3.</span> <span class="nav-text">GNN VS Transformer</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Graph-Augmentation"><span class="nav-number">5.</span> <span class="nav-text">Graph Augmentation</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Reason-for-augmentation"><span class="nav-number">5.1.</span> <span class="nav-text">Reason for augmentation</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GNN-Theory"><span class="nav-number">6.</span> <span class="nav-text">GNN Theory</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Refs"><span class="nav-number">7.</span> <span class="nav-text">Refs</span></a></li></ol></div>
       </section>
       <!--/noindex-->
 
@@ -237,20 +237,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">48</span>
+          <span class="site-state-item-count">49</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-count">7</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">52</span>
+        <span class="site-state-item-count">53</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -342,7 +342,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2022-01-03 15:18:59" itemprop="dateModified" datetime="2022-01-03T15:18:59+08:00">2022-01-03</time>
+        <time title="Modified: 2022-01-04 20:02:51" itemprop="dateModified" datetime="2022-01-04T20:02:51+08:00">2022-01-04</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -390,7 +390,7 @@
 </li>
 </ul>
 <a id="more"></a>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><h2 id="Basics"><a href="#Basics" class="headerlink" title="Basics"></a>Basics</h2><h3 id="Insights"><a href="#Insights" class="headerlink" title="Insights"></a>Insights</h3><ul>
+<h1 id="Model"><a href="#Model" class="headerlink" title="Model"></a>Model</h1><h2 id="Basics"><a href="#Basics" class="headerlink" title="Basics"></a>Basics</h2><h3 id="Insights"><a href="#Insights" class="headerlink" title="Insights"></a>Insights</h3><ul>
 <li>其他NN：<strong>依赖于IID(independent and identically distributed)，不同样本间是独立的</strong>，因此其无需满足排列不变性，而<strong>GNN节点间不独立</strong> —》 每个节点的特征依赖于其他节点 —》 节点顺序改变后，输入GNN的特征也会改变 —》 需要满足排列不变性，使得不同的节点排列，也能有同样的结果</li>
 <li>原则<ul>
 <li>排列不变性：调整输入节点的顺序，得到的同一个节点的表达应该一致。A为邻接矩阵，X为节点特征矩阵，两种不同的节点顺序下，得到的同一个节点的表达应该一致<script type="math/tex; mode=display">f\left(\boldsymbol{A}_{1}, \boldsymbol{X}_{1}\right)=f\left(\boldsymbol{A}_{2}, \boldsymbol{X}_{2}\right)</script></li>
@@ -529,7 +529,19 @@ $$ \mathbf{h}_{v}^{(l)}=\sigma\left(\sum_{u \in N(v)}{\alpha_{v u}} \mathbf{W}^{
 <h2 id="GNN-VS-Transformer"><a href="#GNN-VS-Transformer" class="headerlink" title="GNN VS Transformer"></a>GNN VS Transformer</h2><ul>
 <li>Transformer是针对序列数据的，一个序列中两个node互为上下文，因此可以看做是所有node都互相连接的graph</li>
 </ul>
-<h1 id="增强GNN"><a href="#增强GNN" class="headerlink" title="增强GNN"></a>增强GNN</h1><h1 id="GNN内部理论"><a href="#GNN内部理论" class="headerlink" title="GNN内部理论"></a>GNN内部理论</h1><h1 id="Refs"><a href="#Refs" class="headerlink" title="Refs"></a>Refs</h1><ul>
+<h1 id="Graph-Augmentation"><a href="#Graph-Augmentation" class="headerlink" title="Graph Augmentation"></a>Graph Augmentation</h1><ul>
+<li>idea: raw input graph ≠ computation graph: <strong>计算图不必和实际的图结构保持一致</strong></li>
+</ul>
+<h2 id="Reason-for-augmentation"><a href="#Reason-for-augmentation" class="headerlink" title="Reason for augmentation"></a>Reason for augmentation</h2><ul>
+<li>特征：原始图的特征可能比较少 —》 feature augmentation</li>
+<li>图结构<ul>
+<li>图太稀疏：inefficient message passing —》 Add virtual nodes / edges</li>
+<li>图太稠密：costly —》 Sample neighbors when doing message passing</li>
+<li>图太大：GPU放不下 —》 Sample subgraphs to compute embeddings </li>
+</ul>
+</li>
+</ul>
+<h1 id="GNN-Theory"><a href="#GNN-Theory" class="headerlink" title="GNN Theory"></a>GNN Theory</h1><h1 id="Refs"><a href="#Refs" class="headerlink" title="Refs"></a>Refs</h1><ul>
 <li><a target="_blank" rel="noopener" href="http://web.stanford.edu/class/cs224w/slides/06-GNN1.pdf">ppt Lec6: Graph Neural Networks 1: GNN Model</a></li>
 <li><a target="_blank" rel="noopener" href="http://web.stanford.edu/class/cs224w/slides/07-GNN2.pdf">ppt Lec7: Graph Neural Networks 2: Design Space</a></li>
 <li><a target="_blank" rel="noopener" href="http://web.stanford.edu/class/cs224w/slides/08-GNN-application.pdf">ppt Lec8: Applications of Graph Neural Networks</a></li>
