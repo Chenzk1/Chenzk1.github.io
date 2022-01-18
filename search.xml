@@ -813,7 +813,7 @@ r_{j}=\sum_{i \rightarrow j} \beta \frac{r_{i}}{d_{i}}+(1-\beta) \frac{1}{N}</sc
 </li>
 </ul>
 <a id="more"></a>
-<h1 id="Model"><a href="#Model" class="headerlink" title="Model"></a>Model</h1><h2 id="Basics"><a href="#Basics" class="headerlink" title="Basics"></a>Basics</h2><h3 id="Insights"><a href="#Insights" class="headerlink" title="Insights"></a>Insights</h3><ul>
+<h1 id="Model-Structure"><a href="#Model-Structure" class="headerlink" title="Model Structure"></a>Model Structure</h1><h2 id="Basics"><a href="#Basics" class="headerlink" title="Basics"></a>Basics</h2><h3 id="Insights"><a href="#Insights" class="headerlink" title="Insights"></a>Insights</h3><ul>
 <li>其他NN：<strong>依赖于IID(independent and identically distributed)，不同样本间是独立的</strong>，因此其无需满足排列不变性，而<strong>GNN节点间不独立</strong> —》 每个节点的特征依赖于其他节点 —》 节点顺序改变后，输入GNN的特征也会改变 —》 需要满足排列不变性，使得不同的节点排列，也能有同样的结果</li>
 <li>原则<ul>
 <li>排列不变性：调整输入节点的顺序，得到的同一个节点的表达应该一致。A为邻接矩阵，X为节点特征矩阵，两种不同的节点顺序下，得到的同一个节点的表达应该一致<script type="math/tex; mode=display">f\left(\boldsymbol{A}_{1}, \boldsymbol{X}_{1}\right)=f\left(\boldsymbol{A}_{2}, \boldsymbol{X}_{2}\right)</script></li>
@@ -964,7 +964,36 @@ $$ \mathbf{h}_{v}^{(l)}=\sigma\left(\sum_{u \in N(v)}{\alpha_{v u}} \mathbf{W}^{
 </ul>
 </li>
 </ul>
-<h1 id="GNN-Theory"><a href="#GNN-Theory" class="headerlink" title="GNN Theory"></a>GNN Theory</h1><h1 id="Refs"><a href="#Refs" class="headerlink" title="Refs"></a>Refs</h1><ul>
+<h2 id="Feature-augementation"><a href="#Feature-augementation" class="headerlink" title="Feature augementation"></a>Feature augementation</h2><ul>
+<li>one-hot/constant encoding</li>
+<li>others: 一般会使用：<ul>
+<li>node degree</li>
+<li>clustering coefficient</li>
+<li>pagerank</li>
+<li>centrality</li>
+</ul>
+</li>
+</ul>
+<h2 id="Sparse-graphs-augmentation"><a href="#Sparse-graphs-augmentation" class="headerlink" title="Sparse graphs augmentation"></a>Sparse graphs augmentation</h2><ul>
+<li>add virtual nodes/edges</li>
+<li>Add virtual edges<ul>
+<li>例如在使用邻接矩阵A的时候，改为使用 <script type="math/tex">A+A^{2}</script>，A2相当于添加了virtual edges</li>
+</ul>
+</li>
+<li>Add vitual nodes<ul>
+<li>提高稀疏图中的message passing</li>
+</ul>
+</li>
+</ul>
+<h2 id="Node-neighborhood-sampling"><a href="#Node-neighborhood-sampling" class="headerlink" title="Node neighborhood sampling"></a>Node neighborhood sampling</h2><ul>
+<li>针对很稠密的图引起的costly问题</li>
+<li>方案：sampling<ul>
+<li>对某个target节点，sample其neighbors</li>
+<li>sample target节点</li>
+</ul>
+</li>
+</ul>
+<h1 id="GNN-training-amp-serving"><a href="#GNN-training-amp-serving" class="headerlink" title="GNN training &amp; serving"></a>GNN training &amp; serving</h1><h1 id="GNN-Theory"><a href="#GNN-Theory" class="headerlink" title="GNN Theory"></a>GNN Theory</h1><h1 id="Refs"><a href="#Refs" class="headerlink" title="Refs"></a>Refs</h1><ul>
 <li><a href="http://web.stanford.edu/class/cs224w/slides/06-GNN1.pdf">ppt Lec6: Graph Neural Networks 1: GNN Model</a></li>
 <li><a href="http://web.stanford.edu/class/cs224w/slides/07-GNN2.pdf">ppt Lec7: Graph Neural Networks 2: Design Space</a></li>
 <li><a href="http://web.stanford.edu/class/cs224w/slides/08-GNN-application.pdf">ppt Lec8: Applications of Graph Neural Networks</a></li>
@@ -4581,6 +4610,130 @@ w=m(a+x, b+y)^{*} e^{-\frac{\left(x^{\prime}\right)^{2}+\left(y^{\prime}\right)^
       <tags>
         <tag>Resource</tag>
         <tag>健身</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MTL多任务学习</title>
+    <url>/2022/01/18/mtl/</url>
+    <content><![CDATA[<blockquote>
+<p>MTL更多的是一种思想</p>
+</blockquote>
+<h1 id="两种模式"><a href="#两种模式" class="headerlink" title="两种模式"></a>两种模式</h1><ul>
+<li>hard share: 不同任务直接共享部分模型参数</li>
+<li>soft share: 不共享参数，添加正则来保证参数的相似</li>
+</ul>
+<a id="more"></a>
+<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><ul>
+<li>隐式数据增加（implicit data augmentation）：为了训练任务A，通过其他任务的数据来扩充任务A训练过程的数据量。这些数据可以看做是引入额外的噪声，在理想情况下起到提高模型泛化效果的作用</li>
+<li>注意力机制（Attention focusing）：当训练数据量有限且高维时，模型很难区分出相关的特征和不相关的特征。多任务学习可以使模型更关注于有用的特征</li>
+<li>监听机制（Eavesdropping）：从任务B中有可能容易学习到特征G，但是从任务A中很难学习得到。通过多任务学习，可以通过任务B学习到特征G，再利用特征G预测任务A<br>特征偏置（Representation bias）：多任务学习使得模型更容易去选择其他任务容易选择到的特征，这样有助于模型在假设空间下获得更好的模型泛化能力。</li>
+</ul>
+<h1 id="常见模型结构"><a href="#常见模型结构" class="headerlink" title="常见模型结构"></a>常见模型结构</h1><ul>
+<li>常见模型：share bottom/MMoE/SNR/ESMM；损失函数按照指定权重融合，或者使用GradNorm做动态融合</li>
+</ul>
+<h2 id="Share-bottom"><a href="#Share-bottom" class="headerlink" title="Share bottom"></a>Share bottom</h2><ul>
+<li>最常见的mtl结构，不同任务共享底层</li>
+</ul>
+<h2 id="MMoE-Multi-gate-Mixture-of-Experts"><a href="#MMoE-Multi-gate-Mixture-of-Experts" class="headerlink" title="MMoE(Multi-gate Mixture-of-Experts)"></a>MMoE(Multi-gate Mixture-of-Experts)</h2><ul>
+<li><a href="https://dl.acm.org/doi/pdf/10.1145/3219819.3220007">paper</a></li>
+<li>是一种soft share</li>
+<li>添加了expert机制获取不同信息</li>
+<li>添加gate机制对expert进行加权<img src="/2022/01/18/mtl/mmoe.png" class="" title="mmoe">
+</li>
+</ul>
+<h2 id="CGC-Customized-Gate-Control-PLE-Progressive-Layered-Extraction"><a href="#CGC-Customized-Gate-Control-PLE-Progressive-Layered-Extraction" class="headerlink" title="CGC(Customized Gate Control)/PLE(Progressive Layered Extraction)"></a>CGC(Customized Gate Control)/PLE(Progressive Layered Extraction)</h2><ul>
+<li>MMoE的基础上，把experts分为share experts和domain experts</li>
+<li>单层多任务网络结构(CGC)，多层多任务网络结构（PLE）<img src="/2022/01/18/mtl/cgc.png" class="" title="cgc">
+<img src="/2022/01/18/mtl/ple.png" class="" title="ple">
+</li>
+</ul>
+<h2 id="SNR-Sub-Network-Routing"><a href="#SNR-Sub-Network-Routing" class="headerlink" title="SNR(Sub-Network Routing)"></a>SNR(Sub-Network Routing)</h2><ul>
+<li><a href="https://ojs.aaai.org//index.php/AAAI/article/view/3788">paper</a><img src="/2022/01/18/mtl/snr.png" class="" title="snr"></li>
+<li>SNR-Trans: 下层输出通过权重矩阵变换，再做加权后输出至下一层。会引入更多参数。其中z为二进制。<script type="math/tex; mode=display">
+\left[\begin{array}{l}
+\boldsymbol{v}_{1} \\
+\boldsymbol{v}_{2}
+\end{array}\right]=\left[\begin{array}{lll}
+z_{11} W_{11} & z_{12} W_{12} & z_{13} W_{13} \\
+z_{21} W_{21} & z_{22} W_{22} & z_{23} W_{23}
+\end{array}\right]\left[\begin{array}{l}
+u_{1} \\
+u_{2} \\
+u_{3}
+\end{array}\right]</script></li>
+<li>SNR-Avg: 下层输出加权后输出至下一层<script type="math/tex; mode=display">
+\left[\begin{array}{l}
+\boldsymbol{v}_{1} \\
+\boldsymbol{v}_{2}
+\end{array}\right]=\left[\begin{array}{lll}
+z_{11} \boldsymbol{I}_{11} & z_{12} \boldsymbol{I}_{12} & z_{13} \boldsymbol{I}_{13} \\
+z_{21} \boldsymbol{I}_{21} & z_{22} \boldsymbol{I}_{22} & z_{23} \boldsymbol{I}_{23}
+\end{array}\right]\left[\begin{array}{l}
+\boldsymbol{u}_{1} \\
+\boldsymbol{u}_{2} \\
+\boldsymbol{u}_{3}
+\end{array}\right]</script></li>
+<li>损失函数：<script type="math/tex; mode=display">
+\min _{\boldsymbol{W}, \boldsymbol{\pi}} \boldsymbol{E}_{\boldsymbol{z} \sim p(\boldsymbol{z} ; \boldsymbol{\pi})} \frac{1}{N} \sum_{i=1}^{N} L\left(f\left(\boldsymbol{x}_{i} ; \boldsymbol{W}, \boldsymbol{z}\right), \boldsymbol{y}_{i}\right)</script></li>
+<li>z为二进制，无法优化，需要把z松弛为平滑变量，将z变为hardSigmoid，其中s是一个服从q分布的连续的随机变量<script type="math/tex; mode=display">
+z=g(s)=\min (1, \max (0, s))</script></li>
+<li>可以继续转换，其中epsilon是一个噪声变量，r(epsilon)是一个无参数的噪声分布，h是一个确定且可微的分布<script type="math/tex; mode=display">
+\min _{\boldsymbol{W}, \boldsymbol{\pi}} \boldsymbol{E}_{\boldsymbol{\epsilon} \sim r(\boldsymbol{\epsilon})} \frac{1}{N} \sum_{i=1}^{N} L\left(f\left(\boldsymbol{x}_{i} ; \boldsymbol{W}, g(h(\boldsymbol{\phi}, \boldsymbol{\epsilon}))\right), \boldsymbol{y}_{i}\right)</script></li>
+<li>在实际应用中，结合重采样技术和hard concrete distribution，可以继续做转换，其中u为均匀分布，log(α)为需要学习的参数，其他为超参<script type="math/tex; mode=display">
+\begin{aligned}
+u \sim U(0,1), s &=\operatorname{sigmoid}((\log (u)-\log (1-u)+\log (\alpha) / \beta)\\
+\bar{s} &=s(\zeta-\gamma)+\gamma, z=\min (1, \max (\bar{s}, 0))
+\end{aligned}</script></li>
+<li>training的时候，加入z的L0正则，则最终loss为：<script type="math/tex; mode=display">
+\begin{array}{r}
+\boldsymbol{E}_{\boldsymbol{\epsilon} \sim r(\boldsymbol{\epsilon})} \frac{1}{N} \sum_{i=1}^{N} L\left(f\left(\boldsymbol{x}_{i} ; \boldsymbol{W}, g(h(\boldsymbol{\phi}, \boldsymbol{\epsilon}))\right), \boldsymbol{y}_{i}\right) \\
++\lambda \sum_{j=1}^{|\boldsymbol{z}|} 1-Q\left(s_{j}<0 ; \phi_{j}\right)
+\end{array}</script></li>
+<li>training: 总结来说，模型需要学习的参数是W和隐变量分布变量log(alpha)。训练流程如下所示：<ul>
+<li>首先，采样一组均匀分布的随机变量u；</li>
+<li>其次，计算z来获得网络结构；</li>
+<li>最后，将训练数据喂给模型来计算损失函数。W和log(alpha)的梯度通过反馈计算得到。</li>
+</ul>
+</li>
+<li>serving: 使用如下的estimator来得到z的值<script type="math/tex; mode=display">
+\hat{\boldsymbol{z}}=\min (1, \max (0, \operatorname{sigmoid}(\log (\boldsymbol{\alpha}))(\zeta-\gamma)+\gamma)) \text {. }</script></li>
+</ul>
+<p>When sigmoid $\left(\log \left(\alpha<em>{i j}\right)\right)(\zeta-\gamma)+\gamma&lt;0$, we will have $\hat{z}</em>{i j}=0$ and the resulted model will be sparsely connected.</p>
+<h2 id="Star-One-Model-to-Serve-All-Star-Topology-Adaptive-Recommender-for-Multi-Domain-CTR-Prediction"><a href="#Star-One-Model-to-Serve-All-Star-Topology-Adaptive-Recommender-for-Multi-Domain-CTR-Prediction" class="headerlink" title="Star(One Model to Serve All: Star Topology Adaptive Recommender for Multi-Domain CTR Prediction)"></a>Star(One Model to Serve All: Star Topology Adaptive Recommender for Multi-Domain CTR Prediction)</h2><ul>
+<li><a href="https://arxiv.org/abs/2101.11427">paper</a><img src="/2022/01/18/mtl/star.png" class="" title="star"></li>
+<li>center tower和domain tower的结合，论文中是两塔权重element-wise相乘，也可以改为两塔logits相加</li>
+<li>PN: partitioned normalization, 在BN的基础上，对每个domain引入domain相关的两个scale参数<script type="math/tex; mode=display">
+z^{\prime}=\left(\gamma * \gamma_{p}\right) \frac{z-\mu}{\sqrt{\sigma^{2}+\epsilon}}+\left(\beta+\beta_{p}\right)</script></li>
+</ul>
+<h2 id="十字绣-Cross-Stitch-Network"><a href="#十字绣-Cross-Stitch-Network" class="headerlink" title="十字绣(Cross-Stitch Network)"></a>十字绣(Cross-Stitch Network)</h2><ul>
+<li><a href="https://arxiv.org/pdf/1604.03539.pdf">paper</a></li>
+</ul>
+<h2 id="ESMM-Entire-Space-Multi-Task-Model"><a href="#ESMM-Entire-Space-Multi-Task-Model" class="headerlink" title="ESMM(Entire Space Multi-Task Model)"></a>ESMM(Entire Space Multi-Task Model)</h2><ul>
+<li>混合ctr、cvr数据流</li>
+<li>传统CVR预估模型的本质，不是预测“item被点击，然后被转化”的概率（CTCVR），而是“假设item被点击，那么它被转化”的概率（CVR）。即CVR模型的样本空间，是click空间。</li>
+<li>ESMM：使用了全样本空间，通过预测CTR和CTCVR间接求CVR</li>
+<li>利用全概率公式，<strong>隐式学习pCVR</strong></li>
+<li><a href="https://arxiv.org/pdf/1804.07931.pdf">paper</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/57481330">blog</a><script type="math/tex; mode=display">
+\underbrace{p(y=1, z=1 \mid x)}_{p C T C V R}=\underbrace{p(y=1 \mid x)}_{p C T R} \times \underbrace{p(z=1 \mid y=1, x)}_{p C V R}</script></li>
+<li>pCVR只是一个variable，无显式监督信号<img src="/2022/01/18/mtl/esmm.png" class="" title="esmm">
+</li>
+</ul>
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><h2 id="GradNorm"><a href="#GradNorm" class="headerlink" title="GradNorm"></a>GradNorm</h2><ul>
+<li><a href="https://openreview.net/pdf?id=H1bM1fZCW">paper</a></li>
+<li>动态调整不同任务损失函数的权重</li>
+<li><a href="https://blog.csdn.net/Leon_winter/article/details/105014677">https://blog.csdn.net/Leon_winter/article/details/105014677</a></li>
+</ul>
+<h1 id="Refs"><a href="#Refs" class="headerlink" title="Refs"></a>Refs</h1><ul>
+<li><a href="https://blog.nowcoder.net/n/8a9d69d063c546b291a3c9a5091cfbbe">一篇综述</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>ML</tag>
+        <tag>MTL</tag>
       </tags>
   </entry>
 </search>
