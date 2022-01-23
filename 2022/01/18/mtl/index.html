@@ -37,7 +37,7 @@
 <meta property="og:image" content="https://chenzk1.github.io/2022/01/18/mtl/star.png">
 <meta property="og:image" content="https://chenzk1.github.io/2022/01/18/mtl/esmm.png">
 <meta property="article:published_time" content="2022-01-18T02:28:35.000Z">
-<meta property="article:modified_time" content="2022-01-18T08:35:01.711Z">
+<meta property="article:modified_time" content="2022-01-18T08:41:45.936Z">
 <meta property="article:author" content="Kayden">
 <meta property="article:tag" content="ML">
 <meta property="article:tag" content="MTL">
@@ -332,7 +332,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2022-01-18 10:28:35 / Modified: 16:35:01" itemprop="dateCreated datePublished" datetime="2022-01-18T10:28:35+08:00">2022-01-18</time>
+      <time title="Created: 2022-01-18 10:28:35 / Modified: 16:41:45" itemprop="dateCreated datePublished" datetime="2022-01-18T10:28:35+08:00">2022-01-18</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -437,7 +437,7 @@ u \sim U(0,1), s &=\operatorname{sigmoid}((\log (u)-\log (1-u)+\log (\alpha) / \
 <li>serving: 使用如下的estimator来得到z的值<script type="math/tex; mode=display">
 \hat{\boldsymbol{z}}=\min (1, \max (0, \operatorname{sigmoid}(\log (\boldsymbol{\alpha}))(\zeta-\gamma)+\gamma)) \text {. }</script></li>
 </ul>
-<p>When sigmoid $\left(\log \left(\alpha<em>{i j}\right)\right)(\zeta-\gamma)+\gamma&lt;0$, we will have $\hat{z}</em>{i j}=0$ and the resulted model will be sparsely connected.</p>
+<p>When sigmoid <script type="math/tex">\left(\log \left(\alpha_{i j}\right)\right)(\zeta-\gamma)+\gamma<0</script>, we will have <script type="math/tex">\hat{z}_{i j}=0</script> and the resulted model will be sparsely connected.</p>
 <h2 id="Star-One-Model-to-Serve-All-Star-Topology-Adaptive-Recommender-for-Multi-Domain-CTR-Prediction"><a href="#Star-One-Model-to-Serve-All-Star-Topology-Adaptive-Recommender-for-Multi-Domain-CTR-Prediction" class="headerlink" title="Star(One Model to Serve All: Star Topology Adaptive Recommender for Multi-Domain CTR Prediction)"></a>Star(One Model to Serve All: Star Topology Adaptive Recommender for Multi-Domain CTR Prediction)</h2><ul>
 <li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2101.11427">paper</a><img src="/2022/01/18/mtl/star.png" class="" title="star"></li>
 <li>center tower和domain tower的结合，论文中是两塔权重element-wise相乘，也可以改为两塔logits相加</li>

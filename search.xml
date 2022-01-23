@@ -813,7 +813,7 @@ r_{j}=\sum_{i \rightarrow j} \beta \frac{r_{i}}{d_{i}}+(1-\beta) \frac{1}{N}</sc
 </li>
 </ul>
 <a id="more"></a>
-<h1 id="Model-Structure"><a href="#Model-Structure" class="headerlink" title="Model Structure"></a>Model Structure</h1><h2 id="Basics"><a href="#Basics" class="headerlink" title="Basics"></a>Basics</h2><h3 id="Insights"><a href="#Insights" class="headerlink" title="Insights"></a>Insights</h3><ul>
+<h1 id="Basics-amp-Intros"><a href="#Basics-amp-Intros" class="headerlink" title="Basics &amp; Intros"></a>Basics &amp; Intros</h1><h2 id="Insights"><a href="#Insights" class="headerlink" title="Insights"></a>Insights</h2><ul>
 <li>其他NN：<strong>依赖于IID(independent and identically distributed)，不同样本间是独立的</strong>，因此其无需满足排列不变性，而<strong>GNN节点间不独立</strong> —》 每个节点的特征依赖于其他节点 —》 节点顺序改变后，输入GNN的特征也会改变 —》 需要满足排列不变性，使得不同的节点排列，也能有同样的结果</li>
 <li>原则<ul>
 <li>排列不变性：调整输入节点的顺序，得到的同一个节点的表达应该一致。A为邻接矩阵，X为节点特征矩阵，两种不同的节点顺序下，得到的同一个节点的表达应该一致<script type="math/tex; mode=display">f\left(\boldsymbol{A}_{1}, \boldsymbol{X}_{1}\right)=f\left(\boldsymbol{A}_{2}, \boldsymbol{X}_{2}\right)</script></li>
@@ -826,13 +826,13 @@ r_{j}=\sum_{i \rightarrow j} \beta \frac{r_{i}}{d_{i}}+(1-\beta) \frac{1}{N}</sc
 </ul>
 </li>
 </ul>
-<h3 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h3><ul>
+<h2 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h2><ul>
 <li>利用每个节点的邻域节点为每个节点建立计算图。nn的层数k代表用了k hop的邻域。</li>
 <li>每个节点都有不同的计算图<img src="/2021/12/22/CS224WLec6/GNN4.png" class="" title="GNN4"></li>
 <li>layer0: node v的<strong>输入特征</strong></li>
 <li>layerk: 经过了k跳后，node v的节点信息</li>
 </ul>
-<h3 id="模型参数"><a href="#模型参数" class="headerlink" title="模型参数"></a>模型参数</h3><ul>
+<h2 id="模型参数"><a href="#模型参数" class="headerlink" title="模型参数"></a>模型参数</h2><ul>
 <li>每一层包含两个阶段：信息aggregation &amp; passing<img src="/2021/12/22/CS224WLec6/GNN5.png" class="" title="GNN5"></li>
 <li>每层参数共享</li>
 <li><script type="math/tex">h_{v}^{k}</script>: the hidden representation of node v at layer k</li>
@@ -841,11 +841,16 @@ r_{j}=\sum_{i \rightarrow j} \beta \frac{r_{i}}{d_{i}}+(1-\beta) \frac{1}{N}</sc
 <li>当aggregate为简单的平均时，可以转化为稀疏矩阵表达式 —》 稀疏矩阵便于优化<img src="/2021/12/22/CS224WLec6/GNN6.png" class="" title="GNN6">
 </li>
 </ul>
-<h2 id="A-Single-GNN-Layer"><a href="#A-Single-GNN-Layer" class="headerlink" title="A Single GNN Layer"></a>A Single GNN Layer</h2><ul>
+<h1 id="General-GNN-Framework"><a href="#General-GNN-Framework" class="headerlink" title="General GNN Framework"></a>General GNN Framework</h1><h2 id="A-Single-GNN-Layer"><a href="#A-Single-GNN-Layer" class="headerlink" title="A Single GNN Layer"></a>A Single GNN Layer</h2><ul>
 <li>Goal: Compress a set of vectors into a single vector</li>
 <li>Two steps:<ul>
 <li>Message, v, 传送信息</li>
 <li>Aggregate</li>
+</ul>
+</li>
+<li>others:<ul>
+<li>Nonlinearity(activation)：增加表达能力</li>
+<li>residual/attention/dropout/BatchNorm/…</li>
 </ul>
 </li>
 </ul>
@@ -867,18 +872,12 @@ r_{j}=\sum_{i \rightarrow j} \beta \frac{r_{i}}{d_{i}}+(1-\beta) \frac{1}{N}</sc
 <li>Issue2: </li>
 <li>Solution2: Residual</li>
 </ul>
-<h3 id="Frame"><a href="#Frame" class="headerlink" title="Frame"></a>Frame</h3><ul>
-<li>Message</li>
-<li>Aggregation</li>
-<li>Nonlinearity(activation)：增加表达能力</li>
-<li>Others: residual/attention/dropout/BatchNorm</li>
-</ul>
-<h3 id="Classical-GNN-Layers"><a href="#Classical-GNN-Layers" class="headerlink" title="Classical GNN Layers"></a>Classical GNN Layers</h3><h4 id="GCN-Graph-Convolutional-Networks"><a href="#GCN-Graph-Convolutional-Networks" class="headerlink" title="GCN(Graph Convolutional Networks)"></a>GCN(Graph Convolutional Networks)</h4><ul>
+<h2 id="Classical-GNN-Layers"><a href="#Classical-GNN-Layers" class="headerlink" title="Classical GNN Layers"></a>Classical GNN Layers</h2><h3 id="GCN-Graph-Convolutional-Networks"><a href="#GCN-Graph-Convolutional-Networks" class="headerlink" title="GCN(Graph Convolutional Networks)"></a>GCN(Graph Convolutional Networks)</h3><ul>
 <li>Message：利用出度作归一化。包含了self-edge。</li>
 <li>Aggregation: sum<script type="math/tex; mode=display">
 \mathbf{h}_{v}^{(l)}=\sigma\left(\sum_{u \in N(v)} \mathbf{W}^{(l)} \frac{\mathbf{h}_{u}^{(l-1)}}{|N(v)|}\right)</script></li>
 </ul>
-<h4 id="GraphSAGE"><a href="#GraphSAGE" class="headerlink" title="GraphSAGE"></a>GraphSAGE</h4><ul>
+<h3 id="GraphSAGE"><a href="#GraphSAGE" class="headerlink" title="GraphSAGE"></a>GraphSAGE</h3><ul>
 <li>Message和Aggregation结合在一起，且做了多次Aggregation</li>
 <li>先对neighbors做aggregate，再和node本身aggregate，之后再计算一次Message<ul>
 <li>邻域的Aggregation可以是Mean, pool, LSTM等<script type="math/tex; mode=display">
@@ -888,7 +887,7 @@ r_{j}=\sum_{i \rightarrow j} \beta \frac{r_{i}}{d_{i}}+(1-\beta) \frac{1}{N}</sc
 <li>l2 normalization: Apply l2 normalization to <script type="math/tex">{h}_{v}^{(l)}</script> at every layer。标准化后，每个vector的l2 norm都为1<script type="math/tex; mode=display">
 \mathbf{h}_{v}^{(l)} \leftarrow \frac{\mathbf{h}_{v}^{(l)}}{\left\|\mathbf{h}_{v}^{(l)}\right\|_{2}} \forall v \in V</script></li>
 </ul>
-<h4 id="GAT"><a href="#GAT" class="headerlink" title="GAT"></a>GAT</h4><ul>
+<h3 id="GAT"><a href="#GAT" class="headerlink" title="GAT"></a>GAT</h3><ul>
 <li><strong>显式地获得不同邻域节点对目标节点的重要性</strong></li>
 <li><script type="math/tex; mode=display">\alpha_{v u} $$ 为u(key)对v(value)的attention. 
 - 例如GCN中 $$ \alpha_{v u}=\frac{1}{|N(v)|} $$ ，每个节点u对v的attention是一样的
@@ -929,6 +928,135 @@ $$ \mathbf{h}_{v}^{(l)}=\sigma\left(\sum_{u \in N(v)}{\alpha_{v u}} \mathbf{W}^{
 <li>Solution2: 增加其他层（MLP/CNN等）<img src="/2021/12/22/CS224WLec6/GNN7.png" class="" title="GNN7">
 </li>
 </ul>
+<h2 id="Graph-Augmentation"><a href="#Graph-Augmentation" class="headerlink" title="Graph Augmentation"></a>Graph Augmentation</h2><ul>
+<li>idea: raw input graph ≠ computation graph: <strong>计算图不必和实际的图结构保持一致</strong></li>
+</ul>
+<h3 id="Reason-for-augmentation"><a href="#Reason-for-augmentation" class="headerlink" title="Reason for augmentation"></a>Reason for augmentation</h3><ul>
+<li>特征：原始图的特征可能比较少 —》 feature augmentation</li>
+<li>图结构<ul>
+<li>图太稀疏：inefficient message passing —》 Add virtual nodes / edges</li>
+<li>图太稠密：costly —》 Sample neighbors when doing message passing</li>
+<li>图太大：GPU放不下 —》 Sample subgraphs to compute embeddings </li>
+</ul>
+</li>
+</ul>
+<h3 id="Feature-augementation"><a href="#Feature-augementation" class="headerlink" title="Feature augementation"></a>Feature augementation</h3><ul>
+<li>one-hot/constant encoding</li>
+<li>others: 一般会使用：<ul>
+<li>node degree</li>
+<li>clustering coefficient</li>
+<li>pagerank</li>
+<li>centrality</li>
+</ul>
+</li>
+</ul>
+<h3 id="Sparse-graphs-augmentation"><a href="#Sparse-graphs-augmentation" class="headerlink" title="Sparse graphs augmentation"></a>Sparse graphs augmentation</h3><ul>
+<li>add virtual nodes/edges</li>
+<li>Add virtual edges<ul>
+<li>例如在使用邻接矩阵A的时候，改为使用 <script type="math/tex">A+A^{2}</script>，A2相当于添加了virtual edges</li>
+</ul>
+</li>
+<li>Add vitual nodes<ul>
+<li>提高稀疏图中的message passing</li>
+</ul>
+</li>
+</ul>
+<h3 id="Node-neighborhood-sampling"><a href="#Node-neighborhood-sampling" class="headerlink" title="Node neighborhood sampling"></a>Node neighborhood sampling</h3><ul>
+<li>针对很稠密的图引起的costly问题</li>
+<li>方案：sampling<ul>
+<li>对某个target节点，sample其neighbors</li>
+<li>sample target节点</li>
+</ul>
+</li>
+</ul>
+<h2 id="GNN-training-pipeline"><a href="#GNN-training-pipeline" class="headerlink" title="GNN training pipeline"></a>GNN training pipeline</h2><img src="/2021/12/22/CS224WLec6/GNN8.png" class="" title="GNN8">
+<ul>
+<li>以上工作将计算得到set of d-dim node embs</li>
+<li>还存在两个问题：<ul>
+<li>这些emb需要被应用在具体的任务中（前向过程需要完善）</li>
+<li>emb需要更新（反向传播需要定义）</li>
+</ul>
+</li>
+</ul>
+<script type="math/tex; mode=display">
+\left\{\mathbf{h}_{v}^{(L)} \in \mathbb{R}^{d}, \forall v \in G\right\}</script><h3 id="Prediction-heads"><a href="#Prediction-heads" class="headerlink" title="Prediction heads"></a>Prediction heads</h3><h4 id="node-level"><a href="#node-level" class="headerlink" title="node-level"></a>node-level</h4><ul>
+<li>直接利用node embs，其中<script type="math/tex">\mathbf{W}^{(H)} \in \mathbb{R}^{k * d}</script>: map node embeddings from <script type="math/tex">\mathbf{h}_{v}^{(L)} \in \mathbb{R}^{d}</script> to <script type="math/tex">\widehat{\boldsymbol{y}}_{v} \in \mathbb{R}^{k}</script>  so that we can compute the loss</li>
+</ul>
+<script type="math/tex; mode=display">
+\begin{array}{l}
+\widehat{\boldsymbol{y}}_{v}=\operatorname{Head}_{\text {node }}\left(\mathbf{h}_{v}^{(L)}\right)=\mathbf{W}^{(H)} \mathbf{h}_{v}^{(L)}</script><h4 id="edge-level"><a href="#edge-level" class="headerlink" title="edge-level"></a>edge-level</h4><ul>
+<li>使用pair of node embs</li>
+<li>option1: concat+linear(map 2d-dim to k-dim)<script type="math/tex; mode=display">
+\left.\widehat{\boldsymbol{y}}_{u v}=\text { Linear(Concat }\left(\mathbf{h}_{u}^{(L)}, \mathbf{h}_{v}^{(L)}\right)\right)</script></li>
+<li>option2: dot product. 得到一个连续值，只能应用于二分类预测/一维回归</li>
+<li>option3: 多头的dot product，多个加权的option2<script type="math/tex; mode=display">
+\begin{array}{c}
+\widehat{\boldsymbol{y}}_{u v}^{(1)}=\left(\mathbf{h}_{u}^{(L)}\right)^{T} \mathbf{W}^{(1)} \mathbf{h}_{v}^{(L)} \\
+\widehat{\boldsymbol{y}}_{u v}^{(k)}=\left(\mathbf{h}_{u}^{(L)}\right)^{T} \mathbf{W}^{(k)} \mathbf{h}_{v}^{(L)} \\
+\widehat{\boldsymbol{y}}_{u v}=\operatorname{Concat}\left(\widehat{y}_{u v}^{(1)}, \ldots, \widehat{\boldsymbol{y}}_{u v}^{(k)}\right) \in \mathbb{R}^{k}
+\end{array}</script></li>
+</ul>
+<h4 id="graph-level"><a href="#graph-level" class="headerlink" title="graph-level"></a>graph-level</h4><ul>
+<li>option1: global pooling<ul>
+<li>问题：无法区分不同scale的graph<script type="math/tex; mode=display">
+\begin{array}{l}
+\text { Prediction for } G_{1}: \hat{y}_{G}=\operatorname{Sum}(\{-1,-2,0,1,2\})=0 \\
+\text { Prediction for } G_{2}: \hat{y}_{G}=\operatorname{Sum}(\{-10,-20,0,10,20\})=0
+\end{array}</script></li>
+</ul>
+</li>
+<li>option2: hierarchically global pooling<ul>
+<li>需要同时实现两个GNN任务：GNN A：计算node embeddings; GNN B：聚类</li>
+<li>两个任务可以并行训练</li>
+<li>为每一个cluster创建一个新的node，为向欧盟的nodes创建edge，并生成一个新的pooled network<img src="/2021/12/22/CS224WLec6/GNN9.png" class="" title="GNN9">
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="Loss-defines"><a href="#Loss-defines" class="headerlink" title="Loss defines"></a>Loss defines</h3><ul>
+<li>和其他nn无区别</li>
+</ul>
+<h3 id="Dataset-split"><a href="#Dataset-split" class="headerlink" title="Dataset split"></a>Dataset split</h3><ul>
+<li>难点：graph的各个node/edge之间不满足iid假设。random split会带来information leakage。</li>
+<li>solution1(Transductive setting): 会有部分leakage。仅仅split node labels.<ul>
+<li>At training time, we compute embeddings using <strong>the entire graph</strong>, and train <strong>using node 1&amp;2’s labels</strong></li>
+<li>At validation time, we compute embeddings using <strong>the entire graph</strong>, and evaluate on <strong>node 3&amp;4’s labels</strong></li>
+<li>training / validation / test sets都在同一个graph上。三个dataset组成一个graph。</li>
+<li>可以应用在node/edge tasks。因为graph task需要在unseen graphs上做测试，而transductive方法无法满足。</li>
+</ul>
+</li>
+<li>solution2(Inductive setting): We break the edges between splits to get multiple graphs。没有信息泄漏，图被分成了三个子图。<ul>
+<li>At training time, we compute embeddings <strong>using the graph over node 1&amp;2</strong>, and train using node 1&amp;2’s labels</li>
+<li>At validation time, we compute embeddings <strong>using the graph over node 3&amp;4</strong>, and evaluate on node 3&amp;4’s labels</li>
+<li>training / validation / test sets不在同一个graph上。三个dataset组成是三个graph。</li>
+<li>可以应用在node/edge/graph tasks</li>
+</ul>
+</li>
+</ul>
+<h4 id="link-prediction"><a href="#link-prediction" class="headerlink" title="link prediction"></a>link prediction</h4><ul>
+<li>link prediction是无监督任务，需要定义label &amp; split</li>
+<li>step1: 先划分message edges和supervision edges。其中supervision edges不入图，只作为label。</li>
+<li>step2: split<ul>
+<li>Transductive method: 有四种edge: training message edges &amp; training supervision edges &amp; validation edges &amp; predict test edges.<img src="/2021/12/22/CS224WLec6/GNN10.png" class="" title="GNN10"></li>
+<li>Inductive method: In train or val or test set, each graph will have 2 types of edges。<img src="/2021/12/22/CS224WLec6/GNN11.png" class="" title="GNN11">
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h2><ul>
+<li>data processing: use normalization</li>
+<li>optimizer: adam is relatively robust to learning rate</li>
+<li>activation: relu</li>
+<li>bias term in every layer</li>
+<li>debug:<ul>
+<li>小数据集上，loss应该很小。如果underfit, something is wrong</li>
+<li>loss</li>
+<li>visualizations</li>
+<li>initialization</li>
+<li>adjust hyperparameters such as learning rate</li>
+</ul>
+</li>
+</ul>
 <h1 id="性质"><a href="#性质" class="headerlink" title="性质"></a>性质</h1><ul>
 <li>本质：<strong>假设将节点作为特征向量作为输入feed into MLP, 特征向量会包含邻域节点的信息，因此不能满足排列不变性，而GNN则是把节点的领域信息存在了NN结构里，因此每个节点都拥有自己的计算图/神经网络结构</strong></li>
 <li>流程：1）定义neighborhood aggregation function; 2) 定义loss function; 3) train; 4) generate node embeddings</li>
@@ -952,48 +1080,7 @@ $$ \mathbf{h}_{v}^{(l)}=\sigma\left(\sum_{u \in N(v)}{\alpha_{v u}} \mathbf{W}^{
 <h2 id="GNN-VS-Transformer"><a href="#GNN-VS-Transformer" class="headerlink" title="GNN VS Transformer"></a>GNN VS Transformer</h2><ul>
 <li>Transformer是针对序列数据的，一个序列中两个node互为上下文，因此可以看做是所有node都互相连接的graph</li>
 </ul>
-<h1 id="Graph-Augmentation"><a href="#Graph-Augmentation" class="headerlink" title="Graph Augmentation"></a>Graph Augmentation</h1><ul>
-<li>idea: raw input graph ≠ computation graph: <strong>计算图不必和实际的图结构保持一致</strong></li>
-</ul>
-<h2 id="Reason-for-augmentation"><a href="#Reason-for-augmentation" class="headerlink" title="Reason for augmentation"></a>Reason for augmentation</h2><ul>
-<li>特征：原始图的特征可能比较少 —》 feature augmentation</li>
-<li>图结构<ul>
-<li>图太稀疏：inefficient message passing —》 Add virtual nodes / edges</li>
-<li>图太稠密：costly —》 Sample neighbors when doing message passing</li>
-<li>图太大：GPU放不下 —》 Sample subgraphs to compute embeddings </li>
-</ul>
-</li>
-</ul>
-<h2 id="Feature-augementation"><a href="#Feature-augementation" class="headerlink" title="Feature augementation"></a>Feature augementation</h2><ul>
-<li>one-hot/constant encoding</li>
-<li>others: 一般会使用：<ul>
-<li>node degree</li>
-<li>clustering coefficient</li>
-<li>pagerank</li>
-<li>centrality</li>
-</ul>
-</li>
-</ul>
-<h2 id="Sparse-graphs-augmentation"><a href="#Sparse-graphs-augmentation" class="headerlink" title="Sparse graphs augmentation"></a>Sparse graphs augmentation</h2><ul>
-<li>add virtual nodes/edges</li>
-<li>Add virtual edges<ul>
-<li>例如在使用邻接矩阵A的时候，改为使用 <script type="math/tex">A+A^{2}</script>，A2相当于添加了virtual edges</li>
-</ul>
-</li>
-<li>Add vitual nodes<ul>
-<li>提高稀疏图中的message passing</li>
-</ul>
-</li>
-</ul>
-<h2 id="Node-neighborhood-sampling"><a href="#Node-neighborhood-sampling" class="headerlink" title="Node neighborhood sampling"></a>Node neighborhood sampling</h2><ul>
-<li>针对很稠密的图引起的costly问题</li>
-<li>方案：sampling<ul>
-<li>对某个target节点，sample其neighbors</li>
-<li>sample target节点</li>
-</ul>
-</li>
-</ul>
-<h1 id="GNN-training-amp-serving"><a href="#GNN-training-amp-serving" class="headerlink" title="GNN training &amp; serving"></a>GNN training &amp; serving</h1><h1 id="GNN-Theory"><a href="#GNN-Theory" class="headerlink" title="GNN Theory"></a>GNN Theory</h1><h1 id="Refs"><a href="#Refs" class="headerlink" title="Refs"></a>Refs</h1><ul>
+<h1 id="GNN-Theory"><a href="#GNN-Theory" class="headerlink" title="GNN Theory"></a>GNN Theory</h1><h1 id="Refs"><a href="#Refs" class="headerlink" title="Refs"></a>Refs</h1><ul>
 <li><a href="http://web.stanford.edu/class/cs224w/slides/06-GNN1.pdf">ppt Lec6: Graph Neural Networks 1: GNN Model</a></li>
 <li><a href="http://web.stanford.edu/class/cs224w/slides/07-GNN2.pdf">ppt Lec7: Graph Neural Networks 2: Design Space</a></li>
 <li><a href="http://web.stanford.edu/class/cs224w/slides/08-GNN-application.pdf">ppt Lec8: Applications of Graph Neural Networks</a></li>
@@ -1325,10 +1412,44 @@ O_{1}=-\sum_{(i, j) \in E} w_{i j} \log p_{1}\left(v_{i}, v_{j}\right)</script><
     <url>/2021/12/22/Graph/</url>
     <content><![CDATA[<h2 id="OpenResource"><a href="#OpenResource" class="headerlink" title="OpenResource"></a>OpenResource</h2><ul>
 <li><a href="https://ogb.stanford.edu/">OGB</a>: The Open Graph Benchmark (OGB) is a collection of realistic, large-scale, and diverse benchmark datasets for machine learning on graphs.</li>
-<li><a href="https://github.com/snap-stanford/GraphGym">GraphGym</a>: GraphGym is a platform for designing and evaluating Graph Neural Networks</li>
+<li><a href="https://github.com/snap-stanford/GraphGym">GraphGym</a>: GraphGym is a platform for designing and evaluating Graph Neural Networks. —&gt; 和pytorch配合</li>
+<li><a href="https://github.com/deepmind/graph_nets">GraphNets</a>: 配合tensorflow</li>
 </ul>
 <h2 id="Class"><a href="#Class" class="headerlink" title="Class"></a>Class</h2><ul>
 <li><a href="http://web.stanford.edu/class/cs224w/">CS224W: Machine Learning with Graphs</a></li>
+</ul>
+<h2 id="Papers"><a href="#Papers" class="headerlink" title="Papers"></a>Papers</h2><ul>
+<li>Tutorials and overviews:<ul>
+<li>Relational inductive biases and graph networks (Battaglia et al., 2018)</li>
+<li>Representation learning on graphs: Methods and applications (Hamilton et al., 2017)</li>
+</ul>
+</li>
+<li>Attention-based neighborhood aggregation:<ul>
+<li>Graph attention networks (Hoshen, 2017; Velickovic et al., 2018; Liu et al., 2018)</li>
+</ul>
+</li>
+<li>Embedding entire graphs:<ul>
+<li>Graph neural nets with edge embeddings (Battaglia et al., 2016; Gilmer et. al., 2017)</li>
+<li>Embedding entire graphs (Duvenaud et al., 2015; Dai et al., 2016; Li et al., 2018) and graph pooling (Ying et al., 2018, Zhang et al., 2018)</li>
+<li>Graph generation and relational inference (You et al., 2018; Kipf et al., 2018)</li>
+<li>How powerful are graph neural networks(Xu et al., 2017)</li>
+</ul>
+</li>
+<li>Embedding nodes:<ul>
+<li>Varying neighborhood: Jumping knowledge networks (Xu et al., 2018), GeniePath (Liu et al., 2018)</li>
+<li>Position-aware GNN (You et al. 2019)</li>
+</ul>
+</li>
+<li>Spectral approaches to graph neural networks:<ul>
+<li>Spectral graph CNN &amp; ChebNet (Bruna et al., 2015; Defferrard et al., 2016)</li>
+<li>Geometric deep learning (Bronstein et al., 2017; Monti et al., 2017)</li>
+</ul>
+</li>
+<li>Other GNN techniques:<ul>
+<li>Pre-training Graph Neural Networks (Hu et al., 2019)</li>
+<li>GNNExplainer: Generating Explanations for Graph Neural Networks (Ying et al., 2019)</li>
+</ul>
+</li>
 </ul>
 ]]></content>
       <categories>
@@ -4698,7 +4819,7 @@ u \sim U(0,1), s &=\operatorname{sigmoid}((\log (u)-\log (1-u)+\log (\alpha) / \
 <li>serving: 使用如下的estimator来得到z的值<script type="math/tex; mode=display">
 \hat{\boldsymbol{z}}=\min (1, \max (0, \operatorname{sigmoid}(\log (\boldsymbol{\alpha}))(\zeta-\gamma)+\gamma)) \text {. }</script></li>
 </ul>
-<p>When sigmoid $\left(\log \left(\alpha<em>{i j}\right)\right)(\zeta-\gamma)+\gamma&lt;0$, we will have $\hat{z}</em>{i j}=0$ and the resulted model will be sparsely connected.</p>
+<p>When sigmoid <script type="math/tex">\left(\log \left(\alpha_{i j}\right)\right)(\zeta-\gamma)+\gamma<0</script>, we will have <script type="math/tex">\hat{z}_{i j}=0</script> and the resulted model will be sparsely connected.</p>
 <h2 id="Star-One-Model-to-Serve-All-Star-Topology-Adaptive-Recommender-for-Multi-Domain-CTR-Prediction"><a href="#Star-One-Model-to-Serve-All-Star-Topology-Adaptive-Recommender-for-Multi-Domain-CTR-Prediction" class="headerlink" title="Star(One Model to Serve All: Star Topology Adaptive Recommender for Multi-Domain CTR Prediction)"></a>Star(One Model to Serve All: Star Topology Adaptive Recommender for Multi-Domain CTR Prediction)</h2><ul>
 <li><a href="https://arxiv.org/abs/2101.11427">paper</a><img src="/2022/01/18/mtl/star.png" class="" title="star"></li>
 <li>center tower和domain tower的结合，论文中是两塔权重element-wise相乘，也可以改为两塔logits相加</li>
