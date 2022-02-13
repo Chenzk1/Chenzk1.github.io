@@ -37,7 +37,7 @@
 <meta property="og:image" content="https://chenzk1.github.io/2022/01/18/mtl/star.png">
 <meta property="og:image" content="https://chenzk1.github.io/2022/01/18/mtl/esmm.png">
 <meta property="article:published_time" content="2022-01-18T02:28:35.000Z">
-<meta property="article:modified_time" content="2022-01-18T08:41:45.936Z">
+<meta property="article:modified_time" content="2022-01-24T13:18:51.304Z">
 <meta property="article:author" content="Kayden">
 <meta property="article:tag" content="ML">
 <meta property="article:tag" content="MTL">
@@ -219,7 +219,7 @@
 
       <!--noindex-->
       <section class="post-toc-wrap sidebar-panel">
-          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%A4%E7%A7%8D%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">两种模式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8E%9F%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%84"><span class="nav-number">3.</span> <span class="nav-text">常见模型结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Share-bottom"><span class="nav-number">3.1.</span> <span class="nav-text">Share bottom</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MMoE-Multi-gate-Mixture-of-Experts"><span class="nav-number">3.2.</span> <span class="nav-text">MMoE(Multi-gate Mixture-of-Experts)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CGC-Customized-Gate-Control-PLE-Progressive-Layered-Extraction"><span class="nav-number">3.3.</span> <span class="nav-text">CGC(Customized Gate Control)&#x2F;PLE(Progressive Layered Extraction)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SNR-Sub-Network-Routing"><span class="nav-number">3.4.</span> <span class="nav-text">SNR(Sub-Network Routing)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Star-One-Model-to-Serve-All-Star-Topology-Adaptive-Recommender-for-Multi-Domain-CTR-Prediction"><span class="nav-number">3.5.</span> <span class="nav-text">Star(One Model to Serve All: Star Topology Adaptive Recommender for Multi-Domain CTR Prediction)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E5%AD%97%E7%BB%A3-Cross-Stitch-Network"><span class="nav-number">3.6.</span> <span class="nav-text">十字绣(Cross-Stitch Network)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ESMM-Entire-Space-Multi-Task-Model"><span class="nav-number">3.7.</span> <span class="nav-text">ESMM(Entire Space Multi-Task Model)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">4.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GradNorm"><span class="nav-number">4.1.</span> <span class="nav-text">GradNorm</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Refs"><span class="nav-number">5.</span> <span class="nav-text">Refs</span></a></li></ol></div>
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%A4%E7%A7%8D%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">两种模式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8E%9F%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%84"><span class="nav-number">3.</span> <span class="nav-text">常见模型结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Share-bottom"><span class="nav-number">3.1.</span> <span class="nav-text">Share bottom</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MMoE-Multi-gate-Mixture-of-Experts"><span class="nav-number">3.2.</span> <span class="nav-text">MMoE(Multi-gate Mixture-of-Experts)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CGC-Customized-Gate-Control-PLE-Progressive-Layered-Extraction"><span class="nav-number">3.3.</span> <span class="nav-text">CGC(Customized Gate Control)&#x2F;PLE(Progressive Layered Extraction)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SNR-Sub-Network-Routing"><span class="nav-number">3.4.</span> <span class="nav-text">SNR(Sub-Network Routing)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Star-One-Model-to-Serve-All-Star-Topology-Adaptive-Recommender-for-Multi-Domain-CTR-Prediction"><span class="nav-number">3.5.</span> <span class="nav-text">Star(One Model to Serve All: Star Topology Adaptive Recommender for Multi-Domain CTR Prediction)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E5%AD%97%E7%BB%A3-Cross-Stitch-Network"><span class="nav-number">3.6.</span> <span class="nav-text">十字绣(Cross-Stitch Network)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ESMM-Entire-Space-Multi-Task-Model"><span class="nav-number">3.7.</span> <span class="nav-text">ESMM(Entire Space Multi-Task Model)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">4.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GradNorm"><span class="nav-number">4.1.</span> <span class="nav-text">GradNorm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#share-vs-not-share"><span class="nav-number">4.2.</span> <span class="nav-text">share vs not share</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Refs"><span class="nav-number">5.</span> <span class="nav-text">Refs</span></a></li></ol></div>
       </section>
       <!--/noindex-->
 
@@ -330,10 +330,16 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2022-01-18 10:28:35 / Modified: 16:41:45" itemprop="dateCreated datePublished" datetime="2022-01-18T10:28:35+08:00">2022-01-18</time>
+      <time title="Created: 2022-01-18 10:28:35" itemprop="dateCreated datePublished" datetime="2022-01-18T10:28:35+08:00">2022-01-18</time>
     </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2022-01-24 21:18:51" itemprop="dateModified" datetime="2022-01-24T21:18:51+08:00">2022-01-24</time>
+      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -450,7 +456,12 @@ z^{\prime}=\left(\gamma * \gamma_{p}\right) \frac{z-\mu}{\sqrt{\sigma^{2}+\epsil
 <h2 id="ESMM-Entire-Space-Multi-Task-Model"><a href="#ESMM-Entire-Space-Multi-Task-Model" class="headerlink" title="ESMM(Entire Space Multi-Task Model)"></a>ESMM(Entire Space Multi-Task Model)</h2><ul>
 <li>混合ctr、cvr数据流</li>
 <li>传统CVR预估模型的本质，不是预测“item被点击，然后被转化”的概率（CTCVR），而是“假设item被点击，那么它被转化”的概率（CVR）。即CVR模型的样本空间，是click空间。</li>
-<li>ESMM：使用了全样本空间，通过预测CTR和CTCVR间接求CVR</li>
+<li>ESMM<ul>
+<li>使用了全样本空间，通过预测CTR和CTCVR间接求CVR</li>
+<li>解决training样本有偏的问题: training的时候在点击空间，serving的时候在展示空间。</li>
+<li>直接在show空间求ctcvr，label太稀疏，建模ctcvr=cvr*ctr，解决稀疏问题</li>
+</ul>
+</li>
 <li>利用全概率公式，<strong>隐式学习pCVR</strong></li>
 <li><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1804.07931.pdf">paper</a></li>
 <li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/57481330">blog</a><script type="math/tex; mode=display">
@@ -460,8 +471,13 @@ z^{\prime}=\left(\gamma * \gamma_{p}\right) \frac{z-\mu}{\sqrt{\sigma^{2}+\epsil
 </ul>
 <h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><h2 id="GradNorm"><a href="#GradNorm" class="headerlink" title="GradNorm"></a>GradNorm</h2><ul>
 <li><a target="_blank" rel="noopener" href="https://openreview.net/pdf?id=H1bM1fZCW">paper</a></li>
-<li>动态调整不同任务损失函数的权重</li>
+<li>动态调整不同任务损失函数的权重：不同目标重要性不同/收敛的程度/loss的大小 diff较大，可以考虑使用</li>
 <li><a target="_blank" rel="noopener" href="https://blog.csdn.net/Leon_winter/article/details/105014677">https://blog.csdn.net/Leon_winter/article/details/105014677</a></li>
+</ul>
+<h2 id="share-vs-not-share"><a href="#share-vs-not-share" class="headerlink" title="share vs not share"></a>share vs not share</h2><ul>
+<li>not share bias emb: tend to useful</li>
+<li>share sparse: tend to useful</li>
+<li>share bottom use small learning rate, tower use adam or bigger learning rate</li>
 </ul>
 <h1 id="Refs"><a href="#Refs" class="headerlink" title="Refs"></a>Refs</h1><ul>
 <li><a target="_blank" rel="noopener" href="https://blog.nowcoder.net/n/8a9d69d063c546b291a3c9a5091cfbbe">一篇综述</a></li>

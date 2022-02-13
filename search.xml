@@ -914,9 +914,7 @@ $$ \mathbf{h}_{v}^{(l)}=\sigma\left(\sum_{u \in N(v)}{\alpha_{v u}} \mathbf{W}^{
 \left\{\mathbf{h}_{v}^{(L)} \in \mathbb{R}^{d}, \forall v \in G\right\}</script><h3 id="Prediction-heads"><a href="#Prediction-heads" class="headerlink" title="Prediction heads"></a>Prediction heads</h3><h4 id="node-level"><a href="#node-level" class="headerlink" title="node-level"></a>node-level</h4><ul>
 <li>直接利用node embs，其中<script type="math/tex">\mathbf{W}^{(H)} \in \mathbb{R}^{k * d}</script>: map node embeddings from <script type="math/tex">\mathbf{h}_{v}^{(L)} \in \mathbb{R}^{d}</script> to <script type="math/tex">\widehat{\boldsymbol{y}}_{v} \in \mathbb{R}^{k}</script>  so that we can compute the loss</li>
 </ul>
-<script type="math/tex; mode=display">
-\begin{array}{l}
-\widehat{\boldsymbol{y}}_{v}=\operatorname{Head}_{\text {node }}\left(\mathbf{h}_{v}^{(L)}\right)=\mathbf{W}^{(H)} \mathbf{h}_{v}^{(L)}</script><h4 id="edge-level"><a href="#edge-level" class="headerlink" title="edge-level"></a>edge-level</h4><ul>
+<script type="math/tex; mode=display">\widehat{\boldsymbol{y}}_{v}=\operatorname{Head}_{\text {node }}\left(\mathbf{h}_{v}^{(L)}\right)=\mathbf{W}^{(H)} \mathbf{h}_{v}^{(L)}</script><h4 id="edge-level"><a href="#edge-level" class="headerlink" title="edge-level"></a>edge-level</h4><ul>
 <li>使用pair of node embs</li>
 <li>option1: concat+linear(map 2d-dim to k-dim)<script type="math/tex; mode=display">
 \left.\widehat{\boldsymbol{y}}_{u v}=\text { Linear(Concat }\left(\mathbf{h}_{u}^{(L)}, \mathbf{h}_{v}^{(L)}\right)\right)</script></li>
@@ -940,7 +938,7 @@ $$ \mathbf{h}_{v}^{(l)}=\sigma\left(\sum_{u \in N(v)}{\alpha_{v u}} \mathbf{W}^{
 <li>option2: hierarchically global pooling<ul>
 <li>需要同时实现两个GNN任务：GNN A：计算node embeddings; GNN B：聚类</li>
 <li>两个任务可以并行训练</li>
-<li>为每一个cluster创建一个新的node，为向欧盟的nodes创建edge，并生成一个新的pooled network<img src="/2021/12/22/CS224WLec6/GNN9.png" class="" title="GNN9">
+<li>为每一个cluster创建一个新的node，为相连的nodes创建edge，并生成一个新的pooled network<img src="/2021/12/22/CS224WLec6/GNN9.png" class="" title="GNN9">
 </li>
 </ul>
 </li>
@@ -1010,9 +1008,25 @@ $$ \mathbf{h}_{v}^{(l)}=\sigma\left(\sum_{u \in N(v)}{\alpha_{v u}} \mathbf{W}^{
 <li>CNN不满足排列不变性，改变像素排列，输出也不同</li>
 </ul>
 <h2 id="GNN-VS-Transformer"><a href="#GNN-VS-Transformer" class="headerlink" title="GNN VS Transformer"></a>GNN VS Transformer</h2><ul>
-<li>Transformer是针对序列数据的，一个序列中两个node互为上下文，因此可以看做是所有node都互相连接的graph</li>
+<li>Transformer是针对序列数据的，一个序列中两个node互为上下文，因此可以看做是所有n ode都互相连接的graph</li>
 </ul>
-<h1 id="GNN-Theory"><a href="#GNN-Theory" class="headerlink" title="GNN Theory"></a>GNN Theory</h1><h1 id="Refs"><a href="#Refs" class="headerlink" title="Refs"></a>Refs</h1><ul>
+<h1 id="GNN-Theory"><a href="#GNN-Theory" class="headerlink" title="GNN Theory"></a>GNN Theory</h1><ul>
+<li>GNN表达能力的衡量，如何设计表达能力强的GNN</li>
+<li>表达能力强的GNN能够为不同的节点生成不同的embedding
+</li>
+</ul>
+<h2 id="GNN的表达能力"><a href="#GNN的表达能力" class="headerlink" title="GNN的表达能力"></a>GNN的表达能力</h2><ul>
+<li>GNN的计算图：每个节点的有根子树<img src="/2021/12/22/CS224WLec6/GNN13.png" class="" title="GNN13"></li>
+<li>Injective function: 内射函数。f(x)=Y，不同的X能映射为不同的Y，称之为内射函数</li>
+<li>如果每一步的neighbor aggregation是内射函数，则GNN可以分辨不同的有根子树。</li>
+<li>GCN(mean-pool, ex. MeanPool([1,0],[0,1])与MeanPool([1,0],[0,1],[1,0],[0,1])一样)/GraphSAGE(max-pool)都不是内射函数</li>
+<li>Any injective multi-set function can be expressed as: <script type="math/tex">\Phi\left(\sum_{x \in S} f(x)\right)</script>, f和外层φ为非线性函数，<strong>中间是对multi-set做sum</strong>。而非线性函数可以用MLP来建模</li>
+</ul>
+<h2 id="GIN-Graph-Isomorphism-Network"><a href="#GIN-Graph-Isomorphism-Network" class="headerlink" title="GIN(Graph Isomorphism Network)"></a>GIN(Graph Isomorphism Network)</h2><ul>
+<li>THE most expressive GNN in the class of message-passing GNNs</li>
+<li>Apply an MLP, element-wise sum, followed by another MLP.<script type="math/tex; mode=display">\mathrm{MLP}_{\Phi}\left(\sum_{x \in S} \operatorname{MLP}_{f}(x)\right)</script></li>
+</ul>
+<h1 id="Refs"><a href="#Refs" class="headerlink" title="Refs"></a>Refs</h1><ul>
 <li><a href="http://web.stanford.edu/class/cs224w/slides/06-GNN1.pdf">ppt Lec6: Graph Neural Networks 1: GNN Model</a></li>
 <li><a href="http://web.stanford.edu/class/cs224w/slides/07-GNN2.pdf">ppt Lec7: Graph Neural Networks 2: Design Space</a></li>
 <li><a href="http://web.stanford.edu/class/cs224w/slides/08-GNN-application.pdf">ppt Lec8: Applications of Graph Neural Networks</a></li>
@@ -2425,7 +2439,12 @@ z^{\prime}=\left(\gamma * \gamma_{p}\right) \frac{z-\mu}{\sqrt{\sigma^{2}+\epsil
 <h2 id="ESMM-Entire-Space-Multi-Task-Model"><a href="#ESMM-Entire-Space-Multi-Task-Model" class="headerlink" title="ESMM(Entire Space Multi-Task Model)"></a>ESMM(Entire Space Multi-Task Model)</h2><ul>
 <li>混合ctr、cvr数据流</li>
 <li>传统CVR预估模型的本质，不是预测“item被点击，然后被转化”的概率（CTCVR），而是“假设item被点击，那么它被转化”的概率（CVR）。即CVR模型的样本空间，是click空间。</li>
-<li>ESMM：使用了全样本空间，通过预测CTR和CTCVR间接求CVR</li>
+<li>ESMM<ul>
+<li>使用了全样本空间，通过预测CTR和CTCVR间接求CVR</li>
+<li>解决training样本有偏的问题: training的时候在点击空间，serving的时候在展示空间。</li>
+<li>直接在show空间求ctcvr，label太稀疏，建模ctcvr=cvr*ctr，解决稀疏问题</li>
+</ul>
+</li>
 <li>利用全概率公式，<strong>隐式学习pCVR</strong></li>
 <li><a href="https://arxiv.org/pdf/1804.07931.pdf">paper</a></li>
 <li><a href="https://zhuanlan.zhihu.com/p/57481330">blog</a><script type="math/tex; mode=display">
@@ -2435,8 +2454,13 @@ z^{\prime}=\left(\gamma * \gamma_{p}\right) \frac{z-\mu}{\sqrt{\sigma^{2}+\epsil
 </ul>
 <h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><h2 id="GradNorm"><a href="#GradNorm" class="headerlink" title="GradNorm"></a>GradNorm</h2><ul>
 <li><a href="https://openreview.net/pdf?id=H1bM1fZCW">paper</a></li>
-<li>动态调整不同任务损失函数的权重</li>
+<li>动态调整不同任务损失函数的权重：不同目标重要性不同/收敛的程度/loss的大小 diff较大，可以考虑使用</li>
 <li><a href="https://blog.csdn.net/Leon_winter/article/details/105014677">https://blog.csdn.net/Leon_winter/article/details/105014677</a></li>
+</ul>
+<h2 id="share-vs-not-share"><a href="#share-vs-not-share" class="headerlink" title="share vs not share"></a>share vs not share</h2><ul>
+<li>not share bias emb: tend to useful</li>
+<li>share sparse: tend to useful</li>
+<li>share bottom use small learning rate, tower use adam or bigger learning rate</li>
 </ul>
 <h1 id="Refs"><a href="#Refs" class="headerlink" title="Refs"></a>Refs</h1><ul>
 <li><a href="https://blog.nowcoder.net/n/8a9d69d063c546b291a3c9a5091cfbbe">一篇综述</a></li>
