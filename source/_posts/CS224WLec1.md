@@ -4,7 +4,7 @@ mathjax: false
 date: 2021-12-12 13:10:09
 tags: 
   - cs224w
-  - graph
+  - Graph
 categories: 
   - Learning
   - cs224w

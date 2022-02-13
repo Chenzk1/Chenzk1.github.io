@@ -4,7 +4,7 @@ mathjax: true
 date: 2021-12-12 17:46:27
 tags: 
   - cs224w
-  - graph
+  - Graph
   - ML
 categories: 
   - Learning

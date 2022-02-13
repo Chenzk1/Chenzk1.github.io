@@ -3,7 +3,7 @@ title: P、NP、NP-hard问题
 mathjax: true
 date: 2021-12-15 11:16:27
 tags: 
-  - math
+  - Math
 categories: Learning
 ---
 

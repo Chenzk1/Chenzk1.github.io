@@ -5,7 +5,7 @@ categories:
     - Learning
 tags:  
     - ML
-    - GDBT
+    - GBDT
 ---
 [TOC]
 

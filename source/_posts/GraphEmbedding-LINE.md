@@ -3,7 +3,7 @@ title: GraphEmbedding-LINE
 mathjax: true
 date: 2021-12-20 15:29:30
 tags:
-  - graph
+  - Graph
   - LINE
 categories:
   - Learning

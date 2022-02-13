@@ -4,7 +4,7 @@ mathjax: true
 date: 2021-12-18 21:34:53
 tags:
   - cs224w
-  - graph
+  - Graph
   - ML
   - PageRank
 categories:
@@ -21,7 +21,8 @@ $$d_{i} \ldots out-degree of node i$$
   - rank vector r: $$r_{j}$$为node j的重要性score，且$$\sum_{i} r_{i}=1$$
   - n\*1 = n\*n \* n\*1: 
   $$ \boldsymbol{r}=\boldsymbol{M} \cdot \boldsymbol{r} $$,
-  $$\quad r_{j}=\sum_{i \rightarrow j} \frac{r_{i}}{d_{i}} $$
+
+  $$ \quad r_{j}=\sum_{i \rightarrow j} \frac{r_{i}}{d_{i}} $$
 - PageRank VS RandomWalk: 当random walk到达静态分布状态时满足$$ \boldsymbol{r}=\boldsymbol{M} \cdot \boldsymbol{r} $$，即**PageRank得到的重要性向量v是random walk的静态分布**
 - PangRank VS Eigenvector: **PageRank得到的重要性向量v是当特征值为1时得到的主特征向量**
 <!-- more -->
@@ -40,7 +41,7 @@ $$
 $$
 \boldsymbol{r}^{(t+1)}=\boldsymbol{M} \cdot \boldsymbol{r}^{t}
 $$
-  - stop: 可以选择其他度量方式
+  - stop: 也可以选择其他度量方式
 $$
 \left|\boldsymbol{r}^{(t+1)}-\boldsymbol{r}^{t}\right|_{1}<\varepsilon
 $$

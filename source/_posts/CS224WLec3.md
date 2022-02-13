@@ -4,9 +4,9 @@ mathjax: true
 date: 2021-12-15 17:55:00
 tags:
   - cs224w
-  - graph
+  - Graph
   - DeepWalk
-  - node2vec
+  - Node2vec
 categories: 
   - Learning
   - cs224w
@@ -24,6 +24,10 @@ categories:
 - goal: 原始graph中相似的node获得的embeddings也是相似的
 - 类似于word2vec: 目标是求node u的embedding $$\mathbf{z}_{u}$$,而模型的预测目标是：$$P\left(v \mid \mathbf{z}_{u}\right)$$，即node v出现在以node u开始的walk上的概率。
 - 如何获得“句子”：random walk
+- 范式: 
+  - encoder生成node embedding，本节的encoder为word2vec中的权重矩阵: $$ \operatorname{ENC}(v)=\mathbf{z}_{v} $$
+  - decoder将node embedding映射回原空间，这里存在隐式的decoder，embedding空间两向量的点积可以表示原空间u,v的相似度: $$ \operatorname{similarity}(u, v) \approx \mathbf{z}_{v}^{\mathrm{T}} \mathbf{z}_{u} $$
+    - 点击相似度：最小化两向量的模以及夹角余弦的乘积
 
 ## Deep Walk
 ### Random Walk
@@ -81,5 +85,11 @@ $$ P\left(v \mid \mathbf{z}_{u}\right)=\frac{\exp \left(\mathbf{z}_{u}^{\mathrm{
 {% asset_img annoywalks1.png annoywalks1 %}
 {% asset_img annoywalks2.png annoywalks2 %}
 
+## Pros & Cons
+- 属于shallow encoding，有如下优缺点：
+  - 需要O(|V|)的参数量，节点间的embedding不共享，每个node有独立的embedding
+  - training时没有的node，不会有embedding
+  - 没有利用到节点的特征，只利用了graph structure
+  
 # Reference
 - [ppt](http://web.stanford.edu/class/cs224w/slides/03-nodeemb.pdf)
