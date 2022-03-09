@@ -222,7 +222,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-count">51</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -235,7 +235,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">54</span>
+        <span class="site-state-item-count">56</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -295,6 +295,214 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2022/03/09/seq/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Kayden">
+      <meta itemprop="description" content="Kayden's Blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kayden's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/03/09/seq/" class="post-title-link" itemprop="url">序列模型</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2022-03-09 11:29:58 / Modified: 17:07:13" itemprop="dateCreated datePublished" datetime="2022-03-09T11:29:58+08:00">2022-03-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <a id="more"></a>
+<h1 id="DIN"><a href="#DIN" class="headerlink" title="DIN"></a>DIN</h1><p><a target="_blank" rel="noopener" href="https://dl.acm.org/doi/abs/10.1145/3219819.3219823">paper</a></p>
+<h2 id="Model"><a href="#Model" class="headerlink" title="Model"></a>Model</h2><ul>
+<li>思想：针对不同的候选广告，用户历史行为与该广告的权重是不同的。</li>
+<li>方法：以当前候选广告为query，用户历史行为为key/value，利用attention机制，求query与key的attention score，并利用attention score加权value<img src="/2022/03/09/seq/din.png" class="" title="din">
+</li>
+</ul>
+<script type="math/tex; mode=display">V_{u}=f\left(V_{a}\right)=\sum_{i=1}^{N} w_{i} * V_{i}=\sum_{i=1}^{N} g\left(V_{i}, V_{a}\right) * V_{i}</script><ul>
+<li>Vi表示behavior id i的嵌入向量，比如good_id,shop_id等。Vu是所有behavior ids的加权和，表示的是用户兴趣；Va是候选广告的嵌入向量；wi是候选广告影响着每个behavior id的权重，也就是Local Activation。wi通过Activation Unit计算得出，这一块用函数去拟合，表示为g(Vi,Va)。</li>
+</ul>
+<h2 id="Tricks"><a href="#Tricks" class="headerlink" title="Tricks"></a>Tricks</h2><h3 id="GAUC"><a href="#GAUC" class="headerlink" title="GAUC"></a>GAUC</h3><ul>
+<li>group auc</li>
+<li>auc的评估是对所有样本排序后，评估正样本排在负样本的概率。但推荐、广告系统中，关注的是单个用户的排序。</li>
+<li>gauc是在单个用户auc基础上，按照点击次数、show次数等进行加权平均，消除用户偏差对模型的影响。n为用户数量。<script type="math/tex; mode=display">\mathrm{GAUC}=\frac{\sum_{i=1}^{n} w_{i} * \mathrm{AUC}_{i}}{\sum_{i=1}^{n} w_{i}}=\frac{\sum_{i=1}^{n} \text { impression }_{i} * \mathrm{AUC}_{i}}{\sum_{i=1}^{n} \text { impression }_{i}}</script></li>
+</ul>
+<h3 id="DICE"><a href="#DICE" class="headerlink" title="DICE"></a>DICE</h3><ul>
+<li>Data Dependent Activation Function<script type="math/tex; mode=display">f(s)=p(s) . s+(1-p(s)) \cdot \alpha s, p(s)=\frac{1}{1+e^{-\frac{s-E(s)}{\sqrt{V} a r(s)+\epsilon}}}</script></li>
+<li>可以视为Batch Normalization的变化。使得<strong>激活函数随着一个batch的数据分布做自适应调整</strong>——data dependent。<script type="math/tex; mode=display">f(s)=\operatorname{sigmoid}(B N(s)) \cdot s+(1-\operatorname{sigmoid}(B N(s))) \cdot \alpha s</script></li>
+<li>pi是一个概率值，这个概率值决定着输出是取 s 或者是 alpha_i * s，起到了一个整流器的作用。pi的计算分为两步：<ul>
+<li>首先，对 x 进行均值归一化处理，这使得整流点是在数据的均值处，实现了 data dependent 的想法；</li>
+<li>其次，经过一个 sigmoid 函数的计算，得到了一个 0 到 1 的概率值。</li>
+</ul>
+</li>
+<li>另外，期望和方差使用每次训练的 mini batch data 直接计算，并类似于 Momentum 使用了 指数加权平均：</li>
+</ul>
+<script type="math/tex; mode=display">
+\begin{aligned}
+E\left[s_{i}\right]_{t+1}^{\prime} &=E\left[s_{i}\right]_{t}^{\prime}+\alpha E\left[s_{i}\right]_{t+1} \\
+\operatorname{Var}\left[s_{i}\right]_{t+1}^{\prime} &=\operatorname{Var}\left[s_{i}\right]_{t}^{\prime}+\alpha \operatorname{Var}\left[s_{i}\right]_{t+1}
+\end{aligned}</script><h3 id="Adaptive-L2-Regularization"><a href="#Adaptive-L2-Regularization" class="headerlink" title="Adaptive L2 Regularization"></a>Adaptive L2 Regularization</h3><ul>
+<li>两点改进<ul>
+<li>针对 feature id 出现的频率，来自适应的调整他们正则化的强度:<ul>
+<li>对于出现频率高的，给与较小的正则化强度；</li>
+<li>对于出现频率低的，给予较大的正则化强度。</li>
+</ul>
+</li>
+<li>正则化涉及的参数限制在了仅在Mini-batch出现过的特征所影响的权重, 有效地缓解了过拟合的问题</li>
+</ul>
+</li>
+</ul>
+<script type="math/tex; mode=display">L_{2}(W) \approx \sum_{j=1}^{K} \sum_{m=1}^{B} \frac{\alpha_{m j}}{n_{j}}\left\|w_{j}\right\|_{2}^{2}</script><ul>
+<li>amj表示是否至少有一个样本的id为j的特征出现在mini-batch中；nj表示feature id为j出现的次数，惩罚了出现频率低的item</li>
+</ul>
+<h1 id="DIEN"><a href="#DIEN" class="headerlink" title="DIEN"></a>DIEN</h1><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1809.03672v1">paper</a>, <a target="_blank" rel="noopener" href="https://github.com/mouna99/dien">git</a></p>
+<ul>
+<li>DIN: <strong>将用户历史行为视作用户兴趣</strong>，并用attention机制来捕捉target和历史行为的相对兴趣</li>
+<li>DIEN: <strong>行为不等于兴趣，需要从行为中挖掘兴趣，并考虑兴趣的动态变化</strong><ul>
+<li>兴趣抽取层：计算一个辅助loss，来提升兴趣表达(每个历史行为embedding学习)的准确性&lt; GRU + Loss&gt;</li>
+<li>兴趣进化层：更加准确的表达用户兴趣的动态变化性(加权历史行为embedding的学习)&lt; AUGRU(GRU + attention) &gt;</li>
+</ul>
+</li>
+</ul>
+<h2 id="Model-1"><a href="#Model-1" class="headerlink" title="Model"></a>Model</h2><img src="/2022/03/09/seq/dien.jpeg" class="" title="dien">
+<h3 id="Interest-Extractor层：兴趣的挖掘。利用GRU-辅助loss来挖掘用户兴趣。"><a href="#Interest-Extractor层：兴趣的挖掘。利用GRU-辅助loss来挖掘用户兴趣。" class="headerlink" title="Interest Extractor层：兴趣的挖掘。利用GRU+辅助loss来挖掘用户兴趣。"></a>Interest Extractor层：兴趣的挖掘。利用GRU+辅助loss来挖掘用户兴趣。</h3><ul>
+<li>辅助loss: 第t个时间步输入e(t)，GRU输出隐单元h(t)，第t步loss: 令下一个时间步的输入向量e(t+1)作为正样本，随机采样负样本e(t+1)。<script type="math/tex; mode=display">\begin{aligned} L_{a u x}=-& \frac{1}{N}\left(\sum_{i=1}^{N} \sum_{t} \log \sigma\left(\mathbf{h}_{t}^{i}, \mathbf{e}_{b}^{i}[t+1]\right)\right.\\ &\left.+\log \left(1-\sigma\left(\mathbf{h}_{t}^{i}, \hat{\mathbf{e}}_{b}^{i}[t+1]\right)\right)\right) \end{aligned}</script></li>
+<li>GRU, u表示update gate, r 表示reset gate, h’表示候选的隐藏状态,通过tanh缩放到-1～1之间，对Ht-1进行reset同时+Item, ht 通过last hidden states <em> (1-update) 表示遗忘，update </em> h’表示记忆当前状态<script type="math/tex; mode=display">\begin{aligned}
+\mathbf{u}_{t} &=\sigma\left(W^{u} \mathbf{i}_{t}+U^{u} \mathbf{h}_{t-1}+\mathbf{b}^{u}\right) \\
+\mathbf{r}_{t} &=\sigma\left(W^{r} \mathbf{i}_{t}+U^{r} \mathbf{h}_{t-1}+\mathbf{b}^{r}\right) \\
+\tilde{\mathbf{h}}_{t} &=\tanh \left(W^{h} \mathbf{i}_{t}+\mathbf{r}_{t} \circ U^{h} \mathbf{h}_{t-1}+\mathbf{b}^{h}\right) \\
+\mathbf{h}_{t} &=\left(\mathbf{1}-\mathbf{u}_{t}\right) \circ \mathbf{h}_{t-1}+\mathbf{u}_{t} \circ \tilde{\mathbf{h}}_{t}
+\end{aligned}</script></li>
+</ul>
+<h3 id="Interest-Evolving层"><a href="#Interest-Evolving层" class="headerlink" title="Interest Evolving层"></a>Interest Evolving层</h3><ul>
+<li>Interest Evolving层对与target item相关的兴趣演化轨迹进行建模：利用注意力机制+GRU</li>
+<li>AUGRU: attention update-gate gru。利用attention与update gate相乘，替换原始的update gate</li>
+<li>变体<ul>
+<li>GRU with attentional input（AIGRU）: 较为简单，直接将attention系数和输入相乘</li>
+<li>Attention based GRU（AGRU）：采用问答领域文章提到的一种方法，直接将attention系数来替换GRU的update gate，直接对隐状态进行更新</li>
+</ul>
+</li>
+</ul>
+<h2 id="Problems"><a href="#Problems" class="headerlink" title="Problems"></a>Problems</h2><ul>
+<li>GRU的耗时</li>
+<li>可以借鉴的：aug loss?</li>
+</ul>
+<h1 id="DSIN"><a href="#DSIN" class="headerlink" title="DSIN"></a>DSIN</h1><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1905.06482">paper</a></p>
+<ul>
+<li><strong>session内行为同构，不同session行为异构</strong><ul>
+<li>Bias encoding + Transformer：获取session内的兴趣表达</li>
+<li>Bi-LSTM: session间的序列关系</li>
+<li>activation unit: 类似于din，获得行为序列表达与target item的关系</li>
+</ul>
+</li>
+</ul>
+<h2 id="Model-2"><a href="#Model-2" class="headerlink" title="Model"></a>Model</h2><img src="/2022/03/09/seq/dsin.png" class="" title="dsin">
+<h3 id="Session-Division-Layer"><a href="#Session-Division-Layer" class="headerlink" title="Session Division Layer"></a>Session Division Layer</h3><ul>
+<li>长度为n的seq，切分为K个session，session内有T个item，一个item D维，一个session 30min</li>
+<li>得到Q ∈ R^(K*T*D)</li>
+</ul>
+<h3 id="Session-Interest-Extractor-Layer"><a href="#Session-Interest-Extractor-Layer" class="headerlink" title="Session Interest Extractor Layer"></a>Session Interest Extractor Layer</h3><ul>
+<li><strong>session内的序列建模</strong></li>
+<li>bias encoding: BE(k, t, c)指session k，item t下，位置c的偏置值<script type="math/tex; mode=display">\mathbf{BE}_{(k, t, c)}=\mathbf{w}_{k}^{K}+\mathbf{w}_{t}^{T}+\mathbf{w}_{c}^{C}</script></li>
+</ul>
+<script type="math/tex; mode=display">\mathbf{Q}=\mathbf{Q}+\mathbf{B} \mathbf{E}</script><ul>
+<li>分别对每个session k：<ul>
+<li>过一个Transformer得到<script type="math/tex">{I}_{k}^{Q}</script></li>
+<li>做avg，得到Ik，shape为K*D：<script type="math/tex; mode=display">\mathbf{I}_{k}=\operatorname{Avg}\left(\mathbf{I}_{k}^{Q}\right)</script></li>
+</ul>
+</li>
+</ul>
+<h3 id="Session-Interest-Interacting-Layer"><a href="#Session-Interest-Interacting-Layer" class="headerlink" title="Session Interest Interacting Layer"></a>Session Interest Interacting Layer</h3><ul>
+<li><strong>session间的序列关系</strong></li>
+<li>Bi-LSTM</li>
+</ul>
+<script type="math/tex; mode=display">
+\begin{array}{l}
+\mathbf{i}_{t}=\sigma\left(\mathbf{W}_{x i} \mathbf{I}_{t}+\mathbf{W}_{h i} \mathbf{h}_{t-1}+\mathbf{W}_{c i} \mathbf{c}_{t-1}+\mathbf{b}_{i}\right)\\
+\mathbf{f}_{t}=\sigma\left(\mathbf{W}_{x f} \mathbf{I}_{t}+\mathbf{W}_{h f} \mathbf{h}_{t-1}+\mathbf{W}_{c f} \mathbf{c}_{t-1}+\mathbf{b}_{f}\right)\\
+\mathbf{c}_{t}=\mathbf{f}_{t} \mathbf{c}_{t-1}+\mathbf{i}_{t} \tanh \left(\mathbf{W}_{x c} \mathbf{I}_{t}+\mathbf{W}_{h c} \mathbf{h}_{t-1}+\mathbf{b}_{c}\right)\\
+\mathbf{o}_{t}=\sigma\left(\mathbf{W}_{x o} \mathbf{I}_{t}+\mathbf{W}_{h o} \mathbf{h}_{t-1}+\mathbf{W}_{c o} \mathbf{c}_{t}+\mathbf{b}_{o}\right)\\
+\mathbf{h}_{t}=\mathbf{o}_{t} \tanh \left(\mathbf{c}_{t}\right)\\
+\mathbf{H}_{t}=\overrightarrow{\mathbf{h}_{f t}} \oplus \overleftarrow{\mathbf{h}_{b t}}
+\end{array}</script><h3 id="Session-Interest-Activating-Layer"><a href="#Session-Interest-Activating-Layer" class="headerlink" title="Session Interest Activating Layer"></a>Session Interest Activating Layer</h3><ul>
+<li><strong>与target交互</strong></li>
+<li>包括两部分：<ul>
+<li>Ik与target的attention：未建模session间关系</li>
+<li>Hk与target的attention：建模session间关系之后</li>
+</ul>
+</li>
+</ul>
+<h2 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h2><img src="/2022/03/09/seq/dsin_result.jpeg" class="" title="dsin_result">
+<h2 id="讨论"><a href="#讨论" class="headerlink" title="讨论"></a>讨论</h2><ul>
+<li>DIN-RNN的效果差与DIN，而DSIN-BE的效果好于DSIN-BE-No-SIIL：说明切分session后，序列建模有效，而切分前，序列建模效果有损。原因猜测为，用户行为在长期来看是跳跃的，序列建模可能在某些时间点出有很大的噪声</li>
+</ul>
+<h1 id="DMIN"><a href="#DMIN" class="headerlink" title="DMIN"></a>DMIN</h1><p><a target="_blank" rel="noopener" href="https://www.researchgate.net/publication/345125472_Deep_Multi-Interest_Network_for_Click-through_Rate_Prediction">paper</a>、<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/69929b24bb37">推荐系统遇上深度学习(一零零)-[阿里]深度多兴趣网络DMIN</a></p>
+<ul>
+<li>利用multi-head attention机制，建模用户多兴趣</li>
+</ul>
+<h2 id="Model-3"><a href="#Model-3" class="headerlink" title="Model"></a>Model</h2><img src="/2022/03/09/seq/dmin.jpg" class="" title="dmin">
+<h3 id="Behavior-Refiner-Layer"><a href="#Behavior-Refiner-Layer" class="headerlink" title="Behavior Refiner Layer"></a>Behavior Refiner Layer</h3><script type="math/tex; mode=display">
+\begin{aligned}
+\operatorname{head}_{h} &=\operatorname{Attention}\left(\mathbf{x}_{b} \mathbf{W}_{h}^{Q}, \mathbf{x}_{b} \mathbf{W}_{h}^{K}, \mathbf{x}_{b} \mathbf{W}_{h}^{V}\right) \\
+&=\operatorname{Softmax}\left(\frac{\mathbf{x}_{b} \mathbf{W}_{h}^{Q} \cdot\left(\mathbf{x}_{b} \mathbf{W}_{h}^{K}\right)^{\top}}{\sqrt{d_{h}}} \cdot \mathbf{x}_{b} \mathbf{W}_{h}^{V}\right)
+\end{aligned}</script><script type="math/tex; mode=display">
+\mathrm{Z}=\text { MultiHead }\left(\mathbf{x}_{b}\right)=\text { Concat }\left(\text { head }_{1}, \text { head }_{2}, \ldots, \text { head }_{H_{R}}\right) \mathbf{W}^{O}</script>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
     <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2022/01/18/mtl/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -327,7 +535,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2022-01-24 21:18:51" itemprop="dateModified" datetime="2022-01-24T21:18:51+08:00">2022-01-24</time>
+        <time title="Modified: 2022-02-22 14:11:58" itemprop="dateModified" datetime="2022-02-22T14:11:58+08:00">2022-02-22</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -764,7 +972,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2022-02-13 19:12:42" itemprop="dateModified" datetime="2022-02-13T19:12:42+08:00">2022-02-13</time>
+        <time title="Modified: 2022-02-13 19:15:28" itemprop="dateModified" datetime="2022-02-13T19:15:28+08:00">2022-02-13</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1158,112 +1366,10 @@
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2021/12/18/CS224WLec4/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Kayden">
-      <meta itemprop="description" content="Kayden's Blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Kayden's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/12/18/CS224WLec4/" class="post-title-link" itemprop="url">CS224WLec4-PageRank</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-12-18 21:34:53" itemprop="dateCreated datePublished" datetime="2021-12-18T21:34:53+08:00">2021-12-18</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2022-01-01 19:14:06" itemprop="dateModified" datetime="2022-01-01T19:14:06+08:00">2022-01-01</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
-        </span>
-          , 
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Learning/cs224w/" itemprop="url" rel="index"><span itemprop="name">cs224w</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="PageRank"><a href="#PageRank" class="headerlink" title="PageRank"></a>PageRank</h1><ul>
-<li>一个node的重要性由指向它的节点的重要性决定 —&gt; <strong>指向该node的节点数越多，且这些节点重要性越高，则该节点越重要</strong>。node j的重要性（传递函数）为：<script type="math/tex; mode=display">r_{j}=\sum_{i \rightarrow j} \frac{r_{i}}{d_{i}}</script><script type="math/tex; mode=display">d_{i} \ldots out-degree of node i</script></li>
-<li><p>矩阵形式：</p>
-<ul>
-<li>随机邻接矩阵M。j有<script type="math/tex">d_{j}</script>个出链，如果j -&gt; i，则<script type="math/tex">M_{ij}=1/d_{j}</script>，因此每一列上的值要么为0，要么为<script type="math/tex">1/d_{j}</script>，且加和为1，称为列随机矩阵</li>
-<li>rank vector r: <script type="math/tex">r_{j}</script>为node j的重要性score，且<script type="math/tex">\sum_{i} r_{i}=1</script></li>
-<li>n*1 = n*n * n*1:<br><script type="math/tex">\boldsymbol{r}=\boldsymbol{M} \cdot \boldsymbol{r}</script>,</li>
-</ul>
-<script type="math/tex; mode=display">\quad r_{j}=\sum_{i \rightarrow j} \frac{r_{i}}{d_{i}}</script></li>
-<li>PageRank VS RandomWalk: 当random walk到达静态分布状态时满足<script type="math/tex">\boldsymbol{r}=\boldsymbol{M} \cdot \boldsymbol{r}</script>，即<strong>PageRank得到的重要性向量v是random walk的静态分布</strong></li>
-<li>PangRank VS Eigenvector: <strong>PageRank得到的重要性向量v是当特征值为1时得到的主特征向量</strong>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/12/18/CS224WLec4/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 

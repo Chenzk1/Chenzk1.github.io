@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/mylogo-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/mylogo-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/mylogo-16x16-next.png">
+  <link rel="mask-icon" href="/images/mylogo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.0/css/all.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"chenzk1.github.io","root":"/","scheme":"Gemini","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+
+  <meta name="description" content="DINpaper Model 思想：针对不同的候选广告，用户历史行为与该广告的权重是不同的。 方法：以当前候选广告为query，用户历史行为为key&#x2F;value，利用attention机制，求query与key的attention score，并利用attention score加权value   V_{u}&#x3D;f\left(V_{a}\right)&#x3D;\sum_{i&#x3D;1}^{N} w_{i} *">
+<meta property="og:type" content="article">
+<meta property="og:title" content="序列模型">
+<meta property="og:url" content="https://chenzk1.github.io/2022/03/09/seq/index.html">
+<meta property="og:site_name" content="Kayden&#39;s Blog">
+<meta property="og:description" content="DINpaper Model 思想：针对不同的候选广告，用户历史行为与该广告的权重是不同的。 方法：以当前候选广告为query，用户历史行为为key&#x2F;value，利用attention机制，求query与key的attention score，并利用attention score加权value   V_{u}&#x3D;f\left(V_{a}\right)&#x3D;\sum_{i&#x3D;1}^{N} w_{i} *">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://chenzk1.github.io/2022/03/09/seq/din.png">
+<meta property="og:image" content="https://chenzk1.github.io/2022/03/09/seq/dien.jpeg">
+<meta property="og:image" content="https://chenzk1.github.io/2022/03/09/seq/dsin.png">
+<meta property="og:image" content="https://chenzk1.github.io/2022/03/09/seq/dsin_result.jpeg">
+<meta property="og:image" content="https://chenzk1.github.io/2022/03/09/seq/dmin.jpg">
+<meta property="article:published_time" content="2022-03-09T03:29:58.000Z">
+<meta property="article:modified_time" content="2022-03-09T09:07:13.265Z">
+<meta property="article:author" content="Kayden">
+<meta property="article:tag" content="ML">
+<meta property="article:tag" content="Seq Model">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://chenzk1.github.io/2022/03/09/seq/din.png">
+
+
+<link rel="canonical" href="https://chenzk1.github.io/2022/03/09/seq/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>序列模型 | Kayden's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Kayden's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Mamba forever.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#DIN"><span class="nav-number">1.</span> <span class="nav-text">DIN</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Model"><span class="nav-number">1.1.</span> <span class="nav-text">Model</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tricks"><span class="nav-number">1.2.</span> <span class="nav-text">Tricks</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#GAUC"><span class="nav-number">1.2.1.</span> <span class="nav-text">GAUC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DICE"><span class="nav-number">1.2.2.</span> <span class="nav-text">DICE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Adaptive-L2-Regularization"><span class="nav-number">1.2.3.</span> <span class="nav-text">Adaptive L2 Regularization</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DIEN"><span class="nav-number">2.</span> <span class="nav-text">DIEN</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Model-1"><span class="nav-number">2.1.</span> <span class="nav-text">Model</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Interest-Extractor%E5%B1%82%EF%BC%9A%E5%85%B4%E8%B6%A3%E7%9A%84%E6%8C%96%E6%8E%98%E3%80%82%E5%88%A9%E7%94%A8GRU-%E8%BE%85%E5%8A%A9loss%E6%9D%A5%E6%8C%96%E6%8E%98%E7%94%A8%E6%88%B7%E5%85%B4%E8%B6%A3%E3%80%82"><span class="nav-number">2.1.1.</span> <span class="nav-text">Interest Extractor层：兴趣的挖掘。利用GRU+辅助loss来挖掘用户兴趣。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Interest-Evolving%E5%B1%82"><span class="nav-number">2.1.2.</span> <span class="nav-text">Interest Evolving层</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Problems"><span class="nav-number">2.2.</span> <span class="nav-text">Problems</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DSIN"><span class="nav-number">3.</span> <span class="nav-text">DSIN</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Model-2"><span class="nav-number">3.1.</span> <span class="nav-text">Model</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Session-Division-Layer"><span class="nav-number">3.1.1.</span> <span class="nav-text">Session Division Layer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Session-Interest-Extractor-Layer"><span class="nav-number">3.1.2.</span> <span class="nav-text">Session Interest Extractor Layer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Session-Interest-Interacting-Layer"><span class="nav-number">3.1.3.</span> <span class="nav-text">Session Interest Interacting Layer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Session-Interest-Activating-Layer"><span class="nav-number">3.1.4.</span> <span class="nav-text">Session Interest Activating Layer</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Experiments"><span class="nav-number">3.2.</span> <span class="nav-text">Experiments</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A8%E8%AE%BA"><span class="nav-number">3.3.</span> <span class="nav-text">讨论</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DMIN"><span class="nav-number">4.</span> <span class="nav-text">DMIN</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Model-3"><span class="nav-number">4.1.</span> <span class="nav-text">Model</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Behavior-Refiner-Layer"><span class="nav-number">4.1.1.</span> <span class="nav-text">Behavior Refiner Layer</span></a></li></ol></li></ol></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kayden</p>
+  <div class="site-description" itemprop="description">Kayden's Blog</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">56</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Chenzk1" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Chenzk1" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:chenzk666@gmail.com" title="E-Mail → mailto:chenzk666@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://andrewsher.github.io/" title="https:&#x2F;&#x2F;andrewsher.github.io&#x2F;" rel="noopener" target="_blank">Andrewsher's blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://shorey.tech/" title="http:&#x2F;&#x2F;shorey.tech&#x2F;" rel="noopener" target="_blank">Shorey's blog</a>
+        </li>
+    </ul>
+  </div>
+
+      </section>
+        <div class="back-to-top animated">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2022/03/09/seq/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Kayden">
+      <meta itemprop="description" content="Kayden's Blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kayden's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          序列模型
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2022-03-09 11:29:58 / Modified: 17:07:13" itemprop="dateCreated datePublished" datetime="2022-03-09T11:29:58+08:00">2022-03-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <a id="more"></a>
+<h1 id="DIN"><a href="#DIN" class="headerlink" title="DIN"></a>DIN</h1><p><a target="_blank" rel="noopener" href="https://dl.acm.org/doi/abs/10.1145/3219819.3219823">paper</a></p>
+<h2 id="Model"><a href="#Model" class="headerlink" title="Model"></a>Model</h2><ul>
+<li>思想：针对不同的候选广告，用户历史行为与该广告的权重是不同的。</li>
+<li>方法：以当前候选广告为query，用户历史行为为key/value，利用attention机制，求query与key的attention score，并利用attention score加权value<img src="/2022/03/09/seq/din.png" class="" title="din">
+</li>
+</ul>
+<script type="math/tex; mode=display">V_{u}=f\left(V_{a}\right)=\sum_{i=1}^{N} w_{i} * V_{i}=\sum_{i=1}^{N} g\left(V_{i}, V_{a}\right) * V_{i}</script><ul>
+<li>Vi表示behavior id i的嵌入向量，比如good_id,shop_id等。Vu是所有behavior ids的加权和，表示的是用户兴趣；Va是候选广告的嵌入向量；wi是候选广告影响着每个behavior id的权重，也就是Local Activation。wi通过Activation Unit计算得出，这一块用函数去拟合，表示为g(Vi,Va)。</li>
+</ul>
+<h2 id="Tricks"><a href="#Tricks" class="headerlink" title="Tricks"></a>Tricks</h2><h3 id="GAUC"><a href="#GAUC" class="headerlink" title="GAUC"></a>GAUC</h3><ul>
+<li>group auc</li>
+<li>auc的评估是对所有样本排序后，评估正样本排在负样本的概率。但推荐、广告系统中，关注的是单个用户的排序。</li>
+<li>gauc是在单个用户auc基础上，按照点击次数、show次数等进行加权平均，消除用户偏差对模型的影响。n为用户数量。<script type="math/tex; mode=display">\mathrm{GAUC}=\frac{\sum_{i=1}^{n} w_{i} * \mathrm{AUC}_{i}}{\sum_{i=1}^{n} w_{i}}=\frac{\sum_{i=1}^{n} \text { impression }_{i} * \mathrm{AUC}_{i}}{\sum_{i=1}^{n} \text { impression }_{i}}</script></li>
+</ul>
+<h3 id="DICE"><a href="#DICE" class="headerlink" title="DICE"></a>DICE</h3><ul>
+<li>Data Dependent Activation Function<script type="math/tex; mode=display">f(s)=p(s) . s+(1-p(s)) \cdot \alpha s, p(s)=\frac{1}{1+e^{-\frac{s-E(s)}{\sqrt{V} a r(s)+\epsilon}}}</script></li>
+<li>可以视为Batch Normalization的变化。使得<strong>激活函数随着一个batch的数据分布做自适应调整</strong>——data dependent。<script type="math/tex; mode=display">f(s)=\operatorname{sigmoid}(B N(s)) \cdot s+(1-\operatorname{sigmoid}(B N(s))) \cdot \alpha s</script></li>
+<li>pi是一个概率值，这个概率值决定着输出是取 s 或者是 alpha_i * s，起到了一个整流器的作用。pi的计算分为两步：<ul>
+<li>首先，对 x 进行均值归一化处理，这使得整流点是在数据的均值处，实现了 data dependent 的想法；</li>
+<li>其次，经过一个 sigmoid 函数的计算，得到了一个 0 到 1 的概率值。</li>
+</ul>
+</li>
+<li>另外，期望和方差使用每次训练的 mini batch data 直接计算，并类似于 Momentum 使用了 指数加权平均：</li>
+</ul>
+<script type="math/tex; mode=display">
+\begin{aligned}
+E\left[s_{i}\right]_{t+1}^{\prime} &=E\left[s_{i}\right]_{t}^{\prime}+\alpha E\left[s_{i}\right]_{t+1} \\
+\operatorname{Var}\left[s_{i}\right]_{t+1}^{\prime} &=\operatorname{Var}\left[s_{i}\right]_{t}^{\prime}+\alpha \operatorname{Var}\left[s_{i}\right]_{t+1}
+\end{aligned}</script><h3 id="Adaptive-L2-Regularization"><a href="#Adaptive-L2-Regularization" class="headerlink" title="Adaptive L2 Regularization"></a>Adaptive L2 Regularization</h3><ul>
+<li>两点改进<ul>
+<li>针对 feature id 出现的频率，来自适应的调整他们正则化的强度:<ul>
+<li>对于出现频率高的，给与较小的正则化强度；</li>
+<li>对于出现频率低的，给予较大的正则化强度。</li>
+</ul>
+</li>
+<li>正则化涉及的参数限制在了仅在Mini-batch出现过的特征所影响的权重, 有效地缓解了过拟合的问题</li>
+</ul>
+</li>
+</ul>
+<script type="math/tex; mode=display">L_{2}(W) \approx \sum_{j=1}^{K} \sum_{m=1}^{B} \frac{\alpha_{m j}}{n_{j}}\left\|w_{j}\right\|_{2}^{2}</script><ul>
+<li>amj表示是否至少有一个样本的id为j的特征出现在mini-batch中；nj表示feature id为j出现的次数，惩罚了出现频率低的item</li>
+</ul>
+<h1 id="DIEN"><a href="#DIEN" class="headerlink" title="DIEN"></a>DIEN</h1><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1809.03672v1">paper</a>, <a target="_blank" rel="noopener" href="https://github.com/mouna99/dien">git</a></p>
+<ul>
+<li>DIN: <strong>将用户历史行为视作用户兴趣</strong>，并用attention机制来捕捉target和历史行为的相对兴趣</li>
+<li>DIEN: <strong>行为不等于兴趣，需要从行为中挖掘兴趣，并考虑兴趣的动态变化</strong><ul>
+<li>兴趣抽取层：计算一个辅助loss，来提升兴趣表达(每个历史行为embedding学习)的准确性&lt; GRU + Loss&gt;</li>
+<li>兴趣进化层：更加准确的表达用户兴趣的动态变化性(加权历史行为embedding的学习)&lt; AUGRU(GRU + attention) &gt;</li>
+</ul>
+</li>
+</ul>
+<h2 id="Model-1"><a href="#Model-1" class="headerlink" title="Model"></a>Model</h2><img src="/2022/03/09/seq/dien.jpeg" class="" title="dien">
+<h3 id="Interest-Extractor层：兴趣的挖掘。利用GRU-辅助loss来挖掘用户兴趣。"><a href="#Interest-Extractor层：兴趣的挖掘。利用GRU-辅助loss来挖掘用户兴趣。" class="headerlink" title="Interest Extractor层：兴趣的挖掘。利用GRU+辅助loss来挖掘用户兴趣。"></a>Interest Extractor层：兴趣的挖掘。利用GRU+辅助loss来挖掘用户兴趣。</h3><ul>
+<li>辅助loss: 第t个时间步输入e(t)，GRU输出隐单元h(t)，第t步loss: 令下一个时间步的输入向量e(t+1)作为正样本，随机采样负样本e(t+1)。<script type="math/tex; mode=display">\begin{aligned} L_{a u x}=-& \frac{1}{N}\left(\sum_{i=1}^{N} \sum_{t} \log \sigma\left(\mathbf{h}_{t}^{i}, \mathbf{e}_{b}^{i}[t+1]\right)\right.\\ &\left.+\log \left(1-\sigma\left(\mathbf{h}_{t}^{i}, \hat{\mathbf{e}}_{b}^{i}[t+1]\right)\right)\right) \end{aligned}</script></li>
+<li>GRU, u表示update gate, r 表示reset gate, h’表示候选的隐藏状态,通过tanh缩放到-1～1之间，对Ht-1进行reset同时+Item, ht 通过last hidden states <em> (1-update) 表示遗忘，update </em> h’表示记忆当前状态<script type="math/tex; mode=display">\begin{aligned}
+\mathbf{u}_{t} &=\sigma\left(W^{u} \mathbf{i}_{t}+U^{u} \mathbf{h}_{t-1}+\mathbf{b}^{u}\right) \\
+\mathbf{r}_{t} &=\sigma\left(W^{r} \mathbf{i}_{t}+U^{r} \mathbf{h}_{t-1}+\mathbf{b}^{r}\right) \\
+\tilde{\mathbf{h}}_{t} &=\tanh \left(W^{h} \mathbf{i}_{t}+\mathbf{r}_{t} \circ U^{h} \mathbf{h}_{t-1}+\mathbf{b}^{h}\right) \\
+\mathbf{h}_{t} &=\left(\mathbf{1}-\mathbf{u}_{t}\right) \circ \mathbf{h}_{t-1}+\mathbf{u}_{t} \circ \tilde{\mathbf{h}}_{t}
+\end{aligned}</script></li>
+</ul>
+<h3 id="Interest-Evolving层"><a href="#Interest-Evolving层" class="headerlink" title="Interest Evolving层"></a>Interest Evolving层</h3><ul>
+<li>Interest Evolving层对与target item相关的兴趣演化轨迹进行建模：利用注意力机制+GRU</li>
+<li>AUGRU: attention update-gate gru。利用attention与update gate相乘，替换原始的update gate</li>
+<li>变体<ul>
+<li>GRU with attentional input（AIGRU）: 较为简单，直接将attention系数和输入相乘</li>
+<li>Attention based GRU（AGRU）：采用问答领域文章提到的一种方法，直接将attention系数来替换GRU的update gate，直接对隐状态进行更新</li>
+</ul>
+</li>
+</ul>
+<h2 id="Problems"><a href="#Problems" class="headerlink" title="Problems"></a>Problems</h2><ul>
+<li>GRU的耗时</li>
+<li>可以借鉴的：aug loss?</li>
+</ul>
+<h1 id="DSIN"><a href="#DSIN" class="headerlink" title="DSIN"></a>DSIN</h1><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1905.06482">paper</a></p>
+<ul>
+<li><strong>session内行为同构，不同session行为异构</strong><ul>
+<li>Bias encoding + Transformer：获取session内的兴趣表达</li>
+<li>Bi-LSTM: session间的序列关系</li>
+<li>activation unit: 类似于din，获得行为序列表达与target item的关系</li>
+</ul>
+</li>
+</ul>
+<h2 id="Model-2"><a href="#Model-2" class="headerlink" title="Model"></a>Model</h2><img src="/2022/03/09/seq/dsin.png" class="" title="dsin">
+<h3 id="Session-Division-Layer"><a href="#Session-Division-Layer" class="headerlink" title="Session Division Layer"></a>Session Division Layer</h3><ul>
+<li>长度为n的seq，切分为K个session，session内有T个item，一个item D维，一个session 30min</li>
+<li>得到Q ∈ R^(K*T*D)</li>
+</ul>
+<h3 id="Session-Interest-Extractor-Layer"><a href="#Session-Interest-Extractor-Layer" class="headerlink" title="Session Interest Extractor Layer"></a>Session Interest Extractor Layer</h3><ul>
+<li><strong>session内的序列建模</strong></li>
+<li>bias encoding: BE(k, t, c)指session k，item t下，位置c的偏置值<script type="math/tex; mode=display">\mathbf{BE}_{(k, t, c)}=\mathbf{w}_{k}^{K}+\mathbf{w}_{t}^{T}+\mathbf{w}_{c}^{C}</script></li>
+</ul>
+<script type="math/tex; mode=display">\mathbf{Q}=\mathbf{Q}+\mathbf{B} \mathbf{E}</script><ul>
+<li>分别对每个session k：<ul>
+<li>过一个Transformer得到<script type="math/tex">{I}_{k}^{Q}</script></li>
+<li>做avg，得到Ik，shape为K*D：<script type="math/tex; mode=display">\mathbf{I}_{k}=\operatorname{Avg}\left(\mathbf{I}_{k}^{Q}\right)</script></li>
+</ul>
+</li>
+</ul>
+<h3 id="Session-Interest-Interacting-Layer"><a href="#Session-Interest-Interacting-Layer" class="headerlink" title="Session Interest Interacting Layer"></a>Session Interest Interacting Layer</h3><ul>
+<li><strong>session间的序列关系</strong></li>
+<li>Bi-LSTM</li>
+</ul>
+<script type="math/tex; mode=display">
+\begin{array}{l}
+\mathbf{i}_{t}=\sigma\left(\mathbf{W}_{x i} \mathbf{I}_{t}+\mathbf{W}_{h i} \mathbf{h}_{t-1}+\mathbf{W}_{c i} \mathbf{c}_{t-1}+\mathbf{b}_{i}\right)\\
+\mathbf{f}_{t}=\sigma\left(\mathbf{W}_{x f} \mathbf{I}_{t}+\mathbf{W}_{h f} \mathbf{h}_{t-1}+\mathbf{W}_{c f} \mathbf{c}_{t-1}+\mathbf{b}_{f}\right)\\
+\mathbf{c}_{t}=\mathbf{f}_{t} \mathbf{c}_{t-1}+\mathbf{i}_{t} \tanh \left(\mathbf{W}_{x c} \mathbf{I}_{t}+\mathbf{W}_{h c} \mathbf{h}_{t-1}+\mathbf{b}_{c}\right)\\
+\mathbf{o}_{t}=\sigma\left(\mathbf{W}_{x o} \mathbf{I}_{t}+\mathbf{W}_{h o} \mathbf{h}_{t-1}+\mathbf{W}_{c o} \mathbf{c}_{t}+\mathbf{b}_{o}\right)\\
+\mathbf{h}_{t}=\mathbf{o}_{t} \tanh \left(\mathbf{c}_{t}\right)\\
+\mathbf{H}_{t}=\overrightarrow{\mathbf{h}_{f t}} \oplus \overleftarrow{\mathbf{h}_{b t}}
+\end{array}</script><h3 id="Session-Interest-Activating-Layer"><a href="#Session-Interest-Activating-Layer" class="headerlink" title="Session Interest Activating Layer"></a>Session Interest Activating Layer</h3><ul>
+<li><strong>与target交互</strong></li>
+<li>包括两部分：<ul>
+<li>Ik与target的attention：未建模session间关系</li>
+<li>Hk与target的attention：建模session间关系之后</li>
+</ul>
+</li>
+</ul>
+<h2 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h2><img src="/2022/03/09/seq/dsin_result.jpeg" class="" title="dsin_result">
+<h2 id="讨论"><a href="#讨论" class="headerlink" title="讨论"></a>讨论</h2><ul>
+<li>DIN-RNN的效果差与DIN，而DSIN-BE的效果好于DSIN-BE-No-SIIL：说明切分session后，序列建模有效，而切分前，序列建模效果有损。原因猜测为，用户行为在长期来看是跳跃的，序列建模可能在某些时间点出有很大的噪声</li>
+</ul>
+<h1 id="DMIN"><a href="#DMIN" class="headerlink" title="DMIN"></a>DMIN</h1><p><a target="_blank" rel="noopener" href="https://www.researchgate.net/publication/345125472_Deep_Multi-Interest_Network_for_Click-through_Rate_Prediction">paper</a>、<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/69929b24bb37">推荐系统遇上深度学习(一零零)-[阿里]深度多兴趣网络DMIN</a></p>
+<ul>
+<li>利用multi-head attention机制，建模用户多兴趣</li>
+</ul>
+<h2 id="Model-3"><a href="#Model-3" class="headerlink" title="Model"></a>Model</h2><img src="/2022/03/09/seq/dmin.jpg" class="" title="dmin">
+<h3 id="Behavior-Refiner-Layer"><a href="#Behavior-Refiner-Layer" class="headerlink" title="Behavior Refiner Layer"></a>Behavior Refiner Layer</h3><script type="math/tex; mode=display">
+\begin{aligned}
+\operatorname{head}_{h} &=\operatorname{Attention}\left(\mathbf{x}_{b} \mathbf{W}_{h}^{Q}, \mathbf{x}_{b} \mathbf{W}_{h}^{K}, \mathbf{x}_{b} \mathbf{W}_{h}^{V}\right) \\
+&=\operatorname{Softmax}\left(\frac{\mathbf{x}_{b} \mathbf{W}_{h}^{Q} \cdot\left(\mathbf{x}_{b} \mathbf{W}_{h}^{K}\right)^{\top}}{\sqrt{d_{h}}} \cdot \mathbf{x}_{b} \mathbf{W}_{h}^{V}\right)
+\end{aligned}</script><script type="math/tex; mode=display">
+\mathrm{Z}=\text { MultiHead }\left(\mathbf{x}_{b}\right)=\text { Concat }\left(\text { head }_{1}, \text { head }_{2}, \ldots, \text { head }_{H_{R}}\right) \mathbf{W}^{O}</script>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ML/" rel="tag"># ML</a>
+              <a href="/tags/Seq-Model/" rel="tag"># Seq Model</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/01/18/mtl/" rel="prev" title="MTL多任务学习">
+                  <i class="fa fa-chevron-left"></i> MTL多任务学习
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Kayden</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+      <script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              const target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    const script = document.createElement('script');
+    script.src = '//cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js';
+    script.defer = true;
+    document.head.appendChild(script);
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.typesetClear();
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
