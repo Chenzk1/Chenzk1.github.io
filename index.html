@@ -321,7 +321,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2022-03-09 11:29:58 / Modified: 17:07:13" itemprop="dateCreated datePublished" datetime="2022-03-09T11:29:58+08:00">2022-03-09</time>
+      <time title="Created: 2022-03-09 11:29:58 / Modified: 17:43:43" itemprop="dateCreated datePublished" datetime="2022-03-09T11:29:58+08:00">2022-03-09</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -344,7 +344,7 @@
     
     <div class="post-body" itemprop="articleBody">
           <a id="more"></a>
-<h1 id="DIN"><a href="#DIN" class="headerlink" title="DIN"></a>DIN</h1><p><a target="_blank" rel="noopener" href="https://dl.acm.org/doi/abs/10.1145/3219819.3219823">paper</a></p>
+<h1 id="DIN-Deep-Interest-Network"><a href="#DIN-Deep-Interest-Network" class="headerlink" title="DIN(Deep Interest Network)"></a>DIN(Deep Interest Network)</h1><p><a target="_blank" rel="noopener" href="https://dl.acm.org/doi/abs/10.1145/3219819.3219823">paper</a></p>
 <h2 id="Model"><a href="#Model" class="headerlink" title="Model"></a>Model</h2><ul>
 <li>思想：针对不同的候选广告，用户历史行为与该广告的权重是不同的。</li>
 <li>方法：以当前候选广告为query，用户历史行为为key/value，利用attention机制，求query与key的attention score，并利用attention score加权value<img src="/2022/03/09/seq/din.png" class="" title="din">
@@ -386,7 +386,7 @@ E\left[s_{i}\right]_{t+1}^{\prime} &=E\left[s_{i}\right]_{t}^{\prime}+\alpha E\l
 <script type="math/tex; mode=display">L_{2}(W) \approx \sum_{j=1}^{K} \sum_{m=1}^{B} \frac{\alpha_{m j}}{n_{j}}\left\|w_{j}\right\|_{2}^{2}</script><ul>
 <li>amj表示是否至少有一个样本的id为j的特征出现在mini-batch中；nj表示feature id为j出现的次数，惩罚了出现频率低的item</li>
 </ul>
-<h1 id="DIEN"><a href="#DIEN" class="headerlink" title="DIEN"></a>DIEN</h1><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1809.03672v1">paper</a>, <a target="_blank" rel="noopener" href="https://github.com/mouna99/dien">git</a></p>
+<h1 id="DIEN-Deep-Interest-Evolution-Network-for-Click-Through-Rate-Prediction"><a href="#DIEN-Deep-Interest-Evolution-Network-for-Click-Through-Rate-Prediction" class="headerlink" title="DIEN(Deep Interest Evolution Network for Click-Through Rate Prediction)"></a>DIEN(Deep Interest Evolution Network for Click-Through Rate Prediction)</h1><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1809.03672v1">paper</a>, <a target="_blank" rel="noopener" href="https://github.com/mouna99/dien">git</a></p>
 <ul>
 <li>DIN: <strong>将用户历史行为视作用户兴趣</strong>，并用attention机制来捕捉target和历史行为的相对兴趣</li>
 <li>DIEN: <strong>行为不等于兴趣，需要从行为中挖掘兴趣，并考虑兴趣的动态变化</strong><ul>
@@ -418,7 +418,7 @@ E\left[s_{i}\right]_{t+1}^{\prime} &=E\left[s_{i}\right]_{t}^{\prime}+\alpha E\l
 <li>GRU的耗时</li>
 <li>可以借鉴的：aug loss?</li>
 </ul>
-<h1 id="DSIN"><a href="#DSIN" class="headerlink" title="DSIN"></a>DSIN</h1><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1905.06482">paper</a></p>
+<h1 id="DSIN-Deep-Session-Interest-Network-for-Click-Through-Rate-Prediction"><a href="#DSIN-Deep-Session-Interest-Network-for-Click-Through-Rate-Prediction" class="headerlink" title="DSIN(Deep Session Interest Network for Click-Through Rate Prediction)"></a>DSIN(Deep Session Interest Network for Click-Through Rate Prediction)</h1><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1905.06482">paper</a></p>
 <ul>
 <li><strong>session内行为同构，不同session行为异构</strong><ul>
 <li>Bias encoding + Transformer：获取session内的兴趣表达</li>
@@ -467,17 +467,41 @@ E\left[s_{i}\right]_{t+1}^{\prime} &=E\left[s_{i}\right]_{t}^{\prime}+\alpha E\l
 <h2 id="讨论"><a href="#讨论" class="headerlink" title="讨论"></a>讨论</h2><ul>
 <li>DIN-RNN的效果差与DIN，而DSIN-BE的效果好于DSIN-BE-No-SIIL：说明切分session后，序列建模有效，而切分前，序列建模效果有损。原因猜测为，用户行为在长期来看是跳跃的，序列建模可能在某些时间点出有很大的噪声</li>
 </ul>
-<h1 id="DMIN"><a href="#DMIN" class="headerlink" title="DMIN"></a>DMIN</h1><p><a target="_blank" rel="noopener" href="https://www.researchgate.net/publication/345125472_Deep_Multi-Interest_Network_for_Click-through_Rate_Prediction">paper</a>、<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/69929b24bb37">推荐系统遇上深度学习(一零零)-[阿里]深度多兴趣网络DMIN</a></p>
+<h1 id="DMIN-Deep-Multi-Interest-Network-for-Click-through-Rate-Prediction"><a href="#DMIN-Deep-Multi-Interest-Network-for-Click-through-Rate-Prediction" class="headerlink" title="DMIN(Deep Multi-Interest Network for Click-through Rate Prediction)"></a>DMIN(Deep Multi-Interest Network for Click-through Rate Prediction)</h1><p><a target="_blank" rel="noopener" href="https://www.researchgate.net/publication/345125472_Deep_Multi-Interest_Network_for_Click-through_Rate_Prediction">paper</a>、<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/69929b24bb37">推荐系统遇上深度学习(一零零)-[阿里]深度多兴趣网络DMIN</a></p>
 <ul>
 <li>利用multi-head attention机制，建模用户多兴趣</li>
+<li>引入DIEN中的aux loss</li>
 </ul>
 <h2 id="Model-3"><a href="#Model-3" class="headerlink" title="Model"></a>Model</h2><img src="/2022/03/09/seq/dmin.jpg" class="" title="dmin">
-<h3 id="Behavior-Refiner-Layer"><a href="#Behavior-Refiner-Layer" class="headerlink" title="Behavior Refiner Layer"></a>Behavior Refiner Layer</h3><script type="math/tex; mode=display">
+<h3 id="Behavior-Refiner-Layer"><a href="#Behavior-Refiner-Layer" class="headerlink" title="Behavior Refiner Layer"></a>Behavior Refiner Layer</h3><ul>
+<li>multi-head attention，提炼用户行为序列，为每个历史行为生成一个新的embedding。HR为head数（R表示Refine），xb的shape: T*D，W: T*Dh，得到T*Dh，concat后得到T*(Dh*HR)<script type="math/tex; mode=display">
 \begin{aligned}
 \operatorname{head}_{h} &=\operatorname{Attention}\left(\mathbf{x}_{b} \mathbf{W}_{h}^{Q}, \mathbf{x}_{b} \mathbf{W}_{h}^{K}, \mathbf{x}_{b} \mathbf{W}_{h}^{V}\right) \\
 &=\operatorname{Softmax}\left(\frac{\mathbf{x}_{b} \mathbf{W}_{h}^{Q} \cdot\left(\mathbf{x}_{b} \mathbf{W}_{h}^{K}\right)^{\top}}{\sqrt{d_{h}}} \cdot \mathbf{x}_{b} \mathbf{W}_{h}^{V}\right)
-\end{aligned}</script><script type="math/tex; mode=display">
-\mathrm{Z}=\text { MultiHead }\left(\mathbf{x}_{b}\right)=\text { Concat }\left(\text { head }_{1}, \text { head }_{2}, \ldots, \text { head }_{H_{R}}\right) \mathbf{W}^{O}</script>
+\end{aligned}</script></li>
+</ul>
+<script type="math/tex; mode=display">
+\mathrm{Z}=\text { MultiHead }\left(\mathbf{x}_{b}\right)=\text { Concat }\left(\text { head }_{1}, \text { head }_{2}, \ldots, \text { head }_{H_{R}}\right) \mathbf{W}^{O}</script><ul>
+<li>aux loss: 同DIEN</li>
+</ul>
+<h3 id="Multi-Interest-Extractor-Layer"><a href="#Multi-Interest-Extractor-Layer" class="headerlink" title="Multi-Interest Extractor Layer"></a>Multi-Interest Extractor Layer</h3><ul>
+<li>multi-head attention，HE个head<script type="math/tex; mode=display">
+\begin{aligned}
+\text { head }_{h}^{\prime} &=\operatorname{Attention}\left(\mathbf{Z W}_{h}^{\prime Q}, \mathbf{Z W}_{h}^{\prime K}, \mathbf{Z W}_{h}^{\prime V}\right) \\
+&=\operatorname{Softmax}\left(\frac{\mathbf{Z W}_{h}^{\prime} \begin{array}{l}
+Q \\
+h
+\end{array} \cdot\left(\mathbf{Z W}_{h}^{\prime K}\right)^{\top}}{\sqrt{d_{\text {model }}}} \cdot \mathbf{Z W}_{h}^{\prime V}\right)
+\end{aligned}</script></li>
+<li>类似din，得到第h个兴趣，Ijh为第h个head的第j个item，xt为target item,pj为position encoding：<script type="math/tex; mode=display">
+\text { interest }_{h}=\sum_{j=1}^{T} a\left(\mathbf{I}_{j h}, \mathbf{x}_{t}, \mathbf{p}_{j}\right) \mathbf{I}_{j h}=\sum_{j=1}^{T} w_{j} \mathbf{I}_{j h}</script></li>
+</ul>
+<h1 id="MIND-Multi-Interest-Network-with-Dynamic-Routing-for-Recommendation-at-Tmall"><a href="#MIND-Multi-Interest-Network-with-Dynamic-Routing-for-Recommendation-at-Tmall" class="headerlink" title="MIND(Multi-Interest Network with Dynamic Routing for Recommendation at Tmall)"></a>MIND(Multi-Interest Network with Dynamic Routing for Recommendation at Tmall)</h1><p><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1904.08030.pdf">paper</a>、<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/5e339afbf2e7">推荐系统遇上深度学习(七十四)-[天猫]MIND：多兴趣向量召回</a></p>
+<ul>
+<li>胶囊网络</li>
+<li>用于召回</li>
+</ul>
+
       
     </div>
 
