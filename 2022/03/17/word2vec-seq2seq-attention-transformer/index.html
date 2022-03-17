@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/mylogo-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/mylogo-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/mylogo-16x16-next.png">
+  <link rel="mask-icon" href="/images/mylogo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.0/css/all.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"chenzk1.github.io","root":"/","scheme":"Gemini","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+
+  <meta name="description" content="word2vec 优点： 1）由于 Word2vec 会考虑上下文，跟之前的 Embedding 方法相比，效果要更好（但不如 18 年之后的方法） 2）比之前的 Embedding方法维度更少，所以速度更快 3）通用性很强，可以用在各种 NLP 任务中   缺点： 1）由于词和向量是一对一的关系，所以多义词的问题无法解决。 2）Word2vec 是一种静态的方式，虽然通用性强，但是无法针对特定">
+<meta property="og:type" content="article">
+<meta property="og:title" content="word2vec_seq2seq_attention_transformer">
+<meta property="og:url" content="https://chenzk1.github.io/2022/03/17/word2vec-seq2seq-attention-transformer/index.html">
+<meta property="og:site_name" content="Kayden&#39;s Blog">
+<meta property="og:description" content="word2vec 优点： 1）由于 Word2vec 会考虑上下文，跟之前的 Embedding 方法相比，效果要更好（但不如 18 年之后的方法） 2）比之前的 Embedding方法维度更少，所以速度更快 3）通用性很强，可以用在各种 NLP 任务中   缺点： 1）由于词和向量是一对一的关系，所以多义词的问题无法解决。 2）Word2vec 是一种静态的方式，虽然通用性强，但是无法针对特定">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://chenzk1.github.io/2022/03/17/word2vec-seq2seq-attention-transformer/word2vec1.png">
+<meta property="og:image" content="https://chenzk1.github.io/2022/03/17/word2vec-seq2seq-attention-transformer/encoder_decoder.png">
+<meta property="og:image" content="https://chenzk1.github.io/2022/03/17/word2vec-seq2seq-attention-transformer/attention1.jpeg">
+<meta property="og:image" content="https://chenzk1.github.io/2022/03/17/word2vec-seq2seq-attention-transformer/attention2.jpeg">
+<meta property="og:image" content="https://chenzk1.github.io/2022/03/17/word2vec-seq2seq-attention-transformer/attention3.jpeg">
+<meta property="og:image" content="https://chenzk1.github.io/2022/03/17/word2vec-seq2seq-attention-transformer/transformer1.jpeg">
+<meta property="og:image" content="https://chenzk1.github.io/2022/03/17/word2vec-seq2seq-attention-transformer/transformer2.jpeg">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-ac8272e1505602d3f56334fd49d08ab8_hd.jpg">
+<meta property="article:published_time" content="2022-03-17T14:34:08.000Z">
+<meta property="article:modified_time" content="2022-03-17T15:05:46.866Z">
+<meta property="article:author" content="Kayden">
+<meta property="article:tag" content="word2vec">
+<meta property="article:tag" content="seq2seq">
+<meta property="article:tag" content="attention">
+<meta property="article:tag" content="transformer">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://chenzk1.github.io/2022/03/17/word2vec-seq2seq-attention-transformer/word2vec1.png">
+
+
+<link rel="canonical" href="https://chenzk1.github.io/2022/03/17/word2vec-seq2seq-attention-transformer/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>word2vec_seq2seq_attention_transformer | Kayden's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Kayden's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Mamba forever.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#word2vec"><span class="nav-number">1.</span> <span class="nav-text">word2vec</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8B%E9%87%87%E6%A0%B7"><span class="nav-number">1.1.</span> <span class="nav-text">下采样</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B4%9F%E9%87%87%E6%A0%B7"><span class="nav-number">1.2.</span> <span class="nav-text">负采样</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CBOW%E5%92%8Cskip-gram"><span class="nav-number">1.3.</span> <span class="nav-text">CBOW和skip-gram</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#seq2seq"><span class="nav-number">2.</span> <span class="nav-text">seq2seq</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#encoder-decoder%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.1.</span> <span class="nav-text">encoder-decoder模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#seq2seq-1"><span class="nav-number">2.2.</span> <span class="nav-text">seq2seq</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9E%84"><span class="nav-number">2.2.1.</span> <span class="nav-text">结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-number">2.2.2.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#decoding"><span class="nav-number">2.2.3.</span> <span class="nav-text">decoding</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%80%E9%99%90"><span class="nav-number">2.2.4.</span> <span class="nav-text">局限</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%94%E7%94%A8"><span class="nav-number">2.2.5.</span> <span class="nav-text">应用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BA%94%E7%94%A8seq2seq%E5%81%9ANMT-Neural-Machine-Translation"><span class="nav-number">2.2.5.1.</span> <span class="nav-text">应用seq2seq做NMT(Neural Machine Translation)</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#attention"><span class="nav-number">3.</span> <span class="nav-text">attention</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#motivation"><span class="nav-number">3.1.</span> <span class="nav-text">motivation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AC%E8%B4%A8%E6%80%9D%E6%83%B3"><span class="nav-number">3.2.</span> <span class="nav-text">本质思想</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#method"><span class="nav-number">3.3.</span> <span class="nav-text">method</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#attention-score%E7%9A%84%E5%A4%9A%E7%A7%8D%E8%AE%A1%E7%AE%97%E6%96%B9%E5%BC%8F"><span class="nav-number">3.3.1.</span> <span class="nav-text">attention score的多种计算方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#self-Attention-intra-Attention"><span class="nav-number">3.3.2.</span> <span class="nav-text">self Attention&#x2F; intra Attention</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#attention%E7%9A%84%E5%A5%BD%E5%A4%84"><span class="nav-number">3.4.</span> <span class="nav-text">attention的好处</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Transformer"><span class="nav-number">4.</span> <span class="nav-text">Transformer</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Encoder-and-decoder-stacks"><span class="nav-number">4.1.</span> <span class="nav-text">Encoder and decoder stacks</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%84"><span class="nav-number">4.1.1.</span> <span class="nav-text">模型结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Encoder"><span class="nav-number">4.1.2.</span> <span class="nav-text">Encoder</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Decoder"><span class="nav-number">4.1.3.</span> <span class="nav-text">Decoder</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Layer-Normalization"><span class="nav-number">4.1.4.</span> <span class="nav-text">Layer Normalization</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Batch-Normalization"><span class="nav-number">4.1.4.1.</span> <span class="nav-text">Batch Normalization</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LN"><span class="nav-number">4.1.4.2.</span> <span class="nav-text">LN</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Attention"><span class="nav-number">4.1.5.</span> <span class="nav-text">Attention</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Scaled-Dot-Product-Attention"><span class="nav-number">4.1.5.1.</span> <span class="nav-text">Scaled Dot-Product Attention</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#multi-head-attention"><span class="nav-number">4.1.5.2.</span> <span class="nav-text">multi-head attention</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Attention%E5%9C%A8transform%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-number">4.1.5.3.</span> <span class="nav-text">Attention在transform中的应用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Position-wise-Feed-Forward-Networks"><span class="nav-number">4.1.6.</span> <span class="nav-text">Position-wise Feed-Forward Networks</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Embedding-and-Softmax"><span class="nav-number">4.1.7.</span> <span class="nav-text">Embedding and Softmax</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Position-Encoding"><span class="nav-number">4.1.8.</span> <span class="nav-text">Position Encoding</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BD%95%E4%BD%BF%E7%94%A8self-attention"><span class="nav-number">4.1.9.</span> <span class="nav-text">为何使用self-attention</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83"><span class="nav-number">4.1.10.</span> <span class="nav-text">训练</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AD%A3%E5%88%99%E5%8C%96"><span class="nav-number">4.1.10.1.</span> <span class="nav-text">正则化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#decoder"><span class="nav-number">4.1.10.2.</span> <span class="nav-text">decoder</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">4.1.11.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Transformer-VS-CNN"><span class="nav-number">4.2.</span> <span class="nav-text">Transformer VS CNN</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#word2vec-vs-glove-vs-elmo-vs-gpt-vs-bert"><span class="nav-number">5.</span> <span class="nav-text">word2vec vs glove vs elmo vs gpt vs bert</span></a></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kayden</p>
+  <div class="site-description" itemprop="description">Kayden's Blog</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">53</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">61</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Chenzk1" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Chenzk1" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:chenzk666@gmail.com" title="E-Mail → mailto:chenzk666@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://andrewsher.github.io/" title="https:&#x2F;&#x2F;andrewsher.github.io&#x2F;" rel="noopener" target="_blank">Andrewsher's blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://shorey.tech/" title="http:&#x2F;&#x2F;shorey.tech&#x2F;" rel="noopener" target="_blank">Shorey's blog</a>
+        </li>
+    </ul>
+  </div>
+
+      </section>
+        <div class="back-to-top animated">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2022/03/17/word2vec-seq2seq-attention-transformer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Kayden">
+      <meta itemprop="description" content="Kayden's Blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kayden's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          word2vec_seq2seq_attention_transformer
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2022-03-17 22:34:08 / Modified: 23:05:46" itemprop="dateCreated datePublished" datetime="2022-03-17T22:34:08+08:00">2022-03-17</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <a id="more"></a>
+<h1 id="word2vec"><a href="#word2vec" class="headerlink" title="word2vec"></a>word2vec</h1><ul>
+<li>优点：<ul>
+<li>1）由于 Word2vec 会考虑上下文，跟之前的 Embedding 方法相比，效果要更好（但不如 18 年之后的方法）</li>
+<li>2）比之前的 Embedding方法维度更少，所以速度更快</li>
+<li>3）通用性很强，可以用在各种 NLP 任务中</li>
+</ul>
+</li>
+<li>缺点：<ul>
+<li>1）由于词和向量是一对一的关系，所以多义词的问题无法解决。</li>
+<li>2）Word2vec 是一种静态的方式，虽然通用性强，但是无法针对特定任务做动态优化</li>
+</ul>
+</li>
+</ul>
+<h2 id="下采样"><a href="#下采样" class="headerlink" title="下采样"></a>下采样</h2><ul>
+<li>高频词：<ul>
+<li>1）例如the等词不会提供更多语义</li>
+<li>2）训练时用不到那么多样本对</li>
+<li>因此以以某种概率删掉一些词，这个概率与词出现的频数有关</li>
+</ul>
+</li>
+</ul>
+<h2 id="负采样"><a href="#负采样" class="headerlink" title="负采样"></a>负采样</h2><ul>
+<li>对于负样本，只选择一部分。因为负样本的label为0，因此每次更新的参数也会较少。回忆一下我们的隐层-输出层拥有300 x 10000的权重矩阵。如果使用了负采样的方法我们仅仅去更新我们的positive word-“quick”的和我们选择的其他5个negative words的结点对应的权重，共计6个输出神经元，相当于每次只更新300*5个权重。对于3百万的权重来说，相当于只计算了0.06%的权重，这样计算效率就大幅度提高。</li>
+<li>单词被选中的概率与其频度有关：<img src="/2022/03/17/word2vec-seq2seq-attention-transformer/word2vec1.png" class="" title="word2vec1">
+</li>
+</ul>
+<h2 id="CBOW和skip-gram"><a href="#CBOW和skip-gram" class="headerlink" title="CBOW和skip-gram"></a>CBOW和skip-gram</h2><ul>
+<li>CBOW：周围词预测中心词，每次迭代都在调整周围词，因此其迭代的次数与语料库大小相同，复杂度为O(V)</li>
+<li>S-G：中心词预测周围词，每次迭代都在调整中心词，每个中心词需要调整K次，因此其迭代的次数为K*V次，这里K为窗口大小，复杂度为O(KV)</li>
+<li>即CBOW快于S-G；而SG更适用于生僻词以及语料库较小的情况的训练，因为生僻词出现的次数少，SG能够对其进行较多次的训练<blockquote>
+<p>在cbow方法中，是用周围词预测中心词，从而利用中心词的预测结果情况，使用GradientDesent方法，不断的去调整周围词的向量。当训练完成之后，每个词都会作为中心词，把周围词的词向量进行了调整，这样也就获得了整个文本里面所有词的词向量。要注意的是， cbow的对周围词的调整是统一的：求出的gradient的值会同样的作用到每个周围词的词向量当中去。可以看到，cbow预测行为的次数跟整个文本的词数几乎是相等的（每次预测行为才会进行一次backpropgation, 而往往这也是最耗时的部分），复杂度大概是O(V).<br>而skip-gram是用中心词来预测周围的词。在skip-gram中，会利用周围的词的预测结果情况，使用GradientDecent来不断的调整中心词的词向量，最终所有的文本遍历完毕之后，也就得到了文本所有词的词向量。<br>可以看出，skip-gram进行预测的次数是要多于cbow的：因为每个词在作为中心词时，都要使用周围词进行预测一次。这样相当于比cbow的方法多进行了K次（假设K为窗口大小），因此时间的复杂度为O(KV)，训练时间要比cbow要长。<br>但是在skip-gram当中，每个词都要收到周围的词的影响，每个词在作为中心词的时候，都要进行K次的预测、调整。因此，当数据量较少，或者词为生僻词出现次数较少时， 这种多次的调整会使得词向量相对的更加准确。因为尽管cbow从另外一个角度来说，某个词也是会受到多次周围词的影响（多次将其包含在内的窗口移动），进行词向量的跳帧，但是他的调整是跟周围的词一起调整的，grad的值会平均分到该词上， 相当于该生僻词没有收到专门的训练，它只是沾了周围词的光而已。<br>从更通俗的角度来说：在skip-gram里面，每个词在作为中心词的时候，实际上是 1个学生 VS K个老师，K个老师（周围词）都会对学生（中心词）进行“专业”的训练，这样学生（中心词）的“能力”（向量结果）相对就会扎实（准确）一些，但是这样肯定会使用更长的时间；cbow是 1个老师 VS K个学生，K个学生（周围词）都会从老师（中心词）那里学习知识，但是老师（中心词）是一视同仁的，教给大家的一样的知识。至于你学到了多少，还要看下一轮（假如还在窗口内），或者以后的某一轮，你还有机会加入老师的课堂当中（再次出现作为周围词），跟着大家一起学习，然后进步一点。因此相对skip-gram，你的业务能力肯定没有人家强，但是对于整个训练营（训练过程）来说，这样肯定效率高，速度更快。</p>
+</blockquote>
+</li>
+</ul>
+<h1 id="seq2seq"><a href="#seq2seq" class="headerlink" title="seq2seq"></a>seq2seq</h1><h2 id="encoder-decoder模型"><a href="#encoder-decoder模型" class="headerlink" title="encoder-decoder模型"></a>encoder-decoder模型</h2><img src="/2022/03/17/word2vec-seq2seq-attention-transformer/encoder_decoder.png" class="" title="encoder_decoder">
+<ul>
+<li>其中，encoder和decoder的具体架构可选，CNN/RNN/LSTM/GRU…</li>
+<li>C由encoder中所有时间的隐藏状态决定，设共Tx个状态，则C = q(h1,h2,…hTx)</li>
+<li>decoder为一个语言模型，则 <script type="math/tex">y_t = \mathop{argmax} P(y_t)=\prod_{t=1}^Tp(y_t|\{y_1,\ldots,y_{t-1}\},C)</script></li>
+<li><strong>注意，这个C是不变的，即对于decoder中的序列，输入的C是相同的</strong></li>
+<li>局限：encoder和decoder的联系只依靠一个固定长度的语义向量c<ul>
+<li><strong>语义向量可能无法完全表达encoder中整个序列的信息，且输入序列越长，此现象越严重；</strong></li>
+<li><strong>encoder中序列先输入的内容会被后输入的内容稀释掉</strong></li>
+</ul>
+</li>
+</ul>
+<h2 id="seq2seq-1"><a href="#seq2seq-1" class="headerlink" title="seq2seq"></a>seq2seq</h2><h3 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h3><ul>
+<li>第一种结构：将c当做decoder每一时刻的输入，如上encoder-decoder</li>
+<li>第二种结构：c只作为decoder初始时刻的输入</li>
+</ul>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><ul>
+<li>测试时，decoder中前序输出输入到下一个时刻</li>
+<li>训练时，decoder前序输出不作为下一时刻的输入，而使用真实序列作为输入</li>
+<li>端对端训练：<ul>
+<li>两个分模型分别训练得到最优后合在一起不一定能获得全局最优</li>
+</ul>
+</li>
+</ul>
+<h3 id="decoding"><a href="#decoding" class="headerlink" title="decoding"></a>decoding</h3><ul>
+<li>本质是求条件概率</li>
+<li>greedy decoding：decoder中每个序列会接一层softmax，输出语料库中每个单词的概率，测试时，每次取概率最大的单词作为下一序列的输入，称为<strong>greedy decoding</strong>。<ul>
+<li>greedy的问题：<strong>无法回退</strong>，预测出错之后会一直错下去。</li>
+</ul>
+</li>
+<li>Exhaustive search decoding: 每一步都计算，设语料库大小为V，则第T时刻的时间复杂度为O(V^T)</li>
+<li>Beam Search decoding: <ul>
+<li>每次track k个最有可能的值。</li>
+<li>如果遇到结束的序列，先保存，等所有序列结束后，比较其条件概率除以序列长度的最大值（为了避免倾向于选择较短的序列，除以序列长度）。</li>
+<li>终止条件：序列长度阈值、可选结果个数阈值。</li>
+</ul>
+</li>
+</ul>
+<h3 id="局限"><a href="#局限" class="headerlink" title="局限"></a>局限</h3><ul>
+<li>encoder和decoder的联系只依靠一个固定长度的语义向量c：<ul>
+<li>语义向量可能无法完全表达encoder中整个序列的信息，且输入序列越长，此现象越严重；</li>
+<li>encoder中序列先输入的内容会被后输入的内容稀释掉</li>
+</ul>
+</li>
+</ul>
+<h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><h4 id="应用seq2seq做NMT-Neural-Machine-Translation"><a href="#应用seq2seq做NMT-Neural-Machine-Translation" class="headerlink" title="应用seq2seq做NMT(Neural Machine Translation)"></a>应用seq2seq做NMT(Neural Machine Translation)</h4><ul>
+<li>优点：<ul>
+<li>better performance：更流利；应用了更多的上下文信息；对短语相似性利用的更好</li>
+<li>端对端训练</li>
+<li>更少的人工</li>
+</ul>
+</li>
+<li>劣势：<ul>
+<li>解释性</li>
+<li>更难debug</li>
+<li>更难控制（比起SMT（可以直接用规则））</li>
+<li>安全性</li>
+</ul>
+</li>
+<li>遗留问题：<ul>
+<li>out-of-vocabulary words：语料库里没有的单词无法翻译</li>
+<li>domain dismatch：用维基百科训练的模型对Facebook不一定好用</li>
+</ul>
+</li>
+</ul>
+<h1 id="attention"><a href="#attention" class="headerlink" title="attention"></a>attention</h1><h2 id="motivation"><a href="#motivation" class="headerlink" title="motivation"></a>motivation</h2><ul>
+<li>1）语义向量C有语义表达的瓶颈，attention可以使decoder的每个时刻与encoder相连；</li>
+<li>2）attention可以使得decoder的每一步只关注encoder的特定部分。</li>
+</ul>
+<h2 id="本质思想"><a href="#本质思想" class="headerlink" title="本质思想"></a>本质思想</h2><ul>
+<li>target中给定一个query，计算该query与source中每个key之间的相似度，即sim(Query, Key i)；然后对每个sim值进行softmax；使用softmax值来加权平均source中每个key对应的value，并得到attention score：<script type="math/tex">\text { Attention(Query, Source) }=\sum_{i=1}^{L_{x}} \text { Similarity }\left(\text { Query }, \text { Key }_{i}\right) * \text { Value }_{i}</script></li>
+</ul>
+<img src="/2022/03/17/word2vec-seq2seq-attention-transformer/attention1.jpeg" class="" title="attention1">
+<h2 id="method"><a href="#method" class="headerlink" title="method"></a>method</h2><ul>
+<li>核心：<strong>==个性化encoder中每个时刻对decoder中每个时刻的影响，并且直接连接到encoder==</strong>：<img src="/2022/03/17/word2vec-seq2seq-attention-transformer/attention2.jpeg" class="" title="attention2">
+<ul>
+<li>参考文章<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/61816483">attention</a></li>
+</ul>
+</li>
+<li>decoder中每个时间点语义编码对其贡献是一样的Y1=g(C,h(0)),Y2=g(C,Y1)…</li>
+<li>attention中，decoder不再将整个序列编码成固定长度的语义向量C，而是根据生成的新单词计算新的Ci，使得不同时刻输入不同的C，这样就解决了单词信息丢失的问题：<script type="math/tex">p(y_i|y_1,\ldots,y_{i-1},X)=g(y_{i-1},s_i,c_i) 其中，s_i=f(s_{i-1},y_{i-1},c_i)</script><ul>
+<li>即decoder中每个时刻的结果是上个时刻输出、该时刻状态、该时刻语义向量C的函数，而此时刻的状态为上个时刻输出、上个时刻状态以及Ci的函数。</li>
+</ul>
+</li>
+<li>attention，Ci的计算为：<script type="math/tex; mode=display">
+\begin{array}{c}
+c_{i}=\sum_{j=1}^{T_{x}} \alpha_{i j} h_{j} \\
+\alpha_{i j}=\frac{\exp \left(e_{i j}\right)}{\sum_{k=1}^{T_{x}} \exp \left(e_{i k}\right)} \\
+e_{i j}=a\left(s_{i-1}, h_{j}\right)
+\end{array}</script></li>
+<li>即对于decoder的每个状态Si，Ci为encoder中每个状态的hi的加权平均，其中权重为decoder中si-1与encoder中的每个隐藏状态决定（softmax）</li>
+<li>整体：<br>$e<em>{i j}=a\left(s</em>{i-1}, h_{j}\right)$ 这里 $a$ 可以是内积, 即 $S i-1$ 和 $h j$ 的内积<script type="math/tex; mode=display">
+\begin{array}{c}
+\alpha_{i j}=\frac{\exp \left(e_{i j}\right)}{\sum_{k=1}^{T x} \exp \left(e_{i k}\right)} \\
+c_{i}=\sum_{j=1}^{T_{x}} \alpha_{i j} h_{j} \\
+s_{i}=f\left(s_{i-1}, y_{i-1}, c_{i}\right) \\
+y_{i}=g\left(y_{i-1}, s_{i}, c_{i}\right)
+\end{array}</script></li>
+<li>原始attention论文中，encoder使用了BiRNN，因此可以获取到某个输入上下文的信息</li>
+</ul>
+<h3 id="attention-score的多种计算方式"><a href="#attention-score的多种计算方式" class="headerlink" title="attention score的多种计算方式"></a>attention score的多种计算方式</h3><ul>
+<li>参考文章<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/61816483">attention</a></li>
+<li>本质是计算query和source中每个key的相似度或相关度：<ul>
+<li>点积</li>
+<li>cosine相似性</li>
+<li>MLP网络<img src="/2022/03/17/word2vec-seq2seq-attention-transformer/attention3.jpeg" class="" title="attention3">
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="self-Attention-intra-Attention"><a href="#self-Attention-intra-Attention" class="headerlink" title="self Attention/ intra Attention"></a>self Attention/ intra Attention</h3><ul>
+<li>Self Attention顾名思义，指的不是Target和Source之间的Attention机制，而是Source内部元素之间或者Target内部元素之间发生的Attention机制，也可以理解为Target=Source这种特殊情况下的注意力计算机制。</li>
+<li>例如可以捕捉同一个句子中的句法特征和语义特征</li>
+<li>引入Self Attention后会更容易捕获句子中长距离的相互依赖的特征，因为如果是RNN或者LSTM，需要依次序序列计算，对于远距离的相互依赖的特征，要经过若干时间步步骤的信息累积才能将两者联系起来，而距离越远，有效捕获的可能性越小。</li>
+<li>此外，<strong>可以增加计算并行化</strong>，原因是对于self-attention来说，不需要等待序列生成。</li>
+</ul>
+<h2 id="attention的好处"><a href="#attention的好处" class="headerlink" title="attention的好处"></a>attention的好处</h2><ul>
+<li>解决了bottleneck问题<ul>
+<li>允许decoder直接获取到source的信息，而不是经过一个bottleneck</li>
+<li>个性化encoder中每个时刻的状态对当前decoder状态的影响</li>
+</ul>
+</li>
+<li>类似于VGG中的残差，有助于解决vanish gradient</li>
+<li>增强了解释性</li>
+<li>差不多算是一种软对齐</li>
+<li>并行：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/6b698bb6a486">https://www.jianshu.com/p/6b698bb6a486</a><ul>
+<li>encoder：层间无法并行，层内可以同时feed所有输入向量，同时更新梯度，实现并行。而RNN只能并行实现所有时刻的输入，而不能实现梯度的并行（梯度需要从n层到n-1层）。</li>
+<li>decoder：第n个输出依赖第n-1个输出，因此不可以并行。</li>
+</ul>
+</li>
+</ul>
+<h1 id="Transformer"><a href="#Transformer" class="headerlink" title="Transformer"></a>Transformer</h1><ul>
+<li>Paper: <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1706.03762.pdf">attention is all you need</a></li>
+<li>初衷：解决传统RNN等序列模型中无法并行化的问题；CNN可以并行但无法用于变长序列</li>
+</ul>
+<h2 id="Encoder-and-decoder-stacks"><a href="#Encoder-and-decoder-stacks" class="headerlink" title="Encoder and decoder stacks"></a>Encoder and decoder stacks</h2><h3 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h3><img src="/2022/03/17/word2vec-seq2seq-attention-transformer/transformer1.jpeg" class="" title="transformer1">
+<ul>
+<li>简化为两层的Encoder Decoder示意图：<img src="/2022/03/17/word2vec-seq2seq-attention-transformer/transformer2.jpeg" class="" title="transformer2"></li>
+<li>注意是Encoder的输出连到decoder中的encoder-decoder attention层，即第六层的encoder输出的每个序列加权求attention的source</li>
+</ul>
+<h3 id="Encoder"><a href="#Encoder" class="headerlink" title="Encoder"></a>Encoder</h3><ul>
+<li>由6层组成，<strong>每层由2个子层组成，每个子层都使用了residual（残差）连接以及加入了正则化层，即每个子层的输出为LayerNorm(x+Sublayer(x))，x就是这个层的输出。为了确保连接，所有sub-layer和embedding layer的输出维度相同。</strong><ul>
+<li><strong>第一个子层为multi-head self-attention mechanism</strong></li>
+<li><strong>第二个子层为全连接前馈网络。</strong></li>
+</ul>
+</li>
+</ul>
+<h3 id="Decoder"><a href="#Decoder" class="headerlink" title="Decoder"></a>Decoder</h3><ul>
+<li>6层组成。<strong>每层三个子层，除与Encoder相同的两层外，加入了一个masked multi-head self-attention。同样适用残差操作。</strong></li>
+</ul>
+<h3 id="Layer-Normalization"><a href="#Layer-Normalization" class="headerlink" title="Layer Normalization"></a>Layer Normalization</h3><h4 id="Batch-Normalization"><a href="#Batch-Normalization" class="headerlink" title="Batch Normalization"></a>Batch Normalization</h4><ul>
+<li><strong>是在Batch size方向的正则化，即对于一个向量（样本）的每个位置，求其在Batch Size上的均值和方差，并做正则化。</strong></li>
+</ul>
+<h4 id="LN"><a href="#LN" class="headerlink" title="LN"></a>LN</h4><ul>
+<li><strong>在每个样本上计算均值和方差</strong></li>
+</ul>
+<h3 id="Attention"><a href="#Attention" class="headerlink" title="Attention"></a>Attention</h3><h4 id="Scaled-Dot-Product-Attention"><a href="#Scaled-Dot-Product-Attention" class="headerlink" title="Scaled Dot-Product Attention"></a>Scaled Dot-Product Attention</h4><ul>
+<li>query Q和keys K的维度为dk，values V的维度为dv（意思是一个query或一个key，即一个时刻的key的维度是dv）。设source有s个时刻，target有t个时刻。有：Q—t*dk, K—s*dk, V—s*dv</li>
+<li>指定了一种方法来计算query Q和key K之间的相似性：<script type="math/tex">\text { Attention }(Q, K, V)=\operatorname{softmax}\left(\frac{Q K^{T}}{\sqrt{d_{k}}}\right) V</script>. 这里比平常的点积相似度多除一个{\sqrt{d_{k}}，dk是K的维度，原因为：dk很大的时候，点积得到的相似度值非常大，因为每个相似度都是dk个乘机的和，此时相似度之间差异会<strong>相对</strong>比较小，即相似度的梯度区域会比较小。</li>
+</ul>
+<h4 id="multi-head-attention"><a href="#multi-head-attention" class="headerlink" title="multi-head attention"></a>multi-head attention</h4><p>具体计算过程很繁琐，参照<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/63191028">文中的图解</a></p>
+<ul>
+<li>多头作用：获取不同子空间的信息；增加并行化</li>
+<li>单头<ul>
+<li>embedding为dmodel=512维度，对其做线性映射以Q为例：Q * W = t <em> dmodel </em> dmodel <em> dk = t </em> dk，即每个query从dmodel到了dk=64维度，即新的Q为dk=64维</li>
+<li>Q * K^T = t * dk* dk <em> s = t </em> s</li>
+<li>softmax(Q * K^T / sqrt(dk)) = t * s，即以行做softmax</li>
+<li>softmax * V = t * s * s * dv = t * dv</li>
+</ul>
+</li>
+<li>多头self-attention：做多个单头，每个单头的映射矩阵随机初始化，然后得到h个attention得分，transforms中用了h=8个头，即8个t * dv 的attention得分向量</li>
+<li>多头self-attention输入前馈神经网络：先把8个矩阵按列拼接： t * (h dv)；再随机初始化一个(h dv) * dmodel的矩阵，最后结果为t * dmodel，最终得到dmodel是使得其跟原始的输入同纬度，方便相加操作（残差中要用到）</li>
+</ul>
+<p>MultiHead $(Q, K, V)=$ Concat $\left(\right.$ head $<em>{1}, \ldots$, head $\left.</em>{\mathrm{h}}\right) W^{O}$<br>where head $<em>{\mathrm{i}}=$ Attention $\left(Q W</em>{i}^{Q}, K W<em>{i}^{K}, V W</em>{i}^{V}\right)$<br>Where the projections are parameter matrices $W<em>{i}^{Q} \in \mathbb{R}^{d</em>{\text {bouth }} \times d<em>{k}}, W</em>{i}^{K} \in \mathbb{R}^{d<em>{\text {math }} \times d</em>{k}}, W<em>{i}^{V} \in \mathbb{R}^{d</em>{\text {matal }} \times d<em>{v}}$ and $W^{O} \in \mathbb{R}^{h d v \times d</em>{\text {matal }}}$.</p>
+<h4 id="Attention在transform中的应用"><a href="#Attention在transform中的应用" class="headerlink" title="Attention在transform中的应用"></a>Attention在transform中的应用</h4><ul>
+<li>有三种不同的应用：<ul>
+<li>在encoder-decoder attention层，query来自于前序decoder层，key和value来自于encoder的输出。This allows every position in the decoder to attend over all positions in the input sequence。<strong>是典型的seq2seq中的attention</strong>。</li>
+<li>encoder中的self-attention层，key/value/query都来自于之前层（大层，不是子层，也不是attention中的序列）的输出，encoder中每个位置可以attend to之前层的输出<br><img src="https://pic1.zhimg.com/80/v2-ac8272e1505602d3f56334fd49d08ab8_hd.jpg" alt="image"></li>
+<li>decoder中的self-attention层，用了mask来掩盖某些值，使其在参数更新中不产生效果。这里self attention在应用的时候<ul>
+<li>Padding Mask: <strong>每个batch输入的序列长度不同，因此要对收入序列对齐。较短序列在后面填充0，较长序列只截取左边内容。填充0时，会把这些位置的值加上负无穷，经过softmax之后这些地方的概率会接近于0(e的负无穷大次方为0).</strong></li>
+<li>Sequence Mask: <strong>使得decoder不能看见未来的信息。做法为：使用一个上三角全为0的矩阵</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="Position-wise-Feed-Forward-Networks"><a href="#Position-wise-Feed-Forward-Networks" class="headerlink" title="Position-wise Feed-Forward Networks"></a>Position-wise Feed-Forward Networks</h3><ul>
+<li>两层：两个线性变换和一个ReLU激活输出: <script type="math/tex">FFN(x)=\max \left(0, x W_{1}+b_{1}\right) W_{2}+b_{2}</script></li>
+</ul>
+<h3 id="Embedding-and-Softmax"><a href="#Embedding-and-Softmax" class="headerlink" title="Embedding and Softmax"></a>Embedding and Softmax</h3><h3 id="Position-Encoding"><a href="#Position-Encoding" class="headerlink" title="Position Encoding"></a>Position Encoding</h3><ul>
+<li>模型中没有使用循环神经网络或者卷积，所以位置信息需要被编码Position Encoding，该向量和embedding的维度一致，并把该向量与embedding相加输入到下一层。</li>
+</ul>
+<script type="math/tex; mode=display">
+\begin{array}{c}{P E_{(p o s, 2 i)}=\sin \left(\text {pos} / 10000^{2 i / d_{\text {madel }}}\right)} \\ {P E_{(\text {pos}, 2 i+1)}=\cos \left(\text {pos} / 10000^{2 i / d_{\text {madal }}}\right)}\end{array}</script><ul>
+<li>其中pos是位置，i是向量中每个值的index。即在偶数位置使用正弦编码；奇数位置，使用余弦编码。也就是说对于向量的同一个index，每个pos处的向量被编码后是一个sin函数，该函数的波长为2π~10000*2π。选择这个函数的目的是因为这个函数能学习到相对位置，即pos+k可以由pos的线性函数得到，这些相对位置的信息会使用在self-attention中。</li>
+</ul>
+<h3 id="为何使用self-attention"><a href="#为何使用self-attention" class="headerlink" title="为何使用self-attention"></a>为何使用self-attention</h3><ul>
+<li>简单来说，我们需要一个对原序列进行编码以提取信息，在进行编码的过程中需要考虑：<ul>
+<li>每层的计算复杂度。</li>
+<li>最小序列操作，即并行化的程度。</li>
+<li>网络中远程依赖关系之间的路径长度（path length between long-range dependencies in the network）。路径越短越能学习到长距离的依赖关系。</li>
+</ul>
+</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Layer Type</th>
+<th>Complexity per Layer</th>
+<th>Sequential Operations</th>
+<th>Maximum Path Length</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Self-Attention</td>
+<td>O(n^2*d)</td>
+<td>O(1)</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>Recurrent</td>
+<td>O(n*d^2)</td>
+<td>O(n)</td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td>Convolutional</td>
+<td>O(k*n*d^2)</td>
+<td>O(1)</td>
+<td>O(logk(n))</td>
+</tr>
+<tr>
+<td>Self-Attention(restricted)</td>
+<td>O(r*n*d)</td>
+<td>O(n/r)</td>
+<td>O(1)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>n: 序列长度，d: 表达维度，k: 卷积核size，r: Self-Attention(restricted)中的领域size</p>
+<h3 id="训练"><a href="#训练" class="headerlink" title="训练"></a>训练</h3><h4 id="正则化"><a href="#正则化" class="headerlink" title="正则化"></a>正则化</h4><ul>
+<li>Residual Dropout</li>
+<li>Attention Dropout: embeddings + positional encodings</li>
+<li>Label Smoothing</li>
+</ul>
+<h4 id="decoder"><a href="#decoder" class="headerlink" title="decoder"></a>decoder</h4><ul>
+<li>beam search</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
+<li>attention代替了传统的RNN层。<ul>
+<li><strong>RNN每层的信息会随着序列的增加而衰减，因此难以获得较长序列跨度的信息；attention层对其他词的信息不取决于距离而取决于相关性/表示的相似度</strong></li>
+<li><strong>Transform可以获得双向信息</strong></li>
+<li><strong>并行化</strong></li>
+</ul>
+</li>
+<li><strong>attention无需参数，只使用超参数，也即无监督，使得模型很简洁</strong></li>
+<li>self-attention：使用dot-product的相似性计算方式，实际上是一种无监督求解相似性的方式。<strong>并行化非常好</strong>。</li>
+<li>为何点积可以求得相似性：点积可以用来求解两向量的夹角。</li>
+<li><em>decoder第一层的输入是什么</em></li>
+<li><em>decoder中的attention层的key和query</em></li>
+<li><em>mask具体</em></li>
+<li><em>为何不用BN用LN，LN的作用</em>是：<strong>BN使得输入到下一层的样本分布为正态分布，也就是特征的每个维度是正则化的，以改善训练，加速收敛（独立同分布的数据可以简化常规机器学习模型的训练、提升机器学习模型的预测能力）；LN使得每个样本的不同index处的分布为正态分布</strong></li>
+</ul>
+<h2 id="Transformer-VS-CNN"><a href="#Transformer-VS-CNN" class="headerlink" title="Transformer VS CNN"></a>Transformer VS CNN</h2><ul>
+<li><strong>CNN可以并行化输出序列</strong></li>
+<li><strong>CNN的感受野有限，不能感知所有上下文</strong></li>
+<li><strong>CNN每层的卷积权重共享，而Attention每一个decoder对应的attention是不一样的</strong></li>
+</ul>
+<h1 id="word2vec-vs-glove-vs-elmo-vs-gpt-vs-bert"><a href="#word2vec-vs-glove-vs-elmo-vs-gpt-vs-bert" class="headerlink" title="word2vec vs glove vs elmo vs gpt vs bert"></a>word2vec vs glove vs elmo vs gpt vs bert</h1><ul>
+<li>word2vec, Glove只与预训练预料有关</li>
+<li>ELMo<ul>
+<li>属于Context word embedding</li>
+<li>ELMo不是对每个单词使用固定嵌入，而是在为其中的每个单词分配嵌入之前查看整个句子，它使用在特定任务上训练的双向LSTM来创建这些嵌入</li>
+<li>训练时，采用语言模型的方法</li>
+</ul>
+</li>
+<li>OpenAI Transformer<ul>
+<li>使用无attention层的decoder</li>
+<li>只使用了单向信息</li>
+<li>pre-train和fine-tuning不匹配，例如对于多句输入的情况</li>
+</ul>
+</li>
+<li>BERT<ul>
+<li>使用了encoder</li>
+<li>Masked LM解决了只使用单向信息的问题</li>
+<li>使用NSP来解决pre-train和fine-tuning不匹配的问题</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/word2vec/" rel="tag"># word2vec</a>
+              <a href="/tags/seq2seq/" rel="tag"># seq2seq</a>
+              <a href="/tags/attention/" rel="tag"># attention</a>
+              <a href="/tags/transformer/" rel="tag"># transformer</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/03/10/sort/" rel="prev" title="排序算法">
+                  <i class="fa fa-chevron-left"></i> 排序算法
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Kayden</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

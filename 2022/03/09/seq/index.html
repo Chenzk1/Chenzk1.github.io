@@ -35,8 +35,10 @@
 <meta property="og:image" content="https://chenzk1.github.io/2022/03/09/seq/dsin.png">
 <meta property="og:image" content="https://chenzk1.github.io/2022/03/09/seq/dsin_result.jpeg">
 <meta property="og:image" content="https://chenzk1.github.io/2022/03/09/seq/dmin.jpg">
+<meta property="og:image" content="https://chenzk1.github.io/2022/03/09/seq/mind.jpg">
+<meta property="og:image" content="https://chenzk1.github.io/2022/03/09/seq/capsule2.png">
 <meta property="article:published_time" content="2022-03-09T03:29:58.000Z">
-<meta property="article:modified_time" content="2022-03-09T09:43:43.897Z">
+<meta property="article:modified_time" content="2022-03-10T07:23:16.099Z">
 <meta property="article:author" content="Kayden">
 <meta property="article:tag" content="ML">
 <meta property="article:tag" content="Seq Model">
@@ -218,7 +220,7 @@
 
       <!--noindex-->
       <section class="post-toc-wrap sidebar-panel">
-          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#DIN-Deep-Interest-Network"><span class="nav-number">1.</span> <span class="nav-text">DIN(Deep Interest Network)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Model"><span class="nav-number">1.1.</span> <span class="nav-text">Model</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tricks"><span class="nav-number">1.2.</span> <span class="nav-text">Tricks</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#GAUC"><span class="nav-number">1.2.1.</span> <span class="nav-text">GAUC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DICE"><span class="nav-number">1.2.2.</span> <span class="nav-text">DICE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Adaptive-L2-Regularization"><span class="nav-number">1.2.3.</span> <span class="nav-text">Adaptive L2 Regularization</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DIEN-Deep-Interest-Evolution-Network-for-Click-Through-Rate-Prediction"><span class="nav-number">2.</span> <span class="nav-text">DIEN(Deep Interest Evolution Network for Click-Through Rate Prediction)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Model-1"><span class="nav-number">2.1.</span> <span class="nav-text">Model</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Interest-Extractor%E5%B1%82%EF%BC%9A%E5%85%B4%E8%B6%A3%E7%9A%84%E6%8C%96%E6%8E%98%E3%80%82%E5%88%A9%E7%94%A8GRU-%E8%BE%85%E5%8A%A9loss%E6%9D%A5%E6%8C%96%E6%8E%98%E7%94%A8%E6%88%B7%E5%85%B4%E8%B6%A3%E3%80%82"><span class="nav-number">2.1.1.</span> <span class="nav-text">Interest Extractor层：兴趣的挖掘。利用GRU+辅助loss来挖掘用户兴趣。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Interest-Evolving%E5%B1%82"><span class="nav-number">2.1.2.</span> <span class="nav-text">Interest Evolving层</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Problems"><span class="nav-number">2.2.</span> <span class="nav-text">Problems</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DSIN-Deep-Session-Interest-Network-for-Click-Through-Rate-Prediction"><span class="nav-number">3.</span> <span class="nav-text">DSIN(Deep Session Interest Network for Click-Through Rate Prediction)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Model-2"><span class="nav-number">3.1.</span> <span class="nav-text">Model</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Session-Division-Layer"><span class="nav-number">3.1.1.</span> <span class="nav-text">Session Division Layer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Session-Interest-Extractor-Layer"><span class="nav-number">3.1.2.</span> <span class="nav-text">Session Interest Extractor Layer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Session-Interest-Interacting-Layer"><span class="nav-number">3.1.3.</span> <span class="nav-text">Session Interest Interacting Layer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Session-Interest-Activating-Layer"><span class="nav-number">3.1.4.</span> <span class="nav-text">Session Interest Activating Layer</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Experiments"><span class="nav-number">3.2.</span> <span class="nav-text">Experiments</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A8%E8%AE%BA"><span class="nav-number">3.3.</span> <span class="nav-text">讨论</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DMIN-Deep-Multi-Interest-Network-for-Click-through-Rate-Prediction"><span class="nav-number">4.</span> <span class="nav-text">DMIN(Deep Multi-Interest Network for Click-through Rate Prediction)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Model-3"><span class="nav-number">4.1.</span> <span class="nav-text">Model</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Behavior-Refiner-Layer"><span class="nav-number">4.1.1.</span> <span class="nav-text">Behavior Refiner Layer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Multi-Interest-Extractor-Layer"><span class="nav-number">4.1.2.</span> <span class="nav-text">Multi-Interest Extractor Layer</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MIND-Multi-Interest-Network-with-Dynamic-Routing-for-Recommendation-at-Tmall"><span class="nav-number">5.</span> <span class="nav-text">MIND(Multi-Interest Network with Dynamic Routing for Recommendation at Tmall)</span></a></li></ol></div>
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#DIN-Deep-Interest-Network"><span class="nav-number">1.</span> <span class="nav-text">DIN(Deep Interest Network)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Model"><span class="nav-number">1.1.</span> <span class="nav-text">Model</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tricks"><span class="nav-number">1.2.</span> <span class="nav-text">Tricks</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#GAUC"><span class="nav-number">1.2.1.</span> <span class="nav-text">GAUC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DICE"><span class="nav-number">1.2.2.</span> <span class="nav-text">DICE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Adaptive-L2-Regularization"><span class="nav-number">1.2.3.</span> <span class="nav-text">Adaptive L2 Regularization</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DIEN-Deep-Interest-Evolution-Network-for-Click-Through-Rate-Prediction"><span class="nav-number">2.</span> <span class="nav-text">DIEN(Deep Interest Evolution Network for Click-Through Rate Prediction)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Model-1"><span class="nav-number">2.1.</span> <span class="nav-text">Model</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Interest-Extractor%E5%B1%82%EF%BC%9A%E5%85%B4%E8%B6%A3%E7%9A%84%E6%8C%96%E6%8E%98%E3%80%82%E5%88%A9%E7%94%A8GRU-%E8%BE%85%E5%8A%A9loss%E6%9D%A5%E6%8C%96%E6%8E%98%E7%94%A8%E6%88%B7%E5%85%B4%E8%B6%A3%E3%80%82"><span class="nav-number">2.1.1.</span> <span class="nav-text">Interest Extractor层：兴趣的挖掘。利用GRU+辅助loss来挖掘用户兴趣。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Interest-Evolving%E5%B1%82"><span class="nav-number">2.1.2.</span> <span class="nav-text">Interest Evolving层</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Problems"><span class="nav-number">2.2.</span> <span class="nav-text">Problems</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DSIN-Deep-Session-Interest-Network-for-Click-Through-Rate-Prediction"><span class="nav-number">3.</span> <span class="nav-text">DSIN(Deep Session Interest Network for Click-Through Rate Prediction)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Model-2"><span class="nav-number">3.1.</span> <span class="nav-text">Model</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Session-Division-Layer"><span class="nav-number">3.1.1.</span> <span class="nav-text">Session Division Layer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Session-Interest-Extractor-Layer"><span class="nav-number">3.1.2.</span> <span class="nav-text">Session Interest Extractor Layer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Session-Interest-Interacting-Layer"><span class="nav-number">3.1.3.</span> <span class="nav-text">Session Interest Interacting Layer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Session-Interest-Activating-Layer"><span class="nav-number">3.1.4.</span> <span class="nav-text">Session Interest Activating Layer</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Experiments"><span class="nav-number">3.2.</span> <span class="nav-text">Experiments</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A8%E8%AE%BA"><span class="nav-number">3.3.</span> <span class="nav-text">讨论</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DMIN-Deep-Multi-Interest-Network-for-Click-through-Rate-Prediction"><span class="nav-number">4.</span> <span class="nav-text">DMIN(Deep Multi-Interest Network for Click-through Rate Prediction)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Model-3"><span class="nav-number">4.1.</span> <span class="nav-text">Model</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Behavior-Refiner-Layer"><span class="nav-number">4.1.1.</span> <span class="nav-text">Behavior Refiner Layer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Multi-Interest-Extractor-Layer"><span class="nav-number">4.1.2.</span> <span class="nav-text">Multi-Interest Extractor Layer</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MIND-Multi-Interest-Network-with-Dynamic-Routing-for-Recommendation-at-Tmall"><span class="nav-number">5.</span> <span class="nav-text">MIND(Multi-Interest Network with Dynamic Routing for Recommendation at Tmall)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Method"><span class="nav-number">5.1.</span> <span class="nav-text">Method</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#behavior2interest-dynamic-routing"><span class="nav-number">5.1.1.</span> <span class="nav-text">behavior2interest dynamic routing</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%83%B6%E5%9B%8A%E7%BD%91%E7%BB%9C"><span class="nav-number">5.1.1.1.</span> <span class="nav-text">胶囊网络</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#B2I-Dynamic-Routing"><span class="nav-number">5.1.1.2.</span> <span class="nav-text">B2I Dynamic Routing</span></a></li></ol></li></ol></li></ol></li></ol></div>
       </section>
       <!--/noindex-->
 
@@ -232,7 +234,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-count">53</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -245,7 +247,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">56</span>
+        <span class="site-state-item-count">61</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -329,10 +331,16 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2022-03-09 11:29:58 / Modified: 17:43:43" itemprop="dateCreated datePublished" datetime="2022-03-09T11:29:58+08:00">2022-03-09</time>
+      <time title="Created: 2022-03-09 11:29:58" itemprop="dateCreated datePublished" datetime="2022-03-09T11:29:58+08:00">2022-03-09</time>
     </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2022-03-10 15:23:16" itemprop="dateModified" datetime="2022-03-10T15:23:16+08:00">2022-03-10</time>
+      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -508,9 +516,21 @@ h
 </ul>
 <h1 id="MIND-Multi-Interest-Network-with-Dynamic-Routing-for-Recommendation-at-Tmall"><a href="#MIND-Multi-Interest-Network-with-Dynamic-Routing-for-Recommendation-at-Tmall" class="headerlink" title="MIND(Multi-Interest Network with Dynamic Routing for Recommendation at Tmall)"></a>MIND(Multi-Interest Network with Dynamic Routing for Recommendation at Tmall)</h1><p><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1904.08030.pdf">paper</a>、<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/5e339afbf2e7">推荐系统遇上深度学习(七十四)-[天猫]MIND：多兴趣向量召回</a></p>
 <ul>
-<li>胶囊网络</li>
-<li>用于召回</li>
+<li>DIN：通过attention机制建模用户多样的兴趣，并得到一个embedding。MIND采用了另一种表达用户多样兴趣的思路：用多个embedding表示用户多样兴趣，具体来说，可以对用户历史行为的embedding进行聚类，聚类后的每个簇代表用户的一组兴趣。</li>
 </ul>
+<h2 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h2><img src="/2022/03/09/seq/mind.jpg" class="" title="mind">
+<h3 id="behavior2interest-dynamic-routing"><a href="#behavior2interest-dynamic-routing" class="headerlink" title="behavior2interest dynamic routing"></a>behavior2interest dynamic routing</h3><h4 id="胶囊网络"><a href="#胶囊网络" class="headerlink" title="胶囊网络"></a>胶囊网络</h4><ul>
+<li>背景：传统的神经网络输入一组标量，对这组标量求加权和，之后输入非线性激活函数得到一个标量的输出。而<strong>Capsule输入是一组向量，对这组向量进行仿射变换之后求加权和，把加权和输入非线性激活函数，如此经过j次迭代得到一个向量的输出</strong>。Hinton提出Capsule Network是为了解决传统的CNN中只能编码某个特征是否存在而<strong>无法编码特征的orientation</strong>。</li>
+<li>来自<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/68897114">zhihu</a></li>
+<li>一个两层胶囊网络（从low-level到high-level）：<img src="/2022/03/09/seq/capsule2.png" class="" title="capsule2">
+<ul>
+<li>low-level: m个Nl维度的vector, high-level: n个Nh维度的vector</li>
+<li>对每一个low-level vector做映射，然后做加权融合（softmax），再做非线性激活</li>
+<li>其中softmax需要参数，参数需要迭代求解：初始化为0，即权重为1/m；后续迭代更新</li>
+</ul>
+</li>
+</ul>
+<h4 id="B2I-Dynamic-Routing"><a href="#B2I-Dynamic-Routing" class="headerlink" title="B2I Dynamic Routing"></a>B2I Dynamic Routing</h4><p> MIND中的capsule:<br> （在MIND的中我们只要记住Capsule可以接受一组向量输入，输出一个向量；如果我们K个capsule，就会有K个输出向量）</p>
 
     </div>
 
@@ -533,6 +553,9 @@ h
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/2022/03/10/sort/" rel="next" title="排序算法">
+                  排序算法 <i class="fa fa-chevron-right"></i>
+                </a>
             </div>
           </div>
     </footer>

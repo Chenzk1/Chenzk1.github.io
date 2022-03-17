@@ -5045,9 +5045,21 @@ h
 </ul>
 <h1 id="MIND-Multi-Interest-Network-with-Dynamic-Routing-for-Recommendation-at-Tmall"><a href="#MIND-Multi-Interest-Network-with-Dynamic-Routing-for-Recommendation-at-Tmall" class="headerlink" title="MIND(Multi-Interest Network with Dynamic Routing for Recommendation at Tmall)"></a>MIND(Multi-Interest Network with Dynamic Routing for Recommendation at Tmall)</h1><p><a href="https://arxiv.org/pdf/1904.08030.pdf">paper</a>、<a href="https://www.jianshu.com/p/5e339afbf2e7">推荐系统遇上深度学习(七十四)-[天猫]MIND：多兴趣向量召回</a></p>
 <ul>
-<li>胶囊网络</li>
-<li>用于召回</li>
+<li>DIN：通过attention机制建模用户多样的兴趣，并得到一个embedding。MIND采用了另一种表达用户多样兴趣的思路：用多个embedding表示用户多样兴趣，具体来说，可以对用户历史行为的embedding进行聚类，聚类后的每个簇代表用户的一组兴趣。</li>
 </ul>
+<h2 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h2><img src="/2022/03/09/seq/mind.jpg" class="" title="mind">
+<h3 id="behavior2interest-dynamic-routing"><a href="#behavior2interest-dynamic-routing" class="headerlink" title="behavior2interest dynamic routing"></a>behavior2interest dynamic routing</h3><h4 id="胶囊网络"><a href="#胶囊网络" class="headerlink" title="胶囊网络"></a>胶囊网络</h4><ul>
+<li>背景：传统的神经网络输入一组标量，对这组标量求加权和，之后输入非线性激活函数得到一个标量的输出。而<strong>Capsule输入是一组向量，对这组向量进行仿射变换之后求加权和，把加权和输入非线性激活函数，如此经过j次迭代得到一个向量的输出</strong>。Hinton提出Capsule Network是为了解决传统的CNN中只能编码某个特征是否存在而<strong>无法编码特征的orientation</strong>。</li>
+<li>来自<a href="https://zhuanlan.zhihu.com/p/68897114">zhihu</a></li>
+<li>一个两层胶囊网络（从low-level到high-level）：<img src="/2022/03/09/seq/capsule2.png" class="" title="capsule2">
+<ul>
+<li>low-level: m个Nl维度的vector, high-level: n个Nh维度的vector</li>
+<li>对每一个low-level vector做映射，然后做加权融合（softmax），再做非线性激活</li>
+<li>其中softmax需要参数，参数需要迭代求解：初始化为0，即权重为1/m；后续迭代更新</li>
+</ul>
+</li>
+</ul>
+<h4 id="B2I-Dynamic-Routing"><a href="#B2I-Dynamic-Routing" class="headerlink" title="B2I Dynamic Routing"></a>B2I Dynamic Routing</h4><p> MIND中的capsule:<br> （在MIND的中我们只要记住Capsule可以接受一组向量输入，输出一个向量；如果我们K个capsule，就会有K个输出向量）</p>
 ]]></content>
       <categories>
         <category>Learning</category>
@@ -5055,6 +5067,495 @@ h
       <tags>
         <tag>ML</tag>
         <tag>Seq Model</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>word2vec_seq2seq_attention_transformer</title>
+    <url>/2022/03/17/word2vec-seq2seq-attention-transformer/</url>
+    <content><![CDATA[<a id="more"></a>
+<h1 id="word2vec"><a href="#word2vec" class="headerlink" title="word2vec"></a>word2vec</h1><ul>
+<li>优点：<ul>
+<li>1）由于 Word2vec 会考虑上下文，跟之前的 Embedding 方法相比，效果要更好（但不如 18 年之后的方法）</li>
+<li>2）比之前的 Embedding方法维度更少，所以速度更快</li>
+<li>3）通用性很强，可以用在各种 NLP 任务中</li>
+</ul>
+</li>
+<li>缺点：<ul>
+<li>1）由于词和向量是一对一的关系，所以多义词的问题无法解决。</li>
+<li>2）Word2vec 是一种静态的方式，虽然通用性强，但是无法针对特定任务做动态优化</li>
+</ul>
+</li>
+</ul>
+<h2 id="下采样"><a href="#下采样" class="headerlink" title="下采样"></a>下采样</h2><ul>
+<li>高频词：<ul>
+<li>1）例如the等词不会提供更多语义</li>
+<li>2）训练时用不到那么多样本对</li>
+<li>因此以以某种概率删掉一些词，这个概率与词出现的频数有关</li>
+</ul>
+</li>
+</ul>
+<h2 id="负采样"><a href="#负采样" class="headerlink" title="负采样"></a>负采样</h2><ul>
+<li>对于负样本，只选择一部分。因为负样本的label为0，因此每次更新的参数也会较少。回忆一下我们的隐层-输出层拥有300 x 10000的权重矩阵。如果使用了负采样的方法我们仅仅去更新我们的positive word-“quick”的和我们选择的其他5个negative words的结点对应的权重，共计6个输出神经元，相当于每次只更新300*5个权重。对于3百万的权重来说，相当于只计算了0.06%的权重，这样计算效率就大幅度提高。</li>
+<li>单词被选中的概率与其频度有关：<img src="/2022/03/17/word2vec-seq2seq-attention-transformer/word2vec1.png" class="" title="word2vec1">
+</li>
+</ul>
+<h2 id="CBOW和skip-gram"><a href="#CBOW和skip-gram" class="headerlink" title="CBOW和skip-gram"></a>CBOW和skip-gram</h2><ul>
+<li>CBOW：周围词预测中心词，每次迭代都在调整周围词，因此其迭代的次数与语料库大小相同，复杂度为O(V)</li>
+<li>S-G：中心词预测周围词，每次迭代都在调整中心词，每个中心词需要调整K次，因此其迭代的次数为K*V次，这里K为窗口大小，复杂度为O(KV)</li>
+<li>即CBOW快于S-G；而SG更适用于生僻词以及语料库较小的情况的训练，因为生僻词出现的次数少，SG能够对其进行较多次的训练<blockquote>
+<p>在cbow方法中，是用周围词预测中心词，从而利用中心词的预测结果情况，使用GradientDesent方法，不断的去调整周围词的向量。当训练完成之后，每个词都会作为中心词，把周围词的词向量进行了调整，这样也就获得了整个文本里面所有词的词向量。要注意的是， cbow的对周围词的调整是统一的：求出的gradient的值会同样的作用到每个周围词的词向量当中去。可以看到，cbow预测行为的次数跟整个文本的词数几乎是相等的（每次预测行为才会进行一次backpropgation, 而往往这也是最耗时的部分），复杂度大概是O(V).<br>而skip-gram是用中心词来预测周围的词。在skip-gram中，会利用周围的词的预测结果情况，使用GradientDecent来不断的调整中心词的词向量，最终所有的文本遍历完毕之后，也就得到了文本所有词的词向量。<br>可以看出，skip-gram进行预测的次数是要多于cbow的：因为每个词在作为中心词时，都要使用周围词进行预测一次。这样相当于比cbow的方法多进行了K次（假设K为窗口大小），因此时间的复杂度为O(KV)，训练时间要比cbow要长。<br>但是在skip-gram当中，每个词都要收到周围的词的影响，每个词在作为中心词的时候，都要进行K次的预测、调整。因此，当数据量较少，或者词为生僻词出现次数较少时， 这种多次的调整会使得词向量相对的更加准确。因为尽管cbow从另外一个角度来说，某个词也是会受到多次周围词的影响（多次将其包含在内的窗口移动），进行词向量的跳帧，但是他的调整是跟周围的词一起调整的，grad的值会平均分到该词上， 相当于该生僻词没有收到专门的训练，它只是沾了周围词的光而已。<br>从更通俗的角度来说：在skip-gram里面，每个词在作为中心词的时候，实际上是 1个学生 VS K个老师，K个老师（周围词）都会对学生（中心词）进行“专业”的训练，这样学生（中心词）的“能力”（向量结果）相对就会扎实（准确）一些，但是这样肯定会使用更长的时间；cbow是 1个老师 VS K个学生，K个学生（周围词）都会从老师（中心词）那里学习知识，但是老师（中心词）是一视同仁的，教给大家的一样的知识。至于你学到了多少，还要看下一轮（假如还在窗口内），或者以后的某一轮，你还有机会加入老师的课堂当中（再次出现作为周围词），跟着大家一起学习，然后进步一点。因此相对skip-gram，你的业务能力肯定没有人家强，但是对于整个训练营（训练过程）来说，这样肯定效率高，速度更快。</p>
+</blockquote>
+</li>
+</ul>
+<h1 id="seq2seq"><a href="#seq2seq" class="headerlink" title="seq2seq"></a>seq2seq</h1><h2 id="encoder-decoder模型"><a href="#encoder-decoder模型" class="headerlink" title="encoder-decoder模型"></a>encoder-decoder模型</h2><img src="/2022/03/17/word2vec-seq2seq-attention-transformer/encoder_decoder.png" class="" title="encoder_decoder">
+<ul>
+<li>其中，encoder和decoder的具体架构可选，CNN/RNN/LSTM/GRU…</li>
+<li>C由encoder中所有时间的隐藏状态决定，设共Tx个状态，则C = q(h1,h2,…hTx)</li>
+<li>decoder为一个语言模型，则 <script type="math/tex">y_t = \mathop{argmax} P(y_t)=\prod_{t=1}^Tp(y_t|\{y_1,\ldots,y_{t-1}\},C)</script></li>
+<li><strong>注意，这个C是不变的，即对于decoder中的序列，输入的C是相同的</strong></li>
+<li>局限：encoder和decoder的联系只依靠一个固定长度的语义向量c<ul>
+<li><strong>语义向量可能无法完全表达encoder中整个序列的信息，且输入序列越长，此现象越严重；</strong></li>
+<li><strong>encoder中序列先输入的内容会被后输入的内容稀释掉</strong></li>
+</ul>
+</li>
+</ul>
+<h2 id="seq2seq-1"><a href="#seq2seq-1" class="headerlink" title="seq2seq"></a>seq2seq</h2><h3 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h3><ul>
+<li>第一种结构：将c当做decoder每一时刻的输入，如上encoder-decoder</li>
+<li>第二种结构：c只作为decoder初始时刻的输入</li>
+</ul>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><ul>
+<li>测试时，decoder中前序输出输入到下一个时刻</li>
+<li>训练时，decoder前序输出不作为下一时刻的输入，而使用真实序列作为输入</li>
+<li>端对端训练：<ul>
+<li>两个分模型分别训练得到最优后合在一起不一定能获得全局最优</li>
+</ul>
+</li>
+</ul>
+<h3 id="decoding"><a href="#decoding" class="headerlink" title="decoding"></a>decoding</h3><ul>
+<li>本质是求条件概率</li>
+<li>greedy decoding：decoder中每个序列会接一层softmax，输出语料库中每个单词的概率，测试时，每次取概率最大的单词作为下一序列的输入，称为<strong>greedy decoding</strong>。<ul>
+<li>greedy的问题：<strong>无法回退</strong>，预测出错之后会一直错下去。</li>
+</ul>
+</li>
+<li>Exhaustive search decoding: 每一步都计算，设语料库大小为V，则第T时刻的时间复杂度为O(V^T)</li>
+<li>Beam Search decoding: <ul>
+<li>每次track k个最有可能的值。</li>
+<li>如果遇到结束的序列，先保存，等所有序列结束后，比较其条件概率除以序列长度的最大值（为了避免倾向于选择较短的序列，除以序列长度）。</li>
+<li>终止条件：序列长度阈值、可选结果个数阈值。</li>
+</ul>
+</li>
+</ul>
+<h3 id="局限"><a href="#局限" class="headerlink" title="局限"></a>局限</h3><ul>
+<li>encoder和decoder的联系只依靠一个固定长度的语义向量c：<ul>
+<li>语义向量可能无法完全表达encoder中整个序列的信息，且输入序列越长，此现象越严重；</li>
+<li>encoder中序列先输入的内容会被后输入的内容稀释掉</li>
+</ul>
+</li>
+</ul>
+<h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><h4 id="应用seq2seq做NMT-Neural-Machine-Translation"><a href="#应用seq2seq做NMT-Neural-Machine-Translation" class="headerlink" title="应用seq2seq做NMT(Neural Machine Translation)"></a>应用seq2seq做NMT(Neural Machine Translation)</h4><ul>
+<li>优点：<ul>
+<li>better performance：更流利；应用了更多的上下文信息；对短语相似性利用的更好</li>
+<li>端对端训练</li>
+<li>更少的人工</li>
+</ul>
+</li>
+<li>劣势：<ul>
+<li>解释性</li>
+<li>更难debug</li>
+<li>更难控制（比起SMT（可以直接用规则））</li>
+<li>安全性</li>
+</ul>
+</li>
+<li>遗留问题：<ul>
+<li>out-of-vocabulary words：语料库里没有的单词无法翻译</li>
+<li>domain dismatch：用维基百科训练的模型对Facebook不一定好用</li>
+</ul>
+</li>
+</ul>
+<h1 id="attention"><a href="#attention" class="headerlink" title="attention"></a>attention</h1><h2 id="motivation"><a href="#motivation" class="headerlink" title="motivation"></a>motivation</h2><ul>
+<li>1）语义向量C有语义表达的瓶颈，attention可以使decoder的每个时刻与encoder相连；</li>
+<li>2）attention可以使得decoder的每一步只关注encoder的特定部分。</li>
+</ul>
+<h2 id="本质思想"><a href="#本质思想" class="headerlink" title="本质思想"></a>本质思想</h2><ul>
+<li>target中给定一个query，计算该query与source中每个key之间的相似度，即sim(Query, Key i)；然后对每个sim值进行softmax；使用softmax值来加权平均source中每个key对应的value，并得到attention score：<script type="math/tex">\text { Attention(Query, Source) }=\sum_{i=1}^{L_{x}} \text { Similarity }\left(\text { Query }, \text { Key }_{i}\right) * \text { Value }_{i}</script></li>
+</ul>
+<img src="/2022/03/17/word2vec-seq2seq-attention-transformer/attention1.jpeg" class="" title="attention1">
+<h2 id="method"><a href="#method" class="headerlink" title="method"></a>method</h2><ul>
+<li>核心：<strong>==个性化encoder中每个时刻对decoder中每个时刻的影响，并且直接连接到encoder==</strong>：<img src="/2022/03/17/word2vec-seq2seq-attention-transformer/attention2.jpeg" class="" title="attention2">
+<ul>
+<li>参考文章<a href="https://zhuanlan.zhihu.com/p/61816483">attention</a></li>
+</ul>
+</li>
+<li>decoder中每个时间点语义编码对其贡献是一样的Y1=g(C,h(0)),Y2=g(C,Y1)…</li>
+<li>attention中，decoder不再将整个序列编码成固定长度的语义向量C，而是根据生成的新单词计算新的Ci，使得不同时刻输入不同的C，这样就解决了单词信息丢失的问题：<script type="math/tex">p(y_i|y_1,\ldots,y_{i-1},X)=g(y_{i-1},s_i,c_i) 其中，s_i=f(s_{i-1},y_{i-1},c_i)</script><ul>
+<li>即decoder中每个时刻的结果是上个时刻输出、该时刻状态、该时刻语义向量C的函数，而此时刻的状态为上个时刻输出、上个时刻状态以及Ci的函数。</li>
+</ul>
+</li>
+<li>attention，Ci的计算为：<script type="math/tex; mode=display">
+\begin{array}{c}
+c_{i}=\sum_{j=1}^{T_{x}} \alpha_{i j} h_{j} \\
+\alpha_{i j}=\frac{\exp \left(e_{i j}\right)}{\sum_{k=1}^{T_{x}} \exp \left(e_{i k}\right)} \\
+e_{i j}=a\left(s_{i-1}, h_{j}\right)
+\end{array}</script></li>
+<li>即对于decoder的每个状态Si，Ci为encoder中每个状态的hi的加权平均，其中权重为decoder中si-1与encoder中的每个隐藏状态决定（softmax）</li>
+<li>整体：<br>$e<em>{i j}=a\left(s</em>{i-1}, h_{j}\right)$ 这里 $a$ 可以是内积, 即 $S i-1$ 和 $h j$ 的内积<script type="math/tex; mode=display">
+\begin{array}{c}
+\alpha_{i j}=\frac{\exp \left(e_{i j}\right)}{\sum_{k=1}^{T x} \exp \left(e_{i k}\right)} \\
+c_{i}=\sum_{j=1}^{T_{x}} \alpha_{i j} h_{j} \\
+s_{i}=f\left(s_{i-1}, y_{i-1}, c_{i}\right) \\
+y_{i}=g\left(y_{i-1}, s_{i}, c_{i}\right)
+\end{array}</script></li>
+<li>原始attention论文中，encoder使用了BiRNN，因此可以获取到某个输入上下文的信息</li>
+</ul>
+<h3 id="attention-score的多种计算方式"><a href="#attention-score的多种计算方式" class="headerlink" title="attention score的多种计算方式"></a>attention score的多种计算方式</h3><ul>
+<li>参考文章<a href="https://zhuanlan.zhihu.com/p/61816483">attention</a></li>
+<li>本质是计算query和source中每个key的相似度或相关度：<ul>
+<li>点积</li>
+<li>cosine相似性</li>
+<li>MLP网络<img src="/2022/03/17/word2vec-seq2seq-attention-transformer/attention3.jpeg" class="" title="attention3">
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="self-Attention-intra-Attention"><a href="#self-Attention-intra-Attention" class="headerlink" title="self Attention/ intra Attention"></a>self Attention/ intra Attention</h3><ul>
+<li>Self Attention顾名思义，指的不是Target和Source之间的Attention机制，而是Source内部元素之间或者Target内部元素之间发生的Attention机制，也可以理解为Target=Source这种特殊情况下的注意力计算机制。</li>
+<li>例如可以捕捉同一个句子中的句法特征和语义特征</li>
+<li>引入Self Attention后会更容易捕获句子中长距离的相互依赖的特征，因为如果是RNN或者LSTM，需要依次序序列计算，对于远距离的相互依赖的特征，要经过若干时间步步骤的信息累积才能将两者联系起来，而距离越远，有效捕获的可能性越小。</li>
+<li>此外，<strong>可以增加计算并行化</strong>，原因是对于self-attention来说，不需要等待序列生成。</li>
+</ul>
+<h2 id="attention的好处"><a href="#attention的好处" class="headerlink" title="attention的好处"></a>attention的好处</h2><ul>
+<li>解决了bottleneck问题<ul>
+<li>允许decoder直接获取到source的信息，而不是经过一个bottleneck</li>
+<li>个性化encoder中每个时刻的状态对当前decoder状态的影响</li>
+</ul>
+</li>
+<li>类似于VGG中的残差，有助于解决vanish gradient</li>
+<li>增强了解释性</li>
+<li>差不多算是一种软对齐</li>
+<li>并行：<a href="https://www.jianshu.com/p/6b698bb6a486">https://www.jianshu.com/p/6b698bb6a486</a><ul>
+<li>encoder：层间无法并行，层内可以同时feed所有输入向量，同时更新梯度，实现并行。而RNN只能并行实现所有时刻的输入，而不能实现梯度的并行（梯度需要从n层到n-1层）。</li>
+<li>decoder：第n个输出依赖第n-1个输出，因此不可以并行。</li>
+</ul>
+</li>
+</ul>
+<h1 id="Transformer"><a href="#Transformer" class="headerlink" title="Transformer"></a>Transformer</h1><ul>
+<li>Paper: <a href="https://arxiv.org/pdf/1706.03762.pdf">attention is all you need</a></li>
+<li>初衷：解决传统RNN等序列模型中无法并行化的问题；CNN可以并行但无法用于变长序列</li>
+</ul>
+<h2 id="Encoder-and-decoder-stacks"><a href="#Encoder-and-decoder-stacks" class="headerlink" title="Encoder and decoder stacks"></a>Encoder and decoder stacks</h2><h3 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h3><img src="/2022/03/17/word2vec-seq2seq-attention-transformer/transformer1.jpeg" class="" title="transformer1">
+<ul>
+<li>简化为两层的Encoder Decoder示意图：<img src="/2022/03/17/word2vec-seq2seq-attention-transformer/transformer2.jpeg" class="" title="transformer2"></li>
+<li>注意是Encoder的输出连到decoder中的encoder-decoder attention层，即第六层的encoder输出的每个序列加权求attention的source</li>
+</ul>
+<h3 id="Encoder"><a href="#Encoder" class="headerlink" title="Encoder"></a>Encoder</h3><ul>
+<li>由6层组成，<strong>每层由2个子层组成，每个子层都使用了residual（残差）连接以及加入了正则化层，即每个子层的输出为LayerNorm(x+Sublayer(x))，x就是这个层的输出。为了确保连接，所有sub-layer和embedding layer的输出维度相同。</strong><ul>
+<li><strong>第一个子层为multi-head self-attention mechanism</strong></li>
+<li><strong>第二个子层为全连接前馈网络。</strong></li>
+</ul>
+</li>
+</ul>
+<h3 id="Decoder"><a href="#Decoder" class="headerlink" title="Decoder"></a>Decoder</h3><ul>
+<li>6层组成。<strong>每层三个子层，除与Encoder相同的两层外，加入了一个masked multi-head self-attention。同样适用残差操作。</strong></li>
+</ul>
+<h3 id="Layer-Normalization"><a href="#Layer-Normalization" class="headerlink" title="Layer Normalization"></a>Layer Normalization</h3><h4 id="Batch-Normalization"><a href="#Batch-Normalization" class="headerlink" title="Batch Normalization"></a>Batch Normalization</h4><ul>
+<li><strong>是在Batch size方向的正则化，即对于一个向量（样本）的每个位置，求其在Batch Size上的均值和方差，并做正则化。</strong></li>
+</ul>
+<h4 id="LN"><a href="#LN" class="headerlink" title="LN"></a>LN</h4><ul>
+<li><strong>在每个样本上计算均值和方差</strong></li>
+</ul>
+<h3 id="Attention"><a href="#Attention" class="headerlink" title="Attention"></a>Attention</h3><h4 id="Scaled-Dot-Product-Attention"><a href="#Scaled-Dot-Product-Attention" class="headerlink" title="Scaled Dot-Product Attention"></a>Scaled Dot-Product Attention</h4><ul>
+<li>query Q和keys K的维度为dk，values V的维度为dv（意思是一个query或一个key，即一个时刻的key的维度是dv）。设source有s个时刻，target有t个时刻。有：Q—t*dk, K—s*dk, V—s*dv</li>
+<li>指定了一种方法来计算query Q和key K之间的相似性：<script type="math/tex">\text { Attention }(Q, K, V)=\operatorname{softmax}\left(\frac{Q K^{T}}{\sqrt{d_{k}}}\right) V</script>. 这里比平常的点积相似度多除一个{\sqrt{d_{k}}，dk是K的维度，原因为：dk很大的时候，点积得到的相似度值非常大，因为每个相似度都是dk个乘机的和，此时相似度之间差异会<strong>相对</strong>比较小，即相似度的梯度区域会比较小。</li>
+</ul>
+<h4 id="multi-head-attention"><a href="#multi-head-attention" class="headerlink" title="multi-head attention"></a>multi-head attention</h4><p>具体计算过程很繁琐，参照<a href="https://zhuanlan.zhihu.com/p/63191028">文中的图解</a></p>
+<ul>
+<li>多头作用：获取不同子空间的信息；增加并行化</li>
+<li>单头<ul>
+<li>embedding为dmodel=512维度，对其做线性映射以Q为例：Q * W = t <em> dmodel </em> dmodel <em> dk = t </em> dk，即每个query从dmodel到了dk=64维度，即新的Q为dk=64维</li>
+<li>Q * K^T = t * dk* dk <em> s = t </em> s</li>
+<li>softmax(Q * K^T / sqrt(dk)) = t * s，即以行做softmax</li>
+<li>softmax * V = t * s * s * dv = t * dv</li>
+</ul>
+</li>
+<li>多头self-attention：做多个单头，每个单头的映射矩阵随机初始化，然后得到h个attention得分，transforms中用了h=8个头，即8个t * dv 的attention得分向量</li>
+<li>多头self-attention输入前馈神经网络：先把8个矩阵按列拼接： t * (h dv)；再随机初始化一个(h dv) * dmodel的矩阵，最后结果为t * dmodel，最终得到dmodel是使得其跟原始的输入同纬度，方便相加操作（残差中要用到）</li>
+</ul>
+<p>MultiHead $(Q, K, V)=$ Concat $\left(\right.$ head $<em>{1}, \ldots$, head $\left.</em>{\mathrm{h}}\right) W^{O}$<br>where head $<em>{\mathrm{i}}=$ Attention $\left(Q W</em>{i}^{Q}, K W<em>{i}^{K}, V W</em>{i}^{V}\right)$<br>Where the projections are parameter matrices $W<em>{i}^{Q} \in \mathbb{R}^{d</em>{\text {bouth }} \times d<em>{k}}, W</em>{i}^{K} \in \mathbb{R}^{d<em>{\text {math }} \times d</em>{k}}, W<em>{i}^{V} \in \mathbb{R}^{d</em>{\text {matal }} \times d<em>{v}}$ and $W^{O} \in \mathbb{R}^{h d v \times d</em>{\text {matal }}}$.</p>
+<h4 id="Attention在transform中的应用"><a href="#Attention在transform中的应用" class="headerlink" title="Attention在transform中的应用"></a>Attention在transform中的应用</h4><ul>
+<li>有三种不同的应用：<ul>
+<li>在encoder-decoder attention层，query来自于前序decoder层，key和value来自于encoder的输出。This allows every position in the decoder to attend over all positions in the input sequence。<strong>是典型的seq2seq中的attention</strong>。</li>
+<li>encoder中的self-attention层，key/value/query都来自于之前层（大层，不是子层，也不是attention中的序列）的输出，encoder中每个位置可以attend to之前层的输出<br><img src="https://pic1.zhimg.com/80/v2-ac8272e1505602d3f56334fd49d08ab8_hd.jpg" alt="image"></li>
+<li>decoder中的self-attention层，用了mask来掩盖某些值，使其在参数更新中不产生效果。这里self attention在应用的时候<ul>
+<li>Padding Mask: <strong>每个batch输入的序列长度不同，因此要对收入序列对齐。较短序列在后面填充0，较长序列只截取左边内容。填充0时，会把这些位置的值加上负无穷，经过softmax之后这些地方的概率会接近于0(e的负无穷大次方为0).</strong></li>
+<li>Sequence Mask: <strong>使得decoder不能看见未来的信息。做法为：使用一个上三角全为0的矩阵</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="Position-wise-Feed-Forward-Networks"><a href="#Position-wise-Feed-Forward-Networks" class="headerlink" title="Position-wise Feed-Forward Networks"></a>Position-wise Feed-Forward Networks</h3><ul>
+<li>两层：两个线性变换和一个ReLU激活输出: <script type="math/tex">FFN(x)=\max \left(0, x W_{1}+b_{1}\right) W_{2}+b_{2}</script></li>
+</ul>
+<h3 id="Embedding-and-Softmax"><a href="#Embedding-and-Softmax" class="headerlink" title="Embedding and Softmax"></a>Embedding and Softmax</h3><h3 id="Position-Encoding"><a href="#Position-Encoding" class="headerlink" title="Position Encoding"></a>Position Encoding</h3><ul>
+<li>模型中没有使用循环神经网络或者卷积，所以位置信息需要被编码Position Encoding，该向量和embedding的维度一致，并把该向量与embedding相加输入到下一层。</li>
+</ul>
+<script type="math/tex; mode=display">
+\begin{array}{c}{P E_{(p o s, 2 i)}=\sin \left(\text {pos} / 10000^{2 i / d_{\text {madel }}}\right)} \\ {P E_{(\text {pos}, 2 i+1)}=\cos \left(\text {pos} / 10000^{2 i / d_{\text {madal }}}\right)}\end{array}</script><ul>
+<li>其中pos是位置，i是向量中每个值的index。即在偶数位置使用正弦编码；奇数位置，使用余弦编码。也就是说对于向量的同一个index，每个pos处的向量被编码后是一个sin函数，该函数的波长为2π~10000*2π。选择这个函数的目的是因为这个函数能学习到相对位置，即pos+k可以由pos的线性函数得到，这些相对位置的信息会使用在self-attention中。</li>
+</ul>
+<h3 id="为何使用self-attention"><a href="#为何使用self-attention" class="headerlink" title="为何使用self-attention"></a>为何使用self-attention</h3><ul>
+<li>简单来说，我们需要一个对原序列进行编码以提取信息，在进行编码的过程中需要考虑：<ul>
+<li>每层的计算复杂度。</li>
+<li>最小序列操作，即并行化的程度。</li>
+<li>网络中远程依赖关系之间的路径长度（path length between long-range dependencies in the network）。路径越短越能学习到长距离的依赖关系。</li>
+</ul>
+</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Layer Type</th>
+<th>Complexity per Layer</th>
+<th>Sequential Operations</th>
+<th>Maximum Path Length</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Self-Attention</td>
+<td>O(n^2*d)</td>
+<td>O(1)</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>Recurrent</td>
+<td>O(n*d^2)</td>
+<td>O(n)</td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td>Convolutional</td>
+<td>O(k*n*d^2)</td>
+<td>O(1)</td>
+<td>O(logk(n))</td>
+</tr>
+<tr>
+<td>Self-Attention(restricted)</td>
+<td>O(r*n*d)</td>
+<td>O(n/r)</td>
+<td>O(1)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>n: 序列长度，d: 表达维度，k: 卷积核size，r: Self-Attention(restricted)中的领域size</p>
+<h3 id="训练"><a href="#训练" class="headerlink" title="训练"></a>训练</h3><h4 id="正则化"><a href="#正则化" class="headerlink" title="正则化"></a>正则化</h4><ul>
+<li>Residual Dropout</li>
+<li>Attention Dropout: embeddings + positional encodings</li>
+<li>Label Smoothing</li>
+</ul>
+<h4 id="decoder"><a href="#decoder" class="headerlink" title="decoder"></a>decoder</h4><ul>
+<li>beam search</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
+<li>attention代替了传统的RNN层。<ul>
+<li><strong>RNN每层的信息会随着序列的增加而衰减，因此难以获得较长序列跨度的信息；attention层对其他词的信息不取决于距离而取决于相关性/表示的相似度</strong></li>
+<li><strong>Transform可以获得双向信息</strong></li>
+<li><strong>并行化</strong></li>
+</ul>
+</li>
+<li><strong>attention无需参数，只使用超参数，也即无监督，使得模型很简洁</strong></li>
+<li>self-attention：使用dot-product的相似性计算方式，实际上是一种无监督求解相似性的方式。<strong>并行化非常好</strong>。</li>
+<li>为何点积可以求得相似性：点积可以用来求解两向量的夹角。</li>
+<li><em>decoder第一层的输入是什么</em></li>
+<li><em>decoder中的attention层的key和query</em></li>
+<li><em>mask具体</em></li>
+<li><em>为何不用BN用LN，LN的作用</em>是：<strong>BN使得输入到下一层的样本分布为正态分布，也就是特征的每个维度是正则化的，以改善训练，加速收敛（独立同分布的数据可以简化常规机器学习模型的训练、提升机器学习模型的预测能力）；LN使得每个样本的不同index处的分布为正态分布</strong></li>
+</ul>
+<h2 id="Transformer-VS-CNN"><a href="#Transformer-VS-CNN" class="headerlink" title="Transformer VS CNN"></a>Transformer VS CNN</h2><ul>
+<li><strong>CNN可以并行化输出序列</strong></li>
+<li><strong>CNN的感受野有限，不能感知所有上下文</strong></li>
+<li><strong>CNN每层的卷积权重共享，而Attention每一个decoder对应的attention是不一样的</strong></li>
+</ul>
+<h1 id="word2vec-vs-glove-vs-elmo-vs-gpt-vs-bert"><a href="#word2vec-vs-glove-vs-elmo-vs-gpt-vs-bert" class="headerlink" title="word2vec vs glove vs elmo vs gpt vs bert"></a>word2vec vs glove vs elmo vs gpt vs bert</h1><ul>
+<li>word2vec, Glove只与预训练预料有关</li>
+<li>ELMo<ul>
+<li>属于Context word embedding</li>
+<li>ELMo不是对每个单词使用固定嵌入，而是在为其中的每个单词分配嵌入之前查看整个句子，它使用在特定任务上训练的双向LSTM来创建这些嵌入</li>
+<li>训练时，采用语言模型的方法</li>
+</ul>
+</li>
+<li>OpenAI Transformer<ul>
+<li>使用无attention层的decoder</li>
+<li>只使用了单向信息</li>
+<li>pre-train和fine-tuning不匹配，例如对于多句输入的情况</li>
+</ul>
+</li>
+<li>BERT<ul>
+<li>使用了encoder</li>
+<li>Masked LM解决了只使用单向信息的问题</li>
+<li>使用NSP来解决pre-train和fine-tuning不匹配的问题</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>word2vec</tag>
+        <tag>seq2seq</tag>
+        <tag>attention</tag>
+        <tag>transformer</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>排序算法</title>
+    <url>/2022/03/10/sort/</url>
+    <content><![CDATA[<h1 id="经典排序算法"><a href="#经典排序算法" class="headerlink" title="经典排序算法"></a>经典排序算法</h1><ul>
+<li>下文中的稳定是指：若a=b，而排序后的ab顺序与原来的ab顺序一样</li>
+<li>交换排序：冒泡、快排；</li>
+<li>选择排序：选择、堆；</li>
+<li>插入排序：插入、希尔；</li>
+<li>归并排序、基数排序<img src="/2022/03/10/sort/complixty.png" class="" title="complixty">
+</li>
+</ul>
+<a id="more"></a>
+<h2 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h2><ul>
+<li>迭代n-1次，两个相邻元素两两相比，每次迭代将最大的元素放在该迭代序列的顶端。</li>
+<li>稳定</li>
+<li>优化后，对于最优的情况，即已经正序排列的，算法复杂度为O(N)<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">bubble_sort</span>(<span class="params">num</span>):</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(num)<span class="number">-1</span>):</span><br><span class="line">        flag = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(num)-i<span class="number">-1</span>):</span><br><span class="line">            <span class="keyword">if</span> num[j] &gt; num[j+<span class="number">1</span>]:</span><br><span class="line">                num[j], num[j+<span class="number">1</span>] = num[j+<span class="number">1</span>], num[j]</span><br><span class="line">                flag = <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> flag == <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">return</span> num</span><br><span class="line">    <span class="keyword">return</span> num</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="选择排序"><a href="#选择排序" class="headerlink" title="选择排序"></a>选择排序</h2><ul>
+<li>迭代n-1次，每次选择出最小的，并将最小位置处的值与当前位置值交换</li>
+<li>不稳定，因为选择出最小的之后会跟原有数交换顺序，因此会破坏原来的顺序，例如5 3 5 2，第一次之后为2 3 5 5，此时5跟5的顺序变了<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">select_sort</span>(<span class="params">num</span>):</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(num)<span class="number">-1</span>):</span><br><span class="line">        min_index = i   </span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(i,<span class="built_in">len</span>(num)<span class="number">-1</span>):</span><br><span class="line">            <span class="keyword">if</span> num[j+<span class="number">1</span>] &lt; num[min_index]:</span><br><span class="line">                min_index = j+<span class="number">1</span></span><br><span class="line">        num[i], num[min_index] = num[min_index], num[i]</span><br><span class="line">    <span class="keyword">return</span> num</span><br></pre></td></tr></table></figure>
+<h2 id="插入排序"><a href="#插入排序" class="headerlink" title="插入排序"></a>插入排序</h2></li>
+<li>插入排序如同打扑克一样，每次将后面的牌插到前面已经排好序的牌中。</li>
+<li>最快情况是O(N)，如果大部分数据已经排好序了，while pre_index &gt;= 0 and cur_num &lt; num[pre_index]这句的迭代次数会大大减少，会比较快</li>
+<li>稳定<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">insert_sort</span>(<span class="params">num</span>):</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(num)<span class="number">-1</span>):</span><br><span class="line">        pre_index = i <span class="comment"># 前一个数</span></span><br><span class="line">        cur_num = num[i+<span class="number">1</span>] <span class="comment"># 当前待插入数 </span></span><br><span class="line">        <span class="keyword">while</span> pre_index &gt;= <span class="number">0</span> <span class="keyword">and</span> cur_num &lt; num[pre_index]:</span><br><span class="line">            num[pre_index+<span class="number">1</span>] = num[pre_index] <span class="comment"># 往后挪一位，前面的已经排好序了</span></span><br><span class="line">            pre_index -= <span class="number">1</span>   </span><br><span class="line">        num[pre_index+<span class="number">1</span>] = cur_num</span><br><span class="line">    <span class="keyword">return</span> num</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="希尔排序"><a href="#希尔排序" class="headerlink" title="希尔排序"></a>希尔排序</h2><ul>
+<li>对插入排序的优化，使用了递减的增量序列</li>
+<li>如上所述插入排序中：如果大部分数据已经排好序了，while pre_index &gt;= 0 and cur_num &lt; num[pre_index]这句的迭代次数会大大减少，会比较快 –&gt; 所以希尔排序就是针对这个做了优化，即先减少需要排序的数量，再逐步对其排序</li>
+<li>希尔排序是不稳定的算法，它满足稳定算法的定义。对于相同的两个数，可能由于分在不同的组中而导致它们的顺序发生变化。</li>
+<li>希尔排序的性能根据其选取的序列而变化</li>
+<li>不稳定</li>
+<li>使用动态增量序列的代码如下：<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">shell_sort</span>(<span class="params">num</span>):</span></span><br><span class="line">    gap = <span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span> gap &lt; <span class="built_in">len</span>(num) // <span class="number">3</span>: <span class="comment">#gap &lt; (3a,3a+1,3a+2)//3: (a-1)*3+1=3a-2</span></span><br><span class="line">        gap = gap*<span class="number">3</span> + <span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span> gap &gt; <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(gap,<span class="built_in">len</span>(num)):</span><br><span class="line">            cur_num = num[gap]</span><br><span class="line">            pre_index = i-gap</span><br><span class="line">            <span class="keyword">while</span> pre_index &gt;= <span class="number">0</span> <span class="keyword">and</span> cur_num &lt; num[pre_index]:</span><br><span class="line">                num[pre_index+gap] = num[pre_index] </span><br><span class="line">                pre_index -= gap</span><br><span class="line">            num[pre_index+gap] = cur_num</span><br><span class="line">        gap //= <span class="number">3</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="归并排序"><a href="#归并排序" class="headerlink" title="归并排序"></a>归并排序</h2><ul>
+<li>分治</li>
+<li>递归<ul>
+<li>终止条件：剩一个元素时，返回该元素；再上一层对返回的两个元素比较排序</li>
+</ul>
+</li>
+<li>稳定<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">merge_sort</span>(<span class="params">num</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">merge</span>(<span class="params">left,right</span>):</span> <span class="comment"># left和right本身是已经排序好的</span></span><br><span class="line">        result = []</span><br><span class="line">        i=j=<span class="number">0</span></span><br><span class="line">        <span class="keyword">while</span> i &lt; <span class="built_in">len</span>(left) <span class="keyword">and</span> j &lt; <span class="built_in">len</span>(right):</span><br><span class="line">            <span class="keyword">if</span> left[i] &lt;= right[j]:</span><br><span class="line">                result.append(left)</span><br><span class="line">                i+=<span class="number">1</span>            </span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                result.append(right)</span><br><span class="line">                j+=<span class="number">1</span></span><br><span class="line">        result = result + left[i:] + right[j:]</span><br><span class="line">        <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(num) &lt;= <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> num</span><br><span class="line">    mid = <span class="built_in">len</span>(num) // <span class="number">2</span></span><br><span class="line">    left = merge_sort(num[:mid])</span><br><span class="line">    right = merge_sort(num[mid:])</span><br><span class="line">    <span class="keyword">return</span> merge(left,right)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序"></a>快速排序</h2><ul>
+<li>冒泡+二分+分治</li>
+<li>核心：每次迭代使选取的基准值插入到序列中，该序列中基准值左边的值小于基准值，右边的值大于基准值，然后再对两边分别迭代</li>
+<li>基准数选择以及指针移动顺序：最终两个指针相遇时，要把基准数和相遇的位置交换，此时该位置左边的数小于基准数，右边大于基准数；若选择最左边的数为基准数，肯定要跟比它小的数交换，因此只有右指针先动才能找到比它小的（例如算法2里右指针相遇时找到的一定是上一轮左指针的交换结果，一定是小于基准数的）</li>
+<li>与归并的区别：<ul>
+<li>归并是二分，再递归——快排是找到pivot后冒泡，再递归</li>
+<li>归并是out-place，快排是in-place</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">## 二分之后不断地递归，每次递归求出基准值的具体位置</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">quick_sort1</span>(<span class="params">num</span>):</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(num) &lt;= <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> num</span><br><span class="line">    pivot = num[<span class="number">0</span>]</span><br><span class="line">    left = [num[i] <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="built_in">len</span>(num)) <span class="keyword">if</span> num[i] &lt;= pivot]</span><br><span class="line">    right = [num[i] <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="built_in">len</span>(num)) <span class="keyword">if</span> num[i] &gt; pivot]</span><br><span class="line">    <span class="keyword">return</span> quick_sort1(left) + pivot + quick_sort2(right)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">quick_sort2</span>(<span class="params">num,left,right</span>):</span></span><br><span class="line">    <span class="keyword">if</span> left &gt;= right: <span class="comment"># 两指针相遇，则终止</span></span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    low = left</span><br><span class="line">    high = right</span><br><span class="line">    pivot = num[left]</span><br><span class="line">    <span class="keyword">while</span> left &lt; right:</span><br><span class="line">        <span class="keyword">while</span> left &lt; right <span class="keyword">and</span> num[right] &gt; pivot:<span class="comment"># 因为记录了left，所以要从right开始</span></span><br><span class="line">            right -= <span class="number">1</span></span><br><span class="line">        num[left] = num[right]</span><br><span class="line">        <span class="keyword">while</span> left &lt; right <span class="keyword">and</span> num[left] &lt;= pivot:</span><br><span class="line">            left += <span class="number">1</span></span><br><span class="line">        num[right] = num[left]</span><br><span class="line">    num[right] = pivot        </span><br><span class="line"></span><br><span class="line">    quick_sort2(num, low, left<span class="number">-1</span>)</span><br><span class="line">    quick_sort2(num, right+<span class="number">1</span>, high)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">quick_sort3</span>(<span class="params">num,left,right</span>):</span></span><br><span class="line">    <span class="keyword">if</span> left &lt; right:</span><br><span class="line">        p = partition(num, left, right)</span><br><span class="line">        quick_sort3(num, left, p<span class="number">-1</span>)</span><br><span class="line">        quick_sort3(num, p+<span class="number">1</span>, right)</span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">partition</span>(<span class="params">num, left, right</span>):</span></span><br><span class="line">    pivot = num[right] <span class="comment"># 这里是从左边开始移动指针的，因此是right</span></span><br><span class="line">    i = left - <span class="number">1</span></span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(left, right):</span><br><span class="line">        <span class="keyword">if</span> num[j] &lt;= pivot:</span><br><span class="line">            i += <span class="number">1</span></span><br><span class="line">            num[i], num[j] = num[j], num[i]</span><br><span class="line">    num[i+<span class="number">1</span>], num[right] = num[right], num[i+<span class="number">1</span>] <span class="comment"># 把基准数移过来</span></span><br><span class="line">    <span class="keyword">return</span> i+<span class="number">1</span></span><br></pre></td></tr></table></figure>
+<h2 id="堆排序"><a href="#堆排序" class="headerlink" title="堆排序"></a>堆排序</h2><p>利用堆进行选择排序<br>大根堆：根节点的值大于叶子结点的值。用于升序排列。<br>小根堆：根节点的值小于叶子结点的值。用于降序排列。<br>1.7.1 排序流程<br>以大根堆排序为例：<br>1）先构建大根堆<br>2）将堆顶元素与原序列最后一个元素交换<br>3）排除最后一个元素，堆的尺寸减1，更新大根堆<br>4）重复1~3，直到序列有序<br>1.7.2 堆的构造：<br>堆是一个完全二叉树，可以用数组来表示。例如</p>
+<p>a可以表示为[99,66,45,33,37,10,22,13]，所以对于i处的节点，其子节点坐标为2<em>i+1, 2</em>i+2<br>在构造最大堆时，可以先构造一颗完全二叉树，再对每个根节点及其两个子节点进行位置调整，在调整时，从最后一个非叶子节点开始调整<br>1.7.3 代码<br>def adjust_heap(nums, i, size):<br>    ‘’’<br>    nums[:size]: 完全二叉树<br>    i: 从第i个节点开始调整直到根节点<br>    ‘’’<br>    left = 2<em>i+1<br>    right = 2</em>i+2<br>    largest = i<br>    if left &lt; size and nums[largest] &lt; nums[left]: # 要保证小于size<br>        largest = left<br>   if right &lt; size and nums[largest] &lt; nums[right]:<br>        largest = right<br>   if largest != i: # 如果该节点需要调整，则对其进行调整，并沿着被改变的那个叶子节点不断调整<br>        nums[largest], nums[i] = nums[i], nums[largest]<br>        adjust_heap(nums, largest, size)<br>def build_heap(nums):<br>        for i in range(len(nums)//2)[::-1]: #从最后一个非叶子结点开始调整，往上的节点都是非叶子结点<br>            adjust_heap(nums, i, len(nums))<br>def heap_sort(nums):<br>    build_heap(nums) # 先建堆<br>    size = len(nums)<br>    for i in range(size)[::-1]:<br>        nums[0], nums[i] = nums[i], nums[0] #把堆顶元素放在最后<br>        adjust_heap(nums, 0, i) # 堆顶元素被改变，需要调整<br>    return nums<br>1.7.4 复杂度分析<br>需要做n次循环，每次从根节点调整堆，并且沿着其中一个子树往下调整，因此为nlogn</p>
+<p>1.8 计数排序<br>def count_sort(nums):<br>    bucket = [0]*len(max(nums)+1)<br>    for num in nums:<br>        bucket[num] += 1<br>    i = 0<br>    for j in range(len(bucket)):<br>        while bucket[j]:<br>            bucket[j] -= 1<br>            nums[i] = j<br>            i+=1<br>    return nums           </p>
+<p>1.9 桶排序<br>计数排序的升级版：计数排序每个桶为值本身即y=x，桶排序加了一个映射关系，即y=f(x)<br>该映射关系应做到：<br>在额外空间充足的情况下，尽量增大桶的数量<br>使用的映射函数能够将输入的 N 个数据均匀的分配到 K 个桶中<br>什么时候最快（Best Cases）：<br>当输入的数据可以均匀的分配到每一个桶中<br>什么时候最慢（Worst Cases）：<br>当输入的数据被分配到了同一个桶中<br>def bucketSort(nums, defaultBucketSize = 5):<br>    maxVal, minVal = max(nums), min(nums)<br>    bucketSize = defaultBucketSize  # 如果没有指定桶的大小，则默认为5<br>    bucketCount = (maxVal - minVal) // bucketSize + 1  # 数据分为 bucketCount 组<br>    buckets = []  # 二维桶<br>    for i in range(bucketCount):<br>        buckets.append([])</p>
+<pre><code># 利用函数映射将各个数据放入对应的桶中
+for num in nums:
+    buckets[(num - minVal) // bucketSize].append(num)
+nums.clear()  # 清空 nums
+# 对每一个二维桶中的元素进行排序
+for bucket in buckets:
+    insertionSort(bucket)  # 假设使用插入排序
+    nums.extend(bucket)    # 将排序好的桶依次放入到 nums 中
+return nums
+</code></pre><p>1.10 基数排序<br>桶排序的推广<br>基数排序是桶排序的一种推广，它所考虑的待排记录包含不止一个关键字。例如对一副牌的整理，可将每张牌看作一个记录，包含两个关键字：花色、面值。一般我们可以将一个有序列是先按花色划分为四大块，每一块中又再按面值大小排序。这时“花色”就是一张牌的“最主位关键字”，而“面值”是“最次位关键字”。<br>基数排序有两种方法：<br>MSD （主位优先法）：从高位开始进行排序<br>LSD （次位优先法）：从低位开始进行排序</p>
+<h1 id="LSD-Radix-Sort"><a href="#LSD-Radix-Sort" class="headerlink" title="LSD Radix Sort"></a>LSD Radix Sort</h1><p>def radixSort(nums):<br>    mod = 10<br>    div = 1<br>    mostBit = len(str(max(nums)))  # 最大数的位数决定了外循环多少次<br>    buckets = [[] for row in range(mod)] # 构造 mod 个空桶<br>    while mostBit:<br>        for num in nums:  # 将数据放入对应的桶中<br>            buckets[num // div % mod].append(num)<br>        i = 0  # nums 的索引<br>        for bucket in buckets:  # 将数据收集起来<br>            while bucket:<br>                nums[i] = bucket.pop(0) # 依次取出<br>                i += 1<br>        div *= 10<br>        mostBit -= 1<br>    return nums</p>
+<h1 id="大数据排序"><a href="#大数据排序" class="headerlink" title="大数据排序"></a>大数据排序</h1><ul>
+<li>top k/ bottom k/ 中位数：堆</li>
+<li>排序：bitmap</li>
+<li>去重：bitmap</li>
+</ul>
+<h2 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h2><ul>
+<li>作用：求前n大（top k)，前n小，中位数</li>
+<li>前n大：维护一个size为n的最小堆，当有新的元素时，与堆顶元素比较，若比堆顶元素大，则替换堆顶元素</li>
+<li>前n小：维护size为n的最大堆</li>
+<li>问题实例：100w个数中找最大的前100个数。用一个100个元素大小的最小堆即可。</li>
+</ul>
+<h2 id="Bitmap"><a href="#Bitmap" class="headerlink" title="Bitmap"></a>Bitmap</h2><ul>
+<li>用一位代表一个数字</li>
+<li>例如N=10000，则需要使用int a[9999//32 + 1]的内存，因为python的int默认是符合数，所以第一位不能用，- 则数组个数为(N-1)//31+1</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># -*- encoding:utf-8 -*-</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bitmap</span>():</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self,<span class="built_in">max</span></span>):</span></span><br><span class="line">        <span class="string">&#x27;确定所需数组个数&#x27;</span></span><br><span class="line">        self.size = <span class="built_in">int</span> ((<span class="built_in">max</span> + <span class="number">31</span> - <span class="number">1</span>) / <span class="number">31</span>)</span><br><span class="line">        self.array = [<span class="number">0</span> <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(self.size)]</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">bitindex</span>(<span class="params">self,num</span>):</span></span><br><span class="line">        <span class="string">&#x27;确定数组中元素的位索引&#x27;</span></span><br><span class="line">        <span class="keyword">return</span> num % <span class="number">31</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">set_1</span>(<span class="params">self,num</span>):</span></span><br><span class="line">        <span class="string">&#x27;将元素所在的位 置1&#x27;</span></span><br><span class="line">        elemindex = num // <span class="number">31</span></span><br><span class="line">        byteindex = self.bitindex(num)</span><br><span class="line">        ele = self.array[elemindex]</span><br><span class="line">        self.array[elemindex] = ele | (<span class="number">1</span> &lt;&lt; byteindex)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_1</span>(<span class="params">self,i</span>):</span></span><br><span class="line">        <span class="string">&#x27;检测元素存在的位置&#x27;</span></span><br><span class="line">        elemindex = i / <span class="number">31</span></span><br><span class="line">        byteindex = self.bitindex(i)</span><br><span class="line">        <span class="keyword">if</span> self.array[elemindex] &amp; (<span class="number">1</span> &lt;&lt; byteindex):</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    Max = <span class="built_in">ord</span>(<span class="string">&#x27;z&#x27;</span>)</span><br><span class="line">    suffle_array = [x <span class="keyword">for</span> x <span class="keyword">in</span> <span class="string">&#x27;qwelmfg&#x27;</span>]</span><br><span class="line">    result = []</span><br><span class="line">    bitmap = Bitmap(Max)</span><br><span class="line">    <span class="keyword">for</span> c <span class="keyword">in</span> suffle_array:</span><br><span class="line">        bitmap.set_1(<span class="built_in">ord</span>(c))</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(Max+<span class="number">1</span>):</span><br><span class="line">        <span class="keyword">if</span> bitmap.test_1(i):</span><br><span class="line">            result.append(<span class="built_in">chr</span>(i))</span><br><span class="line">    <span class="built_in">print</span> <span class="string">u&#x27;原始数组为:    %s&#x27;</span> % suffle_array</span><br><span class="line">    <span class="built_in">print</span> <span class="string">u&#x27;排序后的数组为: %s&#x27;</span> % result</span><br></pre></td></tr></table></figure>
+<h2 id="外部排序"><a href="#外部排序" class="headerlink" title="外部排序"></a>外部排序</h2><h3 id="外部排序基础步骤"><a href="#外部排序基础步骤" class="headerlink" title="外部排序基础步骤"></a>外部排序基础步骤</h3><ul>
+<li>两个步骤：<ul>
+<li>1）将需要排序的文件多次读入内存进行排序，并写入到多个文件里；</li>
+<li>2）多路归并</li>
+</ul>
+</li>
+<li>例如：2路归并，每次归并后，可以使m个归并段变为m/2(取上界)个归并段<br>在实际归并的过程中，由于内存容量的限制不能满足同时将 2 个归并段全部完整的读入内存进行归并，只能不断地取 2 个归并段中的每一小部分进行归并，通过不断地读数据和向外存写数据，直至 2 个归并段完成归并变为 1 个大的有序文件。</li>
+</ul>
+<h3 id="败者树"><a href="#败者树" class="headerlink" title="败者树"></a>败者树</h3><p>与外部排序的性能有关的因素有：k。增加k，会减少外存数据的时间（需要存取的文件变少了），但k的增加会增加内部归并的时间。例如，10个文件，若k=2，则第一次归并时，需要外存5个文件，查找最小值时的归并次数为1；若k=5，则第一次归并时，需要外存2个文件，但内部归并时需要比较4次才能找到最小值。<br>k路归并时使用败者树可以避免k的增加引起的排序效率的降低。<br>复杂度分析：k路、u个记录、s趟：k个归并段中选取最小的记录需要比较k-1次， 为得到u个记录的一个有序段共需要(u-1)(k-1)次；若归并趟数为s次，那么对n个记录的文件进行外排时，内部归并过程中进行的总的比较次数为 s(n-1)(k-1)，也即(向上取整)(log(k)m)(k-1)(n-1)=(向上取整)(log2m/log2k)(k-1)(n-1)。而(k- 1)/log2k随k增而增因此内部归并时间随k增长而增长了，抵消了外存读写减少的时间，这样做不行，由此引出了“败者树”tree of loser的使用。在内部归并过程中利用败者树将k个归并段中选取最小记录比较的次数降为(向上取整)(log2k)次使总比较次数为(向上取整) (log2m)(n-1)，与k无关。</p>
+<h4 id="败者树-1"><a href="#败者树-1" class="headerlink" title="败者树"></a>败者树</h4><p>胜败：两数相比，小者为胜，大者为败。<br>败者树和胜者树为一颗完全二叉树。<br>败者树：其双亲结点存储的是左右孩子比较之后的失败者，而胜利者则继续同其它的胜者去比较。</p>
+<p>需要两个数组来表示，内部节点用ls数组，叶子结点为需要排序的序列。<br>构造过程：<br>a：b3 Vs b4，b3胜b4负，内部结点ls[4]的值为4，表示b4为败者；胜者b3继续参与竞争。<br>b：b3 Vsb0，b3胜b0负，内部结点ls[2]的值为0，表示b0为败者；胜者b3继续参与竞争。<br>c：b1 Vs b2，b1胜b2负，内部结点ls[3]的值为2，表示b2为败者；胜者b1继续参与竞争。<br>d：b3 Vs b1，b3胜b1负，内部结点ls[1]的值为1，表示b1为败者；胜者b3为最终冠军，用ls[0]=3，记录的最后的胜者索引。<br>重构过程：</p>
+<p>当b3变为13时，败者树的重构过程如下：<br>a：b3 Vs b[ls[4]],也就是b3 Vsb4,b4胜，继续参加下面的竞争，ls[4]=3记录败者。<br>b：b4Vs b[ls[2]],也就是b4 Vs b0, b0胜，继续参加下面的竞争，ls[2]=4记录败者。<br>c：b0Vs b[ls[1]],也就是b0 Vs b1, b1胜，b1为最终冠军，所以ls[0]=1记录冠军，ls[1]=0记录败者。<br>败者树简化了重构。败者树的重构只是与该结点的父结点的记录有关，而胜者树的重构还与该结点的兄弟结点有关。所以败者树在外排序的k路平衡归并中使用。</p>
+<h4 id="胜者树"><a href="#胜者树" class="headerlink" title="胜者树"></a>胜者树</h4><p>b3变为11后，重构为：</p>
+<p>即胜者树在重构时，既需要与父节点比较还要与兄弟节点比较</p>
+<p>2.3.3 利用败者树的外部排序算法<br>1）假设有一个72KB的文件，其中存储了18K个整数，磁盘中物理块的大小为4KB，将文件分成18组，每组刚好4KB。首先通过18次内部排序，把18组数据排好序，得到初始的18个归并段R1~R18，每个归并段有1024个整数。<br>2）对这18个归并段使用4路平衡归并排序：<br>第1次归并：产生5个归并段<br>R11   R12    R13    R14    R15<br>其中<br>R11是由{R1,R2,R3,R4}中的数据合并而来<br>R12是由{R5,R6,R7,R8}中的数据合并而来<br>R13是由{R9,R10,R11,R12}中的数据合并而来<br>R14是由{R13,R14,R15,R16}中的数据合并而来<br>R15是由{R17,R18}中的数据合并而来<br>把这5个归并段的数据写入5个文件：<br>foo_1.dat    foo_2.dat    foo_3.dat     foo_4.dat     foo_5.dat<br>3）第2次归并：从第1次归并产生的5个文件中读取数据，合并，产生2个归并段<br>R21  R22<br>其中R21是由{R11,R12,R13,R14}中的数据合并而来<br>其中R22是由{R15}中的数据合并而来<br>把这2个归并段写入2个文件<br>bar_1.dat   bar_2.dat<br>4）第3次归并：从第2次归并产生的2个文件中读取数据，合并，产生1个归并段<br>R31<br>R31是由{R21,R22}中的数据合并而来<br>把这个文件写入1个文件<br>foo_1.dat<br>此即为最终排序好的文件。</p>
+<p>其中，归并过程中使用了败者树。<br>2.3.4 复杂度<br>共n条记录，对于有m个初始归并段，k路平衡的归并排序，磁盘读写次数为：|log(k)m|<br>不使用败者树归并：每次需要比较k-1次，则O((n-1)<em>(k-1))<br>使用败者树归并：每次需要比较O(log(k))（这个值是每次得到最小值后重构败者树的时间复杂度），即0O((n-1)</em>log(k))<br>为啥要乘n-1：每次归并只能产生一个记录，共有n个记录，最后一条记录为最大值</p>
+<p>2.4 Trie树<br>2.4.1 结构</p>
+<p>1）根节点不包含字符，除根节点外的每一个子节点都包含一个字符。<br>2）从根节点到某一节点，路径上经过的字符连接起来，就是该节点对应的字符串。<br>3）每个单词的公共前缀作为一个字符节点保存。<br>2.4.2 应用<br>适用范围：数据量大，重复多，但是数据种类小可以放入内存<br>1）字符串检索<br>从根节点开始一个一个字符进行比较：<br>如果沿路比较，发现不同的字符，则表示该字符串在集合中不存在。<br>如果所有的字符全部比较完并且全部相同，还需判断最后一个节点的标志位（标记该节点是否代表一个关键字）。<br>struct trie_node<br>{<br>    bool isKey;   // 标记该节点是否代表一个关键字<br>    trie_node <em>children[26]; // 各个子节点<br>};<br>2）词频统计<br>为了实现词频统计，我们修改了节点结构，用一个整型变量count来计数。对每一个关键字执行插入操作，若已存在，计数加1，若不存在，插入后count置1。<br>struct trie_node<br>{<br>    int count;   // 记录该节点代表的单词的个数<br>    trie_node </em>children[26]; // 各个子节点<br>};</p>
+<p>2.5 大数据处理相关例题<br>K: 千 2^10<br>M：百万 2&amp;20<br>G：亿 2^30<br>2.5.1 给定a、b两个文件，各存放50亿个url，每个url各占64字节，内存限制是4G，让你找出a、b文件共同的url？<br>方案1：可以估计每个文件安的大小为50G×64=320G，远远大于内存限制的4G。所以不可能将其完全加载到内存中处理。考虑采取分而治之的方法。<br>Step1: 遍历文件a，对每个url求取hash(url)%1000，然后根据所取得的值将url分别存储到1000个小文件（记为 a0, a1…a999）中。这样每个小文件的大约为300M。<br>Step2: 遍历文件b，采取和a相同的方式将url分别存储到1000各小文件（记为 a0, a1…a999）。这样处理后，所有可能相同的url都在对应的小文件中，不对应的小文件不可能有相同的url。然后我们只要求出1000对小文件中相同的url即可。<br>Step3: 求每对小文件ai和bi中相同的url时，可以把ai的url存储到hash_set/hash_map中。然后遍历bi的每个url，看其是否在刚才构建的hash_set中，如果是，那么就是共同的url，存到文件里面就可以了。</p>
+<p>方案2：如果允许有一定的错误率，可以使用Bloom filter，4G内存大概可以表示340亿bit。将其中一个文件中的url使用Bloom filter映射为这340亿bit，然后挨个读取另外一个文件的url，检查是否与Bloom filter，如果是，那么该url应该是共同的url（注意会有一定的错误率）。</p>
+<p>2.5.2 有10个文件，每个文件1G，每个文件的每一行存放的都是用户的query，每个文件的query都可能重复。要求你按照query的频度排序。<br>方案1：<br>Step1: 顺序读取10个文件，按照hash(query)%10的结果将query写入到另外10个文件（记为 ）中。这样新生成的文件每个的大小大约也1G（假设hash函数是随机的）。<br>Step2: 找一台内存在2G左右的机器，依次对用hash_map(query, query_count)来统计每个query出现的次数。利用快速/堆/归并排序按照出现次数进行排序。将排序好的query和对应的query_cout输出到文件中。这样得到了10个排好序的文件（记为 ）。<br>Step3: 对 这10个文件进行归并排序（内排序与外排序相结合）。<br>方案2：<br>一般query的总量是有限的，只是重复的次数比较多而已，可能对于所有的query，一次性就可以加入到内存了。这样，我们就可以采用trie树/ hash_map等直接来统计每个query出现的次数，然后按出现次数做快速/堆/归并排序就可以了。<br>方案3：<br>与方案1类似，但在做完hash，分成多个文件后，可以交给多个文件来处理，采用分布式的架构来处理（比如MapReduce），最后再进行合并。 </p>
+<p>2.5.3 有一个1G大小的一个文件，里面每一行是一个词，词的大小不超过16字节，内存限制大小是1M。返回频数最高的100个词。 </p>
+<p>Step1: 顺序读文件中，对于每个词x，取hash(x)%5000 ，然后按照该值存到5000个小文件（记为f0,f1,…,f4999） 中。这样每个文件大概是200k左右。如果其中的有的文件超过了1M大小，还可以按照类似的方法继续往下分，知道分解得到的小文件的大小都不超过1M。<br>Step2: 对每个小文件，统计每个文件中出现的词以及相应的频率（可以采用trie树/hash_map等），并取出出现频率最大的100个词（可以用含100个结点的最小堆），并把100词及相应的频率存入文件，这样又得到了5000个文件。<br>Step3: 把这5000个文件进行归并（类似与归并排序）的过程了。</p>
+<p>2.5.4 海量日志数据，提取出某日访问百度次数最多的那个IP。 </p>
+<p>Step1：从这一天的日志数据中把访问百度的IP取出来，逐个写入到一个大文件中;<br>Step2：注意到IP是32位的，最多有2^32=4G个IP。同样可以采用映射的方法，比如模1000，把整个大文件映射为1000个小文件;<br>Step3：对于每一个小文件，可以构建一个IP为key，出现次数为value的Hashmap，同时记录当前出现次数最多的那个IP地址;<br>Step4：在这1000个最大的IP中，找出那个频率最大的IP，即为所求。    </p>
+<p>2.5.5 寻找热门查询：<br>搜索引擎会通过日志文件把用户每次检索使用的所有检索串都记录下来，每个查询串的长度为1-255字节。假设目前有一千万个记录，这些查询串的重复 读比较高，虽然总数是1千万，但是如果去除重复和，不超过3百万个。一个查询串的重复度越高，说明查询它的用户越多，也就越热门。请你统计最热门的10个查询串，要求使用的内存不能超过1G。<br>(1) 请描述你解决这个问题的思路；<br>(2) 请给出主要的处理流程，算法，以及算法的复杂度。<br>方案1：采用trie树，关键字域存该查询串出现的次数，没有出现为0。最后用10个元素的最小推来对出现频率进行排序。<br>Step1: 先对这批海量数据预处理，在O(N)的时间内用Hash表完成统计(之前写成了排序，特此订正。);<br>Step2: 借助堆这个数据结构，找出TopK，时间复杂度为N‘logK。<br>即，借助堆结构，我们可以在log量级的时间内查找和调整/移动。因此，维护一个K(该题目中是10)大小的小根堆，然后遍历300万的Query，分别和根元素进行对比所以，我们最终的时间复杂度是：O(N)+N’*O(logK)，(N为1000万，N’为300万)。</p>
+<p>或者：采用trie树，关键字域存该查询串出现的次数，没有出现为0。最后用10个元素的最小推来对出现频率进行排序。</p>
+<ol>
+<li><p>在2.5亿个整数中找出不重复的整数，内存不足以容纳这2.5亿个整数。<br>方案1：采用2-Bitmap（每个数分配2bit，00表示不存在，01表示出现一次，10表示多次，11无意义）进行，共需内存 内存，还可以接受。然后扫描这2.5亿个整数，查看Bitmap中相对应位，如果是00变01，01变10，10保持不变。所描完事后，查看bitmap，把对应位是01的整数输出即可。<br>方案2：也可采用上题类似的方法，进行划分小文件的方法。然后在小文件中找出不重复的整数，并排序。然后再进行归并，注意去除重复的元素。 </p>
+</li>
+<li><p>海量数据分布在100台电脑中，想个办法高校统计出这批数据的TOP10。<br>方案1：<br>s 在每台电脑上求出TOP10，可以采用包含10个元素的堆完成（TOP10小，用最大堆，TOP10大，用最小堆）。比如求TOP10大，我们首先取前 10个元素调整成最小堆，如果发现，然后扫描后面的数据，并与堆顶元素比较，如果比堆顶元素大，那么用该元素替换堆顶，然后再调整为最小堆。最后堆中的元 素就是TOP10大。<br>s 求出每台电脑上的TOP10后，然后把这100台电脑上的TOP10组合起来，共1000个数据，再利用上面类似的方法求出TOP10就可以了。 </p>
+</li>
+<li><p>怎么在海量数据中找出重复次数最多的一个？<br>方案1：先做hash，然后求模映射为小文件，求出每个小文件中重复次数最多的一个，并记录重复次数。然后找出上一步求出的数据中重复次数最多的一个就是所求（具体参考前面的题）。</p>
+</li>
+<li><p>上千万或上亿数据（有重复），统计其中出现次数最多的钱N个数据。<br>方案1：上千万或上亿的数据，现在的机器的内存应该能存下。所以考虑采用hash_map/搜索二叉树/红黑树等来进行统计次数。然后就是取出前N个出现次数最多的数据了，可以用第6题提到的堆机制完成。</p>
+</li>
+<li><p>1000万字符串，其中有些是重复的，需要把重复的全部去掉，保留没有重复的字符串。请怎么设计和实现？<br>方案1：这题用trie树比较合适，hash_map也应该能行。 </p>
+</li>
+<li><p>一个文本文件，大约有一万行，每行一个词，要求统计出其中最频繁出现的前10个词，请给出思想，给出时间复杂度分析。<br>方案1：这题是考虑时间效率。用trie树统计每个词出现的次数，时间复杂度是O(n<em>le)（le表示单词的平准长度）。然后是找出出现最频繁的 前10个词，可以用堆来实现，前面的题中已经讲到了，时间复杂度是O(n</em>lg10)。所以总的时间复杂度，是O(n<em>le)与O(n</em>lg10)中较大 的哪一个。</p>
+</li>
+<li><p>一个文本文件，找出前10个经常出现的词，但这次文件比较长，说是上亿行或十亿行，总之无法一次读入内存，问最优解。<br>方案1：首先根据用hash并求模，将文件分解为多个小文件，对于单个文件利用上题的方法求出每个文件件中10个最常出现的词。然后再进行归并处理，找出最终的10个最常出现的词。</p>
+</li>
+<li><p>100w个数中找出最大的100个数。<br>方案1：在前面的题中，我们已经提到了，用一个含100个元素的最小堆完成。复杂度为O(100w<em>lg100)。<br>方案2：采用快速排序的思想，每次分割之后只考虑比轴大的一部分，知道比轴大的一部分在比100多的时候，采用传统排序算法排序，取前100个。复杂度为O(100w</em>100)。<br>方案3：采用局部淘汰法。选取前100个元素，并排序，记为序列L。然后一次扫描剩余的元素x，与排好序的100个元素中最小的元素比，如果比这个 最小的要大，那么把这个最小的元素删除，并把x利用插入排序的思想，插入到序列L中。依次循环，知道扫描了所有的元素。复杂度为O(100w*100)。</p>
+</li>
+</ol>
+<ol>
+<li><p>一共有N个机器，每个机器上有N个数。每个机器最多存O(N)个数并对它们操作。如何找到 个数中的中数？<br>方案1：先大体估计一下这些数的范围，比如这里假设这些数都是32位无符号整数（共有 个）。我们把0到 的整数划分为N个范围段，每个段包含 个整数。比如，第一个段位0到 ，第二段为 到 ，…，第N个段为 到 。 然后，扫描每个机器上的N个数，把属于第一个区段的数放到第一个机器上，属于第二个区段的数放到第二个机器上，…，属于第N个区段的数放到第N个机器上。 注意这个过程每个机器上存储的数应该是O(N)的。下面我们依次统计每个机器上数的个数，一次累加，直到找到第k个机器，在该机器上累加的数大于或等于 ，而在第k-1个机器上的累加数小于 ，并把这个数记为x。那么我们要找的中位数在第k个机器中，排在第 位。然后我们对第k个机器的数排序，并找出第 个数，即为所求的中位数。复杂度是 的。<br>方案2：先对每台机器上的数进行排序。排好序后，我们采用归并排序的思想，将这N个机器上的数归并起来得到最终的排序。找到第n个便是所求。复杂度是n(i)的。 </p>
+</li>
+<li><p>最大间隙问题<br>给定n个实数 ，求着n个实数在实轴上向量2个数之间的最大差值，要求线性的时间算法。<br>方案1：最先想到的方法就是先对这n个数据进行排序，然后一遍扫描即可确定相邻的最大间隙。但该方法不能满足线性时间的要求。故采取如下方法：<br>s 找到n个数据中最大和最小数据max和min。<br>s 用n-2个点等分区间[min, max]，即将[min, max]等分为n-1个区间（前闭后开区间），将这些区间看作桶，编号为 ，且桶 的上界和桶i+1的下届相同，即每个桶的大小相同。每个桶的大小为： 。实际上，这些桶的边界构成了一个等差数列（首项为min，公差为 ），且认为将min放入第一个桶，将max放入第n-1个桶。<br>s 将n个数放入n-1个桶中：将每个元素 分配到某个桶（编号为index），其中 ，并求出分到每个桶的最大最小数据。<br>s 最大间隙：除最大最小数据max和min以外的n-2个数据放入n-1个桶中，由抽屉原理可知至少有一个桶是空的，又因为每个桶的大小相同，所以最大间隙 不会在同一桶中出现，一定是某个桶的上界和气候某个桶的下界之间隙，且该量筒之间的桶（即便好在该连个便好之间的桶）一定是空桶。也就是说，最大间隙在桶 i的上界和桶j的下界之间产生 。一遍扫描即可完成。</p>
+</li>
+<li><p>将多个集合合并成没有交集的集合：给定一个字符串的集合，格式如： 。要求将其中交集不为空的集合合并，要求合并完成的集合之间无交集，例如上例应输出 。<br>(1) 请描述你解决这个问题的思路；<br>(2) 给出主要的处理流程，算法，以及算法的复杂度；<br>(3) 请描述可能的改进。<br>方案1：采用并查集。首先所有的字符串都在单独的并查集中。然后依扫描每个集合，顺序合并将两个相邻元素合并。例如，对于 ， 首先查看aaa和bbb是否在同一个并查集中，如果不在，那么把它们所在的并查集合并，然后再看bbb和ccc是否在同一个并查集中，如果不在，那么也把 它们所在的并查集合并。接下来再扫描其他的集合，当所有的集合都扫描完了，并查集代表的集合便是所求。复杂度应该是O(NlgN)的。改进的话，首先可以 记录每个节点的根结点，改进查询。合并的时候，可以把大的和小的进行合，这样也减少复杂度。</p>
+</li>
+<li><p>最大子序列与最大子矩阵问题<br>数组的最大子序列问题：给定一个数组，其中元素有正，也有负，找出其中一个连续子序列，使和最大。<br>方案1：这个问题可以动态规划的思想解决。设 表示以第i个元素 结尾的最大子序列，那么显然 。基于这一点可以很快用代码实现。<br>最大子矩阵问题：给定一个矩阵（二维数组），其中数据有大有小，请找一个子矩阵，使得子矩阵的和最大，并输出这个和。<br>方案1：可以采用与最大子序列类似的思想来解决。如果我们确定了选择第i列和第j列之间的元素，那么在这个范围内，其实就是一个最大子序列问题。如何确定第i列和第j列可以词用暴搜的方法进行。</p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>Leetcode</tag>
+        <tag>Sort</tag>
       </tags>
   </entry>
 </search>
