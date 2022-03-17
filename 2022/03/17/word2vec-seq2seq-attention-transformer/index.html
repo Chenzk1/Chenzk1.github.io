@@ -23,12 +23,12 @@
     var CONFIG = {"hostname":"chenzk1.github.io","root":"/","scheme":"Gemini","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 
-  <meta name="description" content="word2vec 优点： 1）由于 Word2vec 会考虑上下文，跟之前的 Embedding 方法相比，效果要更好（但不如 18 年之后的方法） 2）比之前的 Embedding方法维度更少，所以速度更快 3）通用性很强，可以用在各种 NLP 任务中   缺点： 1）由于词和向量是一对一的关系，所以多义词的问题无法解决。 2）Word2vec 是一种静态的方式，虽然通用性强，但是无法针对特定">
+  <meta name="description" content="word2vec_seq2seq_attention_transformer">
 <meta property="og:type" content="article">
 <meta property="og:title" content="word2vec_seq2seq_attention_transformer">
 <meta property="og:url" content="https://chenzk1.github.io/2022/03/17/word2vec-seq2seq-attention-transformer/index.html">
 <meta property="og:site_name" content="Kayden&#39;s Blog">
-<meta property="og:description" content="word2vec 优点： 1）由于 Word2vec 会考虑上下文，跟之前的 Embedding 方法相比，效果要更好（但不如 18 年之后的方法） 2）比之前的 Embedding方法维度更少，所以速度更快 3）通用性很强，可以用在各种 NLP 任务中   缺点： 1）由于词和向量是一对一的关系，所以多义词的问题无法解决。 2）Word2vec 是一种静态的方式，虽然通用性强，但是无法针对特定">
+<meta property="og:description" content="word2vec_seq2seq_attention_transformer">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://chenzk1.github.io/2022/03/17/word2vec-seq2seq-attention-transformer/word2vec1.png">
 <meta property="og:image" content="https://chenzk1.github.io/2022/03/17/word2vec-seq2seq-attention-transformer/encoder_decoder.png">
@@ -39,7 +39,7 @@
 <meta property="og:image" content="https://chenzk1.github.io/2022/03/17/word2vec-seq2seq-attention-transformer/transformer2.jpeg">
 <meta property="og:image" content="https://pic1.zhimg.com/80/v2-ac8272e1505602d3f56334fd49d08ab8_hd.jpg">
 <meta property="article:published_time" content="2022-03-17T14:34:08.000Z">
-<meta property="article:modified_time" content="2022-03-17T15:05:46.866Z">
+<meta property="article:modified_time" content="2022-03-17T16:18:08.862Z">
 <meta property="article:author" content="Kayden">
 <meta property="article:tag" content="word2vec">
 <meta property="article:tag" content="seq2seq">
@@ -334,10 +334,16 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2022-03-17 22:34:08 / Modified: 23:05:46" itemprop="dateCreated datePublished" datetime="2022-03-17T22:34:08+08:00">2022-03-17</time>
+      <time title="Created: 2022-03-17 22:34:08" itemprop="dateCreated datePublished" datetime="2022-03-17T22:34:08+08:00">2022-03-17</time>
     </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2022-03-18 00:18:08" itemprop="dateModified" datetime="2022-03-18T00:18:08+08:00">2022-03-18</time>
+      </span>
 
   
 </div>
@@ -349,7 +355,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <a id="more"></a>
+        <p>word2vec_seq2seq_attention_transformer<br><a id="more"></a></p>
 <h1 id="word2vec"><a href="#word2vec" class="headerlink" title="word2vec"></a>word2vec</h1><ul>
 <li>优点：<ul>
 <li>1）由于 Word2vec 会考虑上下文，跟之前的 Embedding 方法相比，效果要更好（但不如 18 年之后的方法）</li>
@@ -557,8 +563,10 @@ y_{i}=g\left(y_{i-1}, s_{i}, c_{i}\right)
 <li>多头self-attention：做多个单头，每个单头的映射矩阵随机初始化，然后得到h个attention得分，transforms中用了h=8个头，即8个t * dv 的attention得分向量</li>
 <li>多头self-attention输入前馈神经网络：先把8个矩阵按列拼接： t * (h dv)；再随机初始化一个(h dv) * dmodel的矩阵，最后结果为t * dmodel，最终得到dmodel是使得其跟原始的输入同纬度，方便相加操作（残差中要用到）</li>
 </ul>
-<p>MultiHead $(Q, K, V)=$ Concat $\left(\right.$ head $<em>{1}, \ldots$, head $\left.</em>{\mathrm{h}}\right) W^{O}$<br>where head $<em>{\mathrm{i}}=$ Attention $\left(Q W</em>{i}^{Q}, K W<em>{i}^{K}, V W</em>{i}^{V}\right)$<br>Where the projections are parameter matrices $W<em>{i}^{Q} \in \mathbb{R}^{d</em>{\text {bouth }} \times d<em>{k}}, W</em>{i}^{K} \in \mathbb{R}^{d<em>{\text {math }} \times d</em>{k}}, W<em>{i}^{V} \in \mathbb{R}^{d</em>{\text {matal }} \times d<em>{v}}$ and $W^{O} \in \mathbb{R}^{h d v \times d</em>{\text {matal }}}$.</p>
-<h4 id="Attention在transform中的应用"><a href="#Attention在transform中的应用" class="headerlink" title="Attention在transform中的应用"></a>Attention在transform中的应用</h4><ul>
+<script type="math/tex; mode=display">
+MultiHead(Q, K, V) = Concat \left(\right. head_{1}, \ldots, head \left._{\mathrm{h}}\right) W^{O} \\
+\text{where } head_{\mathrm{i}}= Attention \left(Q W_{i}^{Q}, K W_{i}^{K}, V W_{i}^{V}\right) \\
+\text{Where the projections are parameter matrices } W_{i}^{Q} \in \mathbb{R}^{d_{\text {bouth }} \times d_{k}}, W_{i}^{K} \in \mathbb{R}^{d_{\text {math }} \times d_{k}}, W_{i}^{V} \in \mathbb{R}^{d_{\text {matal }} \times d_{v}} and W^{O} \in \mathbb{R}^{h d v \times d_{\text {matal }}}</script><h4 id="Attention在transform中的应用"><a href="#Attention在transform中的应用" class="headerlink" title="Attention在transform中的应用"></a>Attention在transform中的应用</h4><ul>
 <li>有三种不同的应用：<ul>
 <li>在encoder-decoder attention层，query来自于前序decoder层，key和value来自于encoder的输出。This allows every position in the decoder to attend over all positions in the input sequence。<strong>是典型的seq2seq中的attention</strong>。</li>
 <li>encoder中的self-attention层，key/value/query都来自于之前层（大层，不是子层，也不是attention中的序列）的输出，encoder中每个位置可以attend to之前层的输出<br><img src="https://pic1.zhimg.com/80/v2-ac8272e1505602d3f56334fd49d08ab8_hd.jpg" alt="image"></li>

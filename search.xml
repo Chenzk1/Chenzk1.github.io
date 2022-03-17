@@ -4890,7 +4890,7 @@ d=\sqrt{(x 1-x 2)^{2}+(y 1-y 2)^{2}}</script></li>
   <entry>
     <title>序列模型</title>
     <url>/2022/03/09/seq/</url>
-    <content><![CDATA[<a id="more"></a>
+    <content><![CDATA[<p>广告/推荐中的序列模型<br><a id="more"></a></p>
 <h1 id="DIN-Deep-Interest-Network"><a href="#DIN-Deep-Interest-Network" class="headerlink" title="DIN(Deep Interest Network)"></a>DIN(Deep Interest Network)</h1><p><a href="https://dl.acm.org/doi/abs/10.1145/3219819.3219823">paper</a></p>
 <h2 id="Model"><a href="#Model" class="headerlink" title="Model"></a>Model</h2><ul>
 <li>思想：针对不同的候选广告，用户历史行为与该广告的权重是不同的。</li>
@@ -5072,7 +5072,7 @@ h
   <entry>
     <title>word2vec_seq2seq_attention_transformer</title>
     <url>/2022/03/17/word2vec-seq2seq-attention-transformer/</url>
-    <content><![CDATA[<a id="more"></a>
+    <content><![CDATA[<p>word2vec_seq2seq_attention_transformer<br><a id="more"></a></p>
 <h1 id="word2vec"><a href="#word2vec" class="headerlink" title="word2vec"></a>word2vec</h1><ul>
 <li>优点：<ul>
 <li>1）由于 Word2vec 会考虑上下文，跟之前的 Embedding 方法相比，效果要更好（但不如 18 年之后的方法）</li>
@@ -5280,8 +5280,10 @@ y_{i}=g\left(y_{i-1}, s_{i}, c_{i}\right)
 <li>多头self-attention：做多个单头，每个单头的映射矩阵随机初始化，然后得到h个attention得分，transforms中用了h=8个头，即8个t * dv 的attention得分向量</li>
 <li>多头self-attention输入前馈神经网络：先把8个矩阵按列拼接： t * (h dv)；再随机初始化一个(h dv) * dmodel的矩阵，最后结果为t * dmodel，最终得到dmodel是使得其跟原始的输入同纬度，方便相加操作（残差中要用到）</li>
 </ul>
-<p>MultiHead $(Q, K, V)=$ Concat $\left(\right.$ head $<em>{1}, \ldots$, head $\left.</em>{\mathrm{h}}\right) W^{O}$<br>where head $<em>{\mathrm{i}}=$ Attention $\left(Q W</em>{i}^{Q}, K W<em>{i}^{K}, V W</em>{i}^{V}\right)$<br>Where the projections are parameter matrices $W<em>{i}^{Q} \in \mathbb{R}^{d</em>{\text {bouth }} \times d<em>{k}}, W</em>{i}^{K} \in \mathbb{R}^{d<em>{\text {math }} \times d</em>{k}}, W<em>{i}^{V} \in \mathbb{R}^{d</em>{\text {matal }} \times d<em>{v}}$ and $W^{O} \in \mathbb{R}^{h d v \times d</em>{\text {matal }}}$.</p>
-<h4 id="Attention在transform中的应用"><a href="#Attention在transform中的应用" class="headerlink" title="Attention在transform中的应用"></a>Attention在transform中的应用</h4><ul>
+<script type="math/tex; mode=display">
+MultiHead(Q, K, V) = Concat \left(\right. head_{1}, \ldots, head \left._{\mathrm{h}}\right) W^{O} \\
+\text{where } head_{\mathrm{i}}= Attention \left(Q W_{i}^{Q}, K W_{i}^{K}, V W_{i}^{V}\right) \\
+\text{Where the projections are parameter matrices } W_{i}^{Q} \in \mathbb{R}^{d_{\text {bouth }} \times d_{k}}, W_{i}^{K} \in \mathbb{R}^{d_{\text {math }} \times d_{k}}, W_{i}^{V} \in \mathbb{R}^{d_{\text {matal }} \times d_{v}} and W^{O} \in \mathbb{R}^{h d v \times d_{\text {matal }}}</script><h4 id="Attention在transform中的应用"><a href="#Attention在transform中的应用" class="headerlink" title="Attention在transform中的应用"></a>Attention在transform中的应用</h4><ul>
 <li>有三种不同的应用：<ul>
 <li>在encoder-decoder attention层，query来自于前序decoder层，key和value来自于encoder的输出。This allows every position in the decoder to attend over all positions in the input sequence。<strong>是典型的seq2seq中的attention</strong>。</li>
 <li>encoder中的self-attention层，key/value/query都来自于之前层（大层，不是子层，也不是attention中的序列）的输出，encoder中每个位置可以attend to之前层的输出<br><img src="https://pic1.zhimg.com/80/v2-ac8272e1505602d3f56334fd49d08ab8_hd.jpg" alt="image"></li>
