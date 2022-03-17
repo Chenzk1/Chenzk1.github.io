@@ -9,6 +9,7 @@ categories:
   - Learning
 ---
 
+广告/推荐中的序列模型
 <!-- more -->
 
 # DIN(Deep Interest Network)

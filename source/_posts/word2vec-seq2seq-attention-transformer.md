@@ -10,6 +10,7 @@ tags:
 categories:
 ---
 
+word2vec_seq2seq_attention_transformer
 <!-- more -->
 
 # word2vec
@@ -223,9 +224,11 @@ $$
 - 多头self-attention：做多个单头，每个单头的映射矩阵随机初始化，然后得到h个attention得分，transforms中用了h=8个头，即8个t \* dv 的attention得分向量
 - 多头self-attention输入前馈神经网络：先把8个矩阵按列拼接： t \* (h dv)；再随机初始化一个(h dv) \* dmodel的矩阵，最后结果为t \* dmodel，最终得到dmodel是使得其跟原始的输入同纬度，方便相加操作（残差中要用到）
 
-MultiHead $(Q, K, V)=$ Concat $\left(\right.$ head $_{1}, \ldots$, head $\left._{\mathrm{h}}\right) W^{O}$
-where head $_{\mathrm{i}}=$ Attention $\left(Q W_{i}^{Q}, K W_{i}^{K}, V W_{i}^{V}\right)$
-Where the projections are parameter matrices $W_{i}^{Q} \in \mathbb{R}^{d_{\text {bouth }} \times d_{k}}, W_{i}^{K} \in \mathbb{R}^{d_{\text {math }} \times d_{k}}, W_{i}^{V} \in \mathbb{R}^{d_{\text {matal }} \times d_{v}}$ and $W^{O} \in \mathbb{R}^{h d v \times d_{\text {matal }}}$.
+$$
+MultiHead(Q, K, V) = Concat \left(\right. head_{1}, \ldots, head \left._{\mathrm{h}}\right) W^{O} \\
+\text{where } head_{\mathrm{i}}= Attention \left(Q W_{i}^{Q}, K W_{i}^{K}, V W_{i}^{V}\right) \\
+\text{Where the projections are parameter matrices } W_{i}^{Q} \in \mathbb{R}^{d_{\text {bouth }} \times d_{k}}, W_{i}^{K} \in \mathbb{R}^{d_{\text {math }} \times d_{k}}, W_{i}^{V} \in \mathbb{R}^{d_{\text {matal }} \times d_{v}} and W^{O} \in \mathbb{R}^{h d v \times d_{\text {matal }}}
+$$
 
 #### Attention在transform中的应用
 
