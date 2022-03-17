@@ -9,6 +9,7 @@ tags:
   - GNN
   - GraphSAGE
   - GAT
+  - GIN
 categories:
   - Learning
   - cs224w

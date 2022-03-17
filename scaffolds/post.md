@@ -7,3 +7,4 @@ mathjax: false
 ---
 
 <!-- more -->
+{% asset_img test.png test %}

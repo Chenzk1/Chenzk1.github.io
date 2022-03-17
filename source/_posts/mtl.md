@@ -140,7 +140,10 @@ $$
 # 其他
 ## GradNorm
 - [paper](https://openreview.net/pdf?id=H1bM1fZCW)
-- 动态调整不同任务损失函数的权重：不同目标重要性不同/收敛的程度/loss的大小 diff较大，可以考虑使用
+- 分两个loss，加权多任务loss以及每个任务权重的loss，后者只过share bottom
+- 两个作用
+  - 动态调整不同任务损失函数的权重：不同目标重要性不同/收敛的程度/loss的大小 diff较大，可以考虑使用
+  - share bottom的更新受到每个任务权重的影响
 - https://blog.csdn.net/Leon_winter/article/details/105014677
 
 ## share vs not share
