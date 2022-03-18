@@ -32,7 +32,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://chenzk1.github.io/2022/03/10/sort/complixty.png">
 <meta property="article:published_time" content="2022-03-10T03:17:18.000Z">
-<meta property="article:modified_time" content="2022-03-17T16:39:06.058Z">
+<meta property="article:modified_time" content="2022-03-18T02:03:00.723Z">
 <meta property="article:author" content="Kayden">
 <meta property="article:tag" content="Leetcode">
 <meta property="article:tag" content="Sort">
@@ -228,7 +228,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">53</span>
+          <span class="site-state-item-count">55</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -241,7 +241,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">61</span>
+        <span class="site-state-item-count">64</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -333,7 +333,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2022-03-18 00:39:06" itemprop="dateModified" datetime="2022-03-18T00:39:06+08:00">2022-03-18</time>
+        <time title="Modified: 2022-03-18 10:03:00" itemprop="dateModified" datetime="2022-03-18T10:03:00+08:00">2022-03-18</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -682,8 +682,8 @@
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2022/03/17/word2vec-seq2seq-attention-transformer/" rel="next" title="word2vec_seq2seq_attention_transformer">
-                  word2vec_seq2seq_attention_transformer <i class="fa fa-chevron-right"></i>
+                <a href="/2022/03/17/word2vec-seq2seq-attention-transformer/" rel="next" title="word2vec_seq2seq_attention_transformer_bert">
+                  word2vec_seq2seq_attention_transformer_bert <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>
@@ -779,6 +779,50 @@
   
 
   
+      <script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              const target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    const script = document.createElement('script');
+    script.src = '//cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js';
+    script.defer = true;
+    document.head.appendChild(script);
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.typesetClear();
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 

@@ -23,12 +23,12 @@
     var CONFIG = {"hostname":"chenzk1.github.io","root":"/","scheme":"Gemini","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 
-  <meta name="description" content="word2vec_seq2seq_attention_transformer">
+  <meta name="description" content="word2vec_seq2seq_attention_transformer_bert">
 <meta property="og:type" content="article">
-<meta property="og:title" content="word2vec_seq2seq_attention_transformer">
+<meta property="og:title" content="word2vec_seq2seq_attention_transformer_bert">
 <meta property="og:url" content="https://chenzk1.github.io/2022/03/17/word2vec-seq2seq-attention-transformer/index.html">
 <meta property="og:site_name" content="Kayden&#39;s Blog">
-<meta property="og:description" content="word2vec_seq2seq_attention_transformer">
+<meta property="og:description" content="word2vec_seq2seq_attention_transformer_bert">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://chenzk1.github.io/2022/03/17/word2vec-seq2seq-attention-transformer/word2vec1.png">
 <meta property="og:image" content="https://chenzk1.github.io/2022/03/17/word2vec-seq2seq-attention-transformer/encoder_decoder.png">
@@ -38,13 +38,15 @@
 <meta property="og:image" content="https://chenzk1.github.io/2022/03/17/word2vec-seq2seq-attention-transformer/transformer1.jpeg">
 <meta property="og:image" content="https://chenzk1.github.io/2022/03/17/word2vec-seq2seq-attention-transformer/transformer2.jpeg">
 <meta property="og:image" content="https://pic1.zhimg.com/80/v2-ac8272e1505602d3f56334fd49d08ab8_hd.jpg">
+<meta property="og:image" content="https://chenzk1.github.io/2022/03/17/word2vec-seq2seq-attention-transformer/bert1.png">
 <meta property="article:published_time" content="2022-03-17T14:34:08.000Z">
-<meta property="article:modified_time" content="2022-03-17T16:18:08.862Z">
+<meta property="article:modified_time" content="2022-03-18T02:02:45.466Z">
 <meta property="article:author" content="Kayden">
-<meta property="article:tag" content="word2vec">
-<meta property="article:tag" content="seq2seq">
-<meta property="article:tag" content="attention">
-<meta property="article:tag" content="transformer">
+<meta property="article:tag" content="Word2vec">
+<meta property="article:tag" content="Seq2seq">
+<meta property="article:tag" content="Attention">
+<meta property="article:tag" content="Transformer">
+<meta property="article:tag" content="Bert">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://chenzk1.github.io/2022/03/17/word2vec-seq2seq-attention-transformer/word2vec1.png">
 
@@ -62,7 +64,7 @@
   };
 </script>
 
-  <title>word2vec_seq2seq_attention_transformer | Kayden's Blog</title>
+  <title>word2vec_seq2seq_attention_transformer_bert | Kayden's Blog</title>
   
 
 
@@ -223,7 +225,7 @@
 
       <!--noindex-->
       <section class="post-toc-wrap sidebar-panel">
-          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#word2vec"><span class="nav-number">1.</span> <span class="nav-text">word2vec</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8B%E9%87%87%E6%A0%B7"><span class="nav-number">1.1.</span> <span class="nav-text">下采样</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B4%9F%E9%87%87%E6%A0%B7"><span class="nav-number">1.2.</span> <span class="nav-text">负采样</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CBOW%E5%92%8Cskip-gram"><span class="nav-number">1.3.</span> <span class="nav-text">CBOW和skip-gram</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#seq2seq"><span class="nav-number">2.</span> <span class="nav-text">seq2seq</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#encoder-decoder%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.1.</span> <span class="nav-text">encoder-decoder模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#seq2seq-1"><span class="nav-number">2.2.</span> <span class="nav-text">seq2seq</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9E%84"><span class="nav-number">2.2.1.</span> <span class="nav-text">结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-number">2.2.2.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#decoding"><span class="nav-number">2.2.3.</span> <span class="nav-text">decoding</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%80%E9%99%90"><span class="nav-number">2.2.4.</span> <span class="nav-text">局限</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%94%E7%94%A8"><span class="nav-number">2.2.5.</span> <span class="nav-text">应用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BA%94%E7%94%A8seq2seq%E5%81%9ANMT-Neural-Machine-Translation"><span class="nav-number">2.2.5.1.</span> <span class="nav-text">应用seq2seq做NMT(Neural Machine Translation)</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#attention"><span class="nav-number">3.</span> <span class="nav-text">attention</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#motivation"><span class="nav-number">3.1.</span> <span class="nav-text">motivation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AC%E8%B4%A8%E6%80%9D%E6%83%B3"><span class="nav-number">3.2.</span> <span class="nav-text">本质思想</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#method"><span class="nav-number">3.3.</span> <span class="nav-text">method</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#attention-score%E7%9A%84%E5%A4%9A%E7%A7%8D%E8%AE%A1%E7%AE%97%E6%96%B9%E5%BC%8F"><span class="nav-number">3.3.1.</span> <span class="nav-text">attention score的多种计算方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#self-Attention-intra-Attention"><span class="nav-number">3.3.2.</span> <span class="nav-text">self Attention&#x2F; intra Attention</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#attention%E7%9A%84%E5%A5%BD%E5%A4%84"><span class="nav-number">3.4.</span> <span class="nav-text">attention的好处</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Transformer"><span class="nav-number">4.</span> <span class="nav-text">Transformer</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Encoder-and-decoder-stacks"><span class="nav-number">4.1.</span> <span class="nav-text">Encoder and decoder stacks</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%84"><span class="nav-number">4.1.1.</span> <span class="nav-text">模型结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Encoder"><span class="nav-number">4.1.2.</span> <span class="nav-text">Encoder</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Decoder"><span class="nav-number">4.1.3.</span> <span class="nav-text">Decoder</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Layer-Normalization"><span class="nav-number">4.1.4.</span> <span class="nav-text">Layer Normalization</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Batch-Normalization"><span class="nav-number">4.1.4.1.</span> <span class="nav-text">Batch Normalization</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LN"><span class="nav-number">4.1.4.2.</span> <span class="nav-text">LN</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Attention"><span class="nav-number">4.1.5.</span> <span class="nav-text">Attention</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Scaled-Dot-Product-Attention"><span class="nav-number">4.1.5.1.</span> <span class="nav-text">Scaled Dot-Product Attention</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#multi-head-attention"><span class="nav-number">4.1.5.2.</span> <span class="nav-text">multi-head attention</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Attention%E5%9C%A8transform%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-number">4.1.5.3.</span> <span class="nav-text">Attention在transform中的应用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Position-wise-Feed-Forward-Networks"><span class="nav-number">4.1.6.</span> <span class="nav-text">Position-wise Feed-Forward Networks</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Embedding-and-Softmax"><span class="nav-number">4.1.7.</span> <span class="nav-text">Embedding and Softmax</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Position-Encoding"><span class="nav-number">4.1.8.</span> <span class="nav-text">Position Encoding</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BD%95%E4%BD%BF%E7%94%A8self-attention"><span class="nav-number">4.1.9.</span> <span class="nav-text">为何使用self-attention</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83"><span class="nav-number">4.1.10.</span> <span class="nav-text">训练</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AD%A3%E5%88%99%E5%8C%96"><span class="nav-number">4.1.10.1.</span> <span class="nav-text">正则化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#decoder"><span class="nav-number">4.1.10.2.</span> <span class="nav-text">decoder</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">4.1.11.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Transformer-VS-CNN"><span class="nav-number">4.2.</span> <span class="nav-text">Transformer VS CNN</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#word2vec-vs-glove-vs-elmo-vs-gpt-vs-bert"><span class="nav-number">5.</span> <span class="nav-text">word2vec vs glove vs elmo vs gpt vs bert</span></a></li></ol></div>
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#word2vec"><span class="nav-number">1.</span> <span class="nav-text">word2vec</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8B%E9%87%87%E6%A0%B7"><span class="nav-number">1.1.</span> <span class="nav-text">下采样</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B4%9F%E9%87%87%E6%A0%B7"><span class="nav-number">1.2.</span> <span class="nav-text">负采样</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CBOW%E5%92%8Cskip-gram"><span class="nav-number">1.3.</span> <span class="nav-text">CBOW和skip-gram</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#seq2seq"><span class="nav-number">2.</span> <span class="nav-text">seq2seq</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#encoder-decoder%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.1.</span> <span class="nav-text">encoder-decoder模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#seq2seq-1"><span class="nav-number">2.2.</span> <span class="nav-text">seq2seq</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9E%84"><span class="nav-number">2.2.1.</span> <span class="nav-text">结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-number">2.2.2.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#decoding"><span class="nav-number">2.2.3.</span> <span class="nav-text">decoding</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%80%E9%99%90"><span class="nav-number">2.2.4.</span> <span class="nav-text">局限</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%94%E7%94%A8"><span class="nav-number">2.2.5.</span> <span class="nav-text">应用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BA%94%E7%94%A8seq2seq%E5%81%9ANMT-Neural-Machine-Translation"><span class="nav-number">2.2.5.1.</span> <span class="nav-text">应用seq2seq做NMT(Neural Machine Translation)</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#attention"><span class="nav-number">3.</span> <span class="nav-text">attention</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#motivation"><span class="nav-number">3.1.</span> <span class="nav-text">motivation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AC%E8%B4%A8%E6%80%9D%E6%83%B3"><span class="nav-number">3.2.</span> <span class="nav-text">本质思想</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#method"><span class="nav-number">3.3.</span> <span class="nav-text">method</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#attention-score%E7%9A%84%E5%A4%9A%E7%A7%8D%E8%AE%A1%E7%AE%97%E6%96%B9%E5%BC%8F"><span class="nav-number">3.3.1.</span> <span class="nav-text">attention score的多种计算方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#self-Attention-intra-Attention"><span class="nav-number">3.3.2.</span> <span class="nav-text">self Attention&#x2F; intra Attention</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#attention%E7%9A%84%E5%A5%BD%E5%A4%84"><span class="nav-number">3.4.</span> <span class="nav-text">attention的好处</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Transformer"><span class="nav-number">4.</span> <span class="nav-text">Transformer</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Encoder-and-decoder-stacks"><span class="nav-number">4.1.</span> <span class="nav-text">Encoder and decoder stacks</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%84"><span class="nav-number">4.1.1.</span> <span class="nav-text">模型结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Encoder"><span class="nav-number">4.1.2.</span> <span class="nav-text">Encoder</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Decoder"><span class="nav-number">4.1.3.</span> <span class="nav-text">Decoder</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Layer-Normalization"><span class="nav-number">4.1.4.</span> <span class="nav-text">Layer Normalization</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Batch-Normalization"><span class="nav-number">4.1.4.1.</span> <span class="nav-text">Batch Normalization</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LN"><span class="nav-number">4.1.4.2.</span> <span class="nav-text">LN</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Attention"><span class="nav-number">4.1.5.</span> <span class="nav-text">Attention</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Scaled-Dot-Product-Attention"><span class="nav-number">4.1.5.1.</span> <span class="nav-text">Scaled Dot-Product Attention</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#multi-head-attention"><span class="nav-number">4.1.5.2.</span> <span class="nav-text">multi-head attention</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Attention%E5%9C%A8transform%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-number">4.1.5.3.</span> <span class="nav-text">Attention在transform中的应用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Position-wise-Feed-Forward-Networks"><span class="nav-number">4.1.6.</span> <span class="nav-text">Position-wise Feed-Forward Networks</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Embedding-and-Softmax"><span class="nav-number">4.1.7.</span> <span class="nav-text">Embedding and Softmax</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Position-Encoding"><span class="nav-number">4.1.8.</span> <span class="nav-text">Position Encoding</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BD%95%E4%BD%BF%E7%94%A8self-attention"><span class="nav-number">4.1.9.</span> <span class="nav-text">为何使用self-attention</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83"><span class="nav-number">4.1.10.</span> <span class="nav-text">训练</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AD%A3%E5%88%99%E5%8C%96"><span class="nav-number">4.1.10.1.</span> <span class="nav-text">正则化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#decoder"><span class="nav-number">4.1.10.2.</span> <span class="nav-text">decoder</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">4.1.11.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Transformer-VS-CNN"><span class="nav-number">4.2.</span> <span class="nav-text">Transformer VS CNN</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Bert-Bidirectional-Encoder-Representations-from-Transformers"><span class="nav-number">5.</span> <span class="nav-text">Bert(Bidirectional Encoder Representations from Transformers)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%A4%E4%B8%AA%E4%BB%BB%E5%8A%A1"><span class="nav-number">5.1.</span> <span class="nav-text">两个任务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%84-1"><span class="nav-number">5.2.</span> <span class="nav-text">模型结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pre-training-BERT"><span class="nav-number">5.3.</span> <span class="nav-text">Pre-training BERT</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Masked-LM"><span class="nav-number">5.3.1.</span> <span class="nav-text">Masked LM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Next-Sentence-Prediction"><span class="nav-number">5.3.2.</span> <span class="nav-text">Next Sentence Prediction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pre-training-data"><span class="nav-number">5.3.3.</span> <span class="nav-text">Pre-training data</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#word2vec-vs-glove-vs-elmo-vs-gpt-vs-bert"><span class="nav-number">6.</span> <span class="nav-text">word2vec vs glove vs elmo vs gpt vs bert</span></a></li></ol></div>
       </section>
       <!--/noindex-->
 
@@ -237,7 +239,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">53</span>
+          <span class="site-state-item-count">55</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -250,7 +252,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">61</span>
+        <span class="site-state-item-count">64</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -324,7 +326,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          word2vec_seq2seq_attention_transformer
+          word2vec_seq2seq_attention_transformer_bert
         </h1>
 
         <div class="post-meta-container">
@@ -342,7 +344,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2022-03-18 00:18:08" itemprop="dateModified" datetime="2022-03-18T00:18:08+08:00">2022-03-18</time>
+        <time title="Modified: 2022-03-18 10:02:45" itemprop="dateModified" datetime="2022-03-18T10:02:45+08:00">2022-03-18</time>
       </span>
 
   
@@ -355,7 +357,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>word2vec_seq2seq_attention_transformer<br><a id="more"></a></p>
+        <p>word2vec_seq2seq_attention_transformer_bert<br><a id="more"></a></p>
 <h1 id="word2vec"><a href="#word2vec" class="headerlink" title="word2vec"></a>word2vec</h1><ul>
 <li>优点：<ul>
 <li>1）由于 Word2vec 会考虑上下文，跟之前的 Embedding 方法相比，效果要更好（但不如 18 年之后的方法）</li>
@@ -663,6 +665,42 @@ MultiHead(Q, K, V) = Concat \left(\right. head_{1}, \ldots, head \left._{\mathrm
 <li><strong>CNN的感受野有限，不能感知所有上下文</strong></li>
 <li><strong>CNN每层的卷积权重共享，而Attention每一个decoder对应的attention是不一样的</strong></li>
 </ul>
+<h1 id="Bert-Bidirectional-Encoder-Representations-from-Transformers"><a href="#Bert-Bidirectional-Encoder-Representations-from-Transformers" class="headerlink" title="Bert(Bidirectional Encoder Representations from Transformers)"></a>Bert(Bidirectional Encoder Representations from Transformers)</h1><h2 id="两个任务"><a href="#两个任务" class="headerlink" title="两个任务"></a>两个任务</h2><ul>
+<li>Masked Language Model(MLM)</li>
+<li>Next Sentence Prediction</li>
+</ul>
+<h2 id="模型结构-1"><a href="#模型结构-1" class="headerlink" title="模型结构"></a>模型结构</h2><ul>
+<li>L: transformer blocks; H: hidden size; A: self-attention heads;</li>
+<li>Bert-base: L=12, H=768, A=12, total-Params=110M</li>
+<li>Bert-large: L=24, H=1024, A=16, total-Params=340M</li>
+<li>输入输出表达：<ul>
+<li>sentence：一段连续文本，并不是语言学中的句子</li>
+<li>sequence：BERT的输入tocken sequence，1 sentence或2 sentences(2 sentences用于后续的NSP)</li>
+<li>使用tocken个数为30000的WordPiece embeddings，每个<strong>sequence</strong>的第一个tocken为[CLS]</li>
+<li>不同sentence区分的方式：1. 通过[SEP]分隔；2. 学习一个embeddings，不同的sentence用不同的embedding来区分</li>
+<li>一个给定的tocken，其input representation是相应的tocken、segment和position embeddings的和<img src="/2022/03/17/word2vec-seq2seq-attention-transformer/bert1.png" class="" title="bert1">
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Pre-training-BERT"><a href="#Pre-training-BERT" class="headerlink" title="Pre-training BERT"></a>Pre-training BERT</h2><ul>
+<li>两种无监督训练任务</li>
+</ul>
+<h3 id="Masked-LM"><a href="#Masked-LM" class="headerlink" title="Masked LM"></a>Masked LM</h3><ul>
+<li>在每个<strong>sequence</strong>中随机mask 15%的wordpiece tockens</li>
+<li>缺点：[MASK] tocken不会出现在fine-tuning中，所以会造成pre-training和fine-tuning的mismatch。解决：not always replace “masked” words with the actual [MASK] token：<ul>
+<li>80%的时候用[MASK] tocken</li>
+<li>10%的random tocken</li>
+<li>10%的unchanged token </li>
+<li>Transformer encoder不知道它将被要求预测哪些单词或哪些单词已被随机单词替换，因此它被迫保持每个输入token的分布式上下文表示。此外，因为随机替换只发生在所有token的1.5％（即15％的10％），这似乎不会损害模型的语言理解能力。</li>
+</ul>
+</li>
+</ul>
+<h3 id="Next-Sentence-Prediction"><a href="#Next-Sentence-Prediction" class="headerlink" title="Next Sentence Prediction"></a>Next Sentence Prediction</h3><p><strong>LM无法获取两句之间的相关性</strong></p>
+<ul>
+<li>label：每个样本对AB，如果50%的时间B是A的下一句，则为IsNext，否则NotNext</li>
+</ul>
+<h3 id="Pre-training-data"><a href="#Pre-training-data" class="headerlink" title="Pre-training data"></a>Pre-training data</h3><p>BooksCorpus (800M words) (Zhu et al., 2015) and English Wikipedia (2,500M words)<br><strong>使用文件级的语料库而不是语句级的，这样次啊能够提取到长的连续语句</strong></p>
 <h1 id="word2vec-vs-glove-vs-elmo-vs-gpt-vs-bert"><a href="#word2vec-vs-glove-vs-elmo-vs-gpt-vs-bert" class="headerlink" title="word2vec vs glove vs elmo vs gpt vs bert"></a>word2vec vs glove vs elmo vs gpt vs bert</h1><ul>
 <li>word2vec, Glove只与预训练预料有关</li>
 <li>ELMo<ul>
@@ -693,10 +731,11 @@ MultiHead(Q, K, V) = Concat \left(\right. head_{1}, \ldots, head \left._{\mathrm
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/word2vec/" rel="tag"># word2vec</a>
-              <a href="/tags/seq2seq/" rel="tag"># seq2seq</a>
-              <a href="/tags/attention/" rel="tag"># attention</a>
-              <a href="/tags/transformer/" rel="tag"># transformer</a>
+              <a href="/tags/Word2vec/" rel="tag"># Word2vec</a>
+              <a href="/tags/Seq2seq/" rel="tag"># Seq2seq</a>
+              <a href="/tags/Attention/" rel="tag"># Attention</a>
+              <a href="/tags/Transformer/" rel="tag"># Transformer</a>
+              <a href="/tags/Bert/" rel="tag"># Bert</a>
           </div>
 
         
@@ -708,6 +747,9 @@ MultiHead(Q, K, V) = Concat \left(\right. head_{1}, \ldots, head \left._{\mathrm
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/2022/03/18/tfidf-bm25/" rel="next" title="tfidf_bm25">
+                  tfidf_bm25 <i class="fa fa-chevron-right"></i>
+                </a>
             </div>
           </div>
     </footer>
@@ -802,6 +844,50 @@ MultiHead(Q, K, V) = Concat \left(\right. head_{1}, \ldots, head \left._{\mathrm
   
 
   
+      <script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              const target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    const script = document.createElement('script');
+    script.src = '//cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js';
+    script.defer = true;
+    document.head.appendChild(script);
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.typesetClear();
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 
