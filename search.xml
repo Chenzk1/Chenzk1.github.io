@@ -2464,6 +2464,22 @@ z^{\prime}=\left(\gamma * \gamma_{p}\right) \frac{z-\mu}{\sqrt{\sigma^{2}+\epsil
 </li>
 <li><a href="https://blog.csdn.net/Leon_winter/article/details/105014677">https://blog.csdn.net/Leon_winter/article/details/105014677</a></li>
 </ul>
+<h2 id="MAMDR-MAMDR-A-Model-Agnostic-Learning-Method-for-Multi-Domain-Recommendation"><a href="#MAMDR-MAMDR-A-Model-Agnostic-Learning-Method-for-Multi-Domain-Recommendation" class="headerlink" title="MAMDR(MAMDR: A Model Agnostic Learning Method for Multi-Domain Recommendation)"></a>MAMDR(MAMDR: A Model Agnostic Learning Method for Multi-Domain Recommendation)</h2><ul>
+<li><a href="https://arxiv.org/pdf/2202.12524.pdf">paper</a></li>
+<li>提出了一种通用的，模型结构无关的，多域推荐的学习方法<h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3></li>
+<li>不同域数据分布差异很大：<ul>
+<li>(1) Shared parameters suffer from the domain conflict problem: 共享参数停在compromised position</li>
+<li>(2) Specific parameters are inclined to overfitting: domain参数overfitting</li>
+<li>(3) Existing Multi-domain recommendation models cannot generalize to all circumstances: 与应用场景相关</li>
+</ul>
+</li>
+</ul>
+<h3 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h3><ul>
+<li>包括Domain Negotiatio和Domain Regularization<img src="/2022/01/18/mtl/mamdr.png" class="" title="mamdr"></li>
+<li>Domain Negotiatio: 针对共享参数。所有domain更新完之后，再兑回一点。<img src="/2022/01/18/mtl/mamdr1.png" class="" title="mamdr1"></li>
+<li>Domain Regularization: 针对domain参数。针对domain i，先sample若干其他domain，利用其他domain更新domain i的参数，再利用domain i更新domain i的参数。<img src="/2022/01/18/mtl/mamdr2.png" class="" title="mamdr2">
+</li>
+</ul>
 <h2 id="share-vs-not-share"><a href="#share-vs-not-share" class="headerlink" title="share vs not share"></a>share vs not share</h2><ul>
 <li>not share bias emb: tend to useful</li>
 <li>share sparse: tend to useful</li>
@@ -2644,12 +2660,12 @@ h
 <h2 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h2><img src="/2022/03/09/seq/mind.jpg" class="" title="mind">
 <h3 id="behavior2interest-dynamic-routing"><a href="#behavior2interest-dynamic-routing" class="headerlink" title="behavior2interest dynamic routing"></a>behavior2interest dynamic routing</h3><h4 id="胶囊网络"><a href="#胶囊网络" class="headerlink" title="胶囊网络"></a>胶囊网络</h4><ul>
 <li>背景：传统的神经网络输入一组标量，对这组标量求加权和，之后输入非线性激活函数得到一个标量的输出。而<strong>Capsule输入是一组向量，对这组向量进行仿射变换之后求加权和，把加权和输入非线性激活函数，如此经过j次迭代得到一个向量的输出</strong>。Hinton提出Capsule Network是为了解决传统的CNN中只能编码某个特征是否存在而<strong>无法编码特征的orientation</strong>。</li>
-<li>来自<a href="https://zhuanlan.zhihu.com/p/68897114">zhihu</a></li>
-<li>一个两层胶囊网络（从low-level到high-level）：<img src="/2022/03/09/seq/capsule2.png" class="" title="capsule2">
-<ul>
-<li>low-level: m个Nl维度的vector, high-level: n个Nh维度的vector</li>
+<li>来自<a href="https://zhuanlan.zhihu.com/p/68897114">zhihu</a><img src="/2022/03/09/seq/capsule.jpeg" class="" title="capsule"></li>
+<li>一个两层胶囊网络（从low-level到high-level）：<ul>
+<li>low-level: m个Nl维度的vector; high-level: n个Nh维度的vector</li>
 <li>对每一个low-level vector做映射，然后做加权融合（softmax），再做非线性激活</li>
-<li>其中softmax需要参数，参数需要迭代求解：初始化为0，即权重为1/m；后续迭代更新</li>
+<li>其中softmax需要参数，参数需要迭代求解：初始化为0，即权重为1/m；后续迭代更新<img src="/2022/03/09/seq/capsule2.png" class="" title="capsule2">
+</li>
 </ul>
 </li>
 </ul>
@@ -5147,7 +5163,7 @@ MultiHead(Q, K, V) = Concat \left(\right. head_{1}, \ldots, head \left._{\mathrm
 <li>堆是一个完全二叉树，可以用数组来表示。例如a可以表示为[99,66,45,33,37,10,22,13]，所以对于i处的节点，其子节点坐标为2*i+1, 2*i+2</li>
 <li>在构造最大堆时，可以先构造一颗完全二叉树，再对每个根节点及其两个子节点进行位置调整，在调整时，从最后一个非叶子节点开始调整</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">adjust_heap</span>(<span class="params">nums, i, size</span>):</span> </span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">    nums[:size]: 完全二叉树</span></span><br><span class="line"><span class="string">    i: 从第i个节点开始调整直到根节点</span></span><br><span class="line"><span class="string">    &#x27;&#x27;&#x27;</span></span><br><span class="line">    left = <span class="number">2</span>*i+<span class="number">1</span></span><br><span class="line">    right = <span class="number">2</span>*i+<span class="number">2</span></span><br><span class="line">    largest = i</span><br><span class="line">    <span class="keyword">if</span> left &lt; size <span class="keyword">and</span> nums[largest] &lt; nums[left]: <span class="comment"># 要保证小于size</span></span><br><span class="line">        largest = left</span><br><span class="line">   <span class="keyword">if</span> right &lt; size <span class="keyword">and</span> nums[largest] &lt; nums[right]:</span><br><span class="line">        largest = right</span><br><span class="line">   <span class="keyword">if</span> largest != i: <span class="comment"># 如果该节点需要调整，则对其进行调整，并沿着被改变的那个叶子节点不断调整</span></span><br><span class="line">        nums[largest], nums[i] = nums[i], nums[largest]</span><br><span class="line">        adjust_heap(nums, largest, size)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">build_heap</span>(<span class="params">nums</span>):</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(nums)//<span class="number">2</span>)[::<span class="number">-1</span>]: <span class="comment">#从最后一个非叶子结点开始调整，往上的节点都是非叶子结点</span></span><br><span class="line">            adjust_heap(nums, i, <span class="built_in">len</span>(nums))      </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">heap_sort</span>(<span class="params">nums</span>):</span></span><br><span class="line">    build_heap(nums) <span class="comment"># 先建堆</span></span><br><span class="line">    size = <span class="built_in">len</span>(nums)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(size)[::<span class="number">-1</span>]:</span><br><span class="line">        nums[<span class="number">0</span>], nums[i] = nums[i], nums[<span class="number">0</span>] <span class="comment">#把堆顶元素放在最后</span></span><br><span class="line">        adjust_heap(nums, <span class="number">0</span>, i) <span class="comment"># 堆顶元素被改变，需要调整</span></span><br><span class="line">    <span class="keyword">return</span> nums  </span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">adjust_heap</span>(<span class="params">nums, i, size</span>):</span> </span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">    nums[:size]: 完全二叉树</span></span><br><span class="line"><span class="string">    i: 从第i个节点开始调整直到根节点</span></span><br><span class="line"><span class="string">    &#x27;&#x27;&#x27;</span></span><br><span class="line">    left = <span class="number">2</span>*i+<span class="number">1</span></span><br><span class="line">    right = <span class="number">2</span>*i+<span class="number">2</span></span><br><span class="line">    largest = i</span><br><span class="line">    <span class="keyword">if</span> left &lt; size <span class="keyword">and</span> nums[largest] &lt; nums[left]: <span class="comment"># 要保证小于size</span></span><br><span class="line">        largest = left</span><br><span class="line">   <span class="keyword">if</span> right &lt; size <span class="keyword">and</span> nums[largest] &lt; nums[right]:</span><br><span class="line">        largest = right</span><br><span class="line">   <span class="keyword">if</span> largest != i: <span class="comment"># 如果该节点需要调整，则对其进行调整，并沿着被改变的那个叶子节点不断调整</span></span><br><span class="line">        nums[largest], nums[i] = nums[i], nums[largest]</span><br><span class="line">        adjust_heap(nums, largest, size)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">build_heap</span>(<span class="params">nums</span>):</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(nums)//<span class="number">2</span>)[::<span class="number">-1</span>]: <span class="comment">#从最后一个非叶子结点开始调整，往上的节点都是非叶子结点</span></span><br><span class="line">        adjust_heap(nums, i, <span class="built_in">len</span>(nums))      </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">heap_sort</span>(<span class="params">nums</span>):</span></span><br><span class="line">    build_heap(nums) <span class="comment"># 先建size大小的堆</span></span><br><span class="line">    size = <span class="built_in">len</span>(nums)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(size)[::<span class="number">-1</span>]:</span><br><span class="line">        nums[<span class="number">0</span>], nums[i] = nums[i], nums[<span class="number">0</span>] <span class="comment">#最后的元素一定小于堆顶元素，把堆顶元素放在最后</span></span><br><span class="line">        adjust_heap(nums, <span class="number">0</span>, i) <span class="comment"># 堆顶元素被改变，需要调整</span></span><br><span class="line">    <span class="keyword">return</span> nums</span><br></pre></td></tr></table></figure>
 <h3 id="复杂度分析"><a href="#复杂度分析" class="headerlink" title="复杂度分析"></a>复杂度分析</h3><ul>
 <li>需要做n次循环，每次从根节点调整堆，并且沿着其中一个子树往下调整，因此为nlogn</li>
 </ul>
@@ -6483,6 +6499,153 @@ k &=k_{1}\left((1-b)+b \cdot \frac{d l}{a v d_1}\right)
       </categories>
       <tags>
         <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>计组-原码、反码、补码、移码、浮点数、校验码</title>
+    <url>/2022/04/05/ComputerOrganizationandDesign/</url>
+    <content><![CDATA[<p><a href="https://piaodazhu.github.io/15-floating-point-number-basic/">ref</a></p>
+<h1 id="原码、反码、补码、移码"><a href="#原码、反码、补码、移码" class="headerlink" title="原码、反码、补码、移码"></a>原码、反码、补码、移码</h1><ul>
+<li>原码：符号位+数值位。直观，但是运算较为困难，<strong>加法和减法需要采取不同的硬件实现方式；0有+0和-0两种表达方式</strong>。</li>
+<li>反码：正数的反码：原码，负数的反码：原码的数值位取反。<strong>0有+0和-0两种表达方式</strong></li>
+<li>补码：正数的补码：原码，负数的补码：反码数值位+1。<strong>能将减法运算转换为加法运算，使得加减法能采用同一套硬件实现；0的表示唯一</strong></li>
+<li>移码：补码的符号位取反（<strong>不区分正负数</strong>）。<strong>和补码一样，方便运算；且整体大小单调递增，用于表示浮点数的阶码；0的表示唯一</strong></li>
+</ul>
+<a id="more"></a>
+<h2 id="表示范围"><a href="#表示范围" class="headerlink" title="表示范围"></a>表示范围</h2><ul>
+<li>原码和反码一样，补码和移码一样。后者比前者在负数上多表示一个数，原因是前者的0有两种表达方式。</li>
+<li>从0开始，因此最大值都要减一</li>
+<li>小数是对整数都除以2^(n-1)<img src="/2022/04/05/ComputerOrganizationandDesign/float1.png" class="" title="float1">
+</li>
+</ul>
+<h2 id="规格化"><a href="#规格化" class="headerlink" title="规格化"></a>规格化</h2><ul>
+<li>对于规格化浮点数小数点后第一个值是固定的（正数：1，负数：原码1，补码0）</li>
+<li>目的：为了提高精度需要使尾数的有效位数尽可能占满可用的位数。这种措施称为浮点数的规格化。</li>
+<li><a href="https://blog.csdn.net/qq_43855740/article/details/104721619">ref</a></li>
+</ul>
+<h1 id="浮点数"><a href="#浮点数" class="headerlink" title="浮点数"></a>浮点数</h1><ul>
+<li>浮点数在计算机中的表示<ul>
+<li>浮点数表示时，尾数使用纯小数(有的是0.xxx的小数，有的是1.xxx的小数)</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">|&lt;-----j--------&gt;|&lt;--------S--------&gt;|</span><br><span class="line">+----|-----------|----|--------------+</span><br><span class="line">| jf | j1j2...jm | Sf | S1S2...Sn    |</span><br><span class="line">+----|-----------|----|--------------+</span><br><span class="line"> 阶符     阶码     数符 |    尾数数值</span><br></pre></td></tr></table></figure>
+<ul>
+<li>例如-28.75，用1位阶符、5位阶码、1位数符、8位尾数，阶码和尾数都采用原码表示，则可以表示如下：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">(-28.75)base10 </span><br><span class="line">&#x3D; (-110100.11)base2</span><br><span class="line">&#x3D; -1 * (0.11010011)base2 * 2^5</span><br><span class="line">阶符 jf &#x3D; 0， 阶码 j1j2j3j4j5 &#x3D; 00101 &#x3D; 5， 数符 Sf &#x3D; 1， 尾数 S1S2...S8 &#x3D; 11010011</span><br><span class="line">结果：</span><br><span class="line">    0 00101 1 11010011</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="表示范围-1"><a href="#表示范围-1" class="headerlink" title="表示范围"></a>表示范围</h2><ul>
+<li>先确定阶码位和尾数位是用什么码制表示。尾数的最大最小值分别和阶码最大值相乘即可。</li>
+<li>IEEE-754<ul>
+<li>尾数的规格化方式：省略了开头的“1.”，即M表示的是1.M</li>
+<li>阶码表示以2为底的阶数，用移码表示，但需要注意的是，这里的移码不能采取将补码的最高位取反的方式获得，这是因为把补码的最高位取反，相当于增加了1000…00的偏置量，而IEEE 754标准下的偏置量是0111…11，也就少了一个1。之所以这样设计，是为了保留阶码全0或者全1的情况，以用作特殊用途。</li>
+<li>因此，以float型浮点数转化为十进制数的计算公式为：<script type="math/tex">N=(-1)^{S} \times 1.M \times 2^{J-127}</script></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">+------|-----------------------|----------------------+</span><br><span class="line">|   S  |     阶码J（含阶符）     |       尾数M          |</span><br><span class="line">+------|-----------------------|----------------------+</span><br><span class="line">  数符       （采用移码）        |     （采用原码） </span><br></pre></td></tr></table></figure>
+<h2 id="浮点数运算"><a href="#浮点数运算" class="headerlink" title="浮点数运算"></a>浮点数运算</h2><ul>
+<li><a href="https://piaodazhu.github.io/15-floating-point-number-basic/">ref</a></li>
+</ul>
+<h1 id="校验码"><a href="#校验码" class="headerlink" title="校验码"></a>校验码</h1><ul>
+<li>码距/海明距离：任意两个码字之间最少变化的二进制位数</li>
+</ul>
+<h2 id="奇偶校验码"><a href="#奇偶校验码" class="headerlink" title="奇偶校验码"></a>奇偶校验码</h2><ul>
+<li>分奇校验和偶校验</li>
+<li>预留一位作为校验位，以奇校验为例，值为1则说明有奇数个1，反之有偶数个1</li>
+<li>只能<strong>检错不能纠错、且只能检验出奇数个数据改变的场景</strong></li>
+</ul>
+<h2 id="海明校验码"><a href="#海明校验码" class="headerlink" title="海明校验码"></a>海明校验码</h2><ul>
+<li>一种多重奇偶校验码。</li>
+<li>实现原理：在有效信息位中加入几个校验位形成海明码，并把海明码的每一个二进制位分配到几个奇偶校验组中。当某一位出错后，就会引起有关的几个校验位的值发生变化。</li>
+<li>特点：<strong>可以发现错误，定位错误位置，自动纠正错误。 可以检测双比特错误，但只能纠正单比特错误。</strong><blockquote>
+<p>纠错理论：L-1=D+C且D≥C：编码最小码距L越大，其检测错误的位数D越大，纠正错误的位数C也越大，且纠错能力恒小于检错能力</p>
+</blockquote>
+</li>
+<li>case<img src="/2022/04/05/ComputerOrganizationandDesign/hammingcode1.png" class="" title="hammingcode1">
+<img src="/2022/04/05/ComputerOrganizationandDesign/hammingcode2.png" class="" title="hammingcode2">
+</li>
+</ul>
+<p>hammingcode1.png</p>
+<h2 id="循环冗余校验码（Cyclic-redundancy-check-crc）"><a href="#循环冗余校验码（Cyclic-redundancy-check-crc）" class="headerlink" title="循环冗余校验码（Cyclic redundancy check, crc）"></a>循环冗余校验码（Cyclic redundancy check, crc）</h2><ul>
+<li>CRC码共N位：K位信息位后拼接R位校验码。K+R=N，也称(N,R)码。</li>
+<li><strong>可以发现错误，定位错误位置，自动纠正错误。可检测/纠正出所有奇数位错，所有双比特的错和所有小于、等于校验位长度的突发错</strong></li>
+<li><ol>
+<li>发送端和接受端会有一个生成多项式G(x)约定,生成多项式G(x)的最高次幂为R。任意一个二进制数码都可用一个系数为0或1的多项式与之对应。比如：二进制数码 1101 对应的G(x)=1X^3+1X^2+0X^1+1X^0= X^3+X^2+1</li>
+</ol>
+</li>
+<li><ol>
+<li>在发送端，将要传送的K位二进制信息码左移R位，将它与生成多项式G(x)所对应的的二进制数码进行模2除法（按位异或），产生余数，生成一个R位检验码，并附在信息码后，构成一个新的二进制码（CRC）码，共K+R位。</li>
+</ol>
+</li>
+<li>case<img src="/2022/04/05/ComputerOrganizationandDesign/crc.jpg" class="" title="crc">
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Learning</category>
+        <category>系统分析师</category>
+      </categories>
+      <tags>
+        <tag>码制</tag>
+        <tag>浮点数</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>软考-系统分析师</title>
+    <url>/2022/03/19/%E8%BD%AF%E8%80%83-%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%B8%88/</url>
+    <content><![CDATA[<p>软考<br><a id="more"></a></p>
+<h1 id="操作系统"><a href="#操作系统" class="headerlink" title="操作系统"></a>操作系统</h1><h2 id="进程与线程"><a href="#进程与线程" class="headerlink" title="进程与线程"></a>进程与线程</h2><ul>
+<li>在操作系统中进程是进行<strong>系统资源分配、调度和管理</strong>的最小单位。<ul>
+<li>PCB（process control block）是进程存在的唯一标志， PCB 描述了进程的基本情况。其中的内容可分成为调度信息和执行信息两大部分。</li>
+<li>进程的生命周期可以刻画为不同的状态，并分为三态模型和五态模型。</li>
+</ul>
+</li>
+<li>线程是进程的活动成分，是<strong>处理器</strong>分配资源的最小单位，它可以<strong>共享进程的资源与地址空间</strong>，通过线程的活动，进程可以提供多种服务〈对服务器进程而言）或实行子任务并行（对用户进程而言）。每个进程创建时只有一个线程，根据需要在运行过程中创建更多的线程〈前者也可称主线程）。显然，只有主线程的进程才是传统意义下的进程。<ul>
+<li>内核负责线程的调度，线程的优先级可以动态地改变。采用线程机制的最大优点是节省开销，传统的进程创建子进程的办法中，内存开销大，而且创建时间也长。</li>
+<li>多线程实现的并行避免了进程问并行的缺点：创建线程的开销比创建进程要小，同一进程的线程共享进程的地址空间，所以线程切挟（处理器调度）比进程切换快。</li>
+</ul>
+</li>
+</ul>
+<h2 id="PV操作"><a href="#PV操作" class="headerlink" title="PV操作"></a>PV操作</h2><p><a href="https://www.cnblogs.com/guanghe/p/15246894.html">ref</a></p>
+<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><ul>
+<li>PV操作是一种实现进程互斥与同步的有效方法。PV操作与信号量的处理相关。P（passeren）通过，理解为<strong>申请资源</strong>，V（vrijgeven）释放，理解为<strong>释放资源</strong>。</li>
+<li>P操作的主要动作是：<ul>
+<li>①S减1；（申请资源，资源量减一）</li>
+<li>②若S减1后仍大于或等于0，则进程继续执行；</li>
+<li>③若S减1后小于0，则该进程被阻塞后放入等待该信号量的等待队列中，然后转进程调度。</li>
+</ul>
+</li>
+<li>V操作的主要动作是：<ul>
+<li>①S加1；（释放资源，资源量加一）</li>
+<li>②若相加后结果大于0，则进程继续执行；</li>
+<li>③若相加后结果小于或等于0，则从该信号的等待队列中释放一个等待进程，<strong>然后再返回原进程（调用v的进程）继续执行或转进程调度</strong>。</li>
+</ul>
+</li>
+<li>PV操作对于每一个进程来说，都只能进行一次，而且必须成对使用（申请资源用P，释放资源用V）。在PV原语执行期间不允许有中断发生。原语不能被中断执行，因为原语对变量的操作过程如果被打断，可能会去运行另一个对同一变量的操作过程，从而出现临界段问题。如果能够找到一种解决临界段问题的元方法，就可以实现对共享变量操作的原子性。</li>
+<li>相关推论<ul>
+<li>推论1：若信号量S为正值，则该值等于在阻塞进程之前对信号量S可施行的P操作数，亦即等于S所代表的实际还可以使用的物理资源数。</li>
+<li>推论2：若信号量s为负值，则其绝对值等于登记排列在该信号量S等待队列之中的进程个数，亦即恰好等于对信号量S实施P操作而被阻塞并进入信号量S等待队列的进程数。</li>
+<li>推论3：通常，P操作意味着请求一个资源，V操作意味着释放一个资源。在一定条件下，P操作代表阻塞进程操作，而V操作代表唤醒被阻塞进程的操作。</li>
+</ul>
+</li>
+</ul>
+<h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><h4 id="进程的同步与互斥"><a href="#进程的同步与互斥" class="headerlink" title="进程的同步与互斥"></a>进程的同步与互斥</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1. 进程同步</span><br><span class="line">(1)调用P操作测试消息是否到达</span><br><span class="line">　　任何进程调用P操作可测试到自己所期望的消息是否已经到达。若消息尚未产生，则S&#x3D;0，调用P(s)后，P(S)一定让调用者成为等待信号量S的状态，即调用者此时必定等待直到消息到达；若消息已经存在，则S≠0，调用P(S)后，进程不会成为等待状态而可继续执行，即进程测试到自己期望的消息已经存在。</span><br><span class="line">(2)调用V操作发送消息</span><br><span class="line">　　任何进程要向其他进程发送消息时可调用V操作。若调用V操作之前S&#x3D;0，表示消息尚未产生且无等待消息的进程，则调用V(S)后，V(s)执行S:&#x3D;S+1使S≠0，即意味着消息已存在；若调用V操作之前S&lt;0，表示消息未产生前已有进程在等待消息，则调用V(S)后将释放一个等待消息者，即表示该进程等待的消息已经到达，可以继续执行。</span><br><span class="line">　　在用PV操作实现同步时，一定要根据具体的问题来定义信号量和调用P操作或V操作。一个信号量与一个消息联系在一起，当有多个消息时必须定义多个信号量；测试不同的消息是否到达或发送不同的消息时，应对不同的信号量调用P操作或V操作。</span><br><span class="line"></span><br><span class="line">2. 进程互斥</span><br><span class="line">(1)设立一个互斥信号量S，表示临界区，其取值为1，0，-1，…其中，S&#x3D;1表示无并发进程进入S临界区；S&#x3D;0表示已有一个并发进程进入了S临界区；S等于负数表示已有一个并发进程进入S临界区，且有|S|个进程等待进入S临界区，S的初值为1。</span><br><span class="line">(2)用PV操作表示对S临界区的申请和释放。在进入临界区之前，通过P操作进行申请，在退出临界区之后，通过V操作释放。</span><br></pre></td></tr></table></figure>
+<h4 id="生产者与消费者"><a href="#生产者与消费者" class="headerlink" title="生产者与消费者"></a>生产者与消费者</h4><p><a href="https://www.cnblogs.com/guanghe/p/15246894.html">ref</a></p>
+<h2 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h2><ul>
+<li>产生原因：多个进程的循环等待</li>
+<li>必要条件：互斥条件，不可抢占条件，保持与等待条件（部分分配条件）、循环等待条件<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">- 互斥条件：一个资源每次只能被一个进程使用。</span><br><span class="line">- 保持与等待条件：有一个进程已获得了一些资源，但因请求其他资源被阻塞肘，对已获得的资源保持不放。</span><br><span class="line">- 不可抢占条件：有些系统资源是不可抢占的，当某个进程已获得这种资源后，系统不能强行收回，只能由进程使用完时自己释放。</span><br><span class="line">- 循环等待条件：若干个进程形成环形链，每个都占用对方要申请的下一个资源。</span><br></pre></td></tr></table></figure></li>
+<li>破坏任一条件，死锁不成立</li>
+<li>解决策略<img src="/2022/03/19/%E8%BD%AF%E8%80%83-%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E5%B8%88/deadlock1.png" class="" title="deadlock1">
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Learning</category>
+        <category>软考</category>
+      </categories>
+      <tags>
+        <tag>软考系统分析师</tag>
       </tags>
   </entry>
 </search>

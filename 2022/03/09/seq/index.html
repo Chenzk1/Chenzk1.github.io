@@ -36,9 +36,10 @@
 <meta property="og:image" content="https://chenzk1.github.io/2022/03/09/seq/dsin_result.jpeg">
 <meta property="og:image" content="https://chenzk1.github.io/2022/03/09/seq/dmin.jpg">
 <meta property="og:image" content="https://chenzk1.github.io/2022/03/09/seq/mind.jpg">
+<meta property="og:image" content="https://chenzk1.github.io/2022/03/09/seq/capsule.jpeg">
 <meta property="og:image" content="https://chenzk1.github.io/2022/03/09/seq/capsule2.png">
 <meta property="article:published_time" content="2022-03-09T03:29:58.000Z">
-<meta property="article:modified_time" content="2022-03-17T16:15:07.628Z">
+<meta property="article:modified_time" content="2022-03-27T09:26:29.059Z">
 <meta property="article:author" content="Kayden">
 <meta property="article:tag" content="ML">
 <meta property="article:tag" content="Seq Model">
@@ -234,20 +235,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">55</span>
+          <span class="site-state-item-count">57</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">64</span>
+        <span class="site-state-item-count">67</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -339,7 +340,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2022-03-18 00:15:07" itemprop="dateModified" datetime="2022-03-18T00:15:07+08:00">2022-03-18</time>
+        <time title="Modified: 2022-03-27 17:26:29" itemprop="dateModified" datetime="2022-03-27T17:26:29+08:00">2022-03-27</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -521,12 +522,12 @@ h
 <h2 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h2><img src="/2022/03/09/seq/mind.jpg" class="" title="mind">
 <h3 id="behavior2interest-dynamic-routing"><a href="#behavior2interest-dynamic-routing" class="headerlink" title="behavior2interest dynamic routing"></a>behavior2interest dynamic routing</h3><h4 id="胶囊网络"><a href="#胶囊网络" class="headerlink" title="胶囊网络"></a>胶囊网络</h4><ul>
 <li>背景：传统的神经网络输入一组标量，对这组标量求加权和，之后输入非线性激活函数得到一个标量的输出。而<strong>Capsule输入是一组向量，对这组向量进行仿射变换之后求加权和，把加权和输入非线性激活函数，如此经过j次迭代得到一个向量的输出</strong>。Hinton提出Capsule Network是为了解决传统的CNN中只能编码某个特征是否存在而<strong>无法编码特征的orientation</strong>。</li>
-<li>来自<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/68897114">zhihu</a></li>
-<li>一个两层胶囊网络（从low-level到high-level）：<img src="/2022/03/09/seq/capsule2.png" class="" title="capsule2">
-<ul>
-<li>low-level: m个Nl维度的vector, high-level: n个Nh维度的vector</li>
+<li>来自<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/68897114">zhihu</a><img src="/2022/03/09/seq/capsule.jpeg" class="" title="capsule"></li>
+<li>一个两层胶囊网络（从low-level到high-level）：<ul>
+<li>low-level: m个Nl维度的vector; high-level: n个Nh维度的vector</li>
 <li>对每一个low-level vector做映射，然后做加权融合（softmax），再做非线性激活</li>
-<li>其中softmax需要参数，参数需要迭代求解：初始化为0，即权重为1/m；后续迭代更新</li>
+<li>其中softmax需要参数，参数需要迭代求解：初始化为0，即权重为1/m；后续迭代更新<img src="/2022/03/09/seq/capsule2.png" class="" title="capsule2">
+</li>
 </ul>
 </li>
 </ul>

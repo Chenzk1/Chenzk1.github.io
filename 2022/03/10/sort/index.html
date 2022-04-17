@@ -32,7 +32,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://chenzk1.github.io/2022/03/10/sort/complixty.png">
 <meta property="article:published_time" content="2022-03-10T03:17:18.000Z">
-<meta property="article:modified_time" content="2022-03-18T02:33:54.283Z">
+<meta property="article:modified_time" content="2022-03-27T09:35:37.973Z">
 <meta property="article:author" content="Kayden">
 <meta property="article:tag" content="Leetcode">
 <meta property="article:tag" content="Sort">
@@ -228,20 +228,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">55</span>
+          <span class="site-state-item-count">57</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">64</span>
+        <span class="site-state-item-count">67</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -333,7 +333,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2022-03-18 10:33:54" itemprop="dateModified" datetime="2022-03-18T10:33:54+08:00">2022-03-18</time>
+        <time title="Modified: 2022-03-27 17:35:37" itemprop="dateModified" datetime="2022-03-27T17:35:37+08:00">2022-03-27</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -430,7 +430,7 @@
 <li>堆是一个完全二叉树，可以用数组来表示。例如a可以表示为[99,66,45,33,37,10,22,13]，所以对于i处的节点，其子节点坐标为2*i+1, 2*i+2</li>
 <li>在构造最大堆时，可以先构造一颗完全二叉树，再对每个根节点及其两个子节点进行位置调整，在调整时，从最后一个非叶子节点开始调整</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">adjust_heap</span>(<span class="params">nums, i, size</span>):</span> </span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">    nums[:size]: 完全二叉树</span></span><br><span class="line"><span class="string">    i: 从第i个节点开始调整直到根节点</span></span><br><span class="line"><span class="string">    &#x27;&#x27;&#x27;</span></span><br><span class="line">    left = <span class="number">2</span>*i+<span class="number">1</span></span><br><span class="line">    right = <span class="number">2</span>*i+<span class="number">2</span></span><br><span class="line">    largest = i</span><br><span class="line">    <span class="keyword">if</span> left &lt; size <span class="keyword">and</span> nums[largest] &lt; nums[left]: <span class="comment"># 要保证小于size</span></span><br><span class="line">        largest = left</span><br><span class="line">   <span class="keyword">if</span> right &lt; size <span class="keyword">and</span> nums[largest] &lt; nums[right]:</span><br><span class="line">        largest = right</span><br><span class="line">   <span class="keyword">if</span> largest != i: <span class="comment"># 如果该节点需要调整，则对其进行调整，并沿着被改变的那个叶子节点不断调整</span></span><br><span class="line">        nums[largest], nums[i] = nums[i], nums[largest]</span><br><span class="line">        adjust_heap(nums, largest, size)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">build_heap</span>(<span class="params">nums</span>):</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(nums)//<span class="number">2</span>)[::<span class="number">-1</span>]: <span class="comment">#从最后一个非叶子结点开始调整，往上的节点都是非叶子结点</span></span><br><span class="line">            adjust_heap(nums, i, <span class="built_in">len</span>(nums))      </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">heap_sort</span>(<span class="params">nums</span>):</span></span><br><span class="line">    build_heap(nums) <span class="comment"># 先建堆</span></span><br><span class="line">    size = <span class="built_in">len</span>(nums)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(size)[::<span class="number">-1</span>]:</span><br><span class="line">        nums[<span class="number">0</span>], nums[i] = nums[i], nums[<span class="number">0</span>] <span class="comment">#把堆顶元素放在最后</span></span><br><span class="line">        adjust_heap(nums, <span class="number">0</span>, i) <span class="comment"># 堆顶元素被改变，需要调整</span></span><br><span class="line">    <span class="keyword">return</span> nums  </span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">adjust_heap</span>(<span class="params">nums, i, size</span>):</span> </span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">    nums[:size]: 完全二叉树</span></span><br><span class="line"><span class="string">    i: 从第i个节点开始调整直到根节点</span></span><br><span class="line"><span class="string">    &#x27;&#x27;&#x27;</span></span><br><span class="line">    left = <span class="number">2</span>*i+<span class="number">1</span></span><br><span class="line">    right = <span class="number">2</span>*i+<span class="number">2</span></span><br><span class="line">    largest = i</span><br><span class="line">    <span class="keyword">if</span> left &lt; size <span class="keyword">and</span> nums[largest] &lt; nums[left]: <span class="comment"># 要保证小于size</span></span><br><span class="line">        largest = left</span><br><span class="line">   <span class="keyword">if</span> right &lt; size <span class="keyword">and</span> nums[largest] &lt; nums[right]:</span><br><span class="line">        largest = right</span><br><span class="line">   <span class="keyword">if</span> largest != i: <span class="comment"># 如果该节点需要调整，则对其进行调整，并沿着被改变的那个叶子节点不断调整</span></span><br><span class="line">        nums[largest], nums[i] = nums[i], nums[largest]</span><br><span class="line">        adjust_heap(nums, largest, size)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">build_heap</span>(<span class="params">nums</span>):</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(nums)//<span class="number">2</span>)[::<span class="number">-1</span>]: <span class="comment">#从最后一个非叶子结点开始调整，往上的节点都是非叶子结点</span></span><br><span class="line">        adjust_heap(nums, i, <span class="built_in">len</span>(nums))      </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">heap_sort</span>(<span class="params">nums</span>):</span></span><br><span class="line">    build_heap(nums) <span class="comment"># 先建size大小的堆</span></span><br><span class="line">    size = <span class="built_in">len</span>(nums)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(size)[::<span class="number">-1</span>]:</span><br><span class="line">        nums[<span class="number">0</span>], nums[i] = nums[i], nums[<span class="number">0</span>] <span class="comment">#最后的元素一定小于堆顶元素，把堆顶元素放在最后</span></span><br><span class="line">        adjust_heap(nums, <span class="number">0</span>, i) <span class="comment"># 堆顶元素被改变，需要调整</span></span><br><span class="line">    <span class="keyword">return</span> nums</span><br></pre></td></tr></table></figure>
 <h3 id="复杂度分析"><a href="#复杂度分析" class="headerlink" title="复杂度分析"></a>复杂度分析</h3><ul>
 <li>需要做n次循环，每次从根节点调整堆，并且沿着其中一个子树往下调整，因此为nlogn</li>
 </ul>
