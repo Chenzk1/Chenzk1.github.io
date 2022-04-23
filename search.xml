@@ -186,6 +186,7 @@
 <p>&lt;未完&gt;</p>
 ]]></content>
       <categories>
+        <category>Language</category>
         <category>C++</category>
       </categories>
       <tags>
@@ -263,6 +264,7 @@
 <h3 id="大小"><a href="#大小" class="headerlink" title="大小"></a>大小</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">int size() const:返回向量中元素的个数</span><br><span class="line">int capacity() const:返回当前向量所能容纳的最大元素值</span><br><span class="line">int max_size() const:返回最大可允许的vector元素数量值</span><br></pre></td></tr></table></figure>
 <h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">void swap(vector&amp;):交换两个同类型向量的数据</span><br><span class="line">void assign(int n,const T&amp; x):设置向量中第n个元素的值为x</span><br><span class="line">void assign(const_iterator first,const_iterator last):向量中[first,last)中元素设置成当前向量元素</span><br></pre></td></tr></table></figure>]]></content>
       <categories>
+        <category>Language</category>
         <category>C++</category>
       </categories>
       <tags>
@@ -1496,6 +1498,7 @@ O_{1}=-\sum_{(i, j) \in E} w_{i j} \log p_{1}\left(v_{i}, v_{j}\right)</script><
 </ul>
 ]]></content>
       <categories>
+        <category>Language</category>
         <category>Java</category>
       </categories>
       <tags>
@@ -1964,6 +1967,7 @@ M I o U=\frac{1}{k+1} \sum_{i=0}^{k} \frac{T P}{F N+F P+T P}
 </ul>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LargerNumKey</span>(<span class="params"><span class="built_in">str</span></span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__lt__</span>(<span class="params">x, y</span>):</span></span><br><span class="line">        <span class="keyword">return</span> x+y &gt; y+x</span><br><span class="line"></span><br><span class="line">largest_num = <span class="string">&#x27;&#x27;</span>.join(<span class="built_in">sorted</span>(<span class="built_in">map</span>(<span class="built_in">str</span>, nums), key=LargerNumKey))</span><br></pre></td></tr></table></figure>]]></content>
       <categories>
+        <category>Language</category>
         <category>Python</category>
       </categories>
       <tags>
@@ -1995,6 +1999,7 @@ M I o U=\frac{1}{k+1} \sum_{i=0}^{k} \frac{T P}{F N+F P+T P}
 </ul>
 ]]></content>
       <categories>
+        <category>Language</category>
         <category>Python</category>
       </categories>
       <tags>
@@ -6492,6 +6497,7 @@ k &=k_{1}\left((1-b)+b \cdot \frac{d l}{a v d_1}\right)
 </blockquote>
 ]]></content>
       <categories>
+        <category>Language</category>
         <category>Python</category>
       </categories>
       <tags>
