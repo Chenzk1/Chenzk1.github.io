@@ -1126,7 +1126,7 @@ $$ \mathbf{h}_{v}^{(l)}=\sigma\left(\sum_{u \in N(v)}{\alpha_{v u}} \mathbf{W}^{
 </ul>
 ]]></content>
       <categories>
-        <category>Learning</category>
+        <category>Others</category>
       </categories>
       <tags>
         <tag>Resource</tag>
@@ -1916,7 +1916,7 @@ M I o U=\frac{1}{k+1} \sum_{i=0}^{k} \frac{T P}{F N+F P+T P}
 </blockquote>
 ]]></content>
       <categories>
-        <category>Learning</category>
+        <category>MachineLearning</category>
       </categories>
       <tags>
         <tag>Math</tag>
@@ -2147,7 +2147,7 @@ M I o U=\frac{1}{k+1} \sum_{i=0}^{k} \frac{T P}{F N+F P+T P}
 </ul>
 ]]></content>
       <categories>
-        <category>Learning</category>
+        <category>MachineLearning</category>
       </categories>
       <tags>
         <tag>CUDA</tag>
@@ -6605,7 +6605,6 @@ k &=k_{1}\left((1-b)+b \cdot \frac{d l}{a v d_1}\right)
 </ul>
 <h2 id="存储管理"><a href="#存储管理" class="headerlink" title="存储管理"></a>存储管理</h2>]]></content>
       <categories>
-        <category>Learning</category>
         <category>系统分析师</category>
       </categories>
       <tags>
@@ -6663,25 +6662,10 @@ k &=k_{1}\left((1-b)+b \cdot \frac{d l}{a v d_1}\right)
 </ul>
 ]]></content>
       <categories>
-        <category>Learning</category>
-        <category>软考</category>
+        <category>系统分析师</category>
       </categories>
       <tags>
         <tag>软考系统分析师</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>regressionLoss2ClassificationLoss</title>
-    <url>/2022/04/23/regressionLoss2ClassificationLoss/</url>
-    <content><![CDATA[<a id="more"></a>
-
-]]></content>
-      <categories>
-        <category>MachineLearning</category>
-      </categories>
-      <tags>
-        <tag>ML</tag>
-        <tag>Loss</tag>
       </tags>
   </entry>
 </search>
