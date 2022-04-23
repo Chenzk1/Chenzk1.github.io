@@ -23,17 +23,17 @@
     var CONFIG = {"hostname":"chenzk1.github.io","root":"/","scheme":"Gemini","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 
-  <meta name="description" content="[TOC] 分类ACC(Accuracy) Accuracy &#x3D; 预测正确的样本数量 &#x2F; 总样本数量 &#x3D; (TP+TN) &#x2F; (TP+FP+TN+FN)">
+  <meta name="description" content="回归MSE MSE可以理解为，假设整体分布与样本分布误差满足N(0, σ^2)下的最大似然估计，即MSE对误差的先验分布为高斯分布。见：https:&#x2F;&#x2F;chenzk1.github.io&#x2F;2022&#x2F;04&#x2F;23&#x2F;MLE-MAP&#x2F;#Case2-MSE-Loss 问题 1）基于单峰高斯分布，建模多峰分布比较困难；  2）相当于MAE的二次函数，大于1的时候loss值较大，对异常值很敏感，很容易造成梯度爆">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ML-Metrics">
+<meta property="og:title" content="机器学习中的Metrics&amp;Losses">
 <meta property="og:url" content="https://chenzk1.github.io/2021/12/10/ML-metrics/index.html">
 <meta property="og:site_name" content="Kayden&#39;s Blog">
-<meta property="og:description" content="[TOC] 分类ACC(Accuracy) Accuracy &#x3D; 预测正确的样本数量 &#x2F; 总样本数量 &#x3D; (TP+TN) &#x2F; (TP+FP+TN+FN)">
+<meta property="og:description" content="回归MSE MSE可以理解为，假设整体分布与样本分布误差满足N(0, σ^2)下的最大似然估计，即MSE对误差的先验分布为高斯分布。见：https:&#x2F;&#x2F;chenzk1.github.io&#x2F;2022&#x2F;04&#x2F;23&#x2F;MLE-MAP&#x2F;#Case2-MSE-Loss 问题 1）基于单峰高斯分布，建模多峰分布比较困难；  2）相当于MAE的二次函数，大于1的时候loss值较大，对异常值很敏感，很容易造成梯度爆">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/2019013111150139.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NzY2NfbGVhcm5pbmc=,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https://pic3.zhimg.com/80/v2-99faeb1f9876f11a32f90263ff1cafba_1440w.jpg">
 <meta property="article:published_time" content="2021-12-09T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-04-23T12:32:51.085Z">
+<meta property="article:modified_time" content="2022-04-23T16:36:25.200Z">
 <meta property="article:author" content="Kayden">
 <meta property="article:tag" content="CV">
 <meta property="article:tag" content="ML">
@@ -56,7 +56,7 @@
   };
 </script>
 
-  <title>ML-Metrics | Kayden's Blog</title>
+  <title>机器学习中的Metrics&Losses | Kayden's Blog</title>
   
 
 
@@ -217,7 +217,7 @@
 
       <!--noindex-->
       <section class="post-toc-wrap sidebar-panel">
-          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E7%B1%BB"><span class="nav-number">1.</span> <span class="nav-text">分类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ACC-Accuracy"><span class="nav-number">1.1.</span> <span class="nav-text">ACC(Accuracy)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Precision%E6%9F%A5%E5%87%86"><span class="nav-number">1.2.</span> <span class="nav-text">Precision查准</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Recall-TPR%E6%9F%A5%E5%85%A8"><span class="nav-number">1.3.</span> <span class="nav-text">Recall&#x2F;TPR查全</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#F1-amp-Fn"><span class="nav-number">1.4.</span> <span class="nav-text">F1&amp;Fn</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#F1"><span class="nav-number">1.4.1.</span> <span class="nav-text">F1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Fn"><span class="nav-number">1.4.2.</span> <span class="nav-text">Fn</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#P-R%E6%9B%B2%E7%BA%BF-Precision-Recall"><span class="nav-number">1.5.</span> <span class="nav-text">P-R曲线(Precision-Recall)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FPR"><span class="nav-number">1.6.</span> <span class="nav-text">FPR</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ROC%E6%9B%B2%E7%BA%BF-amp-AUC"><span class="nav-number">1.7.</span> <span class="nav-text">ROC曲线&amp;AUC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ROC-Receiver-operating-characteristic-curve"><span class="nav-number">1.7.1.</span> <span class="nav-text">ROC(Receiver operating characteristic curve)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AUC-Area-under-Curve"><span class="nav-number">1.7.2.</span> <span class="nav-text">AUC(Area under Curve)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8C%BA%E5%88%86%E5%BA%A6"><span class="nav-number">2.</span> <span class="nav-text">区分度</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#KS-Kolmogorov-Smirnov"><span class="nav-number">2.1.</span> <span class="nav-text">KS(Kolmogorov-Smirnov)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gini"><span class="nav-number">2.2.</span> <span class="nav-text">gini</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8E%92%E5%BA%8F"><span class="nav-number">3.</span> <span class="nav-text">排序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#map-k"><span class="nav-number">3.1.</span> <span class="nav-text">map@k</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#prec-k"><span class="nav-number">3.1.1.</span> <span class="nav-text">prec@k</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ap-k"><span class="nav-number">3.1.2.</span> <span class="nav-text">ap@k</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#map-k-1"><span class="nav-number">3.1.3.</span> <span class="nav-text">map@k</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ndcg"><span class="nav-number">3.2.</span> <span class="nav-text">ndcg</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#cg-Cumulative-Gain"><span class="nav-number">3.2.1.</span> <span class="nav-text">cg(Cumulative Gain)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dcg-Discounted-Cumulative-Gain"><span class="nav-number">3.2.2.</span> <span class="nav-text">dcg(Discounted Cumulative Gain)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ndcg-normalize-DCG"><span class="nav-number">3.2.3.</span> <span class="nav-text">ndcg(normalize DCG)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MRR-Mean-Reciprocal-Rank"><span class="nav-number">3.3.</span> <span class="nav-text">MRR(Mean Reciprocal Rank)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A3%80%E6%B5%8B"><span class="nav-number">4.</span> <span class="nav-text">检测</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#mAP"><span class="nav-number">4.1.</span> <span class="nav-text">mAP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IOU-Interest-Over-Union"><span class="nav-number">4.2.</span> <span class="nav-text">IOU(Interest Over Union)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A3%80%E6%B5%8B%E9%87%8C%E7%9A%84IOU"><span class="nav-number">4.2.1.</span> <span class="nav-text">检测里的IOU</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2%E9%87%8C%E7%9A%84IOU"><span class="nav-number">4.2.2.</span> <span class="nav-text">语义分割里的IOU</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mIOU-mean-IOU"><span class="nav-number">4.3.</span> <span class="nav-text">mIOU(mean IOU)</span></a></li></ol></li></ol></div>
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9E%E5%BD%92"><span class="nav-number">1.</span> <span class="nav-text">回归</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#MSE"><span class="nav-number">1.1.</span> <span class="nav-text">MSE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hubor-Loss"><span class="nav-number">1.2.</span> <span class="nav-text">Hubor Loss</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E7%B1%BB"><span class="nav-number">2.</span> <span class="nav-text">分类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ACC-Accuracy"><span class="nav-number">2.1.</span> <span class="nav-text">ACC(Accuracy)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Precision%E6%9F%A5%E5%87%86"><span class="nav-number">2.2.</span> <span class="nav-text">Precision查准</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Recall-TPR%E6%9F%A5%E5%85%A8"><span class="nav-number">2.3.</span> <span class="nav-text">Recall&#x2F;TPR查全</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#F1-amp-Fn"><span class="nav-number">2.4.</span> <span class="nav-text">F1&amp;Fn</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#F1"><span class="nav-number">2.4.1.</span> <span class="nav-text">F1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Fn"><span class="nav-number">2.4.2.</span> <span class="nav-text">Fn</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#P-R%E6%9B%B2%E7%BA%BF-Precision-Recall"><span class="nav-number">2.5.</span> <span class="nav-text">P-R曲线(Precision-Recall)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FPR"><span class="nav-number">2.6.</span> <span class="nav-text">FPR</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ROC%E6%9B%B2%E7%BA%BF-amp-AUC"><span class="nav-number">2.7.</span> <span class="nav-text">ROC曲线&amp;AUC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ROC-Receiver-operating-characteristic-curve"><span class="nav-number">2.7.1.</span> <span class="nav-text">ROC(Receiver operating characteristic curve)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AUC-Area-under-Curve"><span class="nav-number">2.7.2.</span> <span class="nav-text">AUC(Area under Curve)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8C%BA%E5%88%86%E5%BA%A6"><span class="nav-number">3.</span> <span class="nav-text">区分度</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#KS-Kolmogorov-Smirnov"><span class="nav-number">3.1.</span> <span class="nav-text">KS(Kolmogorov-Smirnov)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gini"><span class="nav-number">3.2.</span> <span class="nav-text">gini</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8E%92%E5%BA%8F"><span class="nav-number">4.</span> <span class="nav-text">排序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#map-k"><span class="nav-number">4.1.</span> <span class="nav-text">map@k</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#prec-k"><span class="nav-number">4.1.1.</span> <span class="nav-text">prec@k</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ap-k"><span class="nav-number">4.1.2.</span> <span class="nav-text">ap@k</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#map-k-1"><span class="nav-number">4.1.3.</span> <span class="nav-text">map@k</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ndcg"><span class="nav-number">4.2.</span> <span class="nav-text">ndcg</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#cg-Cumulative-Gain"><span class="nav-number">4.2.1.</span> <span class="nav-text">cg(Cumulative Gain)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dcg-Discounted-Cumulative-Gain"><span class="nav-number">4.2.2.</span> <span class="nav-text">dcg(Discounted Cumulative Gain)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ndcg-normalize-DCG"><span class="nav-number">4.2.3.</span> <span class="nav-text">ndcg(normalize DCG)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MRR-Mean-Reciprocal-Rank"><span class="nav-number">4.3.</span> <span class="nav-text">MRR(Mean Reciprocal Rank)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A3%80%E6%B5%8B"><span class="nav-number">5.</span> <span class="nav-text">检测</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#mAP"><span class="nav-number">5.1.</span> <span class="nav-text">mAP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IOU-Interest-Over-Union"><span class="nav-number">5.2.</span> <span class="nav-text">IOU(Interest Over Union)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A3%80%E6%B5%8B%E9%87%8C%E7%9A%84IOU"><span class="nav-number">5.2.1.</span> <span class="nav-text">检测里的IOU</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2%E9%87%8C%E7%9A%84IOU"><span class="nav-number">5.2.2.</span> <span class="nav-text">语义分割里的IOU</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mIOU-mean-IOU"><span class="nav-number">5.3.</span> <span class="nav-text">mIOU(mean IOU)</span></a></li></ol></li></ol></div>
       </section>
       <!--/noindex-->
 
@@ -318,7 +318,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          ML-Metrics
+          机器学习中的Metrics&Losses
         </h1>
 
         <div class="post-meta-container">
@@ -336,7 +336,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2022-04-23 20:32:51" itemprop="dateModified" datetime="2022-04-23T20:32:51+08:00">2022-04-23</time>
+        <time title="Modified: 2022-04-24 00:36:25" itemprop="dateModified" datetime="2022-04-24T00:36:25+08:00">2022-04-24</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -358,13 +358,26 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <meta name="referrer" content="no-referrer"/>
-
-<p>[TOC]</p>
+        <h1 id="回归"><a href="#回归" class="headerlink" title="回归"></a>回归</h1><h2 id="MSE"><a href="#MSE" class="headerlink" title="MSE"></a>MSE</h2><ul>
+<li>MSE可以理解为，假设整体分布与样本分布误差满足<script type="math/tex">N(0, σ^2)</script>下的最大似然估计，即MSE对误差的先验分布为高斯分布。见：<a href="https://chenzk1.github.io/2022/04/23/MLE-MAP/#Case2-MSE-Loss">https://chenzk1.github.io/2022/04/23/MLE-MAP/#Case2-MSE-Loss</a></li>
+<li>问题<ul>
+<li>1）基于单峰高斯分布，建模多峰分布比较困难； </li>
+<li>2）相当于MAE的二次函数，大于1的时候loss值较大，<strong>对异常值很敏感</strong>，很容易造成梯度爆炸打偏模型。在实际使用中稳定性很差。</li>
+</ul>
+</li>
+</ul>
+<a id="more"></a>
+<h2 id="Hubor-Loss"><a href="#Hubor-Loss" class="headerlink" title="Hubor Loss"></a>Hubor Loss</h2><script type="math/tex; mode=display">
+L_{\delta}(y, f(x))=\left\{\begin{array}{ll}
+\frac{1}{2}(y-f(x))^{2} & \text { for }|y-f(x)| \leq \delta \\
+\delta \cdot\left(|y-f(x)|-\frac{1}{2} \delta\right), & \text { otherwise }
+\end{array}\right.</script><ul>
+<li>缓解MSE对异常值敏感的问题：超参δ ~ 0时，huber loss趋于MAE，反之趋于MSE；在label异常大时，转为绝对值较小的MAE，反之用MSE保证训练强度。</li>
+<li>缺点：单峰高斯分布假设问题同样没有改善。</li>
+</ul>
 <h1 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h1><h2 id="ACC-Accuracy"><a href="#ACC-Accuracy" class="headerlink" title="ACC(Accuracy)"></a>ACC(Accuracy)</h2><ul>
 <li>Accuracy = 预测正确的样本数量 / 总样本数量 = (TP+TN) / (TP+FP+TN+FN)</li>
 </ul>
-<a id="more"></a>
 <h2 id="Precision查准"><a href="#Precision查准" class="headerlink" title="Precision查准"></a>Precision查准</h2><ul>
 <li>Precision = TP / (TP+FP)</li>
 </ul>

@@ -1654,15 +1654,28 @@ O_{1}=-\sum_{(i, j) \in E} w_{i j} \log p_{1}\left(v_{i}, v_{j}\right)</script><
       </tags>
   </entry>
   <entry>
-    <title>ML-Metrics</title>
+    <title>机器学习中的Metrics&amp;Losses</title>
     <url>/2021/12/10/ML-metrics/</url>
-    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
-
-<p>[TOC]</p>
+    <content><![CDATA[<h1 id="回归"><a href="#回归" class="headerlink" title="回归"></a>回归</h1><h2 id="MSE"><a href="#MSE" class="headerlink" title="MSE"></a>MSE</h2><ul>
+<li>MSE可以理解为，假设整体分布与样本分布误差满足<script type="math/tex">N(0, σ^2)</script>下的最大似然估计，即MSE对误差的先验分布为高斯分布。见：<a href="https://chenzk1.github.io/2022/04/23/MLE-MAP/#Case2-MSE-Loss">https://chenzk1.github.io/2022/04/23/MLE-MAP/#Case2-MSE-Loss</a></li>
+<li>问题<ul>
+<li>1）基于单峰高斯分布，建模多峰分布比较困难； </li>
+<li>2）相当于MAE的二次函数，大于1的时候loss值较大，<strong>对异常值很敏感</strong>，很容易造成梯度爆炸打偏模型。在实际使用中稳定性很差。</li>
+</ul>
+</li>
+</ul>
+<a id="more"></a>
+<h2 id="Hubor-Loss"><a href="#Hubor-Loss" class="headerlink" title="Hubor Loss"></a>Hubor Loss</h2><script type="math/tex; mode=display">
+L_{\delta}(y, f(x))=\left\{\begin{array}{ll}
+\frac{1}{2}(y-f(x))^{2} & \text { for }|y-f(x)| \leq \delta \\
+\delta \cdot\left(|y-f(x)|-\frac{1}{2} \delta\right), & \text { otherwise }
+\end{array}\right.</script><ul>
+<li>缓解MSE对异常值敏感的问题：超参δ ~ 0时，huber loss趋于MAE，反之趋于MSE；在label异常大时，转为绝对值较小的MAE，反之用MSE保证训练强度。</li>
+<li>缺点：单峰高斯分布假设问题同样没有改善。</li>
+</ul>
 <h1 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h1><h2 id="ACC-Accuracy"><a href="#ACC-Accuracy" class="headerlink" title="ACC(Accuracy)"></a>ACC(Accuracy)</h2><ul>
 <li>Accuracy = 预测正确的样本数量 / 总样本数量 = (TP+TN) / (TP+FP+TN+FN)</li>
 </ul>
-<a id="more"></a>
 <h2 id="Precision查准"><a href="#Precision查准" class="headerlink" title="Precision查准"></a>Precision查准</h2><ul>
 <li>Precision = TP / (TP+FP)</li>
 </ul>
@@ -6704,7 +6717,7 @@ k &=k_{1}\left((1-b)+b \cdot \frac{d l}{a v d_1}\right)
 <li>连乘 —&gt; <strong>连加：不易下溢/上溢；方便求解。</strong></li>
 </ul>
 </li>
-<li><strong>MLE求解时，首先需要写出p(X | θ)</strong>。ML中，模型参数会转化为某个分布的参数，并利用MLE求解。例如f(x)=wTx+b，假设其噪声服从e~N(0, σ2)，则f(x)~N(wTx, σ2)，接下来就可以利用MLE求解w了。</li>
+<li><strong>MLE求解时，核心是需要写出p(X | θ)</strong>。ML中，模型参数会转化为某个分布的参数，并利用MLE求解。例如f(x)=wTx+b，假设其噪声服从e~N(0, σ2)，则f(x)~N(wTx, σ2)，接下来就可以利用MLE求解w了。</li>
 </ul>
 <h2 id="MAP"><a href="#MAP" class="headerlink" title="MAP"></a>MAP</h2><ul>
 <li>先验：假设θ服从某个分布g(θ)  <ul>

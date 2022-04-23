@@ -677,7 +677,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/12/10/ML-metrics/" class="post-title-link" itemprop="url">ML-Metrics</a>
+            <a href="/2021/12/10/ML-metrics/" class="post-title-link" itemprop="url">机器学习中的Metrics&Losses</a>
         </h2>
 
         <div class="post-meta-container">
@@ -695,7 +695,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2022-04-23 20:32:51" itemprop="dateModified" datetime="2022-04-23T20:32:51+08:00">2022-04-23</time>
+        <time title="Modified: 2022-04-24 00:36:25" itemprop="dateModified" datetime="2022-04-24T00:36:25+08:00">2022-04-24</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -717,11 +717,13 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <meta name="referrer" content="no-referrer"/>
-
-<p>[TOC]</p>
-<h1 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h1><h2 id="ACC-Accuracy"><a href="#ACC-Accuracy" class="headerlink" title="ACC(Accuracy)"></a>ACC(Accuracy)</h2><ul>
-<li>Accuracy = 预测正确的样本数量 / 总样本数量 = (TP+TN) / (TP+FP+TN+FN)</li>
+          <h1 id="回归"><a href="#回归" class="headerlink" title="回归"></a>回归</h1><h2 id="MSE"><a href="#MSE" class="headerlink" title="MSE"></a>MSE</h2><ul>
+<li>MSE可以理解为，假设整体分布与样本分布误差满足<script type="math/tex">N(0, σ^2)</script>下的最大似然估计，即MSE对误差的先验分布为高斯分布。见：<a href="https://chenzk1.github.io/2022/04/23/MLE-MAP/#Case2-MSE-Loss">https://chenzk1.github.io/2022/04/23/MLE-MAP/#Case2-MSE-Loss</a></li>
+<li>问题<ul>
+<li>1）基于单峰高斯分布，建模多峰分布比较困难； </li>
+<li>2）相当于MAE的二次函数，大于1的时候loss值较大，<strong>对异常值很敏感</strong>，很容易造成梯度爆炸打偏模型。在实际使用中稳定性很差。</li>
+</ul>
+</li>
 </ul>
           <!--noindex-->
             <div class="post-button">
