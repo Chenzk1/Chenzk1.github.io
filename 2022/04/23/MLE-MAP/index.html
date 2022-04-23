@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/mylogo-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/mylogo-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/mylogo-16x16-next.png">
+  <link rel="mask-icon" href="/images/mylogo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.0/css/all.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"chenzk1.github.io","root":"/","scheme":"Gemini","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+
+  <meta name="description" content="最大似然估计与最大后验概率估计两大学派频率学派 认为：世界是确定的 &#x3D;&#x3D;&gt; 可以通过某种方式对事件进行建模 建模方法：MLE, max likelihood estimate  贝叶斯学派 认为：世界是不确定的，同一个事件由于观测&#x2F;假设的不同而不同 &#x3D;&#x3D;&gt; 无法直接对事件进行确定性的唯一建模 &#x3D;&#x3D;&gt; 先假设一个先验，利用先验得到后验 &#x3D;&#x3D;&gt; 推断先验的分布 建模方法：MAP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="最大似然估计与最大后验概率估计">
+<meta property="og:url" content="https://chenzk1.github.io/2022/04/23/MLE-MAP/index.html">
+<meta property="og:site_name" content="Kayden&#39;s Blog">
+<meta property="og:description" content="最大似然估计与最大后验概率估计两大学派频率学派 认为：世界是确定的 &#x3D;&#x3D;&gt; 可以通过某种方式对事件进行建模 建模方法：MLE, max likelihood estimate  贝叶斯学派 认为：世界是不确定的，同一个事件由于观测&#x2F;假设的不同而不同 &#x3D;&#x3D;&gt; 无法直接对事件进行确定性的唯一建模 &#x3D;&#x3D;&gt; 先假设一个先验，利用先验得到后验 &#x3D;&#x3D;&gt; 推断先验的分布 建模方法：MAP">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://chenzk1.github.io/2022/04/23/MLE-MAP/mse.jpeg">
+<meta property="og:image" content="https://chenzk1.github.io/2022/04/23/MLE-MAP/logloss.jpeg">
+<meta property="article:published_time" content="2022-04-23T15:38:39.000Z">
+<meta property="article:modified_time" content="2022-04-23T16:26:44.764Z">
+<meta property="article:author" content="Kayden">
+<meta property="article:tag" content="ML">
+<meta property="article:tag" content="MLE">
+<meta property="article:tag" content="MAP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://chenzk1.github.io/2022/04/23/MLE-MAP/mse.jpeg">
+
+
+<link rel="canonical" href="https://chenzk1.github.io/2022/04/23/MLE-MAP/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>最大似然估计与最大后验概率估计 | Kayden's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Kayden's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Mamba forever.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%80%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1%E4%B8%8E%E6%9C%80%E5%A4%A7%E5%90%8E%E9%AA%8C%E6%A6%82%E7%8E%87%E4%BC%B0%E8%AE%A1"><span class="nav-number">1.</span> <span class="nav-text">最大似然估计与最大后验概率估计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%A4%E5%A4%A7%E5%AD%A6%E6%B4%BE"><span class="nav-number">1.1.</span> <span class="nav-text">两大学派</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%91%E7%8E%87%E5%AD%A6%E6%B4%BE"><span class="nav-number">1.1.1.</span> <span class="nav-text">频率学派</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%AD%A6%E6%B4%BE"><span class="nav-number">1.1.2.</span> <span class="nav-text">贝叶斯学派</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MLE"><span class="nav-number">1.2.</span> <span class="nav-text">MLE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MAP"><span class="nav-number">1.3.</span> <span class="nav-text">MAP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Case"><span class="nav-number">1.4.</span> <span class="nav-text">Case</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Case1"><span class="nav-number">1.4.1.</span> <span class="nav-text">Case1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Case2-MSE-Loss"><span class="nav-number">1.4.2.</span> <span class="nav-text">Case2-MSE Loss</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MLE-Case3-Log-Loss"><span class="nav-number">1.4.3.</span> <span class="nav-text">MLE Case3-Log Loss</span></a></li></ol></li></ol></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kayden</p>
+  <div class="site-description" itemprop="description">Kayden's Blog</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">69</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Chenzk1" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Chenzk1" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:chenzk666@gmail.com" title="E-Mail → mailto:chenzk666@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://andrewsher.github.io/" title="https:&#x2F;&#x2F;andrewsher.github.io&#x2F;" rel="noopener" target="_blank">Andrewsher's blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://shorey.tech/" title="http:&#x2F;&#x2F;shorey.tech&#x2F;" rel="noopener" target="_blank">Shorey's blog</a>
+        </li>
+    </ul>
+  </div>
+
+      </section>
+        <div class="back-to-top animated">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2022/04/23/MLE-MAP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Kayden">
+      <meta itemprop="description" content="Kayden's Blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kayden's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          最大似然估计与最大后验概率估计
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-04-23 23:38:39" itemprop="dateCreated datePublished" datetime="2022-04-23T23:38:39+08:00">2022-04-23</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2022-04-24 00:26:44" itemprop="dateModified" datetime="2022-04-24T00:26:44+08:00">2022-04-24</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MachineLearning/" itemprop="url" rel="index"><span itemprop="name">MachineLearning</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="最大似然估计与最大后验概率估计"><a href="#最大似然估计与最大后验概率估计" class="headerlink" title="最大似然估计与最大后验概率估计"></a>最大似然估计与最大后验概率估计</h1><h2 id="两大学派"><a href="#两大学派" class="headerlink" title="两大学派"></a>两大学派</h2><h3 id="频率学派"><a href="#频率学派" class="headerlink" title="频率学派"></a>频率学派</h3><ul>
+<li>认为：世界是确定的 ==&gt; 可以通过某种方式对事件进行建模</li>
+<li>建模方法：MLE, max likelihood estimate</li>
+</ul>
+<h3 id="贝叶斯学派"><a href="#贝叶斯学派" class="headerlink" title="贝叶斯学派"></a>贝叶斯学派</h3><ul>
+<li>认为：世界是不确定的，同一个事件由于观测/假设的不同而不同 ==&gt; 无法直接对事件进行确定性的唯一建模 ==&gt; 先假设一个先验，利用先验得到后验 ==&gt; 推断先验的分布</li>
+<li>建模方法：MAP, max a Posteriori estimation<a id="more"></a>
+</li>
+</ul>
+<h2 id="MLE"><a href="#MLE" class="headerlink" title="MLE"></a>MLE</h2><ul>
+<li>似然：观测到了结果 ==&gt; 假定结果服从一个分布（例如画图发现服从高斯分布，但不知道具体的分布参数），估计最有可能出现这些结果的分布参数。<ul>
+<li>对观测到的数据X，假定其服从某个分布，并设该分布的参数为θ，求p(X | θ)最大时的θ值。</li>
+<li>MLP的前提认为<strong>当前观测得到的样本独立同分布，且与总体的分布一致</strong>。所以观测到的结果越多，估计越准。</li>
+</ul>
+</li>
+<li>似然函数：L(θ | X) = p(X | θ)。假设n个随机变量x1, … , xn独立同分布。则：</li>
+</ul>
+<script type="math/tex; mode=display">L(\theta|X) = L(\theta|x_1, ... , x_n)=p(x_1, ... , x_n|\theta)=\prod_i^n{p(x_i|\theta)}</script><ul>
+<li>最大似然时得到的参数即为MLE估计的参数</li>
+</ul>
+<script type="math/tex; mode=display">\theta = argmax_{\theta}L(\theta|X)=argmax_{\theta} P(X|\theta)</script><ul>
+<li>一般取log似然<ul>
+<li>连乘 —&gt; <strong>连加：不易下溢/上溢；方便求解。</strong></li>
+</ul>
+</li>
+<li><strong>MLE求解时，首先需要写出p(X | θ)</strong>。ML中，模型参数会转化为某个分布的参数，并利用MLE求解。例如f(x)=wTx+b，假设其噪声服从e~N(0, σ2)，则f(x)~N(wTx, σ2)，接下来就可以利用MLE求解w了。</li>
+</ul>
+<h2 id="MAP"><a href="#MAP" class="headerlink" title="MAP"></a>MAP</h2><ul>
+<li>先验：假设θ服从某个分布g(θ)  <ul>
+<li>而MLE中假设θ的值是确定的某个分布的参数</li>
+<li>MLE可以看作先验为常数分布的特殊MAP；MAP可以看作对MLE估计的一个校正。</li>
+</ul>
+</li>
+<li>后验：观察到某些样本的条件下，先验的分布。后验概率 := 似然概率*先验概率。</li>
+</ul>
+<script type="math/tex; mode=display">P\left(\theta \mid X\right)=\frac{P\left(X \mid \theta\right) P(\theta)}{P\left(X\right)}</script><ul>
+<li>MAP在先验假设下估计得到的参数仍然是一个确定的值，而当样本量无限大，P(θ)的作用越来越小。<ul>
+<li>即数据量无限大时，先验假设的影响可以忽略不计。</li>
+<li>数据量无限大时，MAP := MLE</li>
+</ul>
+</li>
+</ul>
+<h2 id="Case"><a href="#Case" class="headerlink" title="Case"></a>Case</h2><h3 id="Case1"><a href="#Case1" class="headerlink" title="Case1"></a>Case1</h3><ul>
+<li>假设有一个罐子，罐子里面有黑白两种球，数目未知。每次任意从罐子里面取一个球，记录颜色，放回罐子里面。重复 10 次，假设 7 次白球，3 次黑球，那么罐子里面白球的比例最有可能是多少？</li>
+<li><p>MLE</p>
+<ul>
+<li><p>由于只有两种颜色的球，可以假设白球的概率服从二项分布（模型已知）。假设白球概率为θ，黑球为1-θ。按照最大似然估计，似然函数为：</p>
+<script type="math/tex; mode=display">L\left(\theta \mid x_{1}, x_{2}, \ldots, x_{10}\right)=\prod_{i=1}^{10} f\left(x_{i} \mid \theta\right)=\theta^{7} \times(1-\theta)^{3}</script></li>
+<li><p>-&gt; log -&gt; argmax —&gt; p = 0.7</p>
+</li>
+</ul>
+</li>
+<li><p>MAP</p>
+<ul>
+<li><p>先验：假设p~N(0.5, 0.1)</p>
+<p><script type="math/tex">P(\theta \mid X)=P(\theta)P(X \mid \theta)=P(\theta)\prod_{i=1}^{10} P\left(x_{i} \mid \theta\right)=\theta^{7} (1-\theta)^{3} \times\left(\frac{1}{\sqrt{2 \pi} \sigma}\right) \exp \left(-\frac{1}{2 \sigma^{2}} (\theta-\mu)^{2}\right)</script>带入μ=0.5，σ=0.1 —&gt; log —&gt; 求argmax —&gt; θ = 0.66349</p>
+</li>
+<li><p>而当试验次数达到1000次，700次正例的话 θ = 0.69958</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="Case2-MSE-Loss"><a href="#Case2-MSE-Loss" class="headerlink" title="Case2-MSE Loss"></a>Case2-MSE Loss</h3><ul>
+<li>用MLE推导MSE Loss</li>
+<li>每个样本i可以表示为 <script type="math/tex">(x_i, y_i)</script>, 此处可以简单表示为<script type="math/tex">y_i</script>, 原因是<ul>
+<li>Loss在形式上是<script type="math/tex">y_i</script> 和 <script type="math/tex">y'_{i}</script> 的函数</li>
+<li>每个样本i可以写为 <script type="math/tex">y_i = f(x_i)</script>，因此可以认为<script type="math/tex">y_i</script>的表示中已经包含了x_i<blockquote>
+<p>机器学习算法需要学习的是整体分布y’，而样本是y1…yn，假设每个样本<script type="math/tex">y_i</script>与其整体分布<script type="math/tex">y'_i</script>的误差e为一个正态分布<script type="math/tex">N(0, σ^2)</script>，即<script type="math/tex">e = y-y', e ~ N(0, σ^2)</script><br>L(y’ | y) = p(y1…yn | y’1…y’n)</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<img src="/2022/04/23/MLE-MAP/mse.jpeg" class="" title="mse">
+<h3 id="MLE-Case3-Log-Loss"><a href="#MLE-Case3-Log-Loss" class="headerlink" title="MLE Case3-Log Loss"></a>MLE Case3-Log Loss</h3><ul>
+<li>用MLE推Log Loss</li>
+</ul>
+<img src="/2022/04/23/MLE-MAP/logloss.jpeg" class="" title="logloss">
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ML/" rel="tag"># ML</a>
+              <a href="/tags/MLE/" rel="tag"># MLE</a>
+              <a href="/tags/MAP/" rel="tag"># MAP</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/04/05/ComputerOrganizationandDesign/" rel="prev" title="计组-原码、反码、补码、移码、浮点数、校验码">
+                  <i class="fa fa-chevron-left"></i> 计组-原码、反码、补码、移码、浮点数、校验码
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Kayden</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+      <script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              const target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    const script = document.createElement('script');
+    script.src = '//cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js';
+    script.defer = true;
+    document.head.appendChild(script);
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.typesetClear();
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
