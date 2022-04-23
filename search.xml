@@ -39,7 +39,7 @@
 <p><strong>作为一种范式，而非产品？</strong></p>
 ]]></content>
       <categories>
-        <category>Learning</category>
+        <category>Lecture</category>
         <category>6.824</category>
       </categories>
       <tags>
@@ -117,7 +117,7 @@
 </ul>
 ]]></content>
       <categories>
-        <category>Learning</category>
+        <category>Lecture</category>
         <category>6.824</category>
       </categories>
       <tags>
@@ -186,7 +186,7 @@
 <p>&lt;未完&gt;</p>
 ]]></content>
       <categories>
-        <category>Learning</category>
+        <category>C++</category>
       </categories>
       <tags>
         <tag>C++</tag>
@@ -263,7 +263,7 @@
 <h3 id="大小"><a href="#大小" class="headerlink" title="大小"></a>大小</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">int size() const:返回向量中元素的个数</span><br><span class="line">int capacity() const:返回当前向量所能容纳的最大元素值</span><br><span class="line">int max_size() const:返回最大可允许的vector元素数量值</span><br></pre></td></tr></table></figure>
 <h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">void swap(vector&amp;):交换两个同类型向量的数据</span><br><span class="line">void assign(int n,const T&amp; x):设置向量中第n个元素的值为x</span><br><span class="line">void assign(const_iterator first,const_iterator last):向量中[first,last)中元素设置成当前向量元素</span><br></pre></td></tr></table></figure>]]></content>
       <categories>
-        <category>Learning</category>
+        <category>C++</category>
       </categories>
       <tags>
         <tag>C++</tag>
@@ -333,7 +333,8 @@
 </ul>
 ]]></content>
       <categories>
-        <category>Learning</category>
+        <category>MachineLearning</category>
+        <category>CV</category>
       </categories>
       <tags>
         <tag>DL</tag>
@@ -400,7 +401,7 @@
 </ul>
 ]]></content>
       <categories>
-        <category>Learning</category>
+        <category>Lecture</category>
         <category>cs224w</category>
       </categories>
       <tags>
@@ -543,7 +544,7 @@ k_{v} \\
 </ul>
 ]]></content>
       <categories>
-        <category>Learning</category>
+        <category>Lecture</category>
         <category>cs224w</category>
       </categories>
       <tags>
@@ -643,7 +644,7 @@ k_{v} \\
 </ul>
 ]]></content>
       <categories>
-        <category>Learning</category>
+        <category>Lecture</category>
         <category>cs224w</category>
       </categories>
       <tags>
@@ -711,7 +712,7 @@ r_{j}=\sum_{i \rightarrow j} \beta \frac{r_{i}}{d_{i}}+(1-\beta) \frac{1}{N}</sc
 </ul>
 ]]></content>
       <categories>
-        <category>Learning</category>
+        <category>Lecture</category>
         <category>cs224w</category>
       </categories>
       <tags>
@@ -780,7 +781,7 @@ r_{j}=\sum_{i \rightarrow j} \beta \frac{r_{i}}{d_{i}}+(1-\beta) \frac{1}{N}</sc
 </ul>
 ]]></content>
       <categories>
-        <category>Learning</category>
+        <category>Lecture</category>
         <category>cs224w</category>
       </categories>
       <tags>
@@ -1102,7 +1103,7 @@ $$ \mathbf{h}_{v}^{(l)}=\sigma\left(\sum_{u \in N(v)}{\alpha_{v u}} \mathbf{W}^{
 </ul>
 ]]></content>
       <categories>
-        <category>Learning</category>
+        <category>Lecture</category>
         <category>cs224w</category>
       </categories>
       <tags>
@@ -1152,7 +1153,8 @@ $$ \mathbf{h}_{v}^{(l)}=\sigma\left(\sum_{u \in N(v)}{\alpha_{v u}} \mathbf{W}^{
 </ul>
 ]]></content>
       <categories>
-        <category>Learning</category>
+        <category>MachineLearning</category>
+        <category>CV</category>
       </categories>
       <tags>
         <tag>DL</tag>
@@ -1244,7 +1246,7 @@ $$ \mathbf{h}_{v}^{(l)}=\sigma\left(\sum_{u \in N(v)}{\alpha_{v u}} \mathbf{W}^{
 <h2 id="代码实例"><a href="#代码实例" class="headerlink" title="代码实例"></a>代码实例</h2><p>原文2中有。<br><a href="https://www.cnblogs.com/pinard/p/6217852.html">原文2</a></p>
 ]]></content>
       <categories>
-        <category>Learning</category>
+        <category>MachineLearning</category>
       </categories>
       <tags>
         <tag>ML</tag>
@@ -1321,7 +1323,7 @@ $$ \mathbf{h}_{v}^{(l)}=\sigma\left(\sum_{u \in N(v)}{\alpha_{v u}} \mathbf{W}^{
 </ul>
 ]]></content>
       <categories>
-        <category>Learning</category>
+        <category>MachineLearning</category>
       </categories>
       <tags>
         <tag>ML</tag>
@@ -1344,7 +1346,7 @@ $$ \mathbf{h}_{v}^{(l)}=\sigma\left(\sum_{u \in N(v)}{\alpha_{v u}} \mathbf{W}^{
 </ul>
 ]]></content>
       <categories>
-        <category>Learning</category>
+        <category>MachineLearning</category>
       </categories>
       <tags>
         <tag>ML</tag>
@@ -1397,7 +1399,7 @@ $$ \mathbf{h}_{v}^{(l)}=\sigma\left(\sum_{u \in N(v)}{\alpha_{v u}} \mathbf{W}^{
 </ul>
 ]]></content>
       <categories>
-        <category>Learning</category>
+        <category>MachineLearning</category>
       </categories>
       <tags>
         <tag>Graph</tag>
@@ -1469,7 +1471,7 @@ O_{1}=-\sum_{(i, j) \in E} w_{i j} \log p_{1}\left(v_{i}, v_{j}\right)</script><
 </ul>
 ]]></content>
       <categories>
-        <category>Learning</category>
+        <category>MachineLearning</category>
       </categories>
       <tags>
         <tag>Graph</tag>
@@ -1494,7 +1496,7 @@ O_{1}=-\sum_{(i, j) \in E} w_{i j} \log p_{1}\left(v_{i}, v_{j}\right)</script><
 </ul>
 ]]></content>
       <categories>
-        <category>Learning</category>
+        <category>Java</category>
       </categories>
       <tags>
         <tag>Resource</tag>
@@ -1557,7 +1559,7 @@ O_{1}=-\sum_{(i, j) \in E} w_{i j} \log p_{1}\left(v_{i}, v_{j}\right)</script><
 &#125;  
 </code></pre>]]></content>
       <categories>
-        <category>Learning</category>
+        <category>MachineLearning</category>
       </categories>
       <tags>
         <tag>ML</tag>
@@ -1641,7 +1643,7 @@ O_{1}=-\sum_{(i, j) \in E} w_{i j} \log p_{1}\left(v_{i}, v_{j}\right)</script><
 </ol>
 ]]></content>
       <categories>
-        <category>Learning</category>
+        <category>MachineLearning</category>
       </categories>
       <tags>
         <tag>ML</tag>
@@ -1788,7 +1790,7 @@ M I o U=\frac{1}{k+1} \sum_{i=0}^{k} \frac{T P}{F N+F P+T P}
 </ul>
 ]]></content>
       <categories>
-        <category>Learning</category>
+        <category>MachineLearning</category>
       </categories>
       <tags>
         <tag>CV</tag>
@@ -1858,7 +1860,7 @@ M I o U=\frac{1}{k+1} \sum_{i=0}^{k} \frac{T P}{F N+F P+T P}
 </ul>
 ]]></content>
       <categories>
-        <category>Learning</category>
+        <category>MachineLearning</category>
       </categories>
       <tags>
         <tag>ML</tag>
@@ -1893,7 +1895,7 @@ M I o U=\frac{1}{k+1} \sum_{i=0}^{k} \frac{T P}{F N+F P+T P}
 </ol>
 ]]></content>
       <categories>
-        <category>Learning</category>
+        <category>MachineLearning</category>
       </categories>
       <tags>
         <tag>ML</tag>
@@ -1962,7 +1964,7 @@ M I o U=\frac{1}{k+1} \sum_{i=0}^{k} \frac{T P}{F N+F P+T P}
 </ul>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LargerNumKey</span>(<span class="params"><span class="built_in">str</span></span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__lt__</span>(<span class="params">x, y</span>):</span></span><br><span class="line">        <span class="keyword">return</span> x+y &gt; y+x</span><br><span class="line"></span><br><span class="line">largest_num = <span class="string">&#x27;&#x27;</span>.join(<span class="built_in">sorted</span>(<span class="built_in">map</span>(<span class="built_in">str</span>, nums), key=LargerNumKey))</span><br></pre></td></tr></table></figure>]]></content>
       <categories>
-        <category>Learning</category>
+        <category>Python</category>
       </categories>
       <tags>
         <tag>Python</tag>
@@ -1993,7 +1995,7 @@ M I o U=\frac{1}{k+1} \sum_{i=0}^{k} \frac{T P}{F N+F P+T P}
 </ul>
 ]]></content>
       <categories>
-        <category>Learning</category>
+        <category>Python</category>
       </categories>
       <tags>
         <tag>Python</tag>
@@ -2109,7 +2111,7 @@ M I o U=\frac{1}{k+1} \sum_{i=0}^{k} \frac{T P}{F N+F P+T P}
 </ul>
 ]]></content>
       <categories>
-        <category>Learning</category>
+        <category>MachineLearning</category>
       </categories>
       <tags>
         <tag>ML</tag>
@@ -2335,7 +2337,7 @@ M I o U=\frac{1}{k+1} \sum_{i=0}^{k} \frac{T P}{F N+F P+T P}
 <p>这里是以一个例子：<a href="https://github.com/ChenglongChen/Kaggle_CrowdFlower">example</a></p>
 ]]></content>
       <categories>
-        <category>Learning</category>
+        <category>MachineLearning</category>
       </categories>
       <tags>
         <tag>ML</tag>
@@ -2490,7 +2492,7 @@ z^{\prime}=\left(\gamma * \gamma_{p}\right) \frac{z-\mu}{\sqrt{\sigma^{2}+\epsil
 </ul>
 ]]></content>
       <categories>
-        <category>Learning</category>
+        <category>MachineLearning</category>
       </categories>
       <tags>
         <tag>ML</tag>
@@ -2672,7 +2674,8 @@ h
 <h4 id="B2I-Dynamic-Routing"><a href="#B2I-Dynamic-Routing" class="headerlink" title="B2I Dynamic Routing"></a>B2I Dynamic Routing</h4><p> MIND中的capsule:<br> （在MIND的中我们只要记住Capsule可以接受一组向量输入，输出一个向量；如果我们K个capsule，就会有K个输出向量）</p>
 ]]></content>
       <categories>
-        <category>Learning</category>
+        <category>MachineLearning</category>
+        <category>广告推荐</category>
       </categories>
       <tags>
         <tag>ML</tag>
@@ -2798,8 +2801,7 @@ h
 </ul>
 ]]></content>
       <categories>
-        <category>Learning</category>
-        <category>面试</category>
+        <category>MachineLearning</category>
       </categories>
       <tags>
         <tag>ML</tag>
@@ -2884,8 +2886,7 @@ C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t}</script></li>
 </ul>
 ]]></content>
       <categories>
-        <category>Learning</category>
-        <category>面试</category>
+        <category>MachineLearning</category>
       </categories>
       <tags>
         <tag>DL</tag>
@@ -3068,8 +3069,7 @@ Gain(D,a) =\underbrace{max}_{t\in T_a}Gain(D,a,t) = \underbrace{max}_{t\in T_a}\
 </ul>
 ]]></content>
       <categories>
-        <category>Learning</category>
-        <category>面试</category>
+        <category>MachineLearning</category>
       </categories>
       <tags>
         <tag>ML</tag>
@@ -3271,8 +3271,7 @@ f(\mathbf{x})=f\left(\mathbf{x}_{0}\right)+\nabla f\left(\mathbf{x}_{0}\right)^{
 <p>机器学习与深度学习习题集答案-1：<a href="https://mp.weixin.qq.com/s/4kWUE8ml_o6iF0F1TREyiA">https://mp.weixin.qq.com/s/4kWUE8ml_o6iF0F1TREyiA</a></p>
 ]]></content>
       <categories>
-        <category>Learning</category>
-        <category>面试</category>
+        <category>MachineLearning</category>
       </categories>
       <tags>
         <tag>DL</tag>
@@ -3496,8 +3495,7 @@ J(\theta) = -lnL(\theta) = -\sum\limits_{i=1}^{m}(y^{(i)}log(h_{\theta}(x^{(i)})
 </ul>
 ]]></content>
       <categories>
-        <category>Learning</category>
-        <category>面试</category>
+        <category>MachineLearning</category>
       </categories>
       <tags>
         <tag>ML</tag>
@@ -3676,8 +3674,7 @@ p(y | \mathbf{x})=\frac{p(\mathbf{x} | y) p(y)}{p(\mathbf{x})}</script><p> 分�
 <p><strong>贝叶斯分类器是一种生成模型，可以处理多分类问题，是一种非线性模型。</strong></p>
 ]]></content>
       <categories>
-        <category>Learning</category>
-        <category>面试</category>
+        <category>MachineLearning</category>
       </categories>
       <tags>
         <tag>ML</tag>
@@ -3810,8 +3807,7 @@ p(y | \mathbf{x})=\frac{p(\mathbf{x} | y) p(y)}{p(\mathbf{x})}</script><p> 分�
 </ul>
 ]]></content>
       <categories>
-        <category>Learning</category>
-        <category>面试</category>
+        <category>MachineLearning</category>
       </categories>
       <tags>
         <tag>ML</tag>
@@ -3922,8 +3918,7 @@ f(x)=w_{0}+\sum_{m=1}^{M} w_{m} \phi_{m}(x)</script><p>其中$w$是权重，$\ph
 </ul>
 ]]></content>
       <categories>
-        <category>Learning</category>
-        <category>面试</category>
+        <category>MachineLearning</category>
       </categories>
       <tags>
         <tag>ML</tag>
@@ -4047,7 +4042,7 @@ AdaMom可以看成Adam的生产环境改进版，前期降低了m_t的方差/自
 Summary -->
 ]]></content>
       <categories>
-        <category>Learning</category>
+        <category>MachineLearning</category>
       </categories>
       <tags>
         <tag>DL</tag>
@@ -4086,7 +4081,7 @@ Summary -->
 </ul>
 ]]></content>
       <categories>
-        <category>Learning</category>
+        <category>MachineLearning</category>
       </categories>
       <tags>
         <tag>ML</tag>
@@ -4108,7 +4103,7 @@ Summary -->
 </ul>
 ]]></content>
       <categories>
-        <category>Learning</category>
+        <category>MachineLearning</category>
       </categories>
       <tags>
         <tag>ML</tag>
@@ -4153,7 +4148,7 @@ d=\sqrt{(x 1-x 2)^{2}+(y 1-y 2)^{2}}</script></li>
 </ul>
 ]]></content>
       <categories>
-        <category>Learning</category>
+        <category>MachineLearning</category>
       </categories>
       <tags>
         <tag>ML</tag>
@@ -4178,7 +4173,7 @@ d=\sqrt{(x 1-x 2)^{2}+(y 1-y 2)^{2}}</script></li>
 </ul>
 ]]></content>
       <categories>
-        <category>Learning</category>
+        <category>MachineLearning</category>
       </categories>
       <tags>
         <tag>ML</tag>
@@ -4521,7 +4516,8 @@ w=m(a+x, b+y)^{*} e^{-\frac{\left(x^{\prime}\right)^{2}+\left(y^{\prime}\right)^
 </ul>
 ]]></content>
       <categories>
-        <category>Learning</category>
+        <category>MachineLearning</category>
+        <category>CV</category>
       </categories>
       <tags>
         <tag>CV</tag>
@@ -4898,6 +4894,10 @@ MultiHead(Q, K, V) = Concat \left(\right. head_{1}, \ldots, head \left._{\mathrm
 </li>
 </ul>
 ]]></content>
+      <categories>
+        <category>MachineLearning</category>
+        <category>NLP</category>
+      </categories>
       <tags>
         <tag>Word2vec</tag>
         <tag>Seq2seq</tag>
@@ -5078,8 +5078,7 @@ MultiHead(Q, K, V) = Concat \left(\right. head_{1}, \ldots, head \left._{\mathrm
 </ul>
 ]]></content>
       <categories>
-        <category>Learning</category>
-        <category>面试</category>
+        <category>MachineLearning</category>
       </categories>
       <tags>
         <tag>ML</tag>
@@ -5399,7 +5398,6 @@ MultiHead(Q, K, V) = Concat \left(\right. head_{1}, \ldots, head \left._{\mathrm
 </ul>
 ]]></content>
       <categories>
-        <category>Learning</category>
         <category>Leetcode</category>
       </categories>
       <tags>
@@ -5778,7 +5776,6 @@ MultiHead(Q, K, V) = Concat \left(\right. head_{1}, \ldots, head \left._{\mathrm
 </ul>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">splitArray</span>(<span class="params">self, nums: List[<span class="built_in">int</span>], m: <span class="built_in">int</span></span>) -&gt; int:</span></span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">helper</span>(<span class="params">mid</span>):</span></span><br><span class="line">            res = tmp = <span class="number">0</span></span><br><span class="line">            <span class="keyword">for</span> num <span class="keyword">in</span> nums:</span><br><span class="line">                <span class="keyword">if</span> tmp + num &lt;= mid:</span><br><span class="line">                    tmp += num</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    res += <span class="number">1</span></span><br><span class="line">                    tmp = num</span><br><span class="line">            <span class="keyword">return</span> res + <span class="number">1</span></span><br><span class="line"></span><br><span class="line">        lo, hi = <span class="built_in">max</span>(nums), <span class="built_in">sum</span>(nums)</span><br><span class="line">        <span class="keyword">while</span> lo &lt; hi:</span><br><span class="line">            mid = (lo + hi) // <span class="number">2</span></span><br><span class="line">            <span class="keyword">if</span> helper(mid) &gt; m:</span><br><span class="line">                lo = mid + <span class="number">1</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                hi = mid</span><br><span class="line">        <span class="keyword">return</span> lo</span><br></pre></td></tr></table></figure>]]></content>
       <categories>
-        <category>Learning</category>
         <category>Leetcode</category>
       </categories>
       <tags>
@@ -5838,7 +5835,7 @@ k &=k_{1}\left((1-b)+b \cdot \frac{d l}{a v d_1}\right)
 </ul>
 ]]></content>
       <categories>
-        <category>Learning</category>
+        <category>MachineLearning</category>
       </categories>
       <tags>
         <tag>Tf-idf</tag>
@@ -6495,7 +6492,7 @@ k &=k_{1}\left((1-b)+b \cdot \frac{d l}{a v d_1}\right)
 </blockquote>
 ]]></content>
       <categories>
-        <category>Learning</category>
+        <category>Python</category>
       </categories>
       <tags>
         <tag>Python</tag>
@@ -6505,7 +6502,7 @@ k &=k_{1}\left((1-b)+b \cdot \frac{d l}{a v d_1}\right)
     <title>计组-原码、反码、补码、移码、浮点数、校验码</title>
     <url>/2022/04/05/ComputerOrganizationandDesign/</url>
     <content><![CDATA[<p><a href="https://piaodazhu.github.io/15-floating-point-number-basic/">ref</a></p>
-<h1 id="原码、反码、补码、移码"><a href="#原码、反码、补码、移码" class="headerlink" title="原码、反码、补码、移码"></a>原码、反码、补码、移码</h1><ul>
+<h1 id="码制-原码、反码、补码、移码"><a href="#码制-原码、反码、补码、移码" class="headerlink" title="码制-原码、反码、补码、移码"></a>码制-原码、反码、补码、移码</h1><ul>
 <li>原码：符号位+数值位。直观，但是运算较为困难，<strong>加法和减法需要采取不同的硬件实现方式；0有+0和-0两种表达方式</strong>。</li>
 <li>反码：正数的反码：原码，负数的反码：原码的数值位取反。<strong>0有+0和-0两种表达方式</strong></li>
 <li>补码：正数的补码：原码，负数的补码：反码数值位+1。<strong>能将减法运算转换为加法运算，使得加减法能采用同一套硬件实现；0的表示唯一</strong></li>
@@ -6581,7 +6578,32 @@ k &=k_{1}\left((1-b)+b \cdot \frac{d l}{a v d_1}\right)
 <li>case<img src="/2022/04/05/ComputerOrganizationandDesign/crc.jpg" class="" title="crc">
 </li>
 </ul>
-]]></content>
+<h1 id="存储系统-amp-存储管理"><a href="#存储系统-amp-存储管理" class="headerlink" title="存储系统 &amp; 存储管理"></a>存储系统 &amp; 存储管理</h1><h2 id="存储结构"><a href="#存储结构" class="headerlink" title="存储结构"></a>存储结构</h2><ul>
+<li>存储器层次结构的思想是上一层次的存储器是低一层次的高速缓存。</li>
+<li>越接近cpu的存储器速度越快容量越小，越远离cpu的存储器速度越慢容量越大。</li>
+<li>高速缓冲技术是利用程序访问的局部性原理，把程序中正在使用的部分存放在一个高速的、容量较小的Cache中，使CPU的访存操作大多数针对Cache进行，从而大大提高程序的执行速度。<img src="/2022/04/05/ComputerOrganizationandDesign/storage1.jpeg" class="" title="storage1">
+</li>
+</ul>
+<h3 id="局部性原理"><a href="#局部性原理" class="headerlink" title="局部性原理"></a>局部性原理</h3><ul>
+<li>空间局部性：一个存储位置被访问后，其周围的位置也倾向于被访问。</li>
+<li>时间局部性：一个存储位置倾向于被多次访问（类似循环体中的变量）。</li>
+<li>程序越满足局部性，其执行效率越高。例如GRU的缓存机制利用了时间局部性，prefetch利用了空间局部性的思想。</li>
+</ul>
+<h3 id="cache置换算法"><a href="#cache置换算法" class="headerlink" title="cache置换算法"></a>cache置换算法</h3><ul>
+<li>随机算法：几乎没意义</li>
+<li>先进先出：一定意义</li>
+<li>近期最少使用 least recently used : lru 使用最广泛，把数据加入一个链表中，按访问时间排序，发生淘汰的时候，把访问时间最旧的淘汰掉。。利用hash表（实现O(1)的访问）和双向链表（实现O(1)的add/delete）。<ul>
+<li>查询某个key，没有则返回-1，有则返回，并移动到链表头。</li>
+<li>新增某个元素，新增在链表头，若链表满，delete链表尾的元素。</li>
+<li>LRU对于循环出现的数据，缓存命中不高。例如1，1，1，2，2，2，3，4，1，1，1，2，2，2…..</li>
+</ul>
+</li>
+<li>最不经常使用页置换 least frequently used : 把数据加入到链表中，按频次排序，一个数据被访问过，把它的频次+1，发生淘汰的时候，把频次低的淘汰掉。<ul>
+<li>lfu 问题在于可能前期用的多，后期不用，就会占住内存不释放。LFU对于交替出现的数据，缓存命中不高，例如1，1，1，2，2，3，4，3，4，3，4，3，4，3，4，3，4……</li>
+</ul>
+</li>
+</ul>
+<h2 id="存储管理"><a href="#存储管理" class="headerlink" title="存储管理"></a>存储管理</h2>]]></content>
       <categories>
         <category>Learning</category>
         <category>系统分析师</category>
@@ -6646,6 +6668,20 @@ k &=k_{1}\left((1-b)+b \cdot \frac{d l}{a v d_1}\right)
       </categories>
       <tags>
         <tag>软考系统分析师</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>regressionLoss2ClassificationLoss</title>
+    <url>/2022/04/23/regressionLoss2ClassificationLoss/</url>
+    <content><![CDATA[<a id="more"></a>
+
+]]></content>
+      <categories>
+        <category>MachineLearning</category>
+      </categories>
+      <tags>
+        <tag>ML</tag>
+        <tag>Loss</tag>
       </tags>
   </entry>
 </search>
