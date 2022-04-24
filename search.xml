@@ -1665,8 +1665,11 @@ O_{1}=-\sum_{(i, j) \in E} w_{i j} \log p_{1}\left(v_{i}, v_{j}\right)</script><
 </ul>
 </li>
 </ul>
-<h1 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h1><h2 id="ACC-Accuracy"><a href="#ACC-Accuracy" class="headerlink" title="ACC(Accuracy)"></a>ACC(Accuracy)</h2><ul>
-<li>Accuracy = 预测正确的样本数量 / 总样本数量 = (TP+TN) / (TP+FP+TN+FN)</li>
+<h1 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h1><h2 id="Logloss"><a href="#Logloss" class="headerlink" title="Logloss"></a>Logloss</h2><ul>
+<li><p><a href="https://chenzk1.github.io/2022/04/23/MLE-MAP/#Case3-Log-Loss">最大似然推导Logloss</a></p>
+<h2 id="ACC-Accuracy"><a href="#ACC-Accuracy" class="headerlink" title="ACC(Accuracy)"></a>ACC(Accuracy)</h2></li>
+<li><p>Accuracy = 预测正确的样本数量 / 总样本数量 = (TP+TN) / (TP+FP+TN+FN)</p>
+</li>
 </ul>
 <h2 id="Precision查准"><a href="#Precision查准" class="headerlink" title="Precision查准"></a>Precision查准</h2><ul>
 <li>Precision = TP / (TP+FP)</li>
@@ -6840,7 +6843,7 @@ k &=k_{1}\left((1-b)+b \cdot \frac{d l}{a v d_1}\right)
 </li>
 </ul>
 <img src="/2022/04/23/MLE-MAP/mse.jpeg" class="" title="mse">
-<h3 id="MLE-Case3-Log-Loss"><a href="#MLE-Case3-Log-Loss" class="headerlink" title="MLE Case3-Log Loss"></a>MLE Case3-Log Loss</h3><ul>
+<h3 id="Case3-Log-Loss"><a href="#Case3-Log-Loss" class="headerlink" title="Case3-Log Loss"></a>Case3-Log Loss</h3><ul>
 <li>用MLE推Log Loss</li>
 </ul>
 <img src="/2022/04/23/MLE-MAP/logloss.jpeg" class="" title="logloss">
