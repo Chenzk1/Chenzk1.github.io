@@ -1666,10 +1666,10 @@ O_{1}=-\sum_{(i, j) \in E} w_{i j} \log p_{1}\left(v_{i}, v_{j}\right)</script><
 </li>
 </ul>
 <h1 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h1><h2 id="Logloss"><a href="#Logloss" class="headerlink" title="Logloss"></a>Logloss</h2><ul>
-<li><p><a href="https://chenzk1.github.io/2022/04/23/MLE-MAP/#Case3-Log-Loss">最大似然推导Logloss</a></p>
-<h2 id="ACC-Accuracy"><a href="#ACC-Accuracy" class="headerlink" title="ACC(Accuracy)"></a>ACC(Accuracy)</h2></li>
-<li><p>Accuracy = 预测正确的样本数量 / 总样本数量 = (TP+TN) / (TP+FP+TN+FN)</p>
-</li>
+<li><a href="https://chenzk1.github.io/2022/04/23/MLE-MAP/#Case3-Log-Loss">最大似然推导Logloss</a></li>
+</ul>
+<h2 id="ACC-Accuracy"><a href="#ACC-Accuracy" class="headerlink" title="ACC(Accuracy)"></a>ACC(Accuracy)</h2><ul>
+<li>Accuracy = 预测正确的样本数量 / 总样本数量 = (TP+TN) / (TP+FP+TN+FN)</li>
 </ul>
 <h2 id="Precision查准"><a href="#Precision查准" class="headerlink" title="Precision查准"></a>Precision查准</h2><ul>
 <li>Precision = TP / (TP+FP)</li>
