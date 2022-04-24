@@ -33,7 +33,7 @@
 <meta property="og:image" content="https://chenzk1.github.io/2022/04/23/MLE-MAP/mse.jpeg">
 <meta property="og:image" content="https://chenzk1.github.io/2022/04/23/MLE-MAP/logloss.jpeg">
 <meta property="article:published_time" content="2022-04-23T15:38:39.000Z">
-<meta property="article:modified_time" content="2022-04-23T16:28:02.900Z">
+<meta property="article:modified_time" content="2022-04-24T09:09:22.353Z">
 <meta property="article:author" content="Kayden">
 <meta property="article:tag" content="ML">
 <meta property="article:tag" content="MLE">
@@ -335,7 +335,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2022-04-24 00:28:02" itemprop="dateModified" datetime="2022-04-24T00:28:02+08:00">2022-04-24</time>
+        <time title="Modified: 2022-04-24 17:09:22" itemprop="dateModified" datetime="2022-04-24T17:09:22+08:00">2022-04-24</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -412,14 +412,15 @@
 <li><p>MAP</p>
 <ul>
 <li><p>先验：假设p~N(0.5, 0.1)</p>
-<p><script type="math/tex">P(\theta \mid X)=P(\theta)P(X \mid \theta)=P(\theta)\prod_{i=1}^{10} P\left(x_{i} \mid \theta\right)=\theta^{7} (1-\theta)^{3} \times\left(\frac{1}{\sqrt{2 \pi} \sigma}\right) \exp \left(-\frac{1}{2 \sigma^{2}} (\theta-\mu)^{2}\right)</script>带入μ=0.5，σ=0.1 —&gt; log —&gt; 求argmax —&gt; θ = 0.66349</p>
+<script type="math/tex; mode=display">P(\theta \mid X)=P(\theta)P(X \mid \theta)=P(\theta)\prod_{i=1}^{10} P\left(x_{i} \mid \theta\right)=\theta^{7} (1-\theta)^{3} \times\left(\frac{1}{\sqrt{2 \pi} \sigma}\right) \exp \left(-\frac{1}{2 \sigma^{2}} (\theta-\mu)^{2}\right)</script><p>带入μ=0.5，σ=0.1 —&gt; log —&gt; 求argmax —&gt; θ = 0.66349</p>
 </li>
 <li><p>而当试验次数达到1000次，700次正例的话 θ = 0.69958</p>
 </li>
 </ul>
 </li>
 </ul>
-<h3 id="Case2-MSE-Loss"><a href="#Case2-MSE-Loss" class="headerlink" title="Case2-MSE Loss"></a>Case2-MSE Loss</h3><ul>
+<h3 id="Case2-MSE-Loss"><a href="#Case2-MSE-Loss" class="headerlink" title="Case2-MSE Loss"></a>Case2-MSE Loss</h3><p><a target="_blank" rel="noopener" href="https://segmentfault.com/1190000018510069">深入Loss Function的来源</a></p>
+<ul>
 <li>用MLE推导MSE Loss</li>
 <li>每个样本i可以表示为 <script type="math/tex">(x_i, y_i)</script>, 此处可以简单表示为<script type="math/tex">y_i</script>, 原因是<ul>
 <li>Loss在形式上是<script type="math/tex">y_i</script> 和 <script type="math/tex">y'_{i}</script> 的函数</li>
