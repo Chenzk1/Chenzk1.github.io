@@ -2,7 +2,9 @@
 title: Python-sort&sorted
 date: 2021-12-10
 tags: Python
-categories: Learning
+categories: 
+    - Language
+    - Python
 ---
 
 ## 不同

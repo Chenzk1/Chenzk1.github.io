@@ -8,7 +8,7 @@ tags:
   - DeepWalk
   - Node2vec
 categories: 
-  - Learning
+  - Lecture
   - cs224w
 ---
 

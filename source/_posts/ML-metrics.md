@@ -1,8 +1,8 @@
 ---
-title: ML-Metrics 
+title: 机器学习中的Metrics&Losses
 date: 2021-12-10
 categories: 
-    - Learning
+    - MachineLearning
 tags:  
     - ML
     - Metrics
@@ -10,17 +10,19 @@ tags:
     - 搜索
 mathjax: true
 ---
-<meta name="referrer" content="no-referrer"/>
 
-[TOC]
+机器学习中的Metrics&Losses
+
+<!-- more -->
+- 参考
+  - [深入Loss Function的来源](https://segmentfault.com/1190000018510069)
+  - [最大似然推导MSE/Logloss](https://chenzk1.github.io/2022/04/23/MLE-MAP/) 
 
 # 分类
 
 ## ACC(Accuracy)
 
 - Accuracy = 预测正确的样本数量 / 总样本数量 = (TP+TN) / (TP+FP+TN+FN)
-
-<!-- more -->
 
 ## Precision查准
 
@@ -80,6 +82,100 @@ $$A U C=\frac{\sum p r e d_{p o s}>p r e d_{n e g}}{p o s i t i v e N u m * n e 
 $$
 A U C=\frac{\sum_{\text {ins}_{i} \in \text {positiveclass}} \operatorname{rank}_{\text {ins}_{i}}-\frac{M \times(M+1)}{2}}{M \times N}
 $$
+
+# 回归
+## MSE
+- MSE可以理解为，假设整体分布与样本分布误差满足$$ N(0, σ^2) $$下的最大似然估计，见：https://chenzk1.github.io/2022/04/23/MLE-MAP/#Case2-MSE-Loss 。这里先验假设可以理解为：
+  - 1）**MSE对误差的假设先验分布为: 0均值常数方差N(0, σ^2)的单峰高斯分布**
+  - 2）**MSE对样本的假设先验分布为: 对于某个样本i，其出现的概率为整体分布在该样本上的值为均值，方差为0，即N(y'_i, σ^2)的单峰高斯分布**
+  - 3）以上两种假设等价
+- 问题
+  - 1）基于单峰高斯分布，建模多峰分布比较困难； 
+  - 2）相当于MAE的二次函数，大于1的时候loss值较大，**对异常值很敏感**，很容易造成梯度爆炸打偏模型。在实际使用中稳定性很差。
+
+## Hubor Loss
+$$
+L_{\delta}(y, f(x))=\left\{\begin{array}{ll}
+\frac{1}{2}(y-f(x))^{2} & \text { for }|y-f(x)| \leq \delta \\
+\delta \cdot\left(|y-f(x)|-\frac{1}{2} \delta\right), & \text { otherwise }
+\end{array}\right.
+$$
+
+- 缓解MSE对异常值敏感的问题：超参δ ~ 0时，huber loss趋于MAE，反之趋于MSE；在label异常大时，转为绝对值较小的MAE，反之用MSE保证训练强度。
+- 缺点：单峰高斯分布假设问题同样没有改善。
+
+## 回归转分类
+- 回归的问题：受样本分布影响较大，对异常值敏感，容易出现梯度计算不稳定、样本分布不满足先验假设的情况。
+  - case1: MSE建立在误差满足单峰高斯分布的先验假设下，不满足该假设则
+  - case2: 回归问题对异常值敏感，例如label的分布上下界较大，使用MSE时label越大loss越大，容易使模型被label大的样本dominate
+- [回归比分类更难吗？](https://cloud.tencent.com/developer/news/60043)
+
+### Softmax
+- 分桶离散化，将回归转化为学习离散后多分类的问题。例如k个分桶时：
+$$
+C=-\sum_{i=1}^{N} \sum_{k=1}^{K} I\left(b_{i}=k\right) \log \hat{y}_{k i}
+$$
+- 优势：避开样本先验分布的假设，可以拟合任意分布
+- 不足：对分桶敏感，分桶策略决定模型学习难度以及预估效果
+
+### Distill Softmax
+- 借鉴蒸馏的思想，有分类的优势，也保留了回归的特性（label连续）
+$$
+\operatorname{loss}=-\sum_{k=1}^{K} f\left(t_{k}, y\right) \log p_{k}
+$$
+- 分k个桶，tk为桶边界或桶的中心点，f(tk, y)为用于软化概率分布的函数，只与tk，y有关，例如|tk-y|的函数，pk为模型预测在桶k内的概率
+- 例如使用exp^2函数的loss:
+$$
+\operatorname{los} s=-\sum_{k=1}^{K} e^{-\frac{\left(t_{k}-y\right)^{2}}{2 \sigma^{2}}} \log p_{k}
+$$
+
+### Weighted cross entropy
+
+- 原始Weighted cross entropy
+  - Weighted cross entropy本身由youtube提出，用来把时长融入ctr模型中，参考[paper](https://static.googleusercontent.com/media/research.google.com/zh-CN//pubs/archive/45530.pdf)。做法为：把正例的label由1改为时长t，负例label仍为0
+
+  $$ C=-\sum_{i=1}^{n}\left(t_{i} y_{i} \log f\left(x_{i}\right)+\left(1-y_{i}\right) \log \left(1-f\left(x_{i}\right)\right)\right), \text { where } f(x)=\frac{1}{1+e^{-\theta x}} $$
+
+  $$
+  \begin{aligned}
+  \frac{P_{+}}{P_{-}} &=\frac{f(x)}{1-f(x)}=\frac{1}{e^{-\theta x}}=e^{\theta x} \\
+  &=\frac{\sum_{i=1}^{k} t_{i}}{n-k}=\frac{\left(\sum_{i=1}^{k} t_{i}\right) / n}{1-k / n}=\frac{E(t)}{1-P(y)} \approx E(t)
+  \end{aligned}
+  $$
+  - k表示正例数量，P(y)为预估ctr，E(t)为预估时长的数学期望，即样本i的预估时长为：$$ E\left(t_{i}\right)=e^{\theta x_{i}} $$。因为忽略了P(y)，所以是有偏估计。
+  - 无偏性修正：分母本来是n-k代表负例数量，改为n之后有偏 -》即负例数量多了k个，为了纠偏需要加入额外的k个正例。
+- 无偏WCE
+  - 把回归中每个label=y的样本当做二分类的y个正样本和1个负样本，设预估正样本的概率为pred/(1+pred)，然后用交叉熵计算loss（只适用于y非负的情况）
+  - P.S. 转为二分类时，当做y个正样本和1个负样本是无偏的，单纯把y转为y/(y+1)做交叉熵是有偏的。
+  
+  | |     回归           | WCE分类 |
+  | :---------------: | :---------------: | :--------: |
+  | 真实值 | 样本i，labeli=ki   | ki个正样本，1个负样本 |
+  | 预估值 | 样本i，模型预测值yi=predi | 模型预测值仍然是yi=predi，p+（类似pctr）, p+=pred/(1+pred) |
+  | 无偏性 | 原分布，预测值的均值为∑y/N | 需要证明预测值的期望为原分布的均值。$$ E[P_{+}] = E[\frac{\text { pred }}{1+\text { pred }}] =\frac{\sum y}{\sum y+N} $$，则E[pred]=∑y/N，即无偏 |
+
+  - loss：
+  $$
+  C=-\sum_{i=1}^{n}\left(y_{i} \log f\left(x_{i}\right)+\log \left(1-f\left(x_{i}\right)\right)\right), \text { where } f(x)=\frac{1}{1+e^{-\theta x}}
+  $$
+  - 用$$\^y$$表示loss：
+  $$
+  \begin{aligned}
+  C &=-\sum_{i=1}^{n}\left(y_{i} \log \frac{\hat{y}_{i}}{1+\hat{y}_{i}}+\log \left(1-\frac{\hat{y}_{i}}{1+\hat{y}_{i}}\right)\right) \\
+  &=-\sum_{i=1}^{n}\left(y_{i} \log \hat{y}_{i}-\left(1+y_{i}\right) \log \left(1+\hat{y}_{i}\right)\right)
+  \end{aligned}
+  $$
+  - 样本分布的假设：
+  $$
+  \begin{aligned}
+  C &=-\sum_{i=1}^{n}\left(y_{i} \log \hat{y}_{i}-\left(1+y_{i}\right) \log \left(1+\hat{y}_{i}\right)\right) \\
+  &=-\sum_{i=1}^{n} \log \left(\hat{y}_{i}^{y_{i}}\left(1+\hat{y}_{i}\right)^{-\left(1+y_{i}\right)}\right) \\
+  &=-\sum_{i=1}^{n} \log \left(\left(\frac{\hat{y}_{i}}{1+\hat{y}_{i}}\right)^{y_{i}} \frac{1}{1+\hat{y}_{i}}\right)
+  \end{aligned}
+  $$
+  当$$ y_{i} \in[0,1,2, \ldots] $$时, 令 $$ p_{i}=\frac{1}{1+\hat{y}_{i}} $$，则$$ P\left(y_{i}=k \mid x_{i}, \theta\right)=\left(1-p_{i}\right)^{k} p_{i} $$，即假设样本满足[几何分布](https://zh.wikipedia.org/wiki/%E5%B9%BE%E4%BD%95%E5%88%86%E4%BD%88)，几何分布的数学期望为$$ \frac{1-p_{i}}{p_{i}}=\hat{y}_{i} $$，即WCE的预估值等于几何分布的数学期望，是无偏的。
+  - 问题：低估和高估的时候梯度不对称，低估梯度大而高估梯度小，因此实践中使用WCE容易发生高估。将label变换到1附近的区间，可以减少高低估时的梯度差异。
+
 
 # 区分度
 

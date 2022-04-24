@@ -5,7 +5,7 @@ tags:
   - 6.824
   - MapReduce
 categories: 
-  - Learning
+  - Lecture
   - 6.824
 ---
 

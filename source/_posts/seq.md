@@ -6,7 +6,8 @@ tags:
   - ML
   - Seq Model
 categories:
-  - Learning
+  - MachineLearning
+  - 搜广推
 ---
 
 广告/推荐中的序列模型
@@ -200,12 +201,12 @@ $$
 
 - 背景：传统的神经网络输入一组标量，对这组标量求加权和，之后输入非线性激活函数得到一个标量的输出。而**Capsule输入是一组向量，对这组向量进行仿射变换之后求加权和，把加权和输入非线性激活函数，如此经过j次迭代得到一个向量的输出**。Hinton提出Capsule Network是为了解决传统的CNN中只能编码某个特征是否存在而**无法编码特征的orientation**。
 - 来自[zhihu](https://zhuanlan.zhihu.com/p/68897114)
-{% asset_img capsule.jpg capsule %}
+{% asset_img capsule.jpeg capsule %}
 - 一个两层胶囊网络（从low-level到high-level）：
-{% asset_img capsule2.png capsule2 %}
-  - low-level: m个Nl维度的vector, high-level: n个Nh维度的vector
+  - low-level: m个Nl维度的vector; high-level: n个Nh维度的vector
   - 对每一个low-level vector做映射，然后做加权融合（softmax），再做非线性激活
   - 其中softmax需要参数，参数需要迭代求解：初始化为0，即权重为1/m；后续迭代更新
+{% asset_img capsule2.png capsule2 %}
 
 #### B2I Dynamic Routing
  MIND中的capsule: 

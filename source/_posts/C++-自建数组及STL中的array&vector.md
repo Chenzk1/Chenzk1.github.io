@@ -2,7 +2,8 @@
 title: C++-自建数组及STL中的array&vector
 date: 2021-12-10
 categories: 
-    - Learning
+    - Language
+    - C++
 tags:  
     - C++
 ---

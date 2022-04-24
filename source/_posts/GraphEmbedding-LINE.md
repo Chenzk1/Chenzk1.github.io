@@ -6,7 +6,7 @@ tags:
   - Graph
   - LINE
 categories:
-  - Learning
+  - MachineLearning
 ---
 
 paper: [LINE: Large-scale Information Network Embedding](https://arxiv.org/pdf/1503.03578.pdf)

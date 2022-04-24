@@ -2,7 +2,7 @@
 title: ML-LightGBM
 date: 2021-12-10
 categories: 
-    - Learning
+    - MachineLearning
 tags:  
     - ML
     - LightGBM

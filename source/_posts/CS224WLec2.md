@@ -7,7 +7,7 @@ tags:
   - Graph
   - ML
 categories: 
-  - Learning
+  - Lecture
   - cs224w
 ---
 

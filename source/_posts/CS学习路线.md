@@ -2,7 +2,7 @@
 title: CS学习路线、资源推荐
 date: 2021-12-10
 categories: 
-    - Learning
+    - Others
 tags:  
     - Resource
 ---

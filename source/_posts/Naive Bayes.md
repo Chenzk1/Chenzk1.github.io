@@ -2,7 +2,7 @@
 title: ML-Naive Bayes及其sklearn实现
 date: 2021-12-10
 categories: 
-    - Learning
+    - MachineLearning
 tags:  
     - ML
     - NaiveBayes

@@ -1,12 +1,12 @@
 ---
 title: 排序算法
-mathjax: false
+mathjax: true
 date: 2022-03-10 11:17:18
 tags:
   - Leetcode
   - Sort
 categories:
-  - Learning
+  - Leetcode
 ---
 
 #  经典排序算法
@@ -201,16 +201,18 @@ def adjust_heap(nums, i, size):
    if largest != i: # 如果该节点需要调整，则对其进行调整，并沿着被改变的那个叶子节点不断调整
         nums[largest], nums[i] = nums[i], nums[largest]
         adjust_heap(nums, largest, size)
+
 def build_heap(nums):
-        for i in range(len(nums)//2)[::-1]: #从最后一个非叶子结点开始调整，往上的节点都是非叶子结点
-            adjust_heap(nums, i, len(nums))      
+    for i in range(len(nums)//2)[::-1]: #从最后一个非叶子结点开始调整，往上的节点都是非叶子结点
+        adjust_heap(nums, i, len(nums))      
+
 def heap_sort(nums):
-    build_heap(nums) # 先建堆
+    build_heap(nums) # 先建size大小的堆
     size = len(nums)
     for i in range(size)[::-1]:
-        nums[0], nums[i] = nums[i], nums[0] #把堆顶元素放在最后
+        nums[0], nums[i] = nums[i], nums[0] #最后的元素一定小于堆顶元素，把堆顶元素放在最后
         adjust_heap(nums, 0, i) # 堆顶元素被改变，需要调整
-    return nums  
+    return nums
 ```
 
 ### 复杂度分析

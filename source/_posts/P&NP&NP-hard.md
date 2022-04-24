@@ -4,7 +4,7 @@ mathjax: true
 date: 2021-12-15 11:16:27
 tags: 
   - Math
-categories: Learning
+categories: MachineLearning
 ---
 
 # 定义

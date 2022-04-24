@@ -2,7 +2,7 @@
 title: ML-信息熵&交叉熵&条件熵&相对熵(KL散度)&互信息
 date: 2021-12-10
 categories: 
-    - Learning
+    - MachineLearning
 tags:  
     - ML
     - 信息论

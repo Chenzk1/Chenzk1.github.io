@@ -7,6 +7,9 @@ tags:
     - git
 ---
 
+git操作整理
+<!-- more -->
+
 - git log: 记录版本历史
 - git reflog：记录操作历史
 

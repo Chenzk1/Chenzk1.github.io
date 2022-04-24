@@ -5,56 +5,36 @@ tags:
     - Leetcode
     - 查找表
 categories: 
-    - Learning
     - Leetcode
 ---
 
-[TOC]
-
-# 一.考虑的基本数据结构
-
-**第一类： 查找有无--set**
-
-元素'a'是否存在，通常用set：集合
-
-set只存储键，而不需要对应其相应的值。 
-
-set中的键不允许重复
-
+leetcode-查找表，忘了从哪里来的，侵删
 <!-- more -->
 
-**第二类： 查找对应关系(键值对应)--dict**
+# 考虑的基本数据结构
 
-元素'a'出现了几次：dict-->字典
-
-dict中的键不允许重复
-
-**第三类： 改变映射关系--map**
-
-通过将原有序列的关系映射统一表示为其他
-
-
-# LeetCode 349 Intersection Of Two Arrays 1
-
-## 题目描述
-给定两个数组nums,求两个数组的公共元素。
-
---如nums1 = [1,2,2,1],nums2 = [2,2]
-
---结果为[2]
-
---结果中每个元素只能出现一次
-
---出现的顺序可以是任意的
+- **第一类： 查找有无--set**：元素'a'是否存在，通常用set：集合。
+    - set只存储键，而不需要对应其相应的值。 
+    - set中的键不允许重复
+- **第二类： 查找对应关系(键值对应)--dict**：元素'a'出现了几次：dict-->字典
+    - dict中的键不允许重复
+- **第三类： 改变映射关系--map**:通过将原有序列的关系映射统一表示为其他
 
 
-## 分析实现
-由于每个元素只出现一次，因此不需要关注每个元素出现的次数，用set的数据结构就可以了。
-记录元素的有和无。
+## LeetCode 349 Intersection Of Two Arrays 1
 
-把nums1记录为set，判断nums2的元素是否在set中，是的话，就放在一个公共的set中，最后公共的set就是我们要的结果。
+### 题目描述
+- 给定两个数组nums,求两个数组的公共元素。
+```
+如nums1 = [1,2,2,1],nums2 = [2,2]
+结果为[2]
+结果中每个元素只能出现一次
+出现的顺序可以是任意的
+```
 
-代码如下：
+### 分析实现
+- 由于每个元素只出现一次，因此不需要关注每个元素出现的次数，用set的数据结构就可以了。记录元素的有和无。
+- 把nums1记录为set，判断nums2的元素是否在set中，是的话，就放在一个公共的set中，最后公共的set就是我们要的结果。
 
 ```python
 class Solution:
@@ -63,7 +43,7 @@ class Solution:
         return set([i for i in nums2 if i in nums1])
 ```
 
-也可以通过set的内置方法来实现，直接求set的交集：
+- 也可以通过set的内置方法来实现，直接求set的交集：
 ```python
 class Solution:
     def intersection(self, nums1: List[int], nums2: List[int]) -> List[int]:
@@ -72,10 +52,9 @@ class Solution:
         return set2 & set1
 ```
 
+## LeetCode 350 Intersection Of Two Arrays 2
 
-# LeetCode 350 Intersection Of Two Arrays 2
-
-## 题目描述
+### 题目描述
 
 给定两个数组nums,求两个数组的交集。
 
@@ -86,7 +65,7 @@ class Solution:
 -- 出现的顺序可以是任意的
 
 
-## 分析实现
+### 分析实现
 元素出现的次数有用，那么对于存储次数就是有意义的，所以选择数据结构时，就应该选择dict的结构，通过字典的比较来判断；
 
 记录每个元素的同时要记录这个元素的频次。
@@ -109,9 +88,9 @@ class Solution:
         return res        
 ```
 
-# LeetCode 242 Intersection Of Two Arrays 2
+## LeetCode 242 Intersection Of Two Arrays 2
 
-## 题目描述 
+### 题目描述 
 给定两个字符串 s 和 t ，编写一个函数来判断 t 是否是 s 的字母异位词。
 
 示例1:
@@ -124,7 +103,7 @@ class Solution:
 输入: s = "rat", t = "car"
 输出: false
 
-## 分析实现
+### 分析实现
 判断异位词即判断变换位置后的字符串和原来是否相同，那么不仅需要存储元素，还需要记录元素的个数。可以选择dict的数据结构，将字符串s和t都用dict存储，而后直接比较两个dict是否相同。
 
 ```python
@@ -140,9 +119,9 @@ class Solution:
 ```
 
 
-# LeetCode 202 Happy number
+## LeetCode 202 Happy number
 
-## 题目描述
+### 题目描述
 
 编写一个算法来判断一个数是不是“快乐数”。
 
@@ -161,7 +140,7 @@ class Solution:
 1^2 + 0^2 + 0^2 = 1
 
 
-## 分析实现
+### 分析实现
 
 这道题目思路很明显，当n不等于1时就循环，每次循环时，将其最后一位到第一位的数依次平方求和，比较求和是否为1。
 
@@ -194,7 +173,7 @@ class Solution:
         return True
 ```
 
-## tips
+### tips
 ```python
 #一般对多位数计算的套路是：
 #循环从后向前取位数
@@ -205,9 +184,9 @@ tmp = n % 10
 n = n // 10
 ```
 
-# LeetCode 290 Word Pattern
+## LeetCode 290 Word Pattern
 
-## 题目描述
+### 题目描述
 
 给出一个模式(pattern)以及一个字符串，判断这个字符串是否符合模式
 
@@ -237,7 +216,7 @@ str = "dog cat cat fish"
 
 输出: false
 
-## 分析实现
+### 分析实现
 抓住变与不变，笔者开始的思路是选择了dict的数据结构，比较count值和dict对应的keys的个数是否相同，但是这样无法判断顺序的关系，如测试用例：'aba','cat cat dog'。
 
 那么如何能**既考虑顺序**，也考虑**键值对应的关系**呢？
@@ -254,7 +233,7 @@ class Solution:
         str = str.split()
         return list(map(pattern.index,pattern)) == list(map(str.index,str))
 ```
-## tips
+### tips
 1. 因为str是字符串，不是由单个字符组成，所以开始需要根据空格拆成字符list：
 ```python
 str = str.split()
@@ -266,9 +245,9 @@ map(pattern.index, pattern)
 ```
 3. map是通过hash存储的，不能直接进行比较，需要转换为list比较list
 
-# LeetCode 205 Isomorphic Strings
+## LeetCode 205 Isomorphic Strings
 
-## 题目描述
+### 题目描述
 
 给定两个字符串 s 和 t，判断它们是否是同构的。
 
@@ -295,7 +274,7 @@ map(pattern.index, pattern)
 输出: true
 
 
-## 分析实现
+### 分析实现
 
 思路与上题一致，可以考虑通过建两个dict，比较怎样不同，也可以将不同转化为相同。
 
@@ -306,9 +285,9 @@ class Solution:
         return list(map(s.index,s)) == list(map(t.index,t))
 ```
 
-# LeetCode 451 Sort Characters By Frequency
+## LeetCode 451 Sort Characters By Frequency
 
-## 题目描述
+### 题目描述
 
 给定一个字符串，请将字符串里的字符按照出现的频率降序排列。
 
@@ -336,7 +315,7 @@ class Solution:
 输出:
 "bbAa"
 
-## 分析实现
+### 分析实现
 
 对于相同频次的字母，顺序任意，需要考虑大小写，返回的是字符串。
 
@@ -356,7 +335,7 @@ class Solution:
         return res
 ```
 
-## tips
+### tips
 1. 通过sorted的方法进行value排序，对字典排序后无法直接按照字典进行返回，返回的为列表元组：
 ```python
 # 对value值由大到小排序
@@ -372,10 +351,10 @@ s = sorted(s_dict.items(), key=lambda item:item[0])
 ```
 
 
-# 二. 对撞指针
-# LeetCode 1 Two Sum
+# 对撞指针
+## LeetCode 1 Two Sum
 
-## 题目描述
+### 题目描述
 
 给出一个整型数组nums，返回这个数组中两个数字的索引值i和j，使得nums[i] + nums[j]等于一个给定的target值，两个索引不能相等。
 
@@ -383,7 +362,7 @@ s = sorted(s_dict.items(), key=lambda item:item[0])
 返回[0,1]
 
 
-## 审题:
+### 审题:
 
 需要考虑：
 
@@ -392,8 +371,8 @@ s = sorted(s_dict.items(), key=lambda item:item[0])
 3. 没有解该怎么办？
 4. 有多个解怎么办？保证有唯一解。
 
-## 分析实现
-## 暴力法O(n^2)
+### 分析实现
+### 暴力法O(n^2)
 时间复杂度为O(n^2),第一遍遍历数组，第二遍遍历当前遍历值之后的元素，其和等于target则return。
 
 
@@ -406,7 +385,7 @@ class Solution:
                 if nums[i] + nums[j] == target:
                     return [i,j]
 ```
-## 排序+指针对撞(O(n)+O(nlogn)=O(n))
+### 排序+指针对撞(O(n)+O(nlogn)=O(n))
 
 在数组篇的LeetCode 167题中，也遇到了找到两个数使得它们相加之和等于目标数，但那是对于排序的情况，因此也可以使用上述的思路来完成。
 
@@ -463,11 +442,11 @@ class Solution:
         return res
 ```
 
-### 小套路:
+#### 小套路:
 
 如果只是对数组的值进行排序，那么数组原来表示的索引的信息就会丢失的情况，可以在排序前：
 
-### 更加pythonic的实现
+#### 更加pythonic的实现
 
 通过list(enumerate(nums))开始实现下标和值的绑定，不用专门的再copy加bool判断。
 
@@ -487,7 +466,7 @@ while i < j:
 ```
 **拷贝数组 + bool型变量辅助**
 
-## 查找表--O(n)
+### 查找表--O(n)
 
 遍历数组过程中，当遍历到元素v时，可以只看v前面的元素，是否含有target-v的元素存在。
 
@@ -503,7 +482,7 @@ class Solution:
         record = dict()
         for i in range(len(nums)):
             complement = target - nums[i]
-            # 已经在之前的字典中找到这个值
+            ## 已经在之前的字典中找到这个值
             if record.get(complement) is not None:
                 res = [i,record[complement]]
                 return res
@@ -514,7 +493,7 @@ class Solution:
 
 
 
-## 补充思路：
+### 补充思路：
 通过enumerate来把索引和值进行绑定，进而对value进行sort，前后对撞指针进行返回。
 
 
@@ -522,7 +501,7 @@ class Solution:
 class Solution:
     def twoSum(self, nums: List[int], target: int) -> List[int]:
         nums = list(enumerate(nums))
-        # 根据value来排序
+        ## 根据value来排序
         nums.sort(key = lambda x:x[1])
         l,r = 0, len(nums)-1
         while l < r:
@@ -534,9 +513,9 @@ class Solution:
                 r -= 1
 ```
 
-# LeetCode 15 3Sum
+## LeetCode 15 3Sum
 
-## 题目描述
+### 题目描述
 
 给出一个整型数组，寻找其中的所有不同的三元组(a,b,c)，使得a+b+c=0
 
@@ -546,18 +525,18 @@ class Solution:
 
 结果为：[[-1, 0, 1],[-1, -1, 2]]
 
-## 审题
+### 审题
 1. 数组不是有序的；
 2. 返回结果为全部解，多个解的顺序是否需要考虑？--不需要考虑顺序
 3. 什么叫不同的三元组？索引不同即不同，还是值不同？--题目定义的是，值不同才为不同的三元组
 4. 没有解时怎么返回？--空列表
 
-## 分析实现
+### 分析实现
 因为上篇中已经实现了Two Sum的问题，因此对于3Sum，首先想到的思路就是，开始固定一个k，然后在其后都当成two sum问题来进行解决，但是这样就ok了吗？
 
 
 
-### 没有考虑重复元素导致错误
+#### 没有考虑重复元素导致错误
 
 直接使用Two Sum问题中的查找表的解法，根据第一层遍历的i，将i之后的数组作为two sum问题进行解决。
 
@@ -656,7 +635,7 @@ class Solution:
         return res
 ```
 
-## 小套路
+### 小套路
 
 1. 采用**for + while**的形式来处理三索引；
 2. 当数组不是有序时需要注意，有序的特点在哪里，有序就可以用哪些方法解决？无序的话不便在哪里？
@@ -682,8 +661,8 @@ while l < r:
     while l < r and nums[l] == nums[l-1]: l += 1
 ```
 
-# LeetCode 18 4Sum
-## 题目描述
+## LeetCode 18 4Sum
+### 题目描述
 给出一个整形数组，寻找其中的所有不同的四元组(a,b,c,d)，使得a+b+c+d等于一个给定的数字target。
 
 --如:
@@ -694,7 +673,7 @@ nums = [1, 0, -1, 0, -2, 2]，target = 0
 
 [[-1,  0, 0, 1],[-2, -1, 1, 2],[-2,  0, 0, 2]]
 
-## 题目分析
+### 题目分析
 4Sum可以当作是3Sum问题的扩展，注意事项仍是一样的，同样是不能返回重复值得解。首先排序。接着从[0,len-1]遍历i，跳过i的重复元素，再在[i+1,len-1]中遍历j，得到i，j后，再选择首尾的l和r，通过对撞指针的思路，四数和大的话r--，小的话l++,相等的话纳入结果list，最后返回。
 
 套用3Sum得代码，在其前加一层循环，对边界情况进行改动即可:
@@ -736,7 +715,7 @@ class Solution:
 
 还可以使用combinations(nums, 4)来对原数组中得4个元素全排列，在开始sort后，对排列得到得元素进行set去重。但单纯利用combinations实现会超时。
 
-## 超出时间限制
+### 超出时间限制
 ```python
 class Solution:
     def fourSum(self, nums: List[int], target: int) -> List[List[int]]:
@@ -751,21 +730,21 @@ class Solution:
                 
 ```
 
-# LeetCode 16 3Sum Closest
+## LeetCode 16 3Sum Closest
 
-## 题目描述
+### 题目描述
 给出一个整形数组，寻找其中的三个元素a,b,c，使得a+b+c的值最接近另外一个给定的数字target。
 
 如：给定数组 nums = [-1，2，1，-4], 和 target = 1.
 
 与 target 最接近的三个数的和为 2. (-1 + 2 + 1 = 2).
 
-## 分析实现
+### 分析实现
 这道题也是2sum,3sum等题组中的，只不过变形的地方在于不是找相等的target，而是找最近的。
 
 那么开始时可以随机设定一个三个数的和为结果值，在每次比较中，先判断三个数的和是否和target相等，如果相等直接返回和。如果不相等，则判断三个数的和与target的差是否小于这个结果值时，如果小于则进行则进行替换，并保存和的结果值。
 
-### 伪代码
+#### 伪代码
 ```python
 # 先排序
 nums.sort()
@@ -791,7 +770,7 @@ for i in range(len(nums)):
 ```
 
 
-### 3Sum问题两层遍历得套路代码：
+#### 3Sum问题两层遍历得套路代码：
 ```python
 nums.sort()
 res = []
@@ -807,7 +786,7 @@ for i in range(len(nums)-2):
             r -= 1
 ```
 
-### 代码实现：
+#### 代码实现：
 
 
 ```python
@@ -835,9 +814,9 @@ class Solution:
 时间复杂度为O(n^2)，空间复杂度为O(1);
 
 
-# LeetCode 454 4SumⅡ
+## LeetCode 454 4SumⅡ
 
-## 题目描述
+### 题目描述
 给出四个整形数组A,B,C,D,寻找有多少i,j,k,l的组合,使得A[i]+B[j]+C[k]+D[l]=0。其中,A,B,C,D中均含有相同的元素个数N，且0<=N<=500；
 
 输入:
@@ -850,13 +829,13 @@ D = [ 0, 2]
 输出:2
 
 
-## 分析实现
+### 分析实现
 
 这个问题同样是Sum类问题得变种，其将同一个数组的条件，变为了四个数组中，依然可以用查找表的思想来实现。
 
 首先可以考虑把D数组中的元素都放入查找表，然后遍历前三个数组，判断target减去每个元素后的值是否在查找表中存在，存在的话，把结果值加1。那么查找表的数据结构选择用set还是dict？考虑到数组中可能存在重复的元素，而重复的元素属于不同的情况，因此用dict存储，最后的结果值加上dict相应key的value，代码如下：
 
-### O(n^3)代码
+#### O(n^3)代码
 
 ```python
 from collections import Counter
@@ -880,7 +859,7 @@ return res
 
 对于查找表问题而言，**很多时候到底要查找什么**，是解决的关键。对于C和D的数组，可以通过dict来记录其中和的个数，之后遍历结果在和中进行查找。代码如下：
 
-### O(n^2)级代码
+#### O(n^2)级代码
 ```python
 class Solution:
     def fourSumCount(self, A: List[int], B: List[int], C: List[int], D: List[int]) -> int:
@@ -909,9 +888,9 @@ class Solution:
 
 
 
-# LeetCode 49 Group Anagrams 
+## LeetCode 49 Group Anagrams 
 
-## 题目描述
+### 题目描述
 
 给出一个字符串数组，将其中所有可以通过颠倒字符顺序产生相同结果的单词进行分组。
 
@@ -926,13 +905,13 @@ class Solution:
 所有输入均为小写字母。
 不考虑答案输出的顺序。
 
-## 分析实现
+### 分析实现
 
 在之前LeetCode 242的问题中，对字符串t和s来判断，判断t是否是s的字母异位词。当时的方法是通过构建t和s的字典，比较字典是否相同来判断是否为异位词。
 
 在刚开始解决这个问题时，我也局限于了这个思路，以为是通过移动指针，来依次比较两个字符串是否对应的字典相等，进而确定异位词列表，再把异位词列表添加到结果集res中。于是有：
 
-### 错误思路
+#### 错误思路
 ```python
 nums = ["eat", "tea", "tan", "ate", "nat", "bat"]
 
@@ -1013,9 +992,9 @@ class Solution:
         return [v for v in strs_dict.values()]
 ```
 
-# LeetCode 447 Number of Boomerangs
+## LeetCode 447 Number of Boomerangs
 
-## 题目描述
+### 题目描述
 给出一个平面上的n个点，寻找存在多少个由这些点构成的三元组(i,j,k)，**使得i,j两点的距离等于i,k两点的距离**。
 
 其中n最多为500,且所有的点坐标的范围在[-10000,10000]之间。
@@ -1032,14 +1011,14 @@ class Solution:
 
 两个结果为： [[1,0],[0,0],[2,0]] 和 [[1,0],[2,0],[0,0]]
 
-## 分析实现
+### 分析实现
 
-### 原始思路
+#### 原始思路
 题目的要求是：使得i,j两点的距离等于i,k两点的距离，那么相当于是比较三个点之间距离的，那么开始的思路就是三层遍历，i从0到len，j从i+1到len，k从j+1到len，然后比较三个点的距离，相等则结果数加一。
 
 显然这样的时间复杂度为O(n^3)，对于这道题目，能否用查找表的思路进行解决优化？
 
-### 查找表
+#### 查找表
 之前的查找表问题，大多是通过**构建一个查找表**，而避免了在查找中再内层嵌套循环，从而降低了时间复杂度。那么可以考虑在这道题中，可以通过查找表进行代替哪两层循环。
 
 当i,j两点距离等于i,k时，用查找表的思路，等价于：对距离key(i,j或i,k的距离)，其值value(个数)为2。
@@ -1052,7 +1031,7 @@ class Solution:
 2. 如果当距离为x的值有3个时，那么选择j,k的可能的情况有：第一次选择有3种，第二次选择有2种，为3*2;
 3. 那么当距离为x的值有n个时，选择j,k的可能情况有：第一次选择有n种，第二次选择有n-1种。
 
-### 距离
+#### 距离
 对于距离值的求算，按照欧式距离的方法进行求算的话，容易产生浮点数，可以将根号去掉，用差的平方和来进行比较距离。
 
 实现代码如下：
@@ -1074,7 +1053,7 @@ class Solution:
         return (point1[0]-point2[0]) ** 2 + (point1[1]-point2[1]) ** 2
 ```
 
-### 优化
+#### 优化
 对实现的代码进行优化：
 
 1. 将for循环遍历改为列表生成式;
@@ -1093,9 +1072,9 @@ class Solution:
         return sum(f(x1, y1) for x1, y1 in points)
 ```
 
-# LeetCode 149 Max Points on a Line
+## LeetCode 149 Max Points on a Line
 
-## 题目描述
+### 题目描述
 给定一个二维平面，平面上有 n 个点，求最多有多少个点在同一条直线上。
 
 示例 1:
@@ -1110,7 +1089,7 @@ class Solution:
 
 输出: 4
 
-## 分析实现
+### 分析实现
 本道题目的要求是：看有多少个点在同一条直线上，那么判断点是否在一条直线上，其实就等价于判断i,j两点的斜率是否等于i,k两点的斜率。
 
 回顾上道447题目中的要求：使得i,j两点的距离等于i,k两点的距离，那么在这里，直接考虑使用查找表实现，即**查找相同斜率key的个数value是多少**。
@@ -1188,16 +1167,16 @@ class Solution:
 时间复杂度为O(n^2)，空间复杂度为O(n)
 
 
-# 总结
+## 总结
 
 遍历时多用索引，而不要直接用值进行遍历；
 
 
 
-# 三. 滑动数组
-# LeetCode 219 Contains Dupliccate Ⅱ
+# 滑动数组
+## LeetCode 219 Contains Dupliccate Ⅱ
 
-## 题目描述
+### 题目描述
 给出一个整形数组nums和一个整数k，是否存在索引i和j，使得nums[i]==nums[j]，且i和J之间的差不超过k。
 
 示例1:
@@ -1212,7 +1191,7 @@ class Solution:
 
 输出: false
 
-## 分析实现
+### 分析实现
 
 翻译下这个题目：在这个数组中，如果有两个元素索引i和j，它们对应的元素是相等的，且索引j-i是小于等于k，那么就返回True，否则返回False。
 
@@ -1246,9 +1225,9 @@ class Solution:
 时间复杂度为O(n)，空间复杂度为O(n)
 
 
-# LeetCode 220 Contains Dupliccate Ⅲ
+## LeetCode 220 Contains Dupliccate Ⅲ
 
-## 题目描述
+### 题目描述
 给定一个整数数组，判断数组中是否有两个不同的索引 i 和 j，使得nums [i] 和nums [j]的差的绝对值最大为 t，并且 i 和 j 之间的差的绝对值最大为 ķ。
 
 示例 1:
@@ -1270,7 +1249,7 @@ class Solution:
 输出: false
 
 
-## 分析实现
+### 分析实现
 相比较上一个问题，这个问题多了一个限定条件，条件不仅索引差限定k，数值差也限定为了t。
 
 将索引的差值固定，于是问题和上道一样，同样转化为了固定长度K+1的滑动窗口内，是否存在两个值的差距不超过 t，考虑使用**滑动窗口**的思想来解决。
@@ -1359,7 +1338,7 @@ class Solution:
         return False
 ```
 
-## 小套路：
+### 小套路：
 二分查找实现，查找比v-t大的最小的元素：
 
 ```python
@@ -1388,13 +1367,13 @@ def upper_bound(nums, target):
         pos = low
     return -1
 ```
-# 四. 二分查找
+# 二分查找
 ## 理解
 查找在算法题中是很常见的，但是怎么最大化查找的效率和写出bugfree的代码才是难的部分。一般查找方法有顺序查找、二分查找和双指针，推荐一开始可以直接用顺序查找，如果遇到TLE的情况再考虑剩下的两种，毕竟AC是最重要的。
 
 一般二分查找的对象是有序或者由有序部分变化的（可能暂时理解不了，看例题即可），但还存在一种可以运用的地方是按值二分查找，之后会介绍。
 
-## 代码模板
+### 代码模板
 总体来说二分查找是比较简单的算法，网上看到的写法也很多，掌握一种就可以了。
 以下是我的写法，参考C++标准库里<algorithm>的写法。这种写法比较好的点在于：
  - 1.即使区间为空、答案不存在、有重复元素、搜索开/闭区间的上/下界也同样适用
@@ -1428,7 +1407,7 @@ class Solution:
 
 那么我们一步一步地揭开二分查找的神秘面纱，首先来一道简单的题。
 
-## LeetCode 35. Search Insert Position
+### LeetCode 35. Search Insert Position
 
 给定排序数组和目标值，如果找到目标，则返回索引。如果不是，则返回按顺序插入索引的位置的索引。 您可以假设数组中没有重复项。
 
@@ -1467,7 +1446,7 @@ class Solution:
         return lo
 ```
 
-## LeetCode540. Single Element in a Sorted Array
+### LeetCode540. Single Element in a Sorted Array
 
 您将获得一个仅由整数组成的排序数组，其中每个元素精确出现两次，但一个元素仅出现一次。 找到只出现一次的单个元素。
 
@@ -1506,7 +1485,7 @@ class Solution:
 
 ---
 
-## LeetCode 410. Split Array Largest Sum
+### LeetCode 410. Split Array Largest Sum
 
 给定一个由非负整数和整数m组成的数组，您可以将该数组拆分为m个非空连续子数组。编写算法以最小化这m个子数组中的最大和。
 

@@ -2,8 +2,7 @@
 title: 机器学习面试题-RF&GBDT&XGBoost&LightGBM 
 date: 2021-12-10
 categories: 
-    - Learning
-    - 面试
+    - MachineLearning
 tags:  
     - ML
     - RandomForset

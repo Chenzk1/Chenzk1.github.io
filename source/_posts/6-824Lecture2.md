@@ -7,7 +7,7 @@ tags:
   - RPC
   - Thread
 categories: 
-  - Learning
+  - Lecture
   - 6.824
 ---
 

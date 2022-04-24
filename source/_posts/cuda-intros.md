@@ -5,7 +5,7 @@ date: 2021-12-28 18:04:43
 tags:
   - CUDA
 categories:
-  - Learning
+  - MachineLearning
 ---
 
 - https://www.cnblogs.com/1024incn/p/4537177.html)

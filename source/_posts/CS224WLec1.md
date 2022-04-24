@@ -6,7 +6,7 @@ tags:
   - cs224w
   - Graph
 categories: 
-  - Learning
+  - Lecture
   - cs224w
 ---
 

@@ -6,7 +6,8 @@ tags:
   - ML
   - MTL
 categories:
-  - Learning
+  - MachineLearning
+  - 搜广推
 ---
 
 > MTL更多的是一种思想
@@ -137,6 +138,7 @@ $$
 - pCVR只是一个variable，无显式监督信号
 {% asset_img esmm.png esmm %}
 
+
 # 其他
 ## GradNorm
 - [paper](https://openreview.net/pdf?id=H1bM1fZCW)
@@ -145,6 +147,23 @@ $$
   - 动态调整不同任务损失函数的权重：不同目标重要性不同/收敛的程度/loss的大小 diff较大，可以考虑使用
   - share bottom的更新受到每个任务权重的影响
 - https://blog.csdn.net/Leon_winter/article/details/105014677
+
+## MAMDR(MAMDR: A Model Agnostic Learning Method for Multi-Domain Recommendation)
+- [paper](https://arxiv.org/pdf/2202.12524.pdf)
+- 提出了一种通用的，模型结构无关的，多域推荐的学习方法
+### 背景
+- 不同域数据分布差异很大：
+  - (1) Shared parameters suffer from the domain conflict problem: 共享参数停在compromised position
+  - (2) Specific parameters are inclined to overfitting: domain参数overfitting
+  - (3) Existing Multi-domain recommendation models cannot generalize to all circumstances: 与应用场景相关
+
+### Method
+- 包括Domain Negotiatio和Domain Regularization
+{% asset_img mamdr.png mamdr %}
+- Domain Negotiatio: 针对共享参数。所有domain更新完之后，再兑回一点。
+{% asset_img mamdr1.png mamdr1 %}
+- Domain Regularization: 针对domain参数。针对domain i，先sample若干其他domain，利用其他domain更新domain i的参数，再利用domain i更新domain i的参数。
+{% asset_img mamdr2.png mamdr2 %}
 
 ## share vs not share
 - not share bias emb: tend to useful

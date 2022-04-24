@@ -1,16 +1,19 @@
 ---
-title: word2vec_seq2seq_attention_transformer
-mathjax: false
+title: word2vec_seq2seq_attention_transformer_bert
+mathjax: true
 date: 2022-03-17 22:34:08
 tags:
-  - word2vec
-  - seq2seq
-  - attention
-  - transformer
+  - Word2vec
+  - Seq2seq
+  - Attention
+  - Transformer
+  - Bert
 categories:
+  - MachineLearning
+  - NLP
 ---
 
-word2vec_seq2seq_attention_transformer
+word2vec_seq2seq_attention_transformer_bert
 <!-- more -->
 
 # word2vec
@@ -301,6 +304,50 @@ n: 序列长度，d: 表达维度，k: 卷积核size，r: Self-Attention(restric
 - **CNN可以并行化输出序列**
 - **CNN的感受野有限，不能感知所有上下文**
 - **CNN每层的卷积权重共享，而Attention每一个decoder对应的attention是不一样的**
+
+# Bert(Bidirectional Encoder Representations from Transformers)
+
+## 两个任务
+
+- Masked Language Model(MLM)
+- Next Sentence Prediction
+
+## 模型结构
+
+- L: transformer blocks; H: hidden size; A: self-attention heads;
+- Bert-base: L=12, H=768, A=12, total-Params=110M
+- Bert-large: L=24, H=1024, A=16, total-Params=340M
+- 输入输出表达：
+    - sentence：一段连续文本，并不是语言学中的句子
+    - sequence：BERT的输入tocken sequence，1 sentence或2 sentences(2 sentences用于后续的NSP)
+    - 使用tocken个数为30000的WordPiece embeddings，每个**sequence**的第一个tocken为[CLS]
+    - 不同sentence区分的方式：1. 通过[SEP]分隔；2. 学习一个embeddings，不同的sentence用不同的embedding来区分
+    - 一个给定的tocken，其input representation是相应的tocken、segment和position embeddings的和
+    {% asset_img bert1.png bert1 %}
+
+## Pre-training BERT
+
+- 两种无监督训练任务
+
+### Masked LM
+
+- 在每个**sequence**中随机mask 15%的wordpiece tockens
+- 缺点：[MASK] tocken不会出现在fine-tuning中，所以会造成pre-training和fine-tuning的mismatch。解决：not always replace “masked” words with the actual [MASK] token：
+    - 80%的时候用[MASK] tocken
+    - 10%的random tocken
+    - 10%的unchanged token 
+    - Transformer encoder不知道它将被要求预测哪些单词或哪些单词已被随机单词替换，因此它被迫保持每个输入token的分布式上下文表示。此外，因为随机替换只发生在所有token的1.5％（即15％的10％），这似乎不会损害模型的语言理解能力。
+
+### Next Sentence Prediction
+
+**LM无法获取两句之间的相关性**
+
+- label：每个样本对AB，如果50%的时间B是A的下一句，则为IsNext，否则NotNext
+
+### Pre-training data
+
+BooksCorpus (800M words) (Zhu et al., 2015) and English Wikipedia (2,500M words)
+**使用文件级的语料库而不是语句级的，这样次啊能够提取到长的连续语句**
 
 # word2vec vs glove vs elmo vs gpt vs bert
 

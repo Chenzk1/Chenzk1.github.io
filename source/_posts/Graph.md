@@ -7,7 +7,7 @@ tags:
   - Resource
   - ML
 categories:
-  - Learning
+  - MachineLearning
 ---
 
 ## OpenResource

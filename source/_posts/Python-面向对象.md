@@ -2,7 +2,9 @@
 title: Python-面向对象
 date: 2021-12-10
 tags: Python
-categories: Learning
+categories: 
+    - Language
+    - Python
 ---
 
 ### 属性命名

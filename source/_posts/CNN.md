@@ -2,7 +2,8 @@
 title: CV-CNN
 date: 2021-12-10
 categories: 
-    - Learning
+    - MachineLearning
+    - CV
 tags:  
     - DL
     - CV

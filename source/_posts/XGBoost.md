@@ -2,7 +2,7 @@
 title: ML-XGBoost
 date: 2021-12-10
 categories: 
-    - Learning
+    - MachineLearning
 tags:  
     - ML
     - XGBoost

@@ -11,7 +11,7 @@ tags:
   - GAT
   - GIN
 categories:
-  - Learning
+  - Lecture
   - cs224w
 ---
 

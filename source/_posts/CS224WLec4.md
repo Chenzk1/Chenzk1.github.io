@@ -8,7 +8,7 @@ tags:
   - ML
   - PageRank
 categories:
-  - Learning
+  - Lecture
   - cs224w
 ---
 
