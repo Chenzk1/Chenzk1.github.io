@@ -2511,6 +2511,7 @@ z^{\prime}=\left(\gamma * \gamma_{p}\right) \frac{z-\mu}{\sqrt{\sigma^{2}+\epsil
 ]]></content>
       <categories>
         <category>MachineLearning</category>
+        <category>搜广推</category>
       </categories>
       <tags>
         <tag>ML</tag>
@@ -2693,7 +2694,7 @@ h
 ]]></content>
       <categories>
         <category>MachineLearning</category>
-        <category>广告推荐</category>
+        <category>搜广推</category>
       </categories>
       <tags>
         <tag>ML</tag>
