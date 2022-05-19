@@ -1665,8 +1665,26 @@ O_{1}=-\sum_{(i, j) \in E} w_{i j} \log p_{1}\left(v_{i}, v_{j}\right)</script><
 </ul>
 </li>
 </ul>
-<h1 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h1><h2 id="Logloss"><a href="#Logloss" class="headerlink" title="Logloss"></a>Logloss</h2><ul>
+<h1 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h1><h2 id="交叉熵-amp-Logloss-amp-Softmax-loss"><a href="#交叉熵-amp-Logloss-amp-Softmax-loss" class="headerlink" title="交叉熵 &amp; Logloss &amp; Softmax loss"></a>交叉熵 &amp; Logloss &amp; Softmax loss</h2><ul>
+<li><a href="https://chenzk1.github.io/2021/12/10/ML-%E4%BF%A1%E6%81%AF%E7%86%B5&amp;%E4%BA%A4%E5%8F%89%E7%86%B5&amp;%E6%9D%A1%E4%BB%B6%E7%86%B5&amp;%E7%9B%B8%E5%AF%B9%E7%86%B5(KL%E6%95%A3%E5%BA%A6">ML-信息熵&amp;交叉熵&amp;条件熵&amp;相对熵(KL散度)&amp;互信息</a>&amp;%E4%BA%92%E4%BF%A1%E6%81%AF/?highlight=%E4%BA%A4%E5%8F%89%E7%86%B5)：衡量不同策略的差异<script type="math/tex; mode=display">
+L=\frac{1}{n} \sum_{i=1}^{n}\left(-\sum_{j=1}^{C} y_{i, j} \log p_{i, j}\right)</script></li>
+</ul>
+<h3 id="Logloss"><a href="#Logloss" class="headerlink" title="Logloss"></a>Logloss</h3><ul>
+<li>Logloss是二分类，且类别为0/1时的交叉熵</li>
 <li><a href="https://chenzk1.github.io/2022/04/23/MLE-MAP/#Case3-Log-Loss">最大似然推导Logloss</a></li>
+</ul>
+<h3 id="Softmax-Loss"><a href="#Softmax-Loss" class="headerlink" title="Softmax Loss"></a>Softmax Loss</h3><ul>
+<li>交叉熵需要得到某样本i在类别j下的预测概率 <script type="math/tex">p_{i, j}</script></li>
+<li>softmax loss为采用softmax(logit)的交叉熵<script type="math/tex; mode=display">
+L=\frac{1}{n} \sum_{i=1}^{n}\left(-\log _{i, Y(i)}\right)=\frac{1}{n} \sum_{i=1}^{n}\left(-\log \frac{e^{l_{i, Y(i)}}}{\sum_{k=1}^{C} e^{l_{i, k}}}\right)</script></li>
+<li>指数函数可能会有溢出问题，因此可以作数值优化：<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">stable_softmax</span>(<span class="params">X</span>):</span></span><br><span class="line">    exps = np.exp(X - np.<span class="built_in">max</span>(X))</span><br><span class="line">    <span class="keyword">return</span> exps / np.<span class="built_in">sum</span>(exps)</span><br></pre></td></tr></table></figure></li>
+<li>推导：<script type="math/tex; mode=display">
+\begin{aligned}
+p_{i} &=\frac{e^{a_{i}}}{\sum_{k=1}^{N} e^{a_{k}}} \\
+&=\frac{C e^{a_{i}}}{C \sum_{k=1}^{N} e^{a_{k}}} \\
+&=\frac{e^{a_{i}+\log (C)}}{\sum_{k=1}^{N} e^{a_{k}+\log (C)}}
+\end{aligned}</script></li>
+<li>导数求解：<a href="https://deepnotes.io/softmax-crossentropy">https://deepnotes.io/softmax-crossentropy</a></li>
 </ul>
 <h2 id="ACC-Accuracy"><a href="#ACC-Accuracy" class="headerlink" title="ACC(Accuracy)"></a>ACC(Accuracy)</h2><ul>
 <li>Accuracy = 预测正确的样本数量 / 总样本数量 = (TP+TN) / (TP+FP+TN+FN)</li>
