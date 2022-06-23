@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/mylogo-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/mylogo-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/mylogo-16x16-next.png">
+  <link rel="mask-icon" href="/images/mylogo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.0/css/all.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"chenzk1.github.io","root":"/","scheme":"Gemini","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+
+  <meta name="description" content="paper 1 Background Sample Selection Bias">
+<meta property="og:type" content="article">
+<meta property="og:title" content="paper_UKD_2022">
+<meta property="og:url" content="https://chenzk1.github.io/2022/06/18/paper-UKD-2022/index.html">
+<meta property="og:site_name" content="Kayden&#39;s Blog">
+<meta property="og:description" content="paper 1 Background Sample Selection Bias">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://chenzk1.github.io/2022/06/18/paper-UKD-2022/SSB.png">
+<meta property="og:image" content="https://chenzk1.github.io/2022/06/18/paper-UKD-2022/esmm_limitation.png">
+<meta property="og:image" content="https://chenzk1.github.io/2022/06/18/paper-UKD-2022/model.png">
+<meta property="og:image" content="https://chenzk1.github.io/2022/06/18/paper-UKD-2022/teacher.png">
+<meta property="og:image" content="https://chenzk1.github.io/2022/06/18/paper-UKD-2022/student_kl.png">
+<meta property="article:published_time" content="2022-06-18T09:13:52.000Z">
+<meta property="article:modified_time" content="2022-06-23T08:20:52.048Z">
+<meta property="article:author" content="Kayden">
+<meta property="article:tag" content="ML">
+<meta property="article:tag" content="SSB">
+<meta property="article:tag" content="paper">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://chenzk1.github.io/2022/06/18/paper-UKD-2022/SSB.png">
+
+
+<link rel="canonical" href="https://chenzk1.github.io/2022/06/18/paper-UKD-2022/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>paper_UKD_2022 | Kayden's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Kayden's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Mamba forever.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Background"><span class="nav-number">1.</span> <span class="nav-text">1 Background</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-The-representative-methods"><span class="nav-number">2.</span> <span class="nav-text">2 The representative methods</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-0-Base-CVR-Models-Trained-in-Click-Space"><span class="nav-number">2.1.</span> <span class="nav-text">2.0 Base CVR Models Trained in Click Space</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-auxiliary-task-learing"><span class="nav-number">2.2.</span> <span class="nav-text">2.1 auxiliary task learing</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-counterfactual-learning"><span class="nav-number">2.3.</span> <span class="nav-text">2.2 counterfactual learning</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-Methods"><span class="nav-number">3.</span> <span class="nav-text">3 Methods</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-click-adaptive-teacher-model"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 click-adaptive teacher model</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-Uncertainty-Regularized-Student-Model"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 Uncertainty-Regularized Student Model</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-1-Base-Student-Model-Label-Distillation"><span class="nav-number">3.2.1.</span> <span class="nav-text">3.2.1 Base Student Model: Label Distillation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-2-Uncertainty-regularized-Student-Alleviate-Noise"><span class="nav-number">3.2.2.</span> <span class="nav-text">3.2.2 Uncertainty-regularized Student: Alleviate Noise</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-2-1-Noise-Samples-Identification"><span class="nav-number">3.2.2.1.</span> <span class="nav-text">3.2.2.1 Noise Samples Identification</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-2-2-Distillation-with-Uncertainty-Regularization"><span class="nav-number">3.2.2.2.</span> <span class="nav-text">3.2.2.2 Distillation with Uncertainty Regularization</span></a></li></ol></li></ol></li></ol></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kayden</p>
+  <div class="site-description" itemprop="description">Kayden's Blog</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">59</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">71</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Chenzk1" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Chenzk1" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:chenzk666@gmail.com" title="E-Mail → mailto:chenzk666@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://andrewsher.github.io/" title="https:&#x2F;&#x2F;andrewsher.github.io&#x2F;" rel="noopener" target="_blank">Andrewsher's blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://shorey.tech/" title="http:&#x2F;&#x2F;shorey.tech&#x2F;" rel="noopener" target="_blank">Shorey's blog</a>
+        </li>
+    </ul>
+  </div>
+
+      </section>
+        <div class="back-to-top animated">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://chenzk1.github.io/2022/06/18/paper-UKD-2022/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Kayden">
+      <meta itemprop="description" content="Kayden's Blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kayden's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          paper_UKD_2022
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-06-18 17:13:52" itemprop="dateCreated datePublished" datetime="2022-06-18T17:13:52+08:00">2022-06-18</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2022-06-23 16:20:52" itemprop="dateModified" datetime="2022-06-23T16:20:52+08:00">2022-06-23</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MachineLearning/" itemprop="url" rel="index"><span itemprop="name">MachineLearning</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MachineLearning/%E6%90%9C%E5%B9%BF%E6%8E%A8/" itemprop="url" rel="index"><span itemprop="name">搜广推</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2201.08024.pdf">paper</a></p>
+<h1 id="1-Background"><a href="#1-Background" class="headerlink" title="1 Background"></a>1 Background</h1><ul>
+<li>Sample Selection Bias<img src="/2022/06/18/paper-UKD-2022/SSB.png" class="" title="SSB">
+</li>
+</ul>
+<a id="more"></a>
+<h1 id="2-The-representative-methods"><a href="#2-The-representative-methods" class="headerlink" title="2 The representative methods"></a>2 The representative methods</h1><h2 id="2-0-Base-CVR-Models-Trained-in-Click-Space"><a href="#2-0-Base-CVR-Models-Trained-in-Click-Space" class="headerlink" title="2.0 Base CVR Models Trained in Click Space"></a>2.0 Base CVR Models Trained in Click Space</h2><blockquote>
+<p>joint training, 最简单的做法</p>
+<ul>
+<li>ctr/cvr共享底层，利用ctr任务来1）缓解cvr数据稀疏；2）间接缓解SSB问题<script type="math/tex; mode=display">
+\min _{F_{v}, F_{c}} \frac{1}{\left|\mathcal{D}_{\text {click }}\right|} \sum_{\mathcal{D}_{\text {click }}} \ell\left(y_{\text {conv }}, F_{v}(x)\right)+\gamma \frac{1}{|\mathcal{D}|} \sum_{\mathcal{D}} \ell\left(y_{c l i c k}, F_{c}(x)\right)</script></li>
+<li>数据分布不同，学到的embedding不准，进而影响cvr分数 <strong>Thus their predicted CVR scores in unclicked space may have a non-negligible deviation because there is a discrepancy between the data distributions of click and unclick ads.</strong></li>
+</ul>
+</blockquote>
+<h2 id="2-1-auxiliary-task-learing"><a href="#2-1-auxiliary-task-learing" class="headerlink" title="2.1 auxiliary task learing"></a>2.1 auxiliary task learing</h2><ul>
+<li>ESMM: pv-conv: post view conv<script type="math/tex; mode=display">
+\min _{F_{v}, F_{c}} \frac{1}{|\mathcal{D}|} \sum_{\mathcal{D}}\left(\ell\left(y_{p v \text {-conv }}, F_{c}(x) \cdot F_{v}(x)\right)+\gamma \ell\left(y_{c l i c k}, F_{c}(x)\right)\right)</script></li>
+<li>Limitations<ul>
+<li>1）对于点击样本，如果其y pv-conv=0: 对CTCVR和CVR任务来说，分别是其负样本和正样本，两个学习任务会产生gradient conflict</li>
+<li>2）对于未点击样本：其y conv是unknown, 而模型会倾向于将其pcvr优化为0<img src="/2022/06/18/paper-UKD-2022/esmm_limitation.png" class="" title="esmm_limitation">
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-2-counterfactual-learning"><a href="#2-2-counterfactual-learning" class="headerlink" title="2.2 counterfactual learning"></a>2.2 counterfactual learning</h2><ul>
+<li>两类：inverse propensity score (IPS) and doubly robust (DR) estimators</li>
+</ul>
+<h1 id="3-Methods"><a href="#3-Methods" class="headerlink" title="3 Methods"></a>3 Methods</h1><blockquote>
+<p>两部分：1）用于学习click-adaptive的teacher model, 作用是为unclicked ads提供pseudo-conversion labels; 2) an uncertainty-regularized student model that is trained on entire impression space.</p>
+</blockquote>
+<img src="/2022/06/18/paper-UKD-2022/model.png" class="" title="model">
+<h2 id="3-1-click-adaptive-teacher-model"><a href="#3-1-click-adaptive-teacher-model" class="headerlink" title="3.1 click-adaptive teacher model"></a>3.1 click-adaptive teacher model</h2><ul>
+<li>说明：<img src="/2022/06/18/paper-UKD-2022/teacher.png" class="" title="teacher"></li>
+<li>forward：impression ads<script type="math/tex; mode=display">
+\begin{aligned}
+\boldsymbol{h}^{(T)} &=T_{f}(x) \\
+\boldsymbol{p}_{\text {conv }}^{(T)} &=\operatorname{softmax}\left(T_{p}\left(\boldsymbol{h}^{(T)}\right)\right)=\left(\hat{p}_{C V R}^{(T)}, 1-\hat{p}_{C V R}^{(T)}\right) \\
+\boldsymbol{p}_{d} &=\operatorname{softmax}\left(T_{d}\left(\boldsymbol{h}^{(T)}\right)\right)
+\end{aligned}</script></li>
+<li>backward：<ul>
+<li>1）对于click样本，优化cvr predictor和representation learner提高其cvr predict效果 —&gt; min cvr loss<script type="math/tex; mode=display">
+\min _{T_{f}, T_{p}} \mathcal{L}_{C V R}^{(T)}=\frac{1}{\left|\mathcal{D}_{\text {click }}\right|} \sum_{\mathcal{D}_{\text {click }}} \ell\left(y_{\text {conv }}, \boldsymbol{p}_{\text {conv }}^{(T)}\right)</script></li>
+<li>2）对于impression样本<ul>
+<li>a. click discriminator提高其ctr predict效果 —&gt; min ctr loss</li>
+<li>b. click-adaptive: 无法区分某个样本的representation是from either click domain or unclick domain —&gt; max ctr loss —&gt; gradient reversal<script type="math/tex; mode=display">
+\max _{T_{f}} \min _{T_{d}} \mathcal{L}_{d}^{(T)}=\frac{1}{|\mathcal{D}|} \sum_{\mathcal{D}} \ell\left(y_{c l i c k}, \boldsymbol{p}_{d}\right)</script></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>作用：click discriminator不能区分来自click domain or unclick domain的representation —&gt; cvr模型在unclick样本上可以获得同click样本一样可靠的效果 —&gt; cvr模型为unclick样本打上pseudo conversion label</li>
+</ul>
+<h2 id="3-2-Uncertainty-Regularized-Student-Model"><a href="#3-2-Uncertainty-Regularized-Student-Model" class="headerlink" title="3.2 Uncertainty-Regularized Student Model"></a>3.2 Uncertainty-Regularized Student Model</h2><h3 id="3-2-1-Base-Student-Model-Label-Distillation"><a href="#3-2-1-Base-Student-Model-Label-Distillation" class="headerlink" title="3.2.1 Base Student Model: Label Distillation"></a>3.2.1 Base Student Model: Label Distillation</h3><ul>
+<li>直接利用teacher打的pseudo conversion label做ctr和cvr的联合学习。</li>
+<li>Distilling Knowledge from Unclicked Ads，利用pseudo conversion labels可以解决SSB问题</li>
+</ul>
+<script type="math/tex; mode=display">
+\mathcal{L}_{C V R}=\underbrace{\sum_{\mathcal{D}_{\text {click }}} \ell\left(y_{\text {conv }}, \boldsymbol{p}_{\text {conv }}\right)}_{\mathcal{L}_{C V R_{-} \text {click }}}+\alpha \underbrace{\sum_{\mathcal{D}_{\text {unclick }}} \ell\left(\boldsymbol{p}_{\text {conv }}^{(T)}, \boldsymbol{p}_{\text {conv }}\right)}_{\mathcal{L}_{C V R} \text { unclick }}</script><ul>
+<li>整体loss为cvr与ctr loss的加权，ctr任务的作用在于通过share embedding的方式为cvr预估引入更多信息</li>
+</ul>
+<script type="math/tex; mode=display">
+\mathcal{L}_{s t u d e n t}=\mathcal{L}_{C V R}+\gamma \mathcal{L}_{C T R}</script><ul>
+<li>限制：效果依赖于teacher model的精度 —》 pseudo conversion labels不可能有ground truth的confidence —》设法减少pseudo conversion labels带来的噪声</li>
+</ul>
+<h3 id="3-2-2-Uncertainty-regularized-Student-Alleviate-Noise"><a href="#3-2-2-Uncertainty-regularized-Student-Alleviate-Noise" class="headerlink" title="3.2.2 Uncertainty-regularized Student: Alleviate Noise"></a>3.2.2 Uncertainty-regularized Student: Alleviate Noise</h3><ul>
+<li>1) 识别噪声，找到unreliable unclicked samples —》unreliable的样本其uncertainty越大</li>
+<li>2) 降低1）找到的样本影响 —》loss加权</li>
+</ul>
+<h4 id="3-2-2-1-Noise-Samples-Identification"><a href="#3-2-2-1-Noise-Samples-Identification" class="headerlink" title="3.2.2.1 Noise Samples Identification"></a>3.2.2.1 Noise Samples Identification</h4><ul>
+<li><p>一个简单的实验：Dclick数据集，随机选择k%比例的正样本，将其label置换为负样本（为保证正负样本比例，对负样本做同样操作），利用一个具有两个head的cvr模型预测两个cvr值，求两个cvr的kl散度</p>
+<ul>
+<li>实验结果表明，noise sample的两次cvr预测值kl散度较大<img src="/2022/06/18/paper-UKD-2022/student_kl.png" class="" title="kl">
+</li>
+</ul>
+</li>
+<li><p>因此有两个cvr predictor，求其获得的representation的kl散度，这里对两个predictor做了dropout来increase the discrepancy of two predictors</p>
+<script type="math/tex; mode=display">
+\begin{array}{l}
+\boldsymbol{p}_{\text {conv }}=S_{p}^{v}\left(\text { dropout }\left(\boldsymbol{h}_{\text {conv }}\right)\right), \boldsymbol{p}_{\text {conv }}^{\prime}=S_{p^{\prime}}^{v}\left(\text { dropout }^{\prime}\left(\boldsymbol{h}_{\text {conv }}\right)\right) \\
+\mathrm{KL}\left(\boldsymbol{p}_{\text {conv }} \| \boldsymbol{p}_{\text {conv }}^{\prime}\right)=\boldsymbol{p}_{\text {conv }} \log \frac{\boldsymbol{p}_{\text {conv }}}{\boldsymbol{p}_{\text {conv }}^{\prime}}
+\end{array}</script></li>
+<li>问题<ul>
+<li>noise很大的时候clean sample的kl散度也很大 —》KL散度loss以及加权需要调整？</li>
+<li>其他的noise识别方法</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-2-2-2-Distillation-with-Uncertainty-Regularization"><a href="#3-2-2-2-Distillation-with-Uncertainty-Regularization" class="headerlink" title="3.2.2.2 Distillation with Uncertainty Regularization"></a>3.2.2.2 Distillation with Uncertainty Regularization</h4><ul>
+<li>1）对unclicked sample对其cvr loss用KL散度加权<script type="math/tex; mode=display">
+\sum_{\widetilde{D}_{\text {unclick }}} \exp \left(-\lambda \cdot \mathrm{KL}\left(\boldsymbol{p}_{\text {conv }} \| \boldsymbol{p}_{\text {conv }}^{\prime}\right)\right) \cdot \ell\left(\boldsymbol{p}_{\text {conv }}^{(T)}, \boldsymbol{p}_{c o n v}\right)</script></li>
+<li>2）添加uncertainty正则项<script type="math/tex; mode=display">
+\sum_{\widetilde{\mathcal{D}}_{\text {unclick }}} \mathrm{KL}\left(\boldsymbol{p}_{\text {conv }} \| \boldsymbol{p}_{\text {conv }}^{\prime}\right)</script></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ML/" rel="tag"># ML</a>
+              <a href="/tags/SSB/" rel="tag"># SSB</a>
+              <a href="/tags/paper/" rel="tag"># paper</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/04/23/MLE-MAP/" rel="prev" title="最大似然估计与最大后验概率估计">
+                  <i class="fa fa-chevron-left"></i> 最大似然估计与最大后验概率估计
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Kayden</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+      <script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              const target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    const script = document.createElement('script');
+    script.src = '//cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js';
+    script.defer = true;
+    document.head.appendChild(script);
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.typesetClear();
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

@@ -1674,7 +1674,6 @@ L=\frac{1}{n} \sum_{i=1}^{n}\left(-\sum_{j=1}^{C} y_{i, j} \log p_{i, j}\right)<
 <li><a href="https://chenzk1.github.io/2022/04/23/MLE-MAP/#Case3-Log-Loss">最大似然推导Logloss</a></li>
 </ul>
 <h3 id="Softmax-Loss"><a href="#Softmax-Loss" class="headerlink" title="Softmax Loss"></a>Softmax Loss</h3><ul>
-<li>交叉熵需要得到某样本i在类别j下的预测概率 <script type="math/tex">p_{i, j}</script></li>
 <li>softmax loss为采用softmax(logit)的交叉熵<script type="math/tex; mode=display">
 L=\frac{1}{n} \sum_{i=1}^{n}\left(-\log _{i, Y(i)}\right)=\frac{1}{n} \sum_{i=1}^{n}\left(-\log \frac{e^{l_{i, Y(i)}}}{\sum_{k=1}^{C} e^{l_{i, k}}}\right)</script></li>
 <li>指数函数可能会有溢出问题，因此可以作数值优化：<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">stable_softmax</span>(<span class="params">X</span>):</span></span><br><span class="line">    exps = np.exp(X - np.<span class="built_in">max</span>(X))</span><br><span class="line">    <span class="keyword">return</span> exps / np.<span class="built_in">sum</span>(exps)</span><br></pre></td></tr></table></figure></li>
@@ -1685,6 +1684,16 @@ p_{i} &=\frac{e^{a_{i}}}{\sum_{k=1}^{N} e^{a_{k}}} \\
 &=\frac{e^{a_{i}+\log (C)}}{\sum_{k=1}^{N} e^{a_{k}+\log (C)}}
 \end{aligned}</script></li>
 <li>导数求解：<a href="https://deepnotes.io/softmax-crossentropy">https://deepnotes.io/softmax-crossentropy</a></li>
+<li>性质<ul>
+<li>参数冗余（overparameterized​）：所有参数减去一个值，loss相同—》对任何一个拟合数据的假设而言，多种参数取值有可能得到同样的假设。处理方法：1）加正则；2）只优化k-1个类别的参数，比如二分类的logloss。<a href="https://zhuanlan.zhihu.com/p/98061179">softmax回归原理与实现</a><script type="math/tex; mode=display">
+\begin{aligned}
+\left(y_{i}=j \mid x_{i} ; \theta\right) &=\frac{e^{\left(\theta_{j}-\psi\right)^{T} x_{i}}}{\sum_{l=1}^{k} e^{\left(\theta_{l}-\psi\right)^{T} x_{i}}} \\
+&=\frac{e^{\theta_{j}^{T} x_{i}} e^{-\psi^{T} x_{i}}}{\sum_{l=1}^{k} e^{\theta_{l}^{T} x_{i}} e^{-\psi^{T} x_{i}}} \\
+&=\frac{e^{\theta_{j}^{T} x_{i}}}{\sum_{l=1}^{k} e^{\theta_{l}^{T} x_{i}}}
+\end{aligned}</script>
+</li>
+</ul>
+</li>
 </ul>
 <h2 id="ACC-Accuracy"><a href="#ACC-Accuracy" class="headerlink" title="ACC(Accuracy)"></a>ACC(Accuracy)</h2><ul>
 <li>Accuracy = 预测正确的样本数量 / 总样本数量 = (TP+TN) / (TP+FP+TN+FN)</li>
@@ -6873,6 +6882,113 @@ k &=k_{1}\left((1-b)+b \cdot \frac{d l}{a v d_1}\right)
         <tag>ML</tag>
         <tag>MLE</tag>
         <tag>MAP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>paper_UKD_2022</title>
+    <url>/2022/06/18/paper-UKD-2022/</url>
+    <content><![CDATA[<p><a href="https://arxiv.org/pdf/2201.08024.pdf">paper</a></p>
+<h1 id="1-Background"><a href="#1-Background" class="headerlink" title="1 Background"></a>1 Background</h1><ul>
+<li>Sample Selection Bias<img src="/2022/06/18/paper-UKD-2022/SSB.png" class="" title="SSB">
+</li>
+</ul>
+<a id="more"></a>
+<h1 id="2-The-representative-methods"><a href="#2-The-representative-methods" class="headerlink" title="2 The representative methods"></a>2 The representative methods</h1><h2 id="2-0-Base-CVR-Models-Trained-in-Click-Space"><a href="#2-0-Base-CVR-Models-Trained-in-Click-Space" class="headerlink" title="2.0 Base CVR Models Trained in Click Space"></a>2.0 Base CVR Models Trained in Click Space</h2><blockquote>
+<p>joint training, 最简单的做法</p>
+<ul>
+<li>ctr/cvr共享底层，利用ctr任务来1）缓解cvr数据稀疏；2）间接缓解SSB问题<script type="math/tex; mode=display">
+\min _{F_{v}, F_{c}} \frac{1}{\left|\mathcal{D}_{\text {click }}\right|} \sum_{\mathcal{D}_{\text {click }}} \ell\left(y_{\text {conv }}, F_{v}(x)\right)+\gamma \frac{1}{|\mathcal{D}|} \sum_{\mathcal{D}} \ell\left(y_{c l i c k}, F_{c}(x)\right)</script></li>
+<li>数据分布不同，学到的embedding不准，进而影响cvr分数 <strong>Thus their predicted CVR scores in unclicked space may have a non-negligible deviation because there is a discrepancy between the data distributions of click and unclick ads.</strong></li>
+</ul>
+</blockquote>
+<h2 id="2-1-auxiliary-task-learing"><a href="#2-1-auxiliary-task-learing" class="headerlink" title="2.1 auxiliary task learing"></a>2.1 auxiliary task learing</h2><ul>
+<li>ESMM: pv-conv: post view conv<script type="math/tex; mode=display">
+\min _{F_{v}, F_{c}} \frac{1}{|\mathcal{D}|} \sum_{\mathcal{D}}\left(\ell\left(y_{p v \text {-conv }}, F_{c}(x) \cdot F_{v}(x)\right)+\gamma \ell\left(y_{c l i c k}, F_{c}(x)\right)\right)</script></li>
+<li>Limitations<ul>
+<li>1）对于点击样本，如果其y pv-conv=0: 对CTCVR和CVR任务来说，分别是其负样本和正样本，两个学习任务会产生gradient conflict</li>
+<li>2）对于未点击样本：其y conv是unknown, 而模型会倾向于将其pcvr优化为0<img src="/2022/06/18/paper-UKD-2022/esmm_limitation.png" class="" title="esmm_limitation">
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-2-counterfactual-learning"><a href="#2-2-counterfactual-learning" class="headerlink" title="2.2 counterfactual learning"></a>2.2 counterfactual learning</h2><ul>
+<li>两类：inverse propensity score (IPS) and doubly robust (DR) estimators</li>
+</ul>
+<h1 id="3-Methods"><a href="#3-Methods" class="headerlink" title="3 Methods"></a>3 Methods</h1><blockquote>
+<p>两部分：1）用于学习click-adaptive的teacher model, 作用是为unclicked ads提供pseudo-conversion labels; 2) an uncertainty-regularized student model that is trained on entire impression space.</p>
+</blockquote>
+<img src="/2022/06/18/paper-UKD-2022/model.png" class="" title="model">
+<h2 id="3-1-click-adaptive-teacher-model"><a href="#3-1-click-adaptive-teacher-model" class="headerlink" title="3.1 click-adaptive teacher model"></a>3.1 click-adaptive teacher model</h2><ul>
+<li>说明：<img src="/2022/06/18/paper-UKD-2022/teacher.png" class="" title="teacher"></li>
+<li>forward：impression ads<script type="math/tex; mode=display">
+\begin{aligned}
+\boldsymbol{h}^{(T)} &=T_{f}(x) \\
+\boldsymbol{p}_{\text {conv }}^{(T)} &=\operatorname{softmax}\left(T_{p}\left(\boldsymbol{h}^{(T)}\right)\right)=\left(\hat{p}_{C V R}^{(T)}, 1-\hat{p}_{C V R}^{(T)}\right) \\
+\boldsymbol{p}_{d} &=\operatorname{softmax}\left(T_{d}\left(\boldsymbol{h}^{(T)}\right)\right)
+\end{aligned}</script></li>
+<li>backward：<ul>
+<li>1）对于click样本，优化cvr predictor和representation learner提高其cvr predict效果 —&gt; min cvr loss<script type="math/tex; mode=display">
+\min _{T_{f}, T_{p}} \mathcal{L}_{C V R}^{(T)}=\frac{1}{\left|\mathcal{D}_{\text {click }}\right|} \sum_{\mathcal{D}_{\text {click }}} \ell\left(y_{\text {conv }}, \boldsymbol{p}_{\text {conv }}^{(T)}\right)</script></li>
+<li>2）对于impression样本<ul>
+<li>a. click discriminator提高其ctr predict效果 —&gt; min ctr loss</li>
+<li>b. click-adaptive: 无法区分某个样本的representation是from either click domain or unclick domain —&gt; max ctr loss —&gt; gradient reversal<script type="math/tex; mode=display">
+\max _{T_{f}} \min _{T_{d}} \mathcal{L}_{d}^{(T)}=\frac{1}{|\mathcal{D}|} \sum_{\mathcal{D}} \ell\left(y_{c l i c k}, \boldsymbol{p}_{d}\right)</script></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>作用：click discriminator不能区分来自click domain or unclick domain的representation —&gt; cvr模型在unclick样本上可以获得同click样本一样可靠的效果 —&gt; cvr模型为unclick样本打上pseudo conversion label</li>
+</ul>
+<h2 id="3-2-Uncertainty-Regularized-Student-Model"><a href="#3-2-Uncertainty-Regularized-Student-Model" class="headerlink" title="3.2 Uncertainty-Regularized Student Model"></a>3.2 Uncertainty-Regularized Student Model</h2><h3 id="3-2-1-Base-Student-Model-Label-Distillation"><a href="#3-2-1-Base-Student-Model-Label-Distillation" class="headerlink" title="3.2.1 Base Student Model: Label Distillation"></a>3.2.1 Base Student Model: Label Distillation</h3><ul>
+<li>直接利用teacher打的pseudo conversion label做ctr和cvr的联合学习。</li>
+<li>Distilling Knowledge from Unclicked Ads，利用pseudo conversion labels可以解决SSB问题</li>
+</ul>
+<script type="math/tex; mode=display">
+\mathcal{L}_{C V R}=\underbrace{\sum_{\mathcal{D}_{\text {click }}} \ell\left(y_{\text {conv }}, \boldsymbol{p}_{\text {conv }}\right)}_{\mathcal{L}_{C V R_{-} \text {click }}}+\alpha \underbrace{\sum_{\mathcal{D}_{\text {unclick }}} \ell\left(\boldsymbol{p}_{\text {conv }}^{(T)}, \boldsymbol{p}_{\text {conv }}\right)}_{\mathcal{L}_{C V R} \text { unclick }}</script><ul>
+<li>整体loss为cvr与ctr loss的加权，ctr任务的作用在于通过share embedding的方式为cvr预估引入更多信息</li>
+</ul>
+<script type="math/tex; mode=display">
+\mathcal{L}_{s t u d e n t}=\mathcal{L}_{C V R}+\gamma \mathcal{L}_{C T R}</script><ul>
+<li>限制：效果依赖于teacher model的精度 —》 pseudo conversion labels不可能有ground truth的confidence —》设法减少pseudo conversion labels带来的噪声</li>
+</ul>
+<h3 id="3-2-2-Uncertainty-regularized-Student-Alleviate-Noise"><a href="#3-2-2-Uncertainty-regularized-Student-Alleviate-Noise" class="headerlink" title="3.2.2 Uncertainty-regularized Student: Alleviate Noise"></a>3.2.2 Uncertainty-regularized Student: Alleviate Noise</h3><ul>
+<li>1) 识别噪声，找到unreliable unclicked samples —》unreliable的样本其uncertainty越大</li>
+<li>2) 降低1）找到的样本影响 —》loss加权</li>
+</ul>
+<h4 id="3-2-2-1-Noise-Samples-Identification"><a href="#3-2-2-1-Noise-Samples-Identification" class="headerlink" title="3.2.2.1 Noise Samples Identification"></a>3.2.2.1 Noise Samples Identification</h4><ul>
+<li><p>一个简单的实验：Dclick数据集，随机选择k%比例的正样本，将其label置换为负样本（为保证正负样本比例，对负样本做同样操作），利用一个具有两个head的cvr模型预测两个cvr值，求两个cvr的kl散度</p>
+<ul>
+<li>实验结果表明，noise sample的两次cvr预测值kl散度较大<img src="/2022/06/18/paper-UKD-2022/student_kl.png" class="" title="kl">
+</li>
+</ul>
+</li>
+<li><p>因此有两个cvr predictor，求其获得的representation的kl散度，这里对两个predictor做了dropout来increase the discrepancy of two predictors</p>
+<script type="math/tex; mode=display">
+\begin{array}{l}
+\boldsymbol{p}_{\text {conv }}=S_{p}^{v}\left(\text { dropout }\left(\boldsymbol{h}_{\text {conv }}\right)\right), \boldsymbol{p}_{\text {conv }}^{\prime}=S_{p^{\prime}}^{v}\left(\text { dropout }^{\prime}\left(\boldsymbol{h}_{\text {conv }}\right)\right) \\
+\mathrm{KL}\left(\boldsymbol{p}_{\text {conv }} \| \boldsymbol{p}_{\text {conv }}^{\prime}\right)=\boldsymbol{p}_{\text {conv }} \log \frac{\boldsymbol{p}_{\text {conv }}}{\boldsymbol{p}_{\text {conv }}^{\prime}}
+\end{array}</script></li>
+<li>问题<ul>
+<li>noise很大的时候clean sample的kl散度也很大 —》KL散度loss以及加权需要调整？</li>
+<li>其他的noise识别方法</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-2-2-2-Distillation-with-Uncertainty-Regularization"><a href="#3-2-2-2-Distillation-with-Uncertainty-Regularization" class="headerlink" title="3.2.2.2 Distillation with Uncertainty Regularization"></a>3.2.2.2 Distillation with Uncertainty Regularization</h4><ul>
+<li>1）对unclicked sample对其cvr loss用KL散度加权<script type="math/tex; mode=display">
+\sum_{\widetilde{D}_{\text {unclick }}} \exp \left(-\lambda \cdot \mathrm{KL}\left(\boldsymbol{p}_{\text {conv }} \| \boldsymbol{p}_{\text {conv }}^{\prime}\right)\right) \cdot \ell\left(\boldsymbol{p}_{\text {conv }}^{(T)}, \boldsymbol{p}_{c o n v}\right)</script></li>
+<li>2）添加uncertainty正则项<script type="math/tex; mode=display">
+\sum_{\widetilde{\mathcal{D}}_{\text {unclick }}} \mathrm{KL}\left(\boldsymbol{p}_{\text {conv }} \| \boldsymbol{p}_{\text {conv }}^{\prime}\right)</script></li>
+</ul>
+]]></content>
+      <categories>
+        <category>MachineLearning</category>
+        <category>搜广推</category>
+      </categories>
+      <tags>
+        <tag>ML</tag>
+        <tag>SSB</tag>
+        <tag>paper</tag>
       </tags>
   </entry>
 </search>
