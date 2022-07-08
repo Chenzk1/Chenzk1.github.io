@@ -1734,8 +1734,19 @@ F_{\beta}=\frac{\left(1+\beta^{2}\right) \cdot \text { true positive }}{\left(1+
 <h3 id="AUC-Area-under-Curve"><a href="#AUC-Area-under-Curve" class="headerlink" title="AUC(Area under Curve)"></a>AUC(Area under Curve)</h3><ul>
 <li>ROC曲线与x轴的面积</li>
 <li>一般认为：AUC最小值=0.5（其实存在AUC小于0.5的情况，例如每次都预测与真实值相反的情况，但是这种情况，只要把预测值取反就可以得到大于0.5的值，因此还是认为AUC最小值=0.5）</li>
-<li>AUC的物理意义为<strong>任取一对例和负例，正例得分大于负例得分的概率</strong>，AUC越大，表明方法效果越好。—&gt; 排序<script type="math/tex; mode=display">A U C=\frac{\sum p r e d_{p o s}>p r e d_{n e g}}{p o s i t i v e N u m * n e g a ti v e N u m}</script>分母是正负样本总的组合数，分子是正样本大于负样本的组合数<script type="math/tex; mode=display">
+<li>AUC的物理意义为<strong>任取一对正例和负例，正例得分大于负例得分的概率</strong>，AUC越大，表明方法效果越好。—&gt; 排序<script type="math/tex; mode=display">A U C=\frac{\sum p r e d_{p o s}>p r e d_{n e g}}{p o s i t i v e N u m * n e g a ti v e N u m}</script><blockquote>
+<p><strong>分母是正负样本总的组合数，分子是正样本大于负样本的组合数</strong></p>
+</blockquote>
+</li>
+<li>计算方式1：n个样本，按照预估值倒序，每个样本rank值赋n…1，计算所有正例的rank值之和，减去排在每个正例后面的正例个数<script type="math/tex; mode=display">
 A U C=\frac{\sum_{\text {ins}_{i} \in \text {positiveclass}} \operatorname{rank}_{\text {ins}_{i}}-\frac{M \times(M+1)}{2}}{M \times N}</script></li>
+<li>计算方式2：减去排错的样本对，排错的样本对：对每个正样本，累积排在前面的负样本，再求和。<ul>
+<li>n个样本，按照预估值倒序，neg_counter = 0, rate_counter = 0</li>
+<li>遍历：对负例，neg_counter += 1；对正例，rate_counter += neg_counter</li>
+<li>结果：<script type="math/tex; mode=display">
+A U C=\frac{M \times N - rate_counter}{M \times N}</script></li>
+</ul>
+</li>
 </ul>
 <h1 id="回归"><a href="#回归" class="headerlink" title="回归"></a>回归</h1><h2 id="MSE"><a href="#MSE" class="headerlink" title="MSE"></a>MSE</h2><ul>
 <li>MSE可以理解为，假设整体分布与样本分布误差满足<script type="math/tex">N(0, σ^2)</script>下的最大似然估计，见：<a href="https://chenzk1.github.io/2022/04/23/MLE-MAP/#Case2-MSE-Loss">https://chenzk1.github.io/2022/04/23/MLE-MAP/#Case2-MSE-Loss</a> 。这里先验假设可以理解为：<ul>
@@ -6931,7 +6942,7 @@ k &=k_{1}\left((1-b)+b \cdot \frac{d l}{a v d_1}\right)
 \min _{T_{f}, T_{p}} \mathcal{L}_{C V R}^{(T)}=\frac{1}{\left|\mathcal{D}_{\text {click }}\right|} \sum_{\mathcal{D}_{\text {click }}} \ell\left(y_{\text {conv }}, \boldsymbol{p}_{\text {conv }}^{(T)}\right)</script></li>
 <li>2）对于impression样本<ul>
 <li>a. click discriminator提高其ctr predict效果 —&gt; min ctr loss</li>
-<li>b. click-adaptive: 无法区分某个样本的representation是from either click domain or unclick domain —&gt; max ctr loss —&gt; gradient reversal<script type="math/tex; mode=display">
+<li>b. click-adaptive: 无法区分某个样本的representation是from either click domain or unclick domain —&gt; max ctr loss —&gt; gradient reversal。实验结果是ctr判别器的auc为0.5<script type="math/tex; mode=display">
 \max _{T_{f}} \min _{T_{d}} \mathcal{L}_{d}^{(T)}=\frac{1}{|\mathcal{D}|} \sum_{\mathcal{D}} \ell\left(y_{c l i c k}, \boldsymbol{p}_{d}\right)</script></li>
 </ul>
 </li>
