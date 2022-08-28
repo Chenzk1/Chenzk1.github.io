@@ -20,6 +20,47 @@ mathjax: true
 
 # 分类
 
+## 交叉熵 & Logloss & Softmax loss
+- [ML-信息熵&交叉熵&条件熵&相对熵(KL散度)&互信息](https://chenzk1.github.io/2021/12/10/ML-%E4%BF%A1%E6%81%AF%E7%86%B5&%E4%BA%A4%E5%8F%89%E7%86%B5&%E6%9D%A1%E4%BB%B6%E7%86%B5&%E7%9B%B8%E5%AF%B9%E7%86%B5(KL%E6%95%A3%E5%BA%A6)&%E4%BA%92%E4%BF%A1%E6%81%AF/?highlight=%E4%BA%A4%E5%8F%89%E7%86%B5)：衡量不同策略的差异
+$$
+L=\frac{1}{n} \sum_{i=1}^{n}\left(-\sum_{j=1}^{C} y_{i, j} \log p_{i, j}\right)
+$$
+
+### Logloss
+- Logloss是二分类，且类别为0/1时的交叉熵
+- [最大似然推导Logloss](https://chenzk1.github.io/2022/04/23/MLE-MAP/#Case3-Log-Loss)
+
+### Softmax Loss
+- softmax loss为采用softmax(logit)的交叉熵
+$$
+L=\frac{1}{n} \sum_{i=1}^{n}\left(-\log _{i, Y(i)}\right)=\frac{1}{n} \sum_{i=1}^{n}\left(-\log \frac{e^{l_{i, Y(i)}}}{\sum_{k=1}^{C} e^{l_{i, k}}}\right)
+$$
+- 指数函数可能会有溢出问题，因此可以作数值优化：
+```python
+def stable_softmax(X):
+    exps = np.exp(X - np.max(X))
+    return exps / np.sum(exps)
+```
+- 推导：
+$$
+\begin{aligned}
+p_{i} &=\frac{e^{a_{i}}}{\sum_{k=1}^{N} e^{a_{k}}} \\
+&=\frac{C e^{a_{i}}}{C \sum_{k=1}^{N} e^{a_{k}}} \\
+&=\frac{e^{a_{i}+\log (C)}}{\sum_{k=1}^{N} e^{a_{k}+\log (C)}}
+\end{aligned}
+$$
+- 导数求解：https://deepnotes.io/softmax-crossentropy
+- 性质
+  - 参数冗余（overparameterized​）：所有参数减去一个值，loss相同--》对任何一个拟合数据的假设而言，多种参数取值有可能得到同样的假设。处理方法：1）加正则；2）只优化k-1个类别的参数，比如二分类的logloss。[softmax回归原理与实现](https://zhuanlan.zhihu.com/p/98061179)
+  $$
+  \begin{aligned}
+  \left(y_{i}=j \mid x_{i} ; \theta\right) &=\frac{e^{\left(\theta_{j}-\psi\right)^{T} x_{i}}}{\sum_{l=1}^{k} e^{\left(\theta_{l}-\psi\right)^{T} x_{i}}} \\
+  &=\frac{e^{\theta_{j}^{T} x_{i}} e^{-\psi^{T} x_{i}}}{\sum_{l=1}^{k} e^{\theta_{l}^{T} x_{i}} e^{-\psi^{T} x_{i}}} \\
+  &=\frac{e^{\theta_{j}^{T} x_{i}}}{\sum_{l=1}^{k} e^{\theta_{l}^{T} x_{i}}}
+  \end{aligned}
+  $$
+  {% asset_img softmax.png softmax %}
+
 ## ACC(Accuracy)
 
 - Accuracy = 预测正确的样本数量 / 总样本数量 = (TP+TN) / (TP+FP+TN+FN)
@@ -76,12 +117,20 @@ $$
 
 - ROC曲线与x轴的面积
 - 一般认为：AUC最小值=0.5（其实存在AUC小于0.5的情况，例如每次都预测与真实值相反的情况，但是这种情况，只要把预测值取反就可以得到大于0.5的值，因此还是认为AUC最小值=0.5）
-- AUC的物理意义为**任取一对例和负例，正例得分大于负例得分的概率**，AUC越大，表明方法效果越好。--> 排序
+- AUC的物理意义为**任取一对正例和负例，正例得分大于负例得分的概率**，AUC越大，表明方法效果越好。--> 排序
 $$A U C=\frac{\sum p r e d_{p o s}>p r e d_{n e g}}{p o s i t i v e N u m * n e g a ti v e N u m}$$
-分母是正负样本总的组合数，分子是正样本大于负样本的组合数
+> **分母是正负样本总的组合数，分子是正样本大于负样本的组合数**
+- 计算方式1：n个样本，按照预估值倒序，每个样本rank值赋n...1，计算所有正例的rank值之和，减去排在每个正例后面的正例个数
 $$
 A U C=\frac{\sum_{\text {ins}_{i} \in \text {positiveclass}} \operatorname{rank}_{\text {ins}_{i}}-\frac{M \times(M+1)}{2}}{M \times N}
 $$
+- 计算方式2：减去排错的样本对，排错的样本对：对每个正样本，累积排在前面的负样本，再求和。
+  - n个样本，按照预估值倒序，neg_counter = 0, rate_counter = 0
+  - 遍历：对负例，neg_counter += 1；对正例，rate_counter += neg_counter
+  - 结果：
+  $$
+  A U C=\frac{M \times N - rate_counter}{M \times N}
+  $$
 
 # 回归
 ## MSE

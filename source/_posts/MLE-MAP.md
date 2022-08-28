@@ -83,7 +83,7 @@ $$ P\left(\theta \mid X\right)=\frac{P\left(X \mid \theta\right) P(\theta)}{P\le
 {% asset_img mse.jpeg mse %}
 
 
-### MLE Case3-Log Loss
+### Case3-Log Loss
 - 用MLE推Log Loss
 
 {% asset_img logloss.jpeg logloss %}
